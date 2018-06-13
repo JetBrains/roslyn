@@ -1796,7 +1796,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return null;
             }
 
-            if (fullPath == null || !PathUtilities.IsValidFilePath(fileName))
+            if (fullPath == null || string.IsNullOrWhiteSpace(fileName) || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
             {
                 AddDiagnostic(diagnostics, ErrorCode.FTL_InputFileNameTooLong, filePath);
                 return null;
