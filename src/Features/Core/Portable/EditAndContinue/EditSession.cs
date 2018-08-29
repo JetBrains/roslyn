@@ -282,6 +282,47 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
             return result;
         }
 
+        internal async Task<ImmutableArray<(DocumentId Id, DocumentAnalysisResults results)>> GetChangedDocumentsAnalysesAsync(Project project, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var baseProject = _baseSolution.GetProject(project.Id);
+
+                // TODO (https://github.com/dotnet/roslyn/issues/1204):
+                if (baseProject == null)
+                {
+                    return ImmutableArray<(DocumentId, DocumentAnalysisResults)>.Empty;
+                }
+
+                var documentAnalyses = GetChangedDocumentsAnalyses(baseProject, project);
+                if (documentAnalyses.Count == 0)
+                {
+                    return ImmutableArray<(DocumentId, DocumentAnalysisResults)>.Empty;
+                }
+
+                var results = new List<(DocumentId, DocumentAnalysisResults)>();
+                foreach (var analysis in documentAnalyses)
+                {
+                    var analysisResults = await analysis.Item2.GetValueAsync(cancellationToken).ConfigureAwait(false);
+                    var tuple = (analysis.Item1, result: analysisResults);
+
+                    // skip documents that actually were not changed:
+                    if (!analysisResults.HasChanges)
+                    {
+                        continue;
+                    }
+                    
+                    results.Add(tuple);
+                }
+
+                return results.ToImmutableArray();
+            }
+            catch (Exception e) when (FatalError.ReportWithoutCrashUnlessCanceledAndPropagate(e))
+            {
+                throw ExceptionUtilities.Unreachable;
+            }
+        }
+
         private async Task<HashSet<ISymbol>> GetAllAddedSymbolsAsync(Project project, CancellationToken cancellationToken)
         {
             try
@@ -469,13 +510,15 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                     // we shouldn't be asking for deltas in presence of errors:
                     Debug.Assert(!result.HasChangesAndErrors);
 
-                    allEdits.AddRange(result.SemanticEdits);
-                    if (result.LineEdits.Length > 0)
+                    if (!result.SemanticEdits.IsDefault)
+                        allEdits.AddRange(result.SemanticEdits);
+                        
+                    if (!result.LineEdits.IsDefault && result.LineEdits.Length > 0)
                     {
                         allLineEdits.Add((documentId, result.LineEdits));
                     }
 
-                    if (result.ActiveStatements.Length > 0)
+                    if (!result.ActiveStatements.IsDefault && result.ActiveStatements.Length > 0)
                     {
                         allActiveStatements.Add((documentId, result.ActiveStatements, result.ExceptionRegions));
                     }

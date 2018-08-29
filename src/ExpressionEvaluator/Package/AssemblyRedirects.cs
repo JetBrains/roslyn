@@ -7,5 +7,3 @@ using Roslyn.VisualStudio.Setup;
 [assembly: ProvideRoslynBindingRedirection("Microsoft.CodeAnalysis.ExpressionEvaluator.ExpressionCompiler.dll")]
 [assembly: ProvideRoslynBindingRedirection("Microsoft.CodeAnalysis.ExpressionEvaluator.FunctionResolver.dll")]
 [assembly: ProvideRoslynBindingRedirection("Microsoft.CodeAnalysis.ExpressionEvaluator.ResultProvider.dll")]
-[assembly: ProvideRoslynBindingRedirection("Microsoft.CodeAnalysis.VisualBasic.ExpressionEvaluator.ExpressionCompiler.dll")]
-[assembly: ProvideRoslynBindingRedirection("Microsoft.CodeAnalysis.VisualBasic.ExpressionEvaluator.ResultProvider.dll")]
