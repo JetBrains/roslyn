@@ -439,6 +439,17 @@ namespace Microsoft.CodeAnalysis
 
             return new Solution(newState);
         }
+        
+        internal Solution RemoveProjectReferences(ProjectId projectId, ImmutableArray<ProjectReference> projectReference)
+        {
+            var newState = _state.RemoveProjectReferences(projectId, projectReference);
+            if (newState == _state)
+            {
+                return this;
+            }
+
+            return new Solution(newState);
+        }
 
         /// <summary>
         /// Create a new solution instance with the project specified updated to contain

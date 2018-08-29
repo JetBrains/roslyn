@@ -8,6 +8,8 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
 {
     internal readonly struct ActiveStatementsMap
     {
+        internal static ActiveStatementsMap Empty = new ActiveStatementsMap(ImmutableDictionary<DocumentId, ImmutableArray<ActiveStatement>>.Empty, ImmutableDictionary<ActiveInstructionId, ActiveStatement>.Empty);
+        
         /// <summary>
         /// Groups active statements by document. 
         /// Multiple documents point to the same set of active statements if they are linked to the same underlying source file.

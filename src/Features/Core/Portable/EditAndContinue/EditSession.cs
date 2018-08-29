@@ -22,6 +22,8 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
 {
     internal sealed partial class EditSession
     {
+        public bool ProcessIsRunning { get; }
+
         private readonly struct Analysis
         {
             public readonly Document Document;
@@ -38,8 +40,7 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
 
         // signaled when the session is terminated:
         private readonly CancellationTokenSource _cancellation;
-
-        internal readonly AsyncLazy<ActiveStatementsMap> BaseActiveStatements;
+        internal AsyncLazy<ActiveStatementsMap> BaseActiveStatements { get; }
 
         /// <summary>
         /// For each base active statement the exception regions around that statement. 
@@ -83,12 +84,14 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
             IActiveStatementProvider activeStatementProvider,
             ImmutableDictionary<ProjectId, ProjectReadOnlyReason> projects,
             ImmutableDictionary<ActiveMethodId, ImmutableArray<NonRemappableRegion>> nonRemappableRegions,
-            bool stoppedAtException)
+            bool stoppedAtException,
+            bool processIsRunning = false)
         {
             Debug.Assert(baseSolution != null);
             Debug.Assert(debuggingSession != null);
             Debug.Assert(activeStatementProvider != null);
             Debug.Assert(nonRemappableRegions != null);
+            ProcessIsRunning = processIsRunning;
 
             _baseSolution = baseSolution;
             _debuggingSession = debuggingSession;
@@ -105,7 +108,10 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
 
             _nonRemappableRegions = nonRemappableRegions;
 
-            BaseActiveStatements = new AsyncLazy<ActiveStatementsMap>(GetBaseActiveStatementsAsync, cacheResult: true);
+            BaseActiveStatements = processIsRunning ? 
+                new AsyncLazy<ActiveStatementsMap>(ActiveStatementsMap.Empty) : 
+                new AsyncLazy<ActiveStatementsMap>(GetBaseActiveStatementsAsync, cacheResult: true);
+            
             BaseActiveExceptionRegions = new AsyncLazy<ImmutableArray<ActiveStatementExceptionRegions>>(GetBaseActiveExceptionRegionsAsync, cacheResult: true);
         }
 
@@ -280,6 +286,47 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
             }
 
             return result;
+        }
+
+        internal async Task<ImmutableArray<(DocumentId Id, DocumentAnalysisResults results)>> GetChangedDocumentsAnalysesAsync(Project project, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var baseProject = _baseSolution.GetProject(project.Id);
+
+                // TODO (https://github.com/dotnet/roslyn/issues/1204):
+                if (baseProject == null)
+                {
+                    return ImmutableArray<(DocumentId, DocumentAnalysisResults)>.Empty;
+                }
+
+                var documentAnalyses = GetChangedDocumentsAnalyses(baseProject, project);
+                if (documentAnalyses.Count == 0)
+                {
+                    return ImmutableArray<(DocumentId, DocumentAnalysisResults)>.Empty;
+                }
+
+                var results = new List<(DocumentId, DocumentAnalysisResults)>();
+                foreach (var analysis in documentAnalyses)
+                {
+                    var analysisResults = await analysis.Item2.GetValueAsync(cancellationToken).ConfigureAwait(false);
+                    var tuple = (analysis.Item1, result: analysisResults);
+
+                    // skip documents that actually were not changed:
+                    if (!analysisResults.HasChanges)
+                    {
+                        continue;
+                    }
+                    
+                    results.Add(tuple);
+                }
+
+                return results.ToImmutableArray();
+            }
+            catch (Exception e) when (FatalError.ReportWithoutCrashUnlessCanceledAndPropagate(e))
+            {
+                throw ExceptionUtilities.Unreachable;
+            }
         }
 
         private async Task<HashSet<ISymbol>> GetAllAddedSymbolsAsync(Project project, CancellationToken cancellationToken)
@@ -469,13 +516,15 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                     // we shouldn't be asking for deltas in presence of errors:
                     Debug.Assert(!result.HasChangesAndErrors);
 
-                    allEdits.AddRange(result.SemanticEdits);
-                    if (result.LineEdits.Length > 0)
+                    if (!result.SemanticEdits.IsDefault)
+                        allEdits.AddRange(result.SemanticEdits);
+                        
+                    if (!result.LineEdits.IsDefault && result.LineEdits.Length > 0)
                     {
                         allLineEdits.Add((documentId, result.LineEdits));
                     }
 
-                    if (result.ActiveStatements.Length > 0)
+                    if (!result.ActiveStatements.IsDefault && result.ActiveStatements.Length > 0)
                     {
                         allActiveStatements.Add((documentId, result.ActiveStatements, result.ExceptionRegions));
                     }

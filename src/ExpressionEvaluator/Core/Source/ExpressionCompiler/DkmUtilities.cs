@@ -10,8 +10,12 @@ using System.Reflection.Metadata;
 using Microsoft.CodeAnalysis.Debugging;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.VisualStudio.Debugger;
+
+#if VSDEBUGGER
 using Microsoft.VisualStudio.Debugger.Clr;
 using Microsoft.VisualStudio.Debugger.Clr.NativeCompilation;
+#endif
+
 using Microsoft.VisualStudio.Debugger.Evaluation;
 using Microsoft.VisualStudio.Debugger.Evaluation.ClrCompilation;
 using Roslyn.Utilities;
@@ -20,6 +24,7 @@ namespace Microsoft.CodeAnalysis.ExpressionEvaluator
 {
     internal static class DkmUtilities
     {
+#if VSDEBUGGER
         internal unsafe delegate IntPtr GetMetadataBytesPtrFunction(AssemblyIdentity assemblyIdentity, out uint uSize);
 
         // Return the set of managed module instances from the AppDomain.
@@ -220,7 +225,7 @@ namespace Microsoft.CodeAnalysis.ExpressionEvaluator
         {
             return (payload == null) ? null : DkmClrCustomTypeInfo.Create(payloadTypeId, payload);
         }
-
+#endif
         internal static ResultProperties GetResultProperties<TSymbol>(this TSymbol symbol, DkmClrCompilationResultFlags flags, bool isConstant)
             where TSymbol : ISymbol
         {
@@ -297,6 +302,8 @@ namespace Microsoft.CodeAnalysis.ExpressionEvaluator
             }
         }
 
+#if VSDEBUGGER
+        
         internal static bool Includes(this DkmVariableInfoFlags flags, DkmVariableInfoFlags desired)
         {
             return (flags & desired) == desired;
@@ -345,5 +352,6 @@ namespace Microsoft.CodeAnalysis.ExpressionEvaluator
         }
 
         private sealed class AppDomainLifetimeDataItem : DkmDataItem { }
+#endif
     }
 }
