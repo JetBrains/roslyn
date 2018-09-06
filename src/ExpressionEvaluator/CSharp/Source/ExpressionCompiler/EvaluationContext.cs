@@ -143,6 +143,30 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             int ilOffset,
             int localSignatureToken)
         {
+            var typedSymReader = (ISymUnmanagedReader3)symReader;
+            return CreateMethodContext(compilation, moduleVersionId, methodToken, methodVersion, ilOffset, localSignatureToken,
+                symbolProvider => MethodDebugInfo<TypeSymbol, LocalSymbol>.ReadMethodDebugInfo(typedSymReader, symbolProvider, methodToken, methodVersion, ilOffset, isVisualBasicMethod: false));
+        }
+
+        /// <summary>
+        /// Create a context for evaluating expressions within a method scope.
+        /// </summary>
+        /// <param name="compilation">Compilation.</param>
+        /// <param name="moduleVersionId">Module containing method</param>
+        /// <param name="methodToken">Method metadata token</param>
+        /// <param name="methodVersion">Method version.</param>
+        /// <param name="ilOffset">IL offset of instruction pointer in method</param>
+        /// <param name="localSignatureToken">Method local signature token</param>
+        /// <returns>Evaluation context</returns>
+        internal static EvaluationContext CreateMethodContext(
+            CSharpCompilation compilation,
+            Guid moduleVersionId,
+            int methodToken,
+            int methodVersion,
+            int ilOffset,
+            int localSignatureToken,
+            Func<CSharpEESymbolProvider, MethodDebugInfo<TypeSymbol, LocalSymbol>> debugInfoProvider)
+        {
             var methodHandle = (MethodDefinitionHandle)MetadataTokens.Handle(methodToken);
             var currentSourceMethod = compilation.GetSourceMethod(moduleVersionId, methodHandle);
             var localSignatureHandle = (localSignatureToken != 0) ? (StandaloneSignatureHandle)MetadataTokens.Handle(localSignatureToken) : default(StandaloneSignatureHandle);
@@ -154,9 +178,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             var metadataDecoder = new MetadataDecoder((PEModuleSymbol)currentFrame.ContainingModule, currentFrame);
             var localInfo = metadataDecoder.GetLocalInfo(localSignatureHandle);
 
-            var typedSymReader = (ISymUnmanagedReader3)symReader;
 
-            var debugInfo = MethodDebugInfo<TypeSymbol, LocalSymbol>.ReadMethodDebugInfo(typedSymReader, symbolProvider, methodToken, methodVersion, ilOffset, isVisualBasicMethod: false);
+            var debugInfo = debugInfoProvider(symbolProvider);
 
             var reuseSpan = debugInfo.ReuseSpan;
             var localsBuilder = ArrayBuilder<LocalSymbol>.GetInstance();
