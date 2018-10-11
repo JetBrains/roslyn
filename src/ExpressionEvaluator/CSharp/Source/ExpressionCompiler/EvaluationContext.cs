@@ -286,6 +286,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             string expr,
             DkmEvaluationFlags compilationFlags,
             ImmutableArray<Alias> aliases,
+            ImmutableArray<string> additionalImports,
             DiagnosticBag diagnostics,
             out ResultProperties resultProperties,
             Microsoft.CodeAnalysis.CodeGen.CompilationTestData testData)
@@ -299,7 +300,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             }
 
             var context = this.CreateCompilationContext();
-            var moduleBuilder = context.CompileExpression(syntax, TypeName, MethodName, aliases, testData, diagnostics, out var synthesizedMethod);
+            var moduleBuilder = context.CompileExpression(syntax, TypeName, MethodName, aliases, Imports.FromUsings(Compilation, additionalImports), testData, diagnostics, out var synthesizedMethod);
             if (moduleBuilder == null)
             {
                 resultProperties = default(ResultProperties);
@@ -373,6 +374,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             string target,
             string expr,
             ImmutableArray<Alias> aliases,
+            ImmutableArray<string> additionalImports,
             DiagnosticBag diagnostics,
             out ResultProperties resultProperties,
             Microsoft.CodeAnalysis.CodeGen.CompilationTestData testData)
@@ -385,7 +387,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             }
 
             var context = this.CreateCompilationContext();
-            var moduleBuilder = context.CompileAssignment(assignment, TypeName, MethodName, aliases, testData, diagnostics, out var synthesizedMethod);
+            var moduleBuilder = context.CompileAssignment(assignment, TypeName, MethodName, aliases, Imports.FromUsings(Compilation, additionalImports), testData, diagnostics, out var synthesizedMethod);
             if (moduleBuilder == null)
             {
                 resultProperties = default(ResultProperties);

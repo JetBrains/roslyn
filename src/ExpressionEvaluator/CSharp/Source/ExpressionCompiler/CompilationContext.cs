@@ -110,7 +110,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             // (Necessary for VB in particular since the EENamedTypeSymbol.Locations
             // is tied to the expression syntax in VB.)
             var synthesizedTypes = syntaxNodes.SelectAsArray(
-                (syntax, i, arg) => (NamedTypeSymbol)CreateSynthesizedType(syntax, typeNameBase + i, methodName, ImmutableArray<Alias>.Empty),
+                (syntax, i, arg) => (NamedTypeSymbol)CreateSynthesizedType(syntax, typeNameBase + i, methodName, ImmutableArray<Alias>.Empty, Imports.Empty),
                 (object)null);
             if (synthesizedTypes.Length == 0)
             {
@@ -136,11 +136,12 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             string typeName,
             string methodName,
             ImmutableArray<Alias> aliases,
+            Imports additionalImports,
             Microsoft.CodeAnalysis.CodeGen.CompilationTestData testData,
             DiagnosticBag diagnostics,
             out EEMethodSymbol synthesizedMethod)
         {
-            var synthesizedType = CreateSynthesizedType(syntax, typeName, methodName, aliases);
+            var synthesizedType = CreateSynthesizedType(syntax, typeName, methodName, aliases, additionalImports);
             var module = CreateModuleBuilder(
                 this.Compilation,
                 additionalTypes: ImmutableArray.Create((NamedTypeSymbol)synthesizedType),
@@ -170,7 +171,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             CSharpSyntaxNode syntax,
             string typeName,
             string methodName,
-            ImmutableArray<Alias> aliases)
+            ImmutableArray<Alias> aliases,
+            Imports additionalImports)
         {
             var objectType = this.Compilation.GetSpecialType(SpecialType.System_Object);
             var synthesizedType = new EENamedTypeSymbol(
@@ -187,6 +189,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                     var binder = ExtendBinderChain(
                         syntax,
                         aliases,
+                        additionalImports,
                         method,
                         this.NamespaceBinder,
                         hasDisplayClassThis,
@@ -206,6 +209,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             string typeName,
             string methodName,
             ImmutableArray<Alias> aliases,
+            Imports additionalImports,
             Microsoft.CodeAnalysis.CodeGen.CompilationTestData testData,
             DiagnosticBag diagnostics,
             out EEMethodSymbol synthesizedMethod)
@@ -225,6 +229,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                     var binder = ExtendBinderChain(
                         syntax,
                         aliases,
+                        additionalImports,
                         method,
                         this.NamespaceBinder,
                         hasDisplayClassThis,
@@ -846,6 +851,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
         private static Binder ExtendBinderChain(
             CSharpSyntaxNode syntax,
             ImmutableArray<Alias> aliases,
+            Imports additionalImports,
             EEMethodSymbol method,
             Binder binder,
             bool hasDisplayClassThis,
@@ -865,7 +871,9 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             {
                 substitutedSourceType = stack.Pop();
 
-                binder = new InContainerBinder(substitutedSourceType, binder);
+                binder = new InContainerBinder(substitutedSourceType, binder, additionalImports);
+                // to avoid adding imports to each binder
+                additionalImports = null;
                 if (substitutedSourceType.Arity > 0)
                 {
                     binder = new WithTypeArgumentsBinder(substitutedSourceType.TypeArgumentsNoUseSiteDiagnostics, binder);
