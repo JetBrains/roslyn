@@ -282,7 +282,7 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
             return result;
         }
 
-        internal async Task<ImmutableArray<DocumentAnalysisResults>> GetChangedDocumentsAnalysesAsync(Project project, CancellationToken cancellationToken)
+        internal async Task<ImmutableArray<(DocumentId Id, DocumentAnalysisResults results)>> GetChangedDocumentsAnalysesAsync(Project project, CancellationToken cancellationToken)
         {
             try
             {
@@ -291,27 +291,28 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                 // TODO (https://github.com/dotnet/roslyn/issues/1204):
                 if (baseProject == null)
                 {
-                    return ImmutableArray<DocumentAnalysisResults>.Empty;
+                    return ImmutableArray<(DocumentId, DocumentAnalysisResults)>.Empty;
                 }
 
                 var documentAnalyses = GetChangedDocumentsAnalyses(baseProject, project);
                 if (documentAnalyses.Count == 0)
                 {
-                    return ImmutableArray<DocumentAnalysisResults>.Empty;
+                    return ImmutableArray<(DocumentId, DocumentAnalysisResults)>.Empty;
                 }
 
-                var results = new List<DocumentAnalysisResults>();
+                var results = new List<(DocumentId, DocumentAnalysisResults)>();
                 foreach (var analysis in documentAnalyses)
                 {
-                    var result = await analysis.Item2.GetValueAsync(cancellationToken).ConfigureAwait(false);
+                    var analysisResults = await analysis.Item2.GetValueAsync(cancellationToken).ConfigureAwait(false);
+                    var tuple = (analysis.Item1, result: analysisResults);
 
                     // skip documents that actually were not changed:
-                    if (!result.HasChanges)
+                    if (!analysisResults.HasChanges)
                     {
                         continue;
                     }
                     
-                    results.Add(result);
+                    results.Add(tuple);
                 }
 
                 return results.ToImmutableArray();
