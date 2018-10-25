@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+// Copyright (c) Microsoft.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System;
 using System.Collections.Generic;
@@ -280,6 +280,46 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
             }
 
             return result;
+        }
+
+        public async Task<ImmutableArray<DocumentAnalysisResults>> GetChangedDocumentsAnalysesAsync(Project project, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var baseProject = _baseSolution.GetProject(project.Id);
+
+                // TODO (https://github.com/dotnet/roslyn/issues/1204):
+                if (baseProject == null)
+                {
+                    return ImmutableArray<DocumentAnalysisResults>.Empty;
+                }
+
+                var documentAnalyses = GetChangedDocumentsAnalyses(baseProject, project);
+                if (documentAnalyses.Count == 0)
+                {
+                    return ImmutableArray<DocumentAnalysisResults>.Empty;
+                }
+
+                var results = new List<DocumentAnalysisResults>();
+                foreach (var analysis in documentAnalyses)
+                {
+                    var result = await analysis.Item2.GetValueAsync(cancellationToken).ConfigureAwait(false);
+
+                    // skip documents that actually were not changed:
+                    if (!result.HasChanges)
+                    {
+                        continue;
+                    }
+                    
+                    results.Add(result);
+                }
+
+                return results.ToImmutableArray();
+            }
+            catch (Exception e) when (FatalError.ReportWithoutCrashUnlessCanceledAndPropagate(e))
+            {
+                throw ExceptionUtilities.Unreachable;
+            }
         }
 
         private async Task<HashSet<ISymbol>> GetAllAddedSymbolsAsync(Project project, CancellationToken cancellationToken)
