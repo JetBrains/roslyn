@@ -282,7 +282,7 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
             return result;
         }
 
-        public async Task<ImmutableArray<DocumentAnalysisResults>> GetChangedDocumentsAnalysesAsync(Project project, CancellationToken cancellationToken)
+        internal async Task<ImmutableArray<DocumentAnalysisResults>> GetChangedDocumentsAnalysesAsync(Project project, CancellationToken cancellationToken)
         {
             try
             {
