@@ -856,7 +856,7 @@ namespace Microsoft.CodeAnalysis
             return this.ForkProject(newProject, withProjectReferenceChange: true);
         }
         
-        public SolutionState RemoveProjectReferences(ProjectId projectId, ImmutableArray<ProjectReference> projectReferences)
+        internal SolutionState RemoveProjectReferences(ProjectId projectId, ImmutableArray<ProjectReference> projectReferences)
         {
             if (projectId == null)
             {

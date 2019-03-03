@@ -487,7 +487,7 @@ namespace Microsoft.CodeAnalysis
                 projectInfo: this.ProjectInfo.WithProjectReferences(this.ProjectReferences.ToImmutableArray().Remove(projectReference)).WithVersion(this.Version.GetNewerVersion()));
         }
         
-        public ProjectState RemoveProjectReferences(ImmutableArray<ProjectReference> projectReferences)
+        internal ProjectState RemoveProjectReferences(ImmutableArray<ProjectReference> projectReferences)
         {
             var references = this.ProjectReferences.ToImmutableHashSet();
             var newProjectReferences = references.Except(projectReferences);

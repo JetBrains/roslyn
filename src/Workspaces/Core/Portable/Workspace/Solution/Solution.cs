@@ -440,7 +440,7 @@ namespace Microsoft.CodeAnalysis
             return new Solution(newState);
         }
         
-        public Solution RemoveProjectReferences(ProjectId projectId, ImmutableArray<ProjectReference> projectReference)
+        internal Solution RemoveProjectReferences(ProjectId projectId, ImmutableArray<ProjectReference> projectReference)
         {
             var newState = _state.RemoveProjectReferences(projectId, projectReference);
             if (newState == _state)

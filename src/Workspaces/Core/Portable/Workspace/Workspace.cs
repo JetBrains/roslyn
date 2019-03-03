@@ -596,7 +596,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
         
-        protected internal void OnProjectReferencesAdded(ProjectId projectId, ImmutableArray<ProjectReference> projectReferences)
+        internal void OnProjectReferencesAdded(ProjectId projectId, ImmutableArray<ProjectReference> projectReferences)
         {
             using (_serializationLock.DisposableWait())
             {
@@ -607,7 +607,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        protected internal void OnProjectReferencesRemoved(ProjectId projectId, ImmutableArray<ProjectReference> projectReferences)
+        internal void OnProjectReferencesRemoved(ProjectId projectId, ImmutableArray<ProjectReference> projectReferences)
         {
             using (_serializationLock.DisposableWait())
             {
