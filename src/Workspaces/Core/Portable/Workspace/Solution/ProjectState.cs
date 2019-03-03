@@ -486,6 +486,14 @@ namespace Microsoft.CodeAnalysis
             return this.With(
                 projectInfo: this.ProjectInfo.WithProjectReferences(this.ProjectReferences.ToImmutableArray().Remove(projectReference)).WithVersion(this.Version.GetNewerVersion()));
         }
+        
+        public ProjectState RemoveProjectReferences(ImmutableArray<ProjectReference> projectReferences)
+        {
+            var references = this.ProjectReferences.ToImmutableHashSet();
+            var newProjectReferences = references.Except(projectReferences);
+            return this.With(
+                projectInfo: this.ProjectInfo.WithProjectReferences(newProjectReferences).WithVersion(this.Version.GetNewerVersion()));
+        }
 
         public ProjectState AddProjectReferences(IEnumerable<ProjectReference> projectReferences)
         {

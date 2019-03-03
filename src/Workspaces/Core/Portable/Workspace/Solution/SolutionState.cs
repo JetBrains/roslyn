@@ -855,6 +855,31 @@ namespace Microsoft.CodeAnalysis
 
             return this.ForkProject(newProject, withProjectReferenceChange: true);
         }
+        
+        public SolutionState RemoveProjectReferences(ProjectId projectId, ImmutableArray<ProjectReference> projectReferences)
+        {
+            if (projectId == null)
+            {
+                throw new ArgumentNullException(nameof(projectId));
+            }
+
+            if (projectReferences == null)
+            {
+                throw new ArgumentNullException(nameof(projectReferences));
+            }
+
+            CheckContainsProject(projectId);
+            foreach (var projectReference in projectReferences)
+            {
+                CheckContainsProject(projectReference.ProjectId);
+            }
+
+            var oldProject = this.GetProjectState(projectId);
+            var newProject = oldProject.RemoveProjectReferences(projectReferences);
+
+            return this.ForkProject(newProject, withProjectReferenceChange: true);
+        }
+
 
         /// <summary>
         /// Create a new solution instance with the project specified updated to contain
