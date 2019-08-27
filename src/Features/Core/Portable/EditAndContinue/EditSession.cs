@@ -288,6 +288,26 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
             }
         }
 
+        internal Task<ImmutableArray<Document>> GetChangedDocumentsAsync(Solution solution, CancellationToken cancellationToken)
+        {
+            var baseSolution = DebuggingSession.LastCommittedSolution;
+            if (baseSolution.HasNoChanges(solution))
+                return Task.FromResult(ImmutableArray<Document>.Empty);
+
+            return Task.Factory.StartNew(async () =>
+            {
+                var tasks = solution.Projects.Select(async project =>
+                {
+                    using var changedDocumentsDisposer = ArrayBuilder<Document>.GetInstance(out var changedDocuments);
+                    await PopulateChangedAndAddedDocumentsAsync(baseSolution, project, changedDocuments, cancellationToken);
+                    return changedDocuments.ToImmutableArray();
+                }).ToList();
+
+                var arrays = await Task.WhenAll(tasks);
+                return arrays.SelectMany(x => x).ToImmutableArray();
+            }, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default).Unwrap();
+        }
+
         private static async Task PopulateChangedAndAddedDocumentsAsync(CommittedSolution baseSolution, Project project, ArrayBuilder<Document> changedOrAddedDocuments, CancellationToken cancellationToken)
         {
             changedOrAddedDocuments.Clear();
@@ -617,7 +637,8 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                     // we shouldn't be asking for deltas in presence of errors:
                     Debug.Assert(!result.HasChangesAndErrors);
 
-                    allEdits.AddRange(result.SemanticEdits);
+                    if (!result.SemanticEdits.IsDefault)
+                        allEdits.AddRange(result.SemanticEdits);
 
                     if (!result.HasChangesAndErrors)
                     {
@@ -629,13 +650,13 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                             }
                         }
                     }
-
-                    if (result.LineEdits.Length > 0)
+                    
+                    if (!result.LineEdits.IsDefault && result.LineEdits.Length > 0)
                     {
                         allLineEdits.Add((document.Id, result.LineEdits));
                     }
 
-                    if (result.ActiveStatements.Length > 0)
+                    if (!result.ActiveStatements.IsDefault && result.ActiveStatements.Length > 0)
                     {
                         activeStatementsInChangedDocuments.Add((document.Id, result.ActiveStatements, result.ExceptionRegions));
                     }

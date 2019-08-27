@@ -259,8 +259,7 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                 return null;
             }
 
-            var infoReader = EditAndContinueMethodDebugInfoReader.Create(moduleInfo.SymReader, version: 1);
-
+            var infoReader = moduleInfo.InfoReader;
             var newBaseline = EmitBaseline.CreateInitialBaseline(
                 moduleInfo.Metadata,
                 infoReader.GetDebugInfo,

@@ -29,5 +29,7 @@ namespace Microsoft.VisualStudio.Debugger.Evaluation
         NoExpansion = 65536,
         FilterToFavorites = 0x40000,
         UseSimpleDisplayString = 0x80000,
+        TreatAsExpression = 1,
+        TreatFunctionAsAddress = 2,
     }
 }

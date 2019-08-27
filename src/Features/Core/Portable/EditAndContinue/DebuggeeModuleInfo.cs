@@ -18,13 +18,15 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
 
         private ISymUnmanagedReader5 _symReader;
         public ISymUnmanagedReader5 SymReader => _symReader;
-
-        public DebuggeeModuleInfo(ModuleMetadata metadata, ISymUnmanagedReader5 symReader)
+        public EditAndContinueMethodDebugInfoReader InfoReader { get; }
+        
+        public DebuggeeModuleInfo(ModuleMetadata metadata, ISymUnmanagedReader5 symReader, EditAndContinueMethodDebugInfoReader infoReader)
         {
             Debug.Assert(metadata != null);
             Debug.Assert(symReader != null);
 
             Metadata = metadata;
+            InfoReader = infoReader;
             _symReader = symReader;
         }
 

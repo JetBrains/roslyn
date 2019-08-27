@@ -46,6 +46,8 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
         private DebuggingSession? _debuggingSession;
         private EditSession? _editSession;
 
+        public DebuggingSession? DebuggingSession => _debuggingSession;
+        public EditSession? EditSession => _editSession;
         internal EditAndContinueWorkspaceService(
             Workspace workspace,
             IDiagnosticAnalyzerService diagnosticService,
