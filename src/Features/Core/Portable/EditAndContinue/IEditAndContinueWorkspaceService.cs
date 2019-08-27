@@ -14,6 +14,7 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
 {
     internal interface IEditAndContinueWorkspaceService : IWorkspaceService
     {
+        EditSession? EditSession { get; }
         /// <summary>
         /// Returns base active statement spans contained in each specified document.
         /// </summary>

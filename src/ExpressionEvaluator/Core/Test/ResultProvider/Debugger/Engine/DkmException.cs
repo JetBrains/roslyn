@@ -8,7 +8,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Runtime.Serialization;
 
 namespace Microsoft.VisualStudio.Debugger
 {
@@ -17,7 +16,7 @@ namespace Microsoft.VisualStudio.Debugger
     //     Base exception class for all exceptions within this API.
     [DebuggerDisplay("\\{DkmException Code={Code,h}\\}")]
     [Serializable]
-    public class DkmException : ApplicationException
+    public class DkmException : Exception
     {
         private readonly DkmExceptionCode _code;
 
@@ -33,11 +32,6 @@ namespace Microsoft.VisualStudio.Debugger
         public DkmException(DkmExceptionCode code)
         {
             _code = code;
-        }
-
-        protected DkmException(SerializationInfo info, StreamingContext context)
-        {
-            throw new NotImplementedException();
         }
 
         //

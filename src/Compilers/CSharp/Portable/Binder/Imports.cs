@@ -259,7 +259,11 @@ namespace Microsoft.CodeAnalysis.CSharp
         public static Imports FromGlobalUsings(CSharpCompilation compilation)
         {
             var usings = compilation.Options.Usings;
-
+            return FromUsings(compilation, usings);
+        }
+        
+        public static Imports FromUsings(CSharpCompilation compilation, ImmutableArray<string> usings)
+        {
             if (usings.Length == 0 && compilation.PreviousSubmission == null)
             {
                 return Empty;

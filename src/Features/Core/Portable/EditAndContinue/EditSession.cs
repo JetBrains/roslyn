@@ -619,7 +619,8 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                     // we shouldn't be asking for deltas in presence of errors:
                     Debug.Assert(!result.HasChangesAndErrors);
 
-                    allEdits.AddRange(result.SemanticEdits);
+                    if (!result.SemanticEdits.IsDefault)
+                        allEdits.AddRange(result.SemanticEdits);
 
                     if (!result.HasChangesAndErrors)
                     {
@@ -631,13 +632,13 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                             }
                         }
                     }
-
-                    if (result.LineEdits.Length > 0)
+                    
+                    if (!result.LineEdits.IsDefault && result.LineEdits.Length > 0)
                     {
                         allLineEdits.Add((document.Id, result.LineEdits));
                     }
 
-                    if (result.ActiveStatements.Length > 0)
+                    if (!result.ActiveStatements.IsDefault && result.ActiveStatements.Length > 0)
                     {
                         activeStatementsInChangedDocuments.Add((document.Id, result.ActiveStatements, result.ExceptionRegions));
                     }
