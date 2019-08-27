@@ -48,5 +48,7 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
         /// At least one of the threads whom this active statement belongs to is in a non-leaf frame.
         /// </summary>
         IsNonLeafFrame = 16,
+
+        IsLeafFrameButExecuted = 32
     }
 }
