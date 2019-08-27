@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Microsoft.VisualStudio.Debugger.Contracts.EditAndContinue;
 
 namespace Microsoft.CodeAnalysis.EditAndContinue
 {

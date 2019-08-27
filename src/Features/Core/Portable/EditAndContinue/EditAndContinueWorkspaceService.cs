@@ -20,7 +20,7 @@ using Microsoft.CodeAnalysis.Internal.Log;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Shared.Extensions;
 using Microsoft.CodeAnalysis.Text;
-using Microsoft.VisualStudio.Debugger.Contracts.EditAndContinue;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.EditAndContinue
@@ -53,6 +53,8 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
 
         private DebuggingSession? _debuggingSession;
 
+        public DebuggingSession? DebuggingSession => _debuggingSession;
+        public EditSession? EditSession => DebuggingSession?.EditSession;
         internal EditAndContinueWorkspaceService()
         {
             _debuggingSessionTelemetry = new DebuggingSessionTelemetry();

@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis.ErrorReporting;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Shared.Collections;
 using Microsoft.CodeAnalysis.Text;
-using Microsoft.VisualStudio.Debugger.Contracts.EditAndContinue;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.EditAndContinue
@@ -278,6 +278,26 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
             {
                 return ImmutableArray<ActiveStatementExceptionRegions>.Empty;
             }
+        }
+
+        internal Task<ImmutableArray<Document>> GetChangedDocumentsAsync(Solution solution, CancellationToken cancellationToken)
+        {
+            var baseSolution = DebuggingSession.LastCommittedSolution;
+            if (baseSolution.HasNoChanges(solution))
+                return Task.FromResult(ImmutableArray<Document>.Empty);
+
+            return Task.Factory.StartNew(async () =>
+            {
+                var tasks = solution.Projects.Select(async project =>
+                {
+                    using var changedDocumentsDisposer = ArrayBuilder<Document>.GetInstance(out var changedDocuments);
+                    await PopulateChangedAndAddedDocumentsAsync(baseSolution, project, changedDocuments, cancellationToken);
+                    return changedDocuments.ToImmutableArray();
+                }).ToList();
+
+                var arrays = await Task.WhenAll(tasks);
+                return arrays.SelectMany(x => x).ToImmutableArray();
+            }, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default).Unwrap();
         }
 
         private static async Task PopulateChangedAndAddedDocumentsAsync(CommittedSolution baseSolution, Project newProject, ArrayBuilder<Document> changedOrAddedDocuments, CancellationToken cancellationToken)
@@ -604,16 +624,17 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                     // we shouldn't be asking for deltas in presence of errors:
                     Contract.ThrowIfTrue(analysis.HasChangesAndErrors);
 
-                    allEdits.AddRange(analysis.SemanticEdits);
+                    if (!analysis.SemanticEdits.IsDefault)
+                        allEdits.AddRange(analysis.SemanticEdits);
 
                     var documentId = analysis.DocumentId;
 
-                    if (analysis.LineEdits.Length > 0)
+                    if (!analysis.LineEdits.IsDefault && analysis.LineEdits.Length > 0)
                     {
                         allLineEdits.Add((documentId, analysis.LineEdits));
                     }
 
-                    if (analysis.ActiveStatements.Length > 0)
+                    if (!analysis.ActiveStatements.IsDefault &&analysis.ActiveStatements.Length > 0)
                     {
                         activeStatementsInChangedDocuments.Add((documentId, analysis.ActiveStatements, analysis.ExceptionRegions));
                     }

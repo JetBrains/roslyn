@@ -16,7 +16,6 @@ using Microsoft.CodeAnalysis.Debugging;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.NavigateTo;
 using Microsoft.CodeAnalysis.PooledObjects;
-using Microsoft.VisualStudio.Debugger.Contracts.EditAndContinue;
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.EditAndContinue
