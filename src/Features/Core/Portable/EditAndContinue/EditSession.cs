@@ -626,8 +626,9 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                     // we shouldn't be asking for deltas in presence of errors:
                     Debug.Assert(!result.HasChangesAndErrors);
 
-                    allEdits.AddRange(result.SemanticEdits);
-
+                    if (!result.SemanticEdits.IsDefault)
+                        allEdits.AddRange(result.SemanticEdits);
+                    
                     if (!result.HasChangesAndErrors)
                     {
                         foreach (var edit in result.SemanticEdits)
@@ -638,13 +639,13 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                             }
                         }
                     }
-
-                    if (result.LineEdits.Length > 0)
+                        
+                    if (!result.LineEdits.IsDefault && result.LineEdits.Length > 0)
                     {
                         allLineEdits.Add((document.Id, result.LineEdits));
                     }
 
-                    if (result.ActiveStatements.Length > 0)
+                    if (!result.ActiveStatements.IsDefault && result.ActiveStatements.Length > 0)
                     {
                         activeStatementsInChangedDocuments.Add((document.Id, result.ActiveStatements, result.ExceptionRegions));
                     }
@@ -744,6 +745,25 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
 
                         if (projectSummary == ProjectAnalysisSummary.CompilationErrors || projectSummary == ProjectAnalysisSummary.RudeEdits)
                         {
+                            foreach (var (document, results) in changedDocumentAnalyses)
+                            {
+                                var analysisResults = await results.GetValueAsync(cancellationToken).ConfigureAwait(false);
+
+                                var tree = await document.GetSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);
+                                var rudeEdits = analysisResults.RudeEditErrors.SelectAsArray((e, t) => e.ToDiagnostic(t), tree);
+                                if (!rudeEdits.IsDefaultOrEmpty)
+                                {
+                                    diagnostics.AddRange((project.Id, rudeEdits));
+                                }
+                            }
+
+                            if (diagnostics.IsEmpty())
+                            {
+                                var compilation = await project.GetCompilationAsync(cancellationToken);
+                                var compilationDiagnostics = compilation.GetDiagnostics(cancellationToken);
+                                diagnostics.AddRange((project.Id, compilationDiagnostics));
+                            }
+                            
                             isBlocked = true;
                         }
 

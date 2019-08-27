@@ -51,6 +51,8 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
         private EditSession? _editSession;
         private PendingSolutionUpdate? _pendingUpdate;
 
+        public EditSession? EditSession => _editSession;
+
         internal EditAndContinueWorkspaceService(
             Workspace workspace,
             IActiveStatementTrackingService activeStatementTrackingService,

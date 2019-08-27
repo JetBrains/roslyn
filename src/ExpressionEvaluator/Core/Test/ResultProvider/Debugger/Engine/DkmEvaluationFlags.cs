@@ -22,6 +22,8 @@ namespace Microsoft.VisualStudio.Debugger.Evaluation
         DynamicView = 16384,
         ResultsOnly = 32768,
         NoExpansion = 65536,
+        TreatAsExpression = 1,
+        TreatFunctionAsAddress = 2,
         FilterToFavorites = 0x40000,
         UseSimpleDisplayString = 0x80000,
     }
