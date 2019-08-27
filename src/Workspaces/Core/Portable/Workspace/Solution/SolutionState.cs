@@ -92,9 +92,9 @@ namespace Microsoft.CodeAnalysis
                 projectIdToTrackerMap: ImmutableDictionary<ProjectId, CompilationTracker>.Empty,
                 filePathToDocumentIdsMap: ImmutableDictionary.Create<string, ImmutableArray<DocumentId>>(StringComparer.OrdinalIgnoreCase),
                 dependencyGraph: ProjectDependencyGraph.Empty,
-#nullable disable warnings // we are passing null here but we're immediately overwriting it -- better to keep the parameter non-null
+#nullable disable  // we are passing null here but we're immediately overwriting it -- better to keep the parameter non-null
                 lazyLatestProjectVersion: null)
-#nullable enable warnings
+#nullable enable 
         {
             _lazyLatestProjectVersion = new Lazy<VersionStamp>(() => ComputeLatestProjectVersion());
         }
@@ -916,6 +916,31 @@ namespace Microsoft.CodeAnalysis
 
             return this.ForkProject(newProject, newDependencyGraph: _dependencyGraph.WithProjectReferences(projectId, newProject.ProjectReferences.Select(p => p.ProjectId)));
         }
+        
+        internal SolutionState RemoveProjectReferences(ProjectId projectId, ImmutableArray<ProjectReference> projectReferences)
+        {
+            if (projectId == null)
+            {
+                throw new ArgumentNullException(nameof(projectId));
+            }
+
+            if (projectReferences == null)
+            {
+                throw new ArgumentNullException(nameof(projectReferences));
+            }
+
+            CheckContainsProject(projectId);
+            foreach (var projectReference in projectReferences)
+            {
+                CheckContainsProject(projectReference.ProjectId);
+            }
+
+            var oldProject = this.GetProjectState(projectId)!;
+            var newProject = oldProject.RemoveProjectReferences(projectReferences);
+
+            return this.ForkProject(newProject, newDependencyGraph: _dependencyGraph.WithProjectReferences(projectId, newProject.ProjectReferences.Select(p => p.ProjectId)));
+        }
+
 
         /// <summary>
         /// Create a new solution instance with the project specified updated to contain

@@ -45,6 +45,9 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
 
         private DebuggingSession _debuggingSession;
         private EditSession _editSession;
+
+        public EditSession EditSession => _editSession;
+
         private PendingSolutionUpdate _pendingUpdate;
 
         internal EditAndContinueWorkspaceService(
