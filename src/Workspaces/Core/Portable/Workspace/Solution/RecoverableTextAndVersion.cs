@@ -104,9 +104,19 @@ namespace Microsoft.CodeAnalysis
             _initialSource = null;
             _version = textAndVersion.Version;
             _filePath = textAndVersion.FilePath;
-            _text = new RecoverableText(this, textAndVersion.Text);
-            _text.GetValue(CancellationToken.None); // force access to trigger save
+
+            // https://github.com/dotnet/roslyn/issues/31548
+            // recoverableText should be initialized before assignment to field to avoid race condition which leads to null assertion failure
+            _text = CreateAndInitRecoverableText(textAndVersion.Text);
+
             return textAndVersion;
+        }
+
+        private RecoverableText CreateAndInitRecoverableText(SourceText text)
+        {
+            var recoverableText = new RecoverableText(this, text);
+            recoverableText.GetValue(CancellationToken.None); // force access to trigger save
+            return recoverableText;
         }
 
         private sealed class RecoverableText : RecoverableWeakValueSource<SourceText>
