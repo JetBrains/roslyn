@@ -175,6 +175,9 @@ namespace Microsoft.CodeAnalysis.Host
 
             public static string CreateUniqueName(long size)
             {
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) // Named maps are not supported on Unix .NET Core
+                    return null;
+
                 return "Roslyn Temp Storage " + size.ToString() + " " + Guid.NewGuid().ToString("N");
             }
 
