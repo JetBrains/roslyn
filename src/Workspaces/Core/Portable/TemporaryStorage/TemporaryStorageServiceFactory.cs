@@ -20,6 +20,9 @@ namespace Microsoft.CodeAnalysis.Host
     [ExportWorkspaceServiceFactory(typeof(ITemporaryStorageService), ServiceLayer.Host), Shared]
     internal partial class TemporaryStorageServiceFactory : IWorkspaceServiceFactory
     {
+        private static bool IsNetCore { get; } = typeof(int).Assembly.GetName().Name
+            .Equals("System.Private.CoreLib", StringComparison.Ordinal);
+
         [ImportingConstructor]
         public TemporaryStorageServiceFactory()
         {
@@ -175,7 +178,7 @@ namespace Microsoft.CodeAnalysis.Host
 
             public static string CreateUniqueName(long size)
             {
-                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) // Named maps are not supported on Unix .NET Core
+                if (IsNetCore && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) // Named maps are not supported on Unix .NET Core
                     return null;
 
                 return "Roslyn Temp Storage " + size.ToString() + " " + Guid.NewGuid().ToString("N");
