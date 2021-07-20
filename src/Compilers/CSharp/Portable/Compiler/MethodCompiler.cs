@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Emit;
+using Microsoft.CodeAnalysis.CSharp.RuntimeChecks;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Debugging;
@@ -725,11 +726,18 @@ namespace Microsoft.CodeAnalysis.CSharp
                     const int methodOrdinal = -1;
                     MethodBody emittedBody = null;
 
+                    BoundStatement body = methodWithBody.Body;
+                    if (_compilation.Options.RuntimeChecks && !method.IsIterator)
+                    {
+                        body = RuntimeCheckSynthesizer
+                            .GenerateArgumentNullChecks(methodWithBody.Method, body, compilationState, diagnosticsThisMethod);
+                    }
+
                     try
                     {
                         // Local functions can be iterators as well as be async (lambdas can only be async), so we need to lower both iterators and async
                         IteratorStateMachine iteratorStateMachine;
-                        BoundStatement loweredBody = IteratorRewriter.Rewrite(methodWithBody.Body, method, methodOrdinal, variableSlotAllocatorOpt, compilationState, diagnosticsThisMethod, out iteratorStateMachine);
+                        BoundStatement loweredBody = IteratorRewriter.Rewrite(body, method, methodOrdinal, variableSlotAllocatorOpt, compilationState, diagnosticsThisMethod, out iteratorStateMachine);
                         StateMachineTypeSymbol stateMachine = iteratorStateMachine;
 
                         if (!loweredBody.HasErrors)
@@ -739,6 +747,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                             Debug.Assert((object)iteratorStateMachine == null || (object)asyncStateMachine == null);
                             stateMachine = stateMachine ?? asyncStateMachine;
+                        }
+
+                        if (_compilation.Options.RuntimeChecks && method.IsIterator)
+                        {
+                            loweredBody = RuntimeCheckSynthesizer
+                                .GenerateArgumentNullChecks(methodWithBody.Method, loweredBody, compilationState, diagnosticsThisMethod);
                         }
 
                         if (_emitMethodBodies && !diagnosticsThisMethod.HasAnyErrors() && !_globalHasErrors)
@@ -1041,7 +1055,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         body = (BoundBlock)body.WithHasErrors();
                     }
-
+                    
                     // lower initializers just once. the lowered tree will be reused when emitting all constructors
                     // with field initializers. Once lowered, these initializers will be stashed in processedInitializers.LoweredInitializers
                     // (see later in this method). Don't bother lowering _now_ if this particular ctor won't have the initializers
@@ -1360,6 +1374,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return loweredBody;
                 }
 
+                if (compilationState.Compilation.Options.RuntimeChecks && !method.IsIterator)
+                {
+                    loweredBody = RuntimeCheckSynthesizer
+                        .GenerateArgumentNullChecks(method, loweredBody, compilationState, diagnostics);
+                }
+
                 if (sawAwaitInExceptionHandler)
                 {
                     // If we have awaits in handlers, we need to
@@ -1421,6 +1441,12 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 Debug.Assert((object)iteratorStateMachine == null || (object)asyncStateMachine == null);
                 stateMachineTypeOpt = (StateMachineTypeSymbol)iteratorStateMachine ?? asyncStateMachine;
+
+                if (compilationState.Compilation.Options.RuntimeChecks && method.IsIterator)
+                {
+                    bodyWithoutAsync = RuntimeCheckSynthesizer
+                        .GenerateArgumentNullChecks(method, bodyWithoutAsync, compilationState, diagnostics);
+                }
 
                 return bodyWithoutAsync;
             }
