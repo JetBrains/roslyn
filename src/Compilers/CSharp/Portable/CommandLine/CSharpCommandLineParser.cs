@@ -135,6 +135,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool publicSign = false;
             string? sourceLink = null;
             string? ruleSetPath = null;
+            bool runtimeChecks = false;
 
             // Process ruleset files first so that diagnostic severity settings specified on the command line via
             // /nowarn and /warnaserror can override diagnostic severity settings specified in the ruleset file.
@@ -1303,6 +1304,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                             }
                             continue;
 
+                        case "runtimechecks":
+                            runtimeChecks = true;
+                            continue;
+
                         case "-":
                             if (Console.IsInputRedirected)
                             {
@@ -1452,6 +1457,11 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (debugPlus)
             {
                 options = options.WithDebugPlusMode(debugPlus);
+            }
+
+            if (runtimeChecks)
+            {
+                options = options.WithRuntimeChecks(runtimeChecks);
             }
 
             var emitOptions = new EmitOptions

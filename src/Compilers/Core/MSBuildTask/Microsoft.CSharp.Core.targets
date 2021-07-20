@@ -147,7 +147,8 @@
          Win32Manifest="$(Win32Manifest)"
          Win32Resource="$(Win32Resource)"
          PathMap="$(PathMap)"
-         SourceLink="$(SourceLink)">
+         SourceLink="$(SourceLink)"
+         RuntimeChecks="$(RuntimeChecks)">
       <Output TaskParameter="CommandLineArgs" ItemName="CscCommandLineArgs" />
     </Csc>
 

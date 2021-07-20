@@ -368,7 +368,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
                 "AllowUnsafe",
                 "Usings",
                 "TopLevelBinderFlags",
-                "NullableContextOptions");
+                "NullableContextOptions",
+                "RuntimeChecks");
         }
 
         [Fact]
