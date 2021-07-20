@@ -169,6 +169,12 @@ namespace Microsoft.CodeAnalysis.BuildTasks
             get { return (string?)_store[nameof(Nullable)]; }
         }
 
+        public bool RuntimeChecks
+        {
+            set { _store[nameof(RuntimeChecks)] = value; }
+            get { return _store.GetOrDefault(nameof(RuntimeChecks), false); }
+        }
+
         #endregion
 
         #region Tool Members
@@ -228,6 +234,7 @@ namespace Microsoft.CodeAnalysis.BuildTasks
             commandLine.AppendPlusOrMinusSwitch("/highentropyva", _store, nameof(HighEntropyVA));
             commandLine.AppendSwitchIfNotNull("/nullable:", Nullable);
             commandLine.AppendWhenTrue("/nosdkpath", _store, nameof(DisableSdkPath));
+            commandLine.AppendWhenTrue("/runtimechecks", _store, nameof(RuntimeChecks));
 
             // If not design time build and the globalSessionGuid property was set then add a -globalsessionguid:<guid>
             bool designTime = false;

@@ -5095,6 +5095,16 @@ C:\*.cs(100,7): error CS0103: The name 'Goo' does not exist in the current conte
         }
 
         [Fact]
+        public void RuntimeChecks()
+        {
+            var parsedArgs1 = DefaultParse(new[] { "a.cs", "/runtimechecks" }, WorkingDirectory);
+            Assert.True(parsedArgs1.CompilationOptions.RuntimeChecks);
+
+            var parsedArgs2 = DefaultParse(new[] { "a.cs", "" }, WorkingDirectory);
+            Assert.False(parsedArgs2.CompilationOptions.RuntimeChecks);
+        }
+
+        [Fact]
         public void Usings()
         {
             CSharpCommandLineArguments parsedArgs;
