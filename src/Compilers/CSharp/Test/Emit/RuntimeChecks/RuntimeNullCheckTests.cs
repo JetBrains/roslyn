@@ -136,6 +136,27 @@ class C
         }
 
         [Fact]
+        public void EmptyMethod_RefTypeParameter()
+        {
+            const string source = @"
+using System;
+class C
+{
+    static void M(string s)
+    {
+    }
+
+    static void Main()
+    {
+        M(""sample text"");
+        Console.WriteLine(""ok"");
+    }
+}";
+            var comp = CreateCompilation(source);
+            CompileAndVerify(comp, expectedOutput: "ok");
+        }
+
+        [Fact]
         public void ReferenceTypeParameter()
         {
             const string source = @"
@@ -219,6 +240,46 @@ class C
     {
         await M(null);
         Console.WriteLine(""unreachable"");
+    }
+}";
+
+            var comp = CreateCompilation(source);
+            CompileAndVerifyException<ArgumentNullException>(comp);
+        }
+
+        [Fact]
+        public void SynthesizedMethod_SingleRetInstruction()
+        {
+            const string source = @"
+using System;
+Console.WriteLine(""ok"");
+
+// It's an empty record: some of its synthesized members will consist
+// of only one ret instruction.
+record R;";
+            var comp = CreateCompilation(source);
+            CompileAndVerify(comp, expectedOutput: "ok");
+        }
+
+        [Fact]
+        public void AsyncEnumerable()
+        {
+            const string source = @"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+class C
+{
+    static async Task Main()
+    {
+        var enumerable = M(null);
+    }
+
+    static async IAsyncEnumerable<int> M(string s)
+    {
+        await Task.Delay(10);
+        yield return s.Length;
     }
 }";
 
@@ -399,7 +460,10 @@ class C
         }
 
         private static CSharpCompilation CreateCompilation(string source, bool nullableContext = true)
-            => CreateCompilation(new[] { source }, options: WithRuntimeChecks(nullableContext));
+        {
+            return CreateCompilationWithTasksExtensions(new[] { source, AsyncStreamsTypes },
+                options: WithRuntimeChecks(nullableContext));
+        }
 
         private static CSharpCompilationOptions WithRuntimeChecks(bool nullableContext)
         {
