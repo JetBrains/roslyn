@@ -65,25 +65,27 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
                 }
             }
 
-            if (stmts.Count > 0 && !producedAnySequencePoints)
+            if (stmts.Count == 0)
             {
-                // If there's an existing sequence point, we can expand its span to include
-                // the generated runtime checks as well.
-                if (!originalStmts.Statements.IsEmpty &&
-                    originalStmts.Statements[0] is BoundSequencePoint sequencePoint)
+                return body;
+            }
+
+            // If we couldn't produce any sequence points, but there's an existing one in the original body,
+            // we can expand its span to include the generated runtime checks as well.
+            if (!producedAnySequencePoints && !originalStmts.Statements.IsEmpty &&
+                originalStmts.Statements[0] is BoundSequencePoint sequencePoint)
+            {
+                if (sequencePoint.StatementOpt is BoundStatement firstStmt)
                 {
-                    if (sequencePoint.StatementOpt is BoundStatement firstStmt)
-                    {
-                        stmts.Add(firstStmt);
-                    }
-                    var updatedSequencePoint = F.SequencePoint(
-                        (CSharpSyntaxNode)sequencePoint.Syntax,
-                        F.Block(stmts.ToImmutableAndClear()));
-                    stmts.Add(updatedSequencePoint);
-                    for (int i = 1; i < originalStmts.Statements.Length; i++)
-                    {
-                        stmts.Add(originalStmts.Statements[i]);
-                    }
+                    stmts.Add(firstStmt);
+                }
+                var updatedSequencePoint = F.SequencePoint(
+                    (CSharpSyntaxNode)sequencePoint.Syntax,
+                    F.Block(stmts.ToImmutableAndClear()));
+                stmts.Add(updatedSequencePoint);
+                for (int i = 1; i < originalStmts.Statements.Length; i++)
+                {
+                    stmts.Add(originalStmts.Statements[i]);
                 }
             }
             else
