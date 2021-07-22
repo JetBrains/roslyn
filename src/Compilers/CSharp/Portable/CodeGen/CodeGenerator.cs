@@ -124,13 +124,14 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
                 }
             }
 
+            var compilationOptions = moduleBuilder.Compilation.Options;
             // Emit sequence points unless
             // - the PDBs are not being generated
             // - debug information for the method is not generated since the method does not contain
             //   user code that can be stepped through, or changed during EnC.
             // 
             // This setting only affects generating PDB sequence points, it shall not affect generated IL in any way.
-            _emitPdbSequencePoints = emittingPdb && method.GenerateDebugInfo;
+            _emitPdbSequencePoints = emittingPdb && (method.GenerateDebugInfo || compilationOptions.RuntimeChecks);
 
             try
             {
