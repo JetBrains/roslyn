@@ -273,7 +273,7 @@ class C
 {
     static async Task Main()
     {
-        var enumerable = M(null);
+        M(null);
     }
 
     static async IAsyncEnumerable<int> M(string s)

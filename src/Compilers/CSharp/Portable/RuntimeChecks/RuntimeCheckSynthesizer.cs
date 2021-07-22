@@ -34,6 +34,12 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
                 // BaseMethod represents the original symbol.
                 baseParameters = rewrittenLambdaOrLocalFunction.BaseMethod.Parameters;
             }
+            else if (methodSymbol is SourcePropertyAccessorSymbol { AssociatedSymbol: SourcePropertySymbol { IsIndexer: true } prop })
+            {
+                // Indexers need special treatment cause their get accessors have "cloned" parameters
+                // with no references to the original syntax.
+                baseParameters = prop.Parameters;
+            }
 
             var F = new SyntheticBoundNodeFactory(methodSymbol, body.Syntax, compilationState, diagnostics);
             MethodSymbol exceptionCtor;
