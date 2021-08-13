@@ -25,18 +25,42 @@ namespace Microsoft.CodeAnalysis.ExpressionEvaluator
         internal static readonly AssemblyIdentity SystemXmlLinqIdentity = new AssemblyIdentity("System.Xml.Linq");
         internal static readonly AssemblyIdentity MicrosoftVisualBasicIdentity = new AssemblyIdentity("Microsoft.VisualBasic");
 
-        internal abstract CompileResult? CompileExpression(
+        internal CompileResult CompileExpression(
             string expr,
             DkmEvaluationFlags compilationFlags,
             ImmutableArray<Alias> aliases,
             DiagnosticBag diagnostics,
             out ResultProperties resultProperties,
+            CompilationTestData testData)
+        {
+            return CompileExpression(expr, compilationFlags, aliases, ImmutableArray<string>.Empty, diagnostics, out resultProperties, testData);
+        }
+
+        internal abstract CompileResult? CompileExpression(
+            string expr,
+            DkmEvaluationFlags compilationFlags,
+            ImmutableArray<Alias> aliases,
+            ImmutableArray<string> additionalImports,
+            DiagnosticBag diagnostics,
+            out ResultProperties resultProperties,
             CompilationTestData? testData);
+
+        internal CompileResult CompileAssignment(
+            string target,
+            string expr,
+            ImmutableArray<Alias> aliases,
+            DiagnosticBag diagnostics,
+            out ResultProperties resultProperties,
+            CompilationTestData testData)
+        {
+            return CompileAssignment(target, expr, aliases, ImmutableArray<string>.Empty, diagnostics, out resultProperties, testData);
+        }
 
         internal abstract CompileResult? CompileAssignment(
             string target,
             string expr,
             ImmutableArray<Alias> aliases,
+            ImmutableArray<string> additionalImports,
             DiagnosticBag diagnostics,
             out ResultProperties resultProperties,
             CompilationTestData? testData);
