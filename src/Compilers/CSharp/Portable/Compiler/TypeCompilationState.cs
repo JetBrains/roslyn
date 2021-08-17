@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Emit;
+using Microsoft.CodeAnalysis.CSharp.RuntimeChecks;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Roslyn.Utilities;
@@ -76,6 +77,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Used to detect and report initializer cycles.
         /// </summary>
         private SmallDictionary<MethodSymbol, MethodSymbol>? _constructorInitializers;
+
+        public readonly RuntimeCheckSynthesizer RuntimeCheckSynthesizer = new();
 
         public TypeCompilationState(NamedTypeSymbol? typeOpt, CSharpCompilation compilation, PEModuleBuilder? moduleBuilderOpt)
         {

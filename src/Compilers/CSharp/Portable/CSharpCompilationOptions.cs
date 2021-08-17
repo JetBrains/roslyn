@@ -756,7 +756,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                    this.TopLevelBinderFlags == other.TopLevelBinderFlags &&
                    (this.Usings == null ? other.Usings == null : this.Usings.SequenceEqual(other.Usings, StringComparer.Ordinal) &&
                    this.NullableContextOptions == other.NullableContextOptions) &&
-                   this.RuntimeChecks;
+                   this.RuntimeChecks == other.RuntimeChecks;
         }
 
         public override bool Equals(object? obj)

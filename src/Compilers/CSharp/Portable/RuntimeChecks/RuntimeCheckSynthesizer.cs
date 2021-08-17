@@ -2,8 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
+using System.Collections.Immutable;
 using System.Diagnostics;
+using Microsoft.CodeAnalysis.CSharp.Emit;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
 
@@ -11,16 +12,33 @@ using Microsoft.CodeAnalysis.PooledObjects;
 
 namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
 {
-    internal static class RuntimeCheckSynthesizer
+    internal class RuntimeCheckSynthesizer
     {
-        public static BoundStatement GenerateArgumentNullChecks(
+        private readonly SuppressedNullAssignmentCollector _suppressedNullAssignmentCollector = new();
+
+        public void ProcessConstructors(NamedTypeSymbol typeSymbol, BindingDiagnosticBag diagnostics)
+        {
+            foreach (var ctor in typeSymbol.Constructors)
+            {
+                if (ctor is SourceConstructorSymbol and SourceMemberMethodSymbol member)
+                {
+                    var binder = member.TryGetBodyBinder();
+                    var body = binder.BindMethodBody(member.SyntaxNode, diagnostics);
+                    _suppressedNullAssignmentCollector.Visit(body);
+                }
+            }
+        }
+
+        public BoundStatement GenerateArgumentNullChecks(
             MethodSymbol methodSymbol,
             BoundStatement body,
             TypeCompilationState compilationState,
             BindingDiagnosticBag diagnostics)
         {
             Debug.Assert(body.Kind is BoundKind.Block or BoundKind.StatementList, $"Unexpected BoundKind: {body.Kind}");
-            if (methodSymbol.Parameters.IsEmpty || body is not BoundStatementList originalStmts)
+            if (methodSymbol.Parameters.IsEmpty || body is not BoundStatementList originalStmts
+                || compilationState.ModuleBuilderOpt is not PEAssemblyBuilderBase assemblyBuilder
+                || IsExcluded(methodSymbol))
             {
                 return body;
             }
@@ -66,7 +84,7 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
                     var syntax = syntaxReferences.Length == 1
                         ? (CSharpSyntaxNode)syntaxReferences[0].GetSyntax()
                         : null;
-                    stmts.Add(GenerateArgumentCheck(param, syntax, F, exceptionCtor));
+                    stmts.Add(GenerateArgumentCheck(param, syntax, F, assemblyBuilder));
                     producedAnySequencePoints |= syntax is not null;
                 }
             }
@@ -79,15 +97,27 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
             // If we couldn't produce any sequence points, but there's an existing one in the original body,
             // we can expand its span to include the generated runtime checks as well.
             if (!producedAnySequencePoints && !originalStmts.Statements.IsEmpty &&
-                originalStmts.Statements[0] is BoundSequencePoint sequencePoint)
+                originalStmts.Statements[0].Kind is BoundKind.SequencePoint or BoundKind.SequencePointWithSpan)
             {
-                if (sequencePoint.StatementOpt is BoundStatement firstStmt)
+                var originalSequencePoint = originalStmts.Statements[0];
+                BoundStatement updatedSequencePoint;
+                if (originalSequencePoint is BoundSequencePoint sp)
                 {
-                    stmts.Add(firstStmt);
+                    stmts.AddIfNotNull(sp.StatementOpt);
+                    updatedSequencePoint = F.SequencePoint(
+                        (CSharpSyntaxNode)sp.Syntax,
+                        F.Block(stmts.ToImmutableAndClear()));
                 }
-                var updatedSequencePoint = F.SequencePoint(
-                    (CSharpSyntaxNode)sequencePoint.Syntax,
-                    F.Block(stmts.ToImmutableAndClear()));
+                else
+                {
+                    var spannedSp = (BoundSequencePointWithSpan)originalSequencePoint;
+                    stmts.AddIfNotNull(spannedSp.StatementOpt);
+                    updatedSequencePoint = F.SequencePointWithSpan(
+                        (CSharpSyntaxNode)spannedSp.Syntax,
+                        spannedSp.Span,
+                        F.Block(stmts.ToImmutableAndClear()));
+                }
+
                 stmts.Add(updatedSequencePoint);
                 for (int i = 1; i < originalStmts.Statements.Length; i++)
                 {
@@ -106,28 +136,48 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
 
         private static bool NeedsChecking(ParameterSymbol parameter)
         {
-            return parameter.Type.IsReferenceType
-                   && !parameter.IsMetadataOut
-                   && parameter.TypeWithAnnotations.NullableAnnotation == NullableAnnotation.NotAnnotated;
+            return parameter is
+            {
+                RefKind: not RefKind.Out,
+                TypeWithAnnotations:
+                {
+                    NullableAnnotation: NullableAnnotation.NotAnnotated,
+                    Type: { IsValueType: false } and not TypeParameterSymbol { IsNotNullable: not true }
+                }
+            } && (parameter.FlowAnalysisAnnotations & FlowAnalysisAnnotations.AllowNull) != FlowAnalysisAnnotations.AllowNull;
+        }
+
+        private bool IsExcluded(MethodSymbol method)
+        {
+            return method.ContainingNamespace.ToString() == "System.Runtime.CompilerServices"
+                || (method is SourcePropertyAccessorSymbol { AssociatedSymbol: SourcePropertySymbol prop }
+                   && _suppressedNullAssignmentCollector.CollectedProperties.Contains(prop));
         }
 
         private static BoundStatement GenerateArgumentCheck(
             ParameterSymbol parameter,
             CSharpSyntaxNode? syntax,
             SyntheticBoundNodeFactory factory,
-            MethodSymbol exceptionCtor)
+            PEAssemblyBuilderBase assemblyBuilder)
         {
             var F = factory;
-            var throwStmt = F.Throw(F.New(exceptionCtor, F.StringLiteral(parameter.Name)));
-            var nullcheck = F.If(
-                F.ObjectEqual(F.Parameter(parameter), F.Null(parameter.Type)),
-                throwStmt);
+            MethodSymbol throwMethod = assemblyBuilder.GetEmbeddedThrowHelper().ThrowArgumentNullMethod;
 
+            var args = ImmutableArray.Create<BoundExpression>(F.StringLiteral(parameter.Name));
+            var throwStmt = F.ExpressionStatement(F.StaticCall(throwMethod, args));
+
+            BoundExpression left = F.Parameter(parameter);
+            BoundExpression right = F.Null(F.Compilation.ObjectType);
+            if (parameter.Type.Kind == SymbolKind.TypeParameter)
+            {
+                left = F.Convert(F.Compilation.ObjectType, left);
+            }
+
+            var nullcheck = F.If(F.ObjectEqual(left, right), throwStmt);
             if (syntax is not null)
             {
                 nullcheck = F.SequencePointWithSpan(syntax, syntax.Span, nullcheck);
             }
-
             return nullcheck;
         }
     }

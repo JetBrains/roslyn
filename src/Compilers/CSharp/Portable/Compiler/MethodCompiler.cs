@@ -466,6 +466,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
+            if (_compilation.Options.RuntimeChecks)
+            {
+                compilationState.RuntimeCheckSynthesizer.ProcessConstructors(containingType, _diagnostics);
+            }
+
             // Indicates if a static constructor is in the member,
             // so we can decide to synthesize a static constructor.
             bool hasStaticConstructor = false;
@@ -729,7 +734,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     BoundStatement body = methodWithBody.Body;
                     if (_compilation.Options.RuntimeChecks && !method.IsIterator)
                     {
-                        body = RuntimeCheckSynthesizer
+                        body = compilationState.RuntimeCheckSynthesizer
                             .GenerateArgumentNullChecks(methodWithBody.Method, body, compilationState, diagnosticsThisMethod);
                     }
 
@@ -751,7 +756,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         if (_compilation.Options.RuntimeChecks && method.IsIterator)
                         {
-                            loweredBody = RuntimeCheckSynthesizer
+                            loweredBody = compilationState.RuntimeCheckSynthesizer
                                 .GenerateArgumentNullChecks(methodWithBody.Method, loweredBody, compilationState, diagnosticsThisMethod);
                         }
 
@@ -1055,7 +1060,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     {
                         body = (BoundBlock)body.WithHasErrors();
                     }
-                    
+
                     // lower initializers just once. the lowered tree will be reused when emitting all constructors
                     // with field initializers. Once lowered, these initializers will be stashed in processedInitializers.LoweredInitializers
                     // (see later in this method). Don't bother lowering _now_ if this particular ctor won't have the initializers
@@ -1374,10 +1379,15 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return loweredBody;
                 }
 
-                if (compilationState.Compilation.Options.RuntimeChecks && !method.IsIterator)
+                bool mayEmitRuntimeChecks = body is not BoundTypeOrInstanceInitializers;
+                if (mayEmitRuntimeChecks && compilationState.Compilation.Options.RuntimeChecks && !method.IsIterator)
                 {
-                    loweredBody = RuntimeCheckSynthesizer
+                    loweredBody = compilationState.RuntimeCheckSynthesizer
                         .GenerateArgumentNullChecks(method, loweredBody, compilationState, diagnostics);
+                    if (diagnostics.HasAnyErrors())
+                    {
+                        return loweredBody;
+                    }
                 }
 
                 if (sawAwaitInExceptionHandler)
@@ -1442,9 +1452,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 Debug.Assert((object)iteratorStateMachine == null || (object)asyncStateMachine == null);
                 stateMachineTypeOpt = (StateMachineTypeSymbol)iteratorStateMachine ?? asyncStateMachine;
 
-                if (compilationState.Compilation.Options.RuntimeChecks && method.IsIterator)
+                if (mayEmitRuntimeChecks && compilationState.Compilation.Options.RuntimeChecks && method.IsIterator)
                 {
-                    bodyWithoutAsync = RuntimeCheckSynthesizer
+                    bodyWithoutAsync = compilationState.RuntimeCheckSynthesizer
                         .GenerateArgumentNullChecks(method, bodyWithoutAsync, compilationState, diagnostics);
                 }
 

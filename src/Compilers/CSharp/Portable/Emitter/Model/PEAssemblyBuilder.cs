@@ -18,7 +18,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.Emit
 {
-    internal abstract class PEAssemblyBuilderBase : PEModuleBuilder, Cci.IAssemblyReference
+    internal abstract partial class PEAssemblyBuilderBase : PEModuleBuilder, Cci.IAssemblyReference
     {
         private readonly SourceAssemblySymbol _sourceAssembly;
 
@@ -98,6 +98,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             builder.AddIfNotNull(_lazyNullableContextAttribute);
             builder.AddIfNotNull(_lazyNullablePublicOnlyAttribute);
             builder.AddIfNotNull(_lazyNativeIntegerAttribute);
+            AddAdditionalEmbeddedTypes(builder);
 
             return builder.ToImmutableAndFree();
         }
