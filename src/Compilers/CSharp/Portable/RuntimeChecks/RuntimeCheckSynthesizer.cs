@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
             Debug.Assert(body.Kind is BoundKind.Block or BoundKind.StatementList, $"Unexpected BoundKind: {body.Kind}");
             if (methodSymbol.Parameters.IsEmpty || body is not BoundStatementList originalStmts
                 || compilationState.ModuleBuilderOpt is not PEAssemblyBuilderBase assemblyBuilder
-                || IsExcluded(methodSymbol))
+                || IsBlocklisted(methodSymbol))
             {
                 return body;
             }
@@ -60,24 +60,13 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
             }
 
             var F = new SyntheticBoundNodeFactory(methodSymbol, body.Syntax, compilationState, diagnostics);
-            MethodSymbol exceptionCtor;
-            try
-            {
-                exceptionCtor = (MethodSymbol)F.LessWellKnownMember(LessWellKnownMember.System_ArgumentNullException__ctor);
-            }
-            catch (SyntheticBoundNodeFactory.MissingPredefinedMember ex)
-            {
-                diagnostics.Add(ex.Diagnostic);
-                return body;
-            }
-
             var stmts = ArrayBuilder<BoundStatement>.GetInstance();
             bool producedAnySequencePoints = false;
             for (int i = 0; i < baseParameters.Length; i++)
             {
                 var param = parameters[i];
                 var baseParam = baseParameters[i];
-                if (NeedsChecking(baseParam))
+                if (NeedsChecking(methodSymbol, baseParam, F.Compilation))
                 {
                     var syntaxReferences = baseParam.DeclaringSyntaxReferences;
                     // Assuming parameters can have either 1 or 0 syntax references
@@ -134,24 +123,87 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
                 : F.Block(stmts.ToImmutableAndFree());
         }
 
-        private static bool NeedsChecking(ParameterSymbol parameter)
-        {
-            return parameter is
-            {
-                RefKind: not RefKind.Out,
-                TypeWithAnnotations:
-                {
-                    NullableAnnotation: NullableAnnotation.NotAnnotated,
-                    Type: { IsValueType: false } and not TypeParameterSymbol { IsNotNullable: not true }
-                }
-            } && (parameter.FlowAnalysisAnnotations & FlowAnalysisAnnotations.AllowNull) != FlowAnalysisAnnotations.AllowNull;
-        }
-
-        private bool IsExcluded(MethodSymbol method)
+        private bool IsBlocklisted(MethodSymbol method)
         {
             return method.ContainingNamespace.ToString() == "System.Runtime.CompilerServices"
                 || (method is SourcePropertyAccessorSymbol { AssociatedSymbol: SourcePropertySymbol prop }
                    && _suppressedNullAssignmentCollector.CollectedProperties.Contains(prop));
+        }
+
+        private static bool NeedsChecking(MethodSymbol method, ParameterSymbol parameter, CSharpCompilation compilation)
+        {
+            if (parameter.Type is { IsValueType: true } or TypeParameterSymbol { IsNotNullable: false }
+                || parameter.RefKind == RefKind.Out)
+            {
+                return false;
+            }
+
+            if (parameter.TypeWithAnnotations.NullableAnnotation == NullableAnnotation.NotAnnotated)
+            {
+                return (parameter.FlowAnalysisAnnotations & FlowAnalysisAnnotations.AllowNull) != FlowAnalysisAnnotations.AllowNull;
+            }
+
+            return parameter.TypeWithAnnotations.NullableAnnotation == NullableAnnotation.Oblivious
+                && CheckJetBrainsAnnotations(method, parameter, compilation);
+        }
+
+        private static bool CheckJetBrainsAnnotations(MethodSymbol method, ParameterSymbol parameter, CSharpCompilation compilation)
+        {
+            static bool isAnnotated(ParameterSymbol parameter, NamedTypeSymbol attributeType)
+            {
+                Symbol symbol = parameter;
+                if (parameter.ContainingSymbol is SourcePropertyAccessorSymbol { AssociatedSymbol: PropertySymbol { IsIndexer: false } prop })
+                {
+                    symbol = prop;
+                }
+                foreach (var attr in symbol.GetAttributes())
+                {
+                    if (attr.AttributeClass?.Equals(attributeType) == true)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            var notNullAttribute = compilation.GetLessWellKnownType(LessWellKnownType.JetBrains_Annotations_NotNullAttribute);
+            // Annotation inheritance: check base methods
+            MethodSymbol? curOverride = method;
+            do
+            {
+                parameter = curOverride.Parameters[parameter.Ordinal];
+                if (isAnnotated(parameter, notNullAttribute))
+                {
+                    return true;
+                }
+            } while ((curOverride = curOverride?.OverriddenMethod) is not null);
+
+            // Annotation inheritance: check whether this method implements an (annotated) interface member
+            var type = method.ContainingType;
+            foreach (var @interface in type.AllInterfacesNoUseSiteDiagnostics)
+            {
+                Symbol? implementingMember;
+                foreach (var interfaceMember in @interface.GetMembersUnordered())
+                {
+                    if (interfaceMember.Kind is not (SymbolKind.Method or SymbolKind.Property or SymbolKind.Event)
+                        || !interfaceMember.IsImplementableInterfaceMember())
+                    {
+                        continue;
+                    }
+                    implementingMember = type.FindImplementationForInterfaceMember(interfaceMember);
+                    if (implementingMember is not null && interfaceMember is MethodSymbol interfaceMethod
+                        && interfaceMethod.ParameterCount == method.ParameterCount)
+                    {
+                        parameter = interfaceMethod.Parameters[parameter.Ordinal];
+                        if (isAnnotated(parameter, notNullAttribute))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         private static BoundStatement GenerateArgumentCheck(

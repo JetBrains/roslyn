@@ -9,6 +9,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     internal enum LessWellKnownType
     {
         System_ArgumentNullException,
+        JetBrains_Annotations_NotNullAttribute,
         Count
     }
 
@@ -16,7 +17,8 @@ namespace Microsoft.CodeAnalysis.CSharp
     {
         private static readonly string[] s_metadataNames = new[]
         {
-            "System.ArgumentNullException"
+            "System.ArgumentNullException",
+            "JetBrains.Annotations.NotNullAttribute"
         };
 
         public static string GetMetadataName(this LessWellKnownType id)
