@@ -21,7 +21,7 @@ namespace JetBrains.Annotations
 
         [Fact]
         [Trait("Annotations", "JetBrains")]
-        public void NotNull_ReferenceType()
+        public void NotNull_ReferenceTypeParameter()
         {
             const string source = @"
 using System;
@@ -41,6 +41,31 @@ class C
 
             var comp = CreateCompilation(source, nullableContext: false);
             CompileAndVerifyException<ArgumentNullException>(comp);
+        }
+
+        [Fact]
+        [Trait("Annotations", "JetBrains")]
+        public void NotNull_MultipleReferenceTypeParameters()
+        {
+            const string source = @"
+using System;
+using JetBrains.Annotations;
+class C
+{
+    static void Main()
+    {
+        M(""meow"", null);
+    }
+
+    static void M([NotNull] string s1, [NotNull] string s2)
+    {
+        Console.WriteLine(s1.Length);
+        Console.WriteLine(s2.Length);
+    }
+}";
+
+            var comp = CreateCompilation(source, nullableContext: false);
+            CompileAndVerifyException<ArgumentNullException>(comp, expectedOutput: "4");
         }
 
         [Fact]

@@ -76,6 +76,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
             _metadataName = (emitOptions.OutputNameOverride == null) ? sourceAssembly.MetadataName : FileNameUtilities.ChangeExtension(emitOptions.OutputNameOverride, extension: null);
 
             AssemblyOrModuleSymbolToModuleRefMap.Add(sourceAssembly, this);
+            SynthesizeAdditionalEmbeddedTypes();
         }
 
         public sealed override ISourceAssemblySymbolInternal SourceAssemblyOpt

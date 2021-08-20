@@ -19,8 +19,9 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
     {
         public SynthesizedThrowHelperMethod ThrowArgumentNullMethod { get; }
 
-        public SynthesizedThrowHelperType(NamespaceSymbol containingNamespace)
+        public SynthesizedThrowHelperType(NamespaceSymbol containingNamespace, ModuleSymbol containingModule)
         {
+            ContainingModule = containingModule;
             ContainingSymbol = ContainingNamespace = containingNamespace;
             ThrowArgumentNullMethod = new SynthesizedThrowHelperMethod(this);
         }
@@ -45,6 +46,7 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
 
         internal override bool HasPossibleWellKnownCloneMethod() => false;
 
+        internal override ModuleSymbol ContainingModule { get; }
         public override NamespaceSymbol ContainingNamespace { get; }
         public override Symbol ContainingSymbol { get; }
         public override ImmutableArray<Location> Locations => ImmutableArray<Location>.Empty;
@@ -81,8 +83,8 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
 
         internal override bool IsInterface => false;
         public override bool IsStatic => true;
-        public override bool IsAbstract => false;
-        public override bool IsSealed => false;
+        public override bool IsAbstract => true;
+        public override bool IsSealed => true;
 
         internal override NamedTypeSymbol BaseTypeNoUseSiteDiagnostics
             => ContainingAssembly.GetSpecialType(SpecialType.System_Object);
