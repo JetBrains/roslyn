@@ -2,9 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using Microsoft.CodeAnalysis.CSharp.RuntimeChecks;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.PooledObjects;
+using Roslyn.Utilities;
 
 #nullable enable
 
@@ -12,27 +14,28 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 {
     internal abstract partial class PEAssemblyBuilderBase
     {
-        private SynthesizedThrowHelperType? _lazyThrowHelperClass;
+        private SynthesizedThrowHelperType? _throwHelperClass;
 
-        private void AddAdditionalEmbeddedTypes(ArrayBuilder<NamedTypeSymbol> buidler)
+        private void SynthesizeAdditionalEmbeddedTypes()
         {
             if (Compilation.Options.RuntimeChecks)
             {
-                buidler.Add(GetEmbeddedThrowHelper());
+                var containingNamespace = GetOrSynthesizeNamespace("System.Runtime.CompilerServices");
+                var helper = new SynthesizedThrowHelperType(containingNamespace, SourceModule);
+                AddSynthesizedDefinition(containingNamespace, helper);
+                _throwHelperClass = helper;
             }
+        }
+
+        private void AddAdditionalEmbeddedTypes(ArrayBuilder<NamedTypeSymbol> buidler)
+        {
+            buidler.AddIfNotNull(_throwHelperClass);
         }
 
         public SynthesizedThrowHelperType GetEmbeddedThrowHelper()
         {
-            if (_lazyThrowHelperClass is null)
-            {
-                var containingNamespace = GetOrSynthesizeNamespace("System.Runtime.CompilerServices");
-                var helper = new SynthesizedThrowHelperType(containingNamespace);
-                AddSynthesizedDefinition(containingNamespace, helper);
-                _lazyThrowHelperClass = helper;
-            }
-
-            return _lazyThrowHelperClass;
+            RoslynDebug.AssertNotNull(_throwHelperClass);
+            return _throwHelperClass;
         }
     }
 }

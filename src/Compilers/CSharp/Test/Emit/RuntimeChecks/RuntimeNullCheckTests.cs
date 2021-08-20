@@ -210,6 +210,50 @@ class C
 
         [Fact]
         [Trait("Annotations", "Roslyn")]
+        public void MulptipleReferenceTypeParameters()
+        {
+            const string source = @"
+using System;
+class C
+{
+    static void Main()
+    {
+        M(""meow"", null);
+    }
+
+    static void M(string s1, string s2)
+    {
+        Console.WriteLine(s1.Length);
+        Console.WriteLine(s2.Length);
+    }
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerifyException<ArgumentNullException>(comp);
+            verifier.VerifyIL("C.M(string, string)", @"
+{
+  // Code size       49 (0x31)
+  .maxstack  1
+  IL_0000:  ldarg.0
+  IL_0001:  brtrue.s   IL_000d
+  IL_0003:  ldstr      ""s1""
+  IL_0008:  call       ""void System.Runtime.CompilerServices.ThrowHelper.ArgumentNull(string)""
+  IL_000d:  ldarg.1
+  IL_000e:  brtrue.s   IL_001a
+  IL_0010:  ldstr      ""s2""
+  IL_0015:  call       ""void System.Runtime.CompilerServices.ThrowHelper.ArgumentNull(string)""
+  IL_001a:  ldarg.0
+  IL_001b:  callvirt   ""int string.Length.get""
+  IL_0020:  call       ""void System.Console.WriteLine(int)""
+  IL_0025:  ldarg.1
+  IL_0026:  callvirt   ""int string.Length.get""
+  IL_002b:  call       ""void System.Console.WriteLine(int)""
+  IL_0030:  ret
+}");
+        }
+
+        [Fact]
+        [Trait("Annotations", "Roslyn")]
         public void Generics_ClassConstraint()
         {
             const string source = @"
