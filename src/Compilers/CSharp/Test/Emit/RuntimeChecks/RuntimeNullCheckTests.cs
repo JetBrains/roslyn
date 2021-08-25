@@ -1248,6 +1248,40 @@ class C
 
         [Fact]
         [Trait("Annotations", "Roslyn")]
+        public void DisallowNull_Property()
+        {
+            const string source = @"
+using System;
+using System.Diagnostics.CodeAnalysis;
+class C
+{
+    static void Main()
+    {
+        Prop = null;
+    }
+
+    [DisallowNull]
+    static string? Prop { get; set; }
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerifyException<ArgumentNullException>(comp);
+            verifier.VerifyIL("C.Prop.set", expectedIL: @"
+{
+  // Code size       20 (0x14)
+  .maxstack  1
+  IL_0000:  ldarg.0
+  IL_0001:  brtrue.s   IL_000d
+  IL_0003:  ldstr      ""value""
+  IL_0008:  call       ""void System.Runtime.CompilerServices.ThrowHelper.ArgumentNull(string)""
+  IL_000d:  ldarg.0
+  IL_000e:  stsfld     ""string C.<Prop>k__BackingField""
+  IL_0013:  ret
+}");
+        }
+
+        [Fact]
+        [Trait("Annotations", "Roslyn")]
         public void DisallowNull_Parameter()
         {
             const string source = @"
