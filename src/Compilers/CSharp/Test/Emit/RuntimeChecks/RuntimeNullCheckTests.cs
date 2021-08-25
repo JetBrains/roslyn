@@ -317,6 +317,79 @@ class C
   IL_0006:  ret
 }");
         }
+        
+        [Fact]
+        [Trait("Annotations", "Roslyn")]
+        public void Generics_BaseClassConstraint()
+        {
+            const string source = @"
+using System;
+class Base { }
+class Derived : Base { }
+class Generic<T> where T : Base
+{
+    public Generic(T value) { }
+}
+class C
+{
+    static void Main()
+    {
+        _ = new Generic<Derived>(null);
+    }
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerifyException<ArgumentNullException>(comp);
+            verifier.VerifyIL("Generic<T>..ctor(T)", @"
+{
+  // Code size       25 (0x19)
+  .maxstack  1
+  IL_0000:  ldarg.1
+  IL_0001:  box        ""T""
+  IL_0006:  brtrue.s   IL_0012
+  IL_0008:  ldstr      ""value""
+  IL_000d:  call       ""void System.Runtime.CompilerServices.ThrowHelper.ArgumentNull(string)""
+  IL_0012:  ldarg.0
+  IL_0013:  call       ""object..ctor()""
+  IL_0018:  ret
+}");
+        }
+
+        [Fact]
+        [Trait("Annotations", "Roslyn")]
+        public void Generics_InterfaceConstraint()
+        {
+            const string source = @"
+using System;
+using System.Collections;
+class Generic<T> where T : IEnumerable
+{
+    public Generic(T value) { }
+}
+class C
+{
+    static void Main()
+    {
+        _ = new Generic<string>(null);
+    }
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerifyException<ArgumentNullException>(comp);
+            verifier.VerifyIL("Generic<T>..ctor(T)", @"
+{
+  // Code size       25 (0x19)
+  .maxstack  1
+  IL_0000:  ldarg.1
+  IL_0001:  box        ""T""
+  IL_0006:  brtrue.s   IL_0012
+  IL_0008:  ldstr      ""value""
+  IL_000d:  call       ""void System.Runtime.CompilerServices.ThrowHelper.ArgumentNull(string)""
+  IL_0012:  ldarg.0
+  IL_0013:  call       ""object..ctor()""
+  IL_0018:  ret
+}");
+        }
 
         [Fact]
         [Trait("Annotations", "Roslyn")]
@@ -990,6 +1063,42 @@ class C
   IL_0013:  ret
 }");
         }
+        
+        [Fact]
+        [Trait("Annotations", "Roslyn")]
+        public void AutoProperty_InitializedWithNull_Suppressed_NoCheck()
+        {
+            const string source = @"
+using System;
+class C
+{
+    public string Prop { get; set; }
+
+    public C()
+    {
+        Prop = null!;
+    }
+
+    static void Main()
+    {
+        var c = new C();
+        Console.WriteLine(""ok"");
+    }
+}";
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerify(comp);
+            verifier.VerifyIL("C..ctor", @"
+{
+  // Code size       14 (0xe)
+  .maxstack  2
+  IL_0000:  ldarg.0
+  IL_0001:  call       ""object..ctor()""
+  IL_0006:  ldarg.0
+  IL_0007:  ldnull
+  IL_0008:  call       ""void C.Prop.set""
+  IL_000d:  ret
+}");
+        }
 
         [Fact]
         [Trait("Annotations", "Roslyn")]
@@ -1106,6 +1215,69 @@ class C
   IL_000f:  ret
 }");
         }
+        
+        [Fact]
+        [Trait("Annotations", "Roslyn")]
+        public void AllowNull_Parameter()
+        {
+            const string source = @"
+using System;
+using System.Diagnostics.CodeAnalysis;
+class C
+{
+    static void Main()
+    {
+        Goo(null);
+        Console.WriteLine(""ok"");
+    }
+
+    static void Goo([AllowNull] string s)
+    {
+    }
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerify(comp, expectedOutput: "ok");
+            verifier.VerifyIL("C.Goo", expectedIL: @"
+{
+  // Code size        1 (0x1)
+  .maxstack  0
+  IL_0000:  ret
+}");
+        }
+
+        [Fact]
+        [Trait("Annotations", "Roslyn")]
+        public void DisallowNull_Parameter()
+        {
+            const string source = @"
+using System;
+using System.Diagnostics.CodeAnalysis;
+class C
+{
+    static void Main()
+    {
+        Goo(null);
+    }
+
+    static void Goo([DisallowNull] string? s)
+    {
+    }
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerifyException<ArgumentNullException>(comp);
+            verifier.VerifyIL("C.Goo", expectedIL: @"
+{
+  // Code size       14 (0xe)
+  .maxstack  1
+  IL_0000:  ldarg.0
+  IL_0001:  brtrue.s   IL_000d
+  IL_0003:  ldstr      ""s""
+  IL_0008:  call       ""void System.Runtime.CompilerServices.ThrowHelper.ArgumentNull(string)""
+  IL_000d:  ret
+}");
+        }
 
         [Fact]
         public void MissingArgumentNullException()
@@ -1154,7 +1326,7 @@ class C
 
         private static CSharpCompilation CreateCompilation(string source, bool nullableContext = true, bool useAsyncStreams = false)
         {
-            var sources = new List<string> { source, AllowNullAttributeDefinition, JetBrainsAnnotations };
+            var sources = new List<string> { source, AllowNullAttributeDefinition, DisallowNullAttributeDefinition, JetBrainsAnnotations };
             if (useAsyncStreams)
             {
                 sources.Add(AsyncStreamsTypes);

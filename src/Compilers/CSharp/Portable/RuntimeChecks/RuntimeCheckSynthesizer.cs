@@ -138,13 +138,12 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
                 return false;
             }
 
-            if (parameter.TypeWithAnnotations.NullableAnnotation == NullableAnnotation.NotAnnotated)
+            return parameter.TypeWithAnnotations.NullableAnnotation switch
             {
-                return (parameter.FlowAnalysisAnnotations & FlowAnalysisAnnotations.AllowNull) != FlowAnalysisAnnotations.AllowNull;
-            }
-
-            return parameter.TypeWithAnnotations.NullableAnnotation == NullableAnnotation.Oblivious
-                && CheckJetBrainsAnnotations(method, parameter, compilation);
+                NullableAnnotation.NotAnnotated => (parameter.FlowAnalysisAnnotations & FlowAnalysisAnnotations.AllowNull) != FlowAnalysisAnnotations.AllowNull,
+                NullableAnnotation.Annotated => (parameter.FlowAnalysisAnnotations & FlowAnalysisAnnotations.DisallowNull) == FlowAnalysisAnnotations.DisallowNull,
+                _ => CheckJetBrainsAnnotations(method, parameter, compilation)
+            };
         }
 
         private static bool CheckJetBrainsAnnotations(MethodSymbol method, ParameterSymbol parameter, CSharpCompilation compilation)
@@ -176,13 +175,12 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
                 {
                     return true;
                 }
-            } while ((curOverride = curOverride?.OverriddenMethod) is not null);
+            } while ((curOverride = curOverride.OverriddenMethod) is not null);
 
             // Annotation inheritance: check whether this method implements an (annotated) interface member
             var type = method.ContainingType;
             foreach (var @interface in type.AllInterfacesNoUseSiteDiagnostics)
             {
-                Symbol? implementingMember;
                 foreach (var interfaceMember in @interface.GetMembersUnordered())
                 {
                     if (interfaceMember.Kind is not (SymbolKind.Method or SymbolKind.Property or SymbolKind.Event)
@@ -190,7 +188,7 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
                     {
                         continue;
                     }
-                    implementingMember = type.FindImplementationForInterfaceMember(interfaceMember);
+                    Symbol? implementingMember = type.FindImplementationForInterfaceMember(interfaceMember);
                     if (implementingMember is not null && interfaceMember is MethodSymbol interfaceMethod
                         && interfaceMethod.ParameterCount == method.ParameterCount)
                     {
