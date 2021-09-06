@@ -18,7 +18,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Emit
 
         private void SynthesizeAdditionalEmbeddedTypes()
         {
-            if (Compilation.Options.RuntimeChecks)
+            if (Compilation.Options.RuntimeChecksMode != RuntimeChecksMode.Disable)
             {
                 var containingNamespace = GetOrSynthesizeNamespace("System.Runtime.CompilerServices");
                 var helper = new SynthesizedThrowHelperType(containingNamespace, SourceModule);

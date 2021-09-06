@@ -5097,11 +5097,20 @@ C:\*.cs(100,7): error CS0103: The name 'Goo' does not exist in the current conte
         [Fact]
         public void RuntimeChecks()
         {
-            var parsedArgs1 = DefaultParse(new[] { "a.cs", "/runtimechecks" }, WorkingDirectory);
-            Assert.True(parsedArgs1.CompilationOptions.RuntimeChecks);
+            var parsedArgs1 = DefaultParse(new[] { "a.cs", "/runtimechecks:enable" }, WorkingDirectory);
+            Assert.Equal(RuntimeChecksMode.Enable, parsedArgs1.CompilationOptions.RuntimeChecksMode);
+            
+            var parsedArgs2 = DefaultParse(new[] { "a.cs", "/runtimechecks:disable" }, WorkingDirectory);
+            Assert.Equal(RuntimeChecksMode.Disable, parsedArgs2.CompilationOptions.RuntimeChecksMode);
+            
+            var parsedArgs3 = DefaultParse(new[] { "a.cs", "/runtimechecks:preconditionsOnly" }, WorkingDirectory);
+            Assert.Equal(RuntimeChecksMode.PreconditionsOnly, parsedArgs3.CompilationOptions.RuntimeChecksMode);
 
-            var parsedArgs2 = DefaultParse(new[] { "a.cs", "" }, WorkingDirectory);
-            Assert.False(parsedArgs2.CompilationOptions.RuntimeChecks);
+            var parsedArgs4 = DefaultParse(new[] { "a.cs", "/runtimechecks:postconditionsOnly" }, WorkingDirectory);
+            Assert.Equal(RuntimeChecksMode.PostconditionsOnly, parsedArgs4.CompilationOptions.RuntimeChecksMode);
+            
+            var parsedArgs5 = DefaultParse(new[] { "a.cs", "" }, WorkingDirectory);
+            Assert.Equal(RuntimeChecksMode.Disable, parsedArgs5.CompilationOptions.RuntimeChecksMode);
         }
 
         [Fact]

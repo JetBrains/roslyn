@@ -15,22 +15,18 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
 {
-    internal sealed class SynthesizedThrowHelperMethod : SynthesizedInstanceMethodSymbol
+    internal abstract class SynthesizedThrowHelperMethod : SynthesizedInstanceMethodSymbol
     {
-        public SynthesizedThrowHelperMethod(SynthesizedThrowHelperType containingType)
+        protected SynthesizedThrowHelperMethod(SynthesizedThrowHelperType containingType)
         {
             ContainingSymbol = ContainingType = containingType;
-            DeclaringCompilation.GetSpecialType(SpecialType.System_String);
-            var param = SynthesizedParameterSymbol.Create(container: this,
-                TypeWithAnnotations.Create(ContainingAssembly.GetSpecialType(SpecialType.System_String), NullableAnnotation.NotAnnotated),
-                ordinal: 0, RefKind.None, "name");
-            Parameters = ImmutableArray.Create(param);
         }
+
+        public abstract override string Name { get; }
+        public abstract override ImmutableArray<ParameterSymbol> Parameters { get; }
 
         public override Symbol ContainingSymbol { get; }
         public override NamedTypeSymbol ContainingType { get; }
-        public override string Name => "ArgumentNull";
-
         public override ImmutableArray<Location> Locations => ContainingType.Locations;
 
         public override Accessibility DeclaredAccessibility => Accessibility.Internal;
@@ -66,11 +62,9 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
         public override ImmutableArray<TypeWithAnnotations> TypeArgumentsWithAnnotations => ImmutableArray<TypeWithAnnotations>.Empty;
         public override ImmutableArray<TypeParameterSymbol> TypeParameters => ImmutableArray<TypeParameterSymbol>.Empty;
 
-        public override ImmutableArray<ParameterSymbol> Parameters { get; }
-
         public override ImmutableArray<MethodSymbol> ExplicitInterfaceImplementations => ImmutableArray<MethodSymbol>.Empty;
         public override ImmutableArray<CustomModifier> RefCustomModifiers => ImmutableArray<CustomModifier>.Empty;
-        public override Symbol AssociatedSymbol => null!;
+        public override Symbol? AssociatedSymbol => null;
 
         internal override ImmutableArray<string> GetAppliedConditionalSymbols() => ImmutableArray<string>.Empty;
 
@@ -90,23 +84,6 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
             base.AddSynthesizedAttributes(moduleBuilder, ref attributes);
         }
 
-        internal override void GenerateMethodBody(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics)
-        {
-            var F = new SyntheticBoundNodeFactory(this, this.GetNonNullSyntaxNode(), compilationState, diagnostics);
-            F.CurrentFunction = this;
-
-            MethodSymbol exceptionCtor;
-            try
-            {
-                exceptionCtor = (MethodSymbol)F.LessWellKnownMember(LessWellKnownMember.System_ArgumentNullException__ctor);
-                var throwStmt = F.Throw(F.New(exceptionCtor, F.Parameter(Parameters[0])));
-                F.CloseMethod(throwStmt);
-            }
-            catch (SyntheticBoundNodeFactory.MissingPredefinedMember ex)
-            {
-                diagnostics.Add(ex.Diagnostic);
-                F.CloseMethod(F.Block());
-            }
-        }
+        internal abstract override void GenerateMethodBody(TypeCompilationState compilationState, BindingDiagnosticBag diagnostics);
     }
 }

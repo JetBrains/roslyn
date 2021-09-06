@@ -135,7 +135,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool publicSign = false;
             string? sourceLink = null;
             string? ruleSetPath = null;
-            bool runtimeChecks = false;
+            RuntimeChecksMode runtimeChecksMode = RuntimeChecksMode.Disable;
 
             // Process ruleset files first so that diagnostic severity settings specified on the command line via
             // /nowarn and /warnaserror can override diagnostic severity settings specified in the ruleset file.
@@ -1305,7 +1305,15 @@ namespace Microsoft.CodeAnalysis.CSharp
                             continue;
 
                         case "runtimechecks":
-                            runtimeChecks = true;
+                            value = RemoveQuotesAndSlashes(value)?.ToLower();
+                            runtimeChecksMode = value switch
+                            {
+                                "disable" or null => RuntimeChecksMode.Disable,
+                                "preconditionsonly" => RuntimeChecksMode.PreconditionsOnly,
+                                "postconditionsonly" => RuntimeChecksMode.PostconditionsOnly,
+                                "enable" => RuntimeChecksMode.Enable,
+                                _ => RuntimeChecksMode.Disable
+                            };
                             continue;
 
                         case "-":
@@ -1459,9 +1467,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                 options = options.WithDebugPlusMode(debugPlus);
             }
 
-            if (runtimeChecks)
+            if (runtimeChecksMode != RuntimeChecksMode.Disable)
             {
-                options = options.WithRuntimeChecks(runtimeChecks);
+                options = options.WithRuntimeChecks(runtimeChecksMode);
             }
 
             var emitOptions = new EmitOptions

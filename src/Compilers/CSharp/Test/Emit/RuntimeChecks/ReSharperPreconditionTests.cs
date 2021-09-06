@@ -7,20 +7,9 @@ using Xunit;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests.RuntimeChecks
 {
-    public partial class RuntimeNullCheckTests
+    public sealed class ReSharperPreconditionTests : RuntimeCheckTestsBase
     {
-        private const string JetBrainsAnnotations = @"
-using System;
-namespace JetBrains.Annotations
-{
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Event | AttributeTargets.Interface | AttributeTargets.Parameter | AttributeTargets.Delegate | AttributeTargets.GenericParameter)]
-    public sealed class NotNullAttribute : Attribute
-    {
-    }
-}";
-
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_ReferenceTypeParameter()
         {
             const string source = @"
@@ -44,7 +33,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_MultipleReferenceTypeParameters()
         {
             const string source = @"
@@ -69,7 +57,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_InheritedFromBase()
         {
             const string source = @"
@@ -98,7 +85,6 @@ class Derived : Base
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_InheritedFromBase_DeeperHierarchy()
         {
             const string source = @"
@@ -131,7 +117,6 @@ class D : B3
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_InheritedFromInterface()
         {
             const string source = @"
@@ -158,9 +143,8 @@ class C : I
             var comp = CreateCompilation(source, nullableContext: false);
             CompileAndVerifyException<ArgumentNullException>(comp);
         }
-        
+
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_InheritedFromInterface_ImplementedInBaseType()
         {
             const string source = @"
@@ -221,9 +205,8 @@ class C : I3
             var comp = CreateCompilation(source, nullableContext: false);
             CompileAndVerifyException<ArgumentNullException>(comp);
         }
-        
+
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_InheritedFromInterface_ExplicitImplementation()
         {
             const string source = @"
@@ -252,7 +235,6 @@ class C : I
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_Generics_UnconstrainedType()
         {
             const string source = @"
@@ -275,7 +257,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_Generics_StructConstraint_NoCheck()
         {
             const string source = @"
@@ -306,7 +287,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_AutoProperty_WithSetter()
         {
             const string source = @"
@@ -327,7 +307,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_AutoProperty_WithSetter_InheritedFromBase()
         {
             const string source = @"
@@ -352,7 +331,6 @@ class D : B
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_AutoProperty_WithSetter_InheritedFromInterface()
         {
             const string source = @"
@@ -377,9 +355,8 @@ class D : I
             var comp = CreateCompilation(source, nullableContext: false);
             CompileAndVerifyException<ArgumentNullException>(comp);
         }
-        
+
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_GenericAutoProperty_WithSetter()
         {
             const string source = @"
@@ -404,7 +381,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_GenericAutoProperty_StructConstraint_NoCheck()
         {
             const string source = @"
@@ -438,7 +414,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_IndexerParameter()
         {
             const string source = @"
@@ -460,7 +435,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "JetBrains")]
         public void NotNull_IndexerParameter_InheritedFromBase()
         {
             const string source = @"
@@ -486,5 +460,8 @@ class D : B
             var comp = CreateCompilation(source, nullableContext: false);
             CompileAndVerifyException<ArgumentNullException>(comp);
         }
+
+        private CSharpCompilation CreateCompilation(string source, bool nullableContext = true, bool useAsyncStreams = false)
+            => CreateCompilation(source, RuntimeChecksMode.PreconditionsOnly, nullableContext, useAsyncStreams);
     }
 }

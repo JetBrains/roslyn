@@ -466,7 +466,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            if (_compilation.Options.RuntimeChecks)
+            if (_compilation.Options.RuntimeChecksMode != RuntimeChecksMode.Disable)
             {
                 compilationState.RuntimeCheckSynthesizer.ProcessConstructors(containingType, _diagnostics);
             }
@@ -732,10 +732,16 @@ namespace Microsoft.CodeAnalysis.CSharp
                     MethodBody emittedBody = null;
 
                     BoundStatement body = methodWithBody.Body;
-                    if (_compilation.Options.RuntimeChecks && !method.IsIterator)
+                    if (_compilation.Options.RuntimeChecksMode != RuntimeChecksMode.Disable)
                     {
-                        body = compilationState.RuntimeCheckSynthesizer
-                            .GenerateArgumentNullChecks(methodWithBody.Method, body, compilationState, diagnosticsThisMethod);
+                        var mode = compilationState.Compilation.Options.RuntimeChecksMode;
+                        if (method.IsIterator)
+                        {
+                            mode = mode.GeneratePostconditionChecks()
+                                ? RuntimeChecksMode.PostconditionsOnly
+                                : RuntimeChecksMode.Disable;
+                        }
+                        body = compilationState.RuntimeCheckSynthesizer.GenerateNullChecks(methodWithBody.Method, body, mode, compilationState, diagnosticsThisMethod);
                     }
 
                     try
@@ -754,10 +760,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                             stateMachine = stateMachine ?? asyncStateMachine;
                         }
 
-                        if (_compilation.Options.RuntimeChecks && method.IsIterator)
+                        if (_compilation.Options.RuntimeChecksMode != RuntimeChecksMode.Disable && (method.IsIterator || method.IsAsync))
                         {
-                            loweredBody = compilationState.RuntimeCheckSynthesizer
-                                .GenerateArgumentNullChecks(methodWithBody.Method, loweredBody, compilationState, diagnosticsThisMethod);
+                            var mode = compilationState.Compilation.Options.RuntimeChecksMode;
+                            mode = mode.GeneratePreconditionChecks()
+                                    ? RuntimeChecksMode.PreconditionsOnly
+                                    : RuntimeChecksMode.Disable;
+                            loweredBody = compilationState.RuntimeCheckSynthesizer.GenerateNullChecks(methodWithBody.Method, loweredBody, mode, compilationState, diagnosticsThisMethod);
                         }
 
                         if (_emitMethodBodies && !diagnosticsThisMethod.HasAnyErrors() && !_globalHasErrors)
@@ -1380,10 +1389,16 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
 
                 bool mayEmitRuntimeChecks = body is not BoundTypeOrInstanceInitializers;
-                if (mayEmitRuntimeChecks && compilationState.Compilation.Options.RuntimeChecks && !method.IsIterator)
+                if (mayEmitRuntimeChecks)
                 {
-                    loweredBody = compilationState.RuntimeCheckSynthesizer
-                        .GenerateArgumentNullChecks(method, loweredBody, compilationState, diagnostics);
+                    var mode = compilationState.Compilation.Options.RuntimeChecksMode;
+                    if (method.IsIterator || method.IsAsync)
+                    {
+                        mode = mode.GeneratePostconditionChecks()
+                            ? RuntimeChecksMode.PostconditionsOnly
+                            : RuntimeChecksMode.Disable;
+                    }
+                    loweredBody = compilationState.RuntimeCheckSynthesizer.GenerateNullChecks(method, loweredBody, mode, compilationState, diagnostics);
                     if (diagnostics.HasAnyErrors())
                     {
                         return loweredBody;
@@ -1452,10 +1467,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                 Debug.Assert((object)iteratorStateMachine == null || (object)asyncStateMachine == null);
                 stateMachineTypeOpt = (StateMachineTypeSymbol)iteratorStateMachine ?? asyncStateMachine;
 
-                if (mayEmitRuntimeChecks && compilationState.Compilation.Options.RuntimeChecks && method.IsIterator)
+                if (mayEmitRuntimeChecks && (method.IsIterator || method.IsAsync))
                 {
-                    bodyWithoutAsync = compilationState.RuntimeCheckSynthesizer
-                        .GenerateArgumentNullChecks(method, bodyWithoutAsync, compilationState, diagnostics);
+                    var mode = compilationState.Compilation.Options.RuntimeChecksMode;
+                    mode = mode.GeneratePreconditionChecks()
+                            ? RuntimeChecksMode.PreconditionsOnly
+                            : RuntimeChecksMode.Disable;
+                    bodyWithoutAsync = compilationState.RuntimeCheckSynthesizer.GenerateNullChecks(method, bodyWithoutAsync, mode, compilationState, diagnostics);
                 }
 
                 return bodyWithoutAsync;

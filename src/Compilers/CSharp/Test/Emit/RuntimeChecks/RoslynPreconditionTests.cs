@@ -3,18 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Microsoft.CodeAnalysis.CSharp.Test.Utilities;
-using Microsoft.CodeAnalysis.Test.Utilities;
 using Xunit;
 
 namespace Microsoft.CodeAnalysis.CSharp.UnitTests.RuntimeChecks
 {
-    public partial class RuntimeNullCheckTests : CompilingTestBase
+    public sealed class RoslynPreconditionTests : RuntimeCheckTestsBase
     {
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void NullableDisable_ChecksNotEmitted()
         {
             const string source = @"
@@ -45,7 +40,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void NullableParameter_NoCheck()
         {
             const string source = @"
@@ -76,7 +70,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void OutParameter_NoCheck()
         {
             const string source = @"
@@ -110,7 +103,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void ValueType_NoCheck()
         {
             const string source = @"
@@ -141,7 +133,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void EmptyMethod_RefTypeParameter()
         {
             const string source = @"
@@ -173,7 +164,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void ReferenceTypeParameter()
         {
             const string source = @"
@@ -209,7 +199,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void MulptipleReferenceTypeParameters()
         {
             const string source = @"
@@ -253,7 +242,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void Generics_ClassConstraint()
         {
             const string source = @"
@@ -288,7 +276,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void Generics_ClassConstraint_NullableT_NoCheck()
         {
             const string source = @"
@@ -317,9 +304,8 @@ class C
   IL_0006:  ret
 }");
         }
-        
+
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void Generics_BaseClassConstraint()
         {
             const string source = @"
@@ -356,7 +342,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void Generics_InterfaceConstraint()
         {
             const string source = @"
@@ -392,7 +377,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void Generics_NotNullConstraint()
         {
             const string source = @"
@@ -427,7 +411,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void Generics_Unconstrained_NoCheck()
         {
             const string source = @"
@@ -458,7 +441,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void Generics_StructConstraint_NoCheck()
         {
             const string source = @"
@@ -487,7 +469,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void Generics_NullableClassConstraint_NoCheck()
         {
             const string source = @"
@@ -518,7 +499,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void ExpressionBodiedMember()
         {
             const string source = @"
@@ -551,7 +531,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void IteratorMethod()
         {
             string source = @"
@@ -591,7 +570,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void AsyncMethod()
         {
             const string source = @"
@@ -692,7 +670,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void SynthesizedMethod_SingleRetInstruction()
         {
             const string source = @"
@@ -707,7 +684,6 @@ record R;";
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void AsyncEnumerable()
         {
             const string source = @"
@@ -749,7 +725,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void LambdaExpression()
         {
             const string source = @"
@@ -782,7 +757,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void LocalFunction()
         {
             const string source = @"
@@ -814,7 +788,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void LocalFunction_Iterator()
         {
             const string source = @"
@@ -853,7 +826,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void LocalFunction_Async()
         {
             const string source = @"
@@ -953,7 +925,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void PropertySetter_BlockBody()
         {
             const string source = @"
@@ -996,7 +967,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void PropertySetter_ExpressionBody()
         {
             const string source = @"
@@ -1033,7 +1003,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void AutoProperty_Setter()
         {
             const string source = @"
@@ -1063,9 +1032,8 @@ class C
   IL_0013:  ret
 }");
         }
-        
+
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void AutoProperty_InitializedWithNull_Suppressed_NoCheck()
         {
             const string source = @"
@@ -1101,7 +1069,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void Ctor_WithFieldInitializers()
         {
             const string source = @"
@@ -1140,7 +1107,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void Indexer()
         {
             const string source = @"
@@ -1173,7 +1139,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void AllowNull_Property_NoCheck()
         {
             const string source = @"
@@ -1215,9 +1180,8 @@ class C
   IL_000f:  ret
 }");
         }
-        
+
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void AllowNull_Parameter()
         {
             const string source = @"
@@ -1247,7 +1211,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void DisallowNull_Property()
         {
             const string source = @"
@@ -1281,7 +1244,6 @@ class C
         }
 
         [Fact]
-        [Trait("Annotations", "Roslyn")]
         public void DisallowNull_Parameter()
         {
             const string source = @"
@@ -1313,70 +1275,7 @@ class C
 }");
         }
 
-        [Fact]
-        public void MissingArgumentNullException()
-        {
-            const string source = @"
-class C
-{
-    static void Main()
-    {
-    }
-}";
-            var options = WithRuntimeChecks(nullableContext: true);
-            var comp = CreateCompilation(source, options: options);
-            comp.MakeTypeMissing(LessWellKnownType.System_ArgumentNullException);
-            comp.VerifyEmitDiagnostics(
-                // error CS0656: Missing compiler required member 'System.ArgumentNullException..ctor'
-                Diagnostic(ErrorCode.ERR_MissingPredefinedMember)
-                    .WithArguments("System.ArgumentNullException", ".ctor")
-                    .WithLocation(1, 1));
-        }
-
-        internal CompilationVerifier CompileAndVerifyException<T>(
-            CSharpCompilation comp,
-            string? expectedMessage = null,
-            string expectedOutput = "",
-            Verification verify = Verification.Passes) where T : Exception
-        {
-            try
-            {
-                CompileAndVerify(comp, expectedOutput: expectedOutput, verify: verify);
-                Assert.False(true, string.Format("Expected exception {0}({1})", typeof(T).Name, expectedMessage));
-            }
-            catch (Exception x)
-            {
-                Exception? e = x.InnerException;
-                Assert.IsType<T>(e);
-                Debug.Assert(e != null);
-                if (expectedMessage != null)
-                {
-                    Assert.Equal(expectedMessage, e.Message);
-                }
-            }
-
-            return CompileAndVerify(comp, verify: verify);
-        }
-
-        private static CSharpCompilation CreateCompilation(string source, bool nullableContext = true, bool useAsyncStreams = false)
-        {
-            var sources = new List<string> { source, AllowNullAttributeDefinition, DisallowNullAttributeDefinition, JetBrainsAnnotations };
-            if (useAsyncStreams)
-            {
-                sources.Add(AsyncStreamsTypes);
-            }
-            return CreateCompilationWithTasksExtensions(sources.ToArray(), options: WithRuntimeChecks(nullableContext));
-        }
-
-        private static CSharpCompilationOptions WithRuntimeChecks(bool nullableContext)
-        {
-            var options = TestOptions.ReleaseExe;
-            var nrtOptions = nullableContext
-                ? NullableContextOptions.Enable
-                : NullableContextOptions.Disable;
-            return options
-                .WithNullableContextOptions(nrtOptions)
-                .WithRuntimeChecks(true);
-        }
+        private CSharpCompilation CreateCompilation(string source, bool nullableContext = true, bool useAsyncStreams = false)
+            => CreateCompilation(source, RuntimeChecksMode.PreconditionsOnly, nullableContext, useAsyncStreams);
     }
 }

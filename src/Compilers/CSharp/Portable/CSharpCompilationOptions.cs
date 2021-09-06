@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public override NullableContextOptions NullableContextOptions { get; protected set; }
 
-        public bool RuntimeChecks { get; private set; }
+        public RuntimeChecksMode RuntimeChecksMode { get; private set; }
 
         // Defaults correspond to the compiler's defaults or indicate that the user did not specify when that is significant.
         // That's significant when one option depends on another's setting. SubsystemVersion depends on Platform and Target.
@@ -73,7 +73,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool publicSign = false,
             MetadataImportOptions metadataImportOptions = MetadataImportOptions.Public,
             NullableContextOptions nullableContextOptions = NullableContextOptions.Disable,
-            bool runtimeChecks = false)
+            RuntimeChecksMode runtimeChecksMode = RuntimeChecksMode.Disable)
             : this(outputKind, reportSuppressedDiagnostics, moduleName, mainTypeName, scriptClassName,
                    usings, optimizationLevel, checkOverflow, allowUnsafe,
                    cryptoKeyContainer, cryptoKeyFile, cryptoPublicKey, delaySign, platform,
@@ -92,7 +92,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                    publicSign: publicSign,
                    topLevelBinderFlags: BinderFlags.None,
                    nullableContextOptions: nullableContextOptions,
-                   runtimeChecks)
+                   runtimeChecksMode)
         {
         }
 
@@ -217,7 +217,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             bool publicSign,
             BinderFlags topLevelBinderFlags,
             NullableContextOptions nullableContextOptions,
-            bool runtimeChecks = false)
+            RuntimeChecksMode runtimeChecksMode = RuntimeChecksMode.Disable)
             : base(outputKind, reportSuppressedDiagnostics, moduleName, mainTypeName, scriptClassName,
                    cryptoKeyContainer, cryptoKeyFile, cryptoPublicKey, delaySign, publicSign, optimizationLevel, checkOverflow,
                    platform, generalDiagnosticOption, warningLevel, specificDiagnosticOptions.ToImmutableDictionaryOrEmpty(),
@@ -229,7 +229,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             this.AllowUnsafe = allowUnsafe;
             this.TopLevelBinderFlags = topLevelBinderFlags;
             this.NullableContextOptions = nullableContextOptions;
-            this.RuntimeChecks = runtimeChecks;
+            this.RuntimeChecksMode = runtimeChecksMode;
         }
 
         private CSharpCompilationOptions(CSharpCompilationOptions other) : this(
@@ -265,7 +265,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             publicSign: other.PublicSign,
             topLevelBinderFlags: other.TopLevelBinderFlags,
             nullableContextOptions: other.NullableContextOptions,
-            runtimeChecks: other.RuntimeChecks)
+            runtimeChecksMode: other.RuntimeChecksMode)
         {
         }
 
@@ -624,14 +624,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             return new CSharpCompilationOptions(this) { StrongNameProvider = provider };
         }
 
-        public CSharpCompilationOptions WithRuntimeChecks(bool enabled)
+        public CSharpCompilationOptions WithRuntimeChecks(RuntimeChecksMode mode)
         {
-            if (enabled == this.RuntimeChecks)
+            if (mode == this.RuntimeChecksMode)
             {
                 return this;
             }
 
-            return new CSharpCompilationOptions(this) { RuntimeChecks = enabled };
+            return new CSharpCompilationOptions(this) { RuntimeChecksMode = mode };
         }
 
         protected override CompilationOptions CommonWithConcurrentBuild(bool concurrent) => WithConcurrentBuild(concurrent);
@@ -756,7 +756,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                    this.TopLevelBinderFlags == other.TopLevelBinderFlags &&
                    (this.Usings == null ? other.Usings == null : this.Usings.SequenceEqual(other.Usings, StringComparer.Ordinal) &&
                    this.NullableContextOptions == other.NullableContextOptions) &&
-                   this.RuntimeChecks == other.RuntimeChecks;
+                   this.RuntimeChecksMode == other.RuntimeChecksMode;
         }
 
         public override bool Equals(object? obj)
@@ -768,7 +768,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             return Hash.Combine(base.GetHashCodeHelper(),
                    Hash.Combine(this.AllowUnsafe,
-                   Hash.Combine(this.RuntimeChecks,
+                   Hash.Combine((int)this.RuntimeChecksMode,
                    Hash.Combine(Hash.CombineValues(this.Usings, StringComparer.Ordinal),
                    Hash.Combine(TopLevelBinderFlags.GetHashCode(), this.NullableContextOptions.GetHashCode())))));
         }
@@ -951,7 +951,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                    publicSign: false,
                    topLevelBinderFlags: BinderFlags.None,
                    nullableContextOptions: NullableContextOptions.Disable,
-                   runtimeChecks: false)
+                   runtimeChecksMode: RuntimeChecksMode.Disable)
         {
         }
     }

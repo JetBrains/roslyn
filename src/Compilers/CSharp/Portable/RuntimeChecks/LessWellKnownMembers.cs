@@ -14,6 +14,8 @@ namespace Microsoft.CodeAnalysis.CSharp
     internal enum LessWellKnownMember
     {
         System_ArgumentNullException__ctor,
+        System_ArgumentException__ctor,
+        System_InvalidOperationException__ctor,
         Count
     }
 
@@ -23,6 +25,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private static string[] Names => new[]
         {
+            ".ctor",
+            ".ctor",
             ".ctor"
         };
 
@@ -33,6 +37,21 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // System_ArgumentNullException__ctor
                 (byte)MemberFlags.Constructor,
                 (byte)LessWellKnownType.System_ArgumentNullException,
+                0,
+                    1,
+                    (byte)SignatureTypeCode.TypeHandle, (byte)SpecialType.System_Void,
+                    (byte)SignatureTypeCode.TypeHandle, (byte)SpecialType.System_String,
+                // System_ArgumentException__ctor
+                (byte)MemberFlags.Constructor,
+                (byte)LessWellKnownType.System_ArgumentException,
+                0,
+                    2,
+                    (byte)SignatureTypeCode.TypeHandle, (byte)SpecialType.System_Void,
+                    (byte)SignatureTypeCode.TypeHandle, (byte)SpecialType.System_String,
+                    (byte)SignatureTypeCode.TypeHandle, (byte)SpecialType.System_String,
+                // System_InvalidOperationException__ctor
+                (byte)MemberFlags.Constructor,
+                (byte)LessWellKnownType.System_InvalidOperationException,
                 0,
                     1,
                     (byte)SignatureTypeCode.TypeHandle, (byte)SpecialType.System_Void,

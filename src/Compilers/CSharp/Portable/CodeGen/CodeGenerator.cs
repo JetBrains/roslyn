@@ -131,7 +131,7 @@ namespace Microsoft.CodeAnalysis.CSharp.CodeGen
             //   user code that can be stepped through, or changed during EnC.
             // 
             // This setting only affects generating PDB sequence points, it shall not affect generated IL in any way.
-            _emitPdbSequencePoints = emittingPdb && (method.GenerateDebugInfo || compilationOptions.RuntimeChecks);
+            _emitPdbSequencePoints = emittingPdb && (method.GenerateDebugInfo || compilationOptions.RuntimeChecksMode != RuntimeChecksMode.Disable);
 
             try
             {

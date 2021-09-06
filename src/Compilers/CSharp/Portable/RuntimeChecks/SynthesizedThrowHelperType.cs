@@ -17,26 +17,40 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
 {
     internal sealed class SynthesizedThrowHelperType : NamedTypeSymbol
     {
-        public SynthesizedThrowHelperMethod ThrowArgumentNullMethod { get; }
-
         public SynthesizedThrowHelperType(NamespaceSymbol containingNamespace, ModuleSymbol containingModule)
         {
             ContainingModule = containingModule;
             ContainingSymbol = ContainingNamespace = containingNamespace;
-            ThrowArgumentNullMethod = new SynthesizedThrowHelperMethod(this);
+            ThrowArgumentNullMethod = new SynthesizedThrowArgumentNullMethod(this);
+            ThrowNullReturnMethod = new SynthesizedThrowNullReturnMethod(this);
+            ThrowOutParameterNull = new SynthesizedThrowOutParameterNull(this);
         }
 
         public override string Name => "ThrowHelper";
         internal override bool MangleName => false;
 
+        public SynthesizedThrowArgumentNullMethod ThrowArgumentNullMethod { get; }
+        public SynthesizedThrowNullReturnMethod ThrowNullReturnMethod { get; }
+        public SynthesizedThrowOutParameterNull ThrowOutParameterNull { get; }
+
         public override IEnumerable<string> MemberNames => GetMembers().Select(x => x.Name);
 
-        public override ImmutableArray<Symbol> GetMembers() => ImmutableArray.Create<Symbol>(ThrowArgumentNullMethod);
+        public override ImmutableArray<Symbol> GetMembers()
+            => ImmutableArray.Create<Symbol>(ThrowArgumentNullMethod, ThrowNullReturnMethod, ThrowOutParameterNull);
 
         public override ImmutableArray<Symbol> GetMembers(string name)
         {
-            return name.Equals(ThrowArgumentNullMethod.Name, StringComparison.Ordinal)
-                ? ImmutableArray.Create<Symbol>(ThrowArgumentNullMethod)
+            if (name.Equals(ThrowArgumentNullMethod.Name, StringComparison.Ordinal))
+            {
+                return ImmutableArray.Create<Symbol>(ThrowArgumentNullMethod);
+            }
+            if (name.Equals(ThrowNullReturnMethod.Name, StringComparison.Ordinal))
+            {
+                return ImmutableArray.Create<Symbol>(ThrowNullReturnMethod);
+            }
+
+            return name.Equals(ThrowOutParameterNull.Name, StringComparison.Ordinal)
+                ? ImmutableArray.Create<Symbol>(ThrowOutParameterNull)
                 : ImmutableArray<Symbol>.Empty;
         }
 
