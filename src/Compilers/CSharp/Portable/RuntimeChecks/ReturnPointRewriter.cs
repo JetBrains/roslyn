@@ -3,9 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 #nullable enable
 
@@ -15,8 +13,6 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
     {
         private readonly Func<BoundExpression, BoundStatement?> _generateReturnValueCheckFunc;
         private readonly Func<BoundStatement?> _generateArgumentChecksFunc;
-
-        private readonly List<LocalSymbol> _locals = new();
 
         private ReturnPointRewriter(
             Func<BoundExpression, BoundStatement?> generateReturnValueCheckFunc,
@@ -52,6 +48,16 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
             var argChecks = _generateArgumentChecksFunc();
             var retStmt = _generateReturnValueCheckFunc(node.Expression) ?? node;
             return List(node.Syntax, argChecks, retStmt) ?? node;
+        }
+
+        public override BoundNode VisitLambda(BoundLambda node)
+        {
+            return node;
+        }
+
+        public override BoundNode VisitLocalFunctionStatement(BoundLocalFunctionStatement node)
+        {
+            return node;
         }
 
         private static BoundNode? List(SyntaxNode syntax, BoundStatement? stmt1, BoundStatement? stmt2)
