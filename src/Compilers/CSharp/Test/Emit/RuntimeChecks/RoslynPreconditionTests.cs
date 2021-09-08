@@ -546,7 +546,6 @@ class C
     static void Main()
     {
         _ = M(null);
-        Console.WriteLine(""unreachable"");
     }
 }";
 
@@ -580,13 +579,11 @@ class C
 {
     static async Task M(string s)
     {
-        await Task.Delay(42);
     }
 
     static async Task Main()
     {
         await M(null);
-        Console.WriteLine(""unreachable"");
     }
 }";
 
@@ -594,78 +591,37 @@ class C
             var verifier = CompileAndVerifyException<ArgumentNullException>(comp);
             verifier.VerifyIL("C.<M>d__0.System.Runtime.CompilerServices.IAsyncStateMachine.MoveNext()", @"
 {
-  // Code size      162 (0xa2)
-  .maxstack  3
-  .locals init (int V_0,
-                System.Runtime.CompilerServices.TaskAwaiter V_1,
-                System.Exception V_2)
-  IL_0000:  ldarg.0
-  IL_0001:  ldfld      ""int C.<M>d__0.<>1__state""
-  IL_0006:  stloc.0
+  // Code size       63 (0x3f)
+  .maxstack  2
+  .locals init (System.Exception V_0)
   .try
   {
-    IL_0007:  ldloc.0
-    IL_0008:  brfalse.s  IL_0052
-    IL_000a:  ldarg.0
-    IL_000b:  ldfld      ""string C.<M>d__0.s""
-    IL_0010:  brtrue.s   IL_001c
-    IL_0012:  ldstr      ""s""
-    IL_0017:  call       ""void System.Runtime.CompilerServices.ThrowHelper.ArgumentNull(string)""
-    IL_001c:  ldc.i4.s   42
-    IL_001e:  call       ""System.Threading.Tasks.Task System.Threading.Tasks.Task.Delay(int)""
-    IL_0023:  callvirt   ""System.Runtime.CompilerServices.TaskAwaiter System.Threading.Tasks.Task.GetAwaiter()""
-    IL_0028:  stloc.1
-    IL_0029:  ldloca.s   V_1
-    IL_002b:  call       ""bool System.Runtime.CompilerServices.TaskAwaiter.IsCompleted.get""
-    IL_0030:  brtrue.s   IL_006e
-    IL_0032:  ldarg.0
-    IL_0033:  ldc.i4.0
-    IL_0034:  dup
-    IL_0035:  stloc.0
-    IL_0036:  stfld      ""int C.<M>d__0.<>1__state""
-    IL_003b:  ldarg.0
-    IL_003c:  ldloc.1
-    IL_003d:  stfld      ""System.Runtime.CompilerServices.TaskAwaiter C.<M>d__0.<>u__1""
-    IL_0042:  ldarg.0
-    IL_0043:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder C.<M>d__0.<>t__builder""
-    IL_0048:  ldloca.s   V_1
-    IL_004a:  ldarg.0
-    IL_004b:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter, C.<M>d__0>(ref System.Runtime.CompilerServices.TaskAwaiter, ref C.<M>d__0)""
-    IL_0050:  leave.s    IL_00a1
-    IL_0052:  ldarg.0
-    IL_0053:  ldfld      ""System.Runtime.CompilerServices.TaskAwaiter C.<M>d__0.<>u__1""
-    IL_0058:  stloc.1
-    IL_0059:  ldarg.0
-    IL_005a:  ldflda     ""System.Runtime.CompilerServices.TaskAwaiter C.<M>d__0.<>u__1""
-    IL_005f:  initobj    ""System.Runtime.CompilerServices.TaskAwaiter""
-    IL_0065:  ldarg.0
-    IL_0066:  ldc.i4.m1
-    IL_0067:  dup
-    IL_0068:  stloc.0
-    IL_0069:  stfld      ""int C.<M>d__0.<>1__state""
-    IL_006e:  ldloca.s   V_1
-    IL_0070:  call       ""void System.Runtime.CompilerServices.TaskAwaiter.GetResult()""
-    IL_0075:  leave.s    IL_008e
+    IL_0000:  ldarg.0
+    IL_0001:  ldfld      ""string C.<M>d__0.s""
+    IL_0006:  brtrue.s   IL_0012
+    IL_0008:  ldstr      ""s""
+    IL_000d:  call       ""void System.Runtime.CompilerServices.ThrowHelper.ArgumentNull(string)""
+    IL_0012:  leave.s    IL_002b
   }
   catch System.Exception
   {
-    IL_0077:  stloc.2
-    IL_0078:  ldarg.0
-    IL_0079:  ldc.i4.s   -2
-    IL_007b:  stfld      ""int C.<M>d__0.<>1__state""
-    IL_0080:  ldarg.0
-    IL_0081:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder C.<M>d__0.<>t__builder""
-    IL_0086:  ldloc.2
-    IL_0087:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.SetException(System.Exception)""
-    IL_008c:  leave.s    IL_00a1
+    IL_0014:  stloc.0
+    IL_0015:  ldarg.0
+    IL_0016:  ldc.i4.s   -2
+    IL_0018:  stfld      ""int C.<M>d__0.<>1__state""
+    IL_001d:  ldarg.0
+    IL_001e:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder C.<M>d__0.<>t__builder""
+    IL_0023:  ldloc.0
+    IL_0024:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.SetException(System.Exception)""
+    IL_0029:  leave.s    IL_003e
   }
-  IL_008e:  ldarg.0
-  IL_008f:  ldc.i4.s   -2
-  IL_0091:  stfld      ""int C.<M>d__0.<>1__state""
-  IL_0096:  ldarg.0
-  IL_0097:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder C.<M>d__0.<>t__builder""
-  IL_009c:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.SetResult()""
-  IL_00a1:  ret
+  IL_002b:  ldarg.0
+  IL_002c:  ldc.i4.s   -2
+  IL_002e:  stfld      ""int C.<M>d__0.<>1__state""
+  IL_0033:  ldarg.0
+  IL_0034:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder C.<M>d__0.<>t__builder""
+  IL_0039:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.SetResult()""
+  IL_003e:  ret
 }");
         }
 

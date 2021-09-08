@@ -108,6 +108,97 @@ class C
         }
 
         [Fact]
+        public void ReturnNullConst()
+        {
+            const string source = @"
+using System;
+class C
+{
+    private const string Const = null!;
+
+    static void Main()
+    {
+        M();
+    }
+
+    static string M() => Const;
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerifyException<InvalidOperationException>(comp);
+            verifier.VerifyIL("C.M", @"
+{
+  // Code size       10 (0xa)
+  .maxstack  2
+  IL_0000:  ldnull
+  IL_0001:  dup
+  IL_0002:  brtrue.s   IL_0009
+  IL_0004:  call       ""void System.Runtime.CompilerServices.ThrowHelper.NullReturn()""
+  IL_0009:  ret
+}");
+        }
+
+        [Fact]
+        public void ReturnNonNullConst_NoCheck()
+        {
+            const string source = @"
+using System;
+class C
+{
+    private const string Const = ""meow"";
+
+    static void Main()
+    {
+        Console.WriteLine(M());
+    }
+
+    static string M() => Const;
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerify(comp, expectedOutput: "meow");
+            verifier.VerifyIL("C.M", @"
+{
+  // Code size        6 (0x6)
+  .maxstack  1
+  IL_0000:  ldstr      ""meow""
+  IL_0005:  ret
+}");
+        }
+
+        [Fact]
+        public void ReturnValue_This_ImplicitConversion()
+        {
+            const string source = @"
+using System;
+class C
+{
+    static void Main()
+    {
+        var c = new C();
+        _ = c.Return();
+    }
+
+    public static implicit operator string(C c) => null!;
+    public string Return() => this;
+}";
+            var comp = CreateCompilation(source);
+            var diags = comp.GetEmitDiagnostics();
+            var verifier = CompileAndVerifyException<InvalidOperationException>(comp);
+            verifier.VerifyIL("C.Return", @"
+{
+  // Code size       15 (0xf)
+  .maxstack  2
+  IL_0000:  ldarg.0
+  IL_0001:  call       ""string C.op_Implicit(C)""
+  IL_0006:  dup
+  IL_0007:  brtrue.s   IL_000e
+  IL_0009:  call       ""void System.Runtime.CompilerServices.ThrowHelper.NullReturn()""
+  IL_000e:  ret
+}");
+        }
+
+        [Fact]
         public void RefReturnValue()
         {
             const string source = @"
@@ -121,6 +212,37 @@ class C
     }
 
     static ref object M() => ref s_field;
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerifyException<InvalidOperationException>(comp);
+            verifier.VerifyIL("C.M", @"
+{
+  // Code size       15 (0xf)
+  .maxstack  2
+  IL_0000:  ldsflda    ""object C.s_field""
+  IL_0005:  dup
+  IL_0006:  ldind.ref
+  IL_0007:  brtrue.s   IL_000e
+  IL_0009:  call       ""void System.Runtime.CompilerServices.ThrowHelper.NullReturn()""
+  IL_000e:  ret
+}");
+        }
+
+        [Fact]
+        public void RefReadonlyReturnValue()
+        {
+            const string source = @"
+class C
+{
+    static object s_field = null!;
+
+    static void Main()
+    {
+        M();
+    }
+
+    static ref readonly object M() => ref s_field;
 }";
 
             var comp = CreateCompilation(source);
@@ -153,7 +275,7 @@ class C
 
     static void M(ref string s)
     {
-        s = null;
+        s = null!;
     }
 }";
 
@@ -192,7 +314,7 @@ class C
 
     static void M([NotNull] ref string? s)
     {
-        s = null;
+        s = null!;
     }
 }";
             var comp = CreateCompilation(source);
@@ -230,7 +352,7 @@ class C
     static void M(ref string s1, ref string s2)
     {
         s1 = ""not null"";
-        s2 = null;
+        s2 = null!;
     }
 }";
 
@@ -277,10 +399,10 @@ class C
     {
         if (s == """")
         {
-            s = null;
+            s = null!;
             return;
         }
-        s = null;
+        s = null!;
     }
 }";
 
@@ -313,6 +435,43 @@ class C
   IL_0027:  ldstr      ""s""
   IL_002c:  call       ""void System.Runtime.CompilerServices.ThrowHelper.OutParameterNull(string)""
   IL_0031:  ret
+}");
+        }
+
+        [Fact]
+        public void OutParameter_NotAnnotated()
+        {
+            const string source = @"
+using System;
+class C
+{
+    static void Main()
+    {
+        string s;
+        M(out s);
+    }
+
+    static void M(out string s)
+    {
+        s = null!;
+    }
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerifyException<ArgumentException>(comp);
+            verifier.VerifyIL("C.M", @"
+{
+  // Code size       18 (0x12)
+  .maxstack  2
+  IL_0000:  ldarg.0
+  IL_0001:  ldnull
+  IL_0002:  stind.ref
+  IL_0003:  ldarg.0
+  IL_0004:  ldind.ref
+  IL_0005:  brtrue.s   IL_0011
+  IL_0007:  ldstr      ""s""
+  IL_000c:  call       ""void System.Runtime.CompilerServices.ThrowHelper.OutParameterNull(string)""
+  IL_0011:  ret
 }");
         }
 
@@ -371,7 +530,7 @@ class C
         }
 
         [Fact]
-        public void Indexer()
+        public void Indexer_ReturnValue()
         {
             const string source = @"
 using System;
@@ -423,6 +582,18 @@ class C
 
             var comp = CreateCompilation(source);
             var verifier = CompileAndVerifyException<InvalidOperationException>(comp);
+            verifier.VerifyIL("Generic<T>.Ret.get", @"
+{
+  // Code size       20 (0x14)
+  .maxstack  2
+  IL_0000:  ldarg.0
+  IL_0001:  ldfld      ""T Generic<T>._field""
+  IL_0006:  dup
+  IL_0007:  box        ""T""
+  IL_000c:  brtrue.s   IL_0013
+  IL_000e:  call       ""void System.Runtime.CompilerServices.ThrowHelper.NullReturn()""
+  IL_0013:  ret
+}");
         }
 
         [Fact]
@@ -450,6 +621,14 @@ class C
 
             var comp = CreateCompilation(source);
             var verifier = CompileAndVerify(comp, expectedOutput: "ok");
+            verifier.VerifyIL("Generic<T>.Ret.get", @"
+{
+  // Code size        7 (0x7)
+  .maxstack  1
+  IL_0000:  ldarg.0
+  IL_0001:  ldfld      ""T Generic<T>._field""
+  IL_0006:  ret
+}");
         }
 
         [Fact]
@@ -553,7 +732,7 @@ class C
         }
 
         [Fact]
-        public void Iterator_NotAnnotatedT()
+        public void Iterator_YieldReturn_NotAnnotatedT()
         {
             const string source = @"
 using System;
@@ -579,7 +758,7 @@ class C
             var verifier = CompileAndVerifyException<InvalidOperationException>(comp, expectedOutput: "meow");
             verifier.VerifyIL("C.<Iter>d__1.System.Collections.IEnumerator.MoveNext()", @"
 {
-  // Code size      106 (0x6a)
+  // Code size       96 (0x60)
   .maxstack  2
   .locals init (int V_0,
                 string V_1)
@@ -589,52 +768,47 @@ class C
   IL_0007:  ldloc.0
   IL_0008:  switch    (
         IL_001b,
-        IL_0040,
-        IL_0061)
+        IL_0036,
+        IL_0057)
   IL_0019:  ldc.i4.0
   IL_001a:  ret
   IL_001b:  ldarg.0
   IL_001c:  ldc.i4.m1
   IL_001d:  stfld      ""int C.<Iter>d__1.<>1__state""
-  IL_0022:  ldstr      ""meow""
-  IL_0027:  stloc.1
-  IL_0028:  ldloc.1
-  IL_0029:  brtrue.s   IL_0030
-  IL_002b:  call       ""void System.Runtime.CompilerServices.ThrowHelper.NullReturn()""
-  IL_0030:  ldarg.0
-  IL_0031:  ldloc.1
-  IL_0032:  stfld      ""string C.<Iter>d__1.<>2__current""
-  IL_0037:  ldarg.0
-  IL_0038:  ldc.i4.1
-  IL_0039:  stfld      ""int C.<Iter>d__1.<>1__state""
-  IL_003e:  ldc.i4.1
-  IL_003f:  ret
-  IL_0040:  ldarg.0
-  IL_0041:  ldc.i4.m1
-  IL_0042:  stfld      ""int C.<Iter>d__1.<>1__state""
-  IL_0047:  ldnull
-  IL_0048:  stloc.1
-  IL_0049:  ldloc.1
-  IL_004a:  brtrue.s   IL_0051
-  IL_004c:  call       ""void System.Runtime.CompilerServices.ThrowHelper.NullReturn()""
-  IL_0051:  ldarg.0
-  IL_0052:  ldloc.1
-  IL_0053:  stfld      ""string C.<Iter>d__1.<>2__current""
-  IL_0058:  ldarg.0
-  IL_0059:  ldc.i4.2
-  IL_005a:  stfld      ""int C.<Iter>d__1.<>1__state""
-  IL_005f:  ldc.i4.1
-  IL_0060:  ret
-  IL_0061:  ldarg.0
-  IL_0062:  ldc.i4.m1
-  IL_0063:  stfld      ""int C.<Iter>d__1.<>1__state""
-  IL_0068:  ldc.i4.0
-  IL_0069:  ret
+  IL_0022:  ldarg.0
+  IL_0023:  ldstr      ""meow""
+  IL_0028:  stfld      ""string C.<Iter>d__1.<>2__current""
+  IL_002d:  ldarg.0
+  IL_002e:  ldc.i4.1
+  IL_002f:  stfld      ""int C.<Iter>d__1.<>1__state""
+  IL_0034:  ldc.i4.1
+  IL_0035:  ret
+  IL_0036:  ldarg.0
+  IL_0037:  ldc.i4.m1
+  IL_0038:  stfld      ""int C.<Iter>d__1.<>1__state""
+  IL_003d:  ldnull
+  IL_003e:  stloc.1
+  IL_003f:  ldloc.1
+  IL_0040:  brtrue.s   IL_0047
+  IL_0042:  call       ""void System.Runtime.CompilerServices.ThrowHelper.NullReturn()""
+  IL_0047:  ldarg.0
+  IL_0048:  ldloc.1
+  IL_0049:  stfld      ""string C.<Iter>d__1.<>2__current""
+  IL_004e:  ldarg.0
+  IL_004f:  ldc.i4.2
+  IL_0050:  stfld      ""int C.<Iter>d__1.<>1__state""
+  IL_0055:  ldc.i4.1
+  IL_0056:  ret
+  IL_0057:  ldarg.0
+  IL_0058:  ldc.i4.m1
+  IL_0059:  stfld      ""int C.<Iter>d__1.<>1__state""
+  IL_005e:  ldc.i4.0
+  IL_005f:  ret
 }");
         }
 
         [Fact]
-        public void Iterator_NullableT_NoCheck()
+        public void Iterator_YieldReturn_NullableT_NoCheck()
         {
             const string source = @"
 using System;
@@ -700,82 +874,47 @@ class C
 
     static async Task<string> Async()
     {
-        await Task.Delay(10);
-        return null;
+        return null!;
     }
 }";
 
             var comp = CreateCompilation(source);
             var verifier = CompileAndVerifyException<InvalidOperationException>(comp);
-            verifier.VerifyIL("C.<Main>d__0.System.Runtime.CompilerServices.IAsyncStateMachine.MoveNext()", @"
+            verifier.VerifyIL("C.<Async>d__1.System.Runtime.CompilerServices.IAsyncStateMachine.MoveNext()", @"
 {
-  // Code size      143 (0x8f)
-  .maxstack  3
-  .locals init (int V_0,
-                System.Runtime.CompilerServices.TaskAwaiter<string> V_1,
-                System.Exception V_2)
-  IL_0000:  ldarg.0
-  IL_0001:  ldfld      ""int C.<Main>d__0.<>1__state""
-  IL_0006:  stloc.0
+  // Code size       56 (0x38)
+  .maxstack  2
+  .locals init (string V_0,
+                System.Exception V_1)
   .try
   {
-    IL_0007:  ldloc.0
-    IL_0008:  brfalse.s  IL_003e
-    IL_000a:  call       ""System.Threading.Tasks.Task<string> C.Async()""
-    IL_000f:  callvirt   ""System.Runtime.CompilerServices.TaskAwaiter<string> System.Threading.Tasks.Task<string>.GetAwaiter()""
-    IL_0014:  stloc.1
-    IL_0015:  ldloca.s   V_1
-    IL_0017:  call       ""bool System.Runtime.CompilerServices.TaskAwaiter<string>.IsCompleted.get""
-    IL_001c:  brtrue.s   IL_005a
-    IL_001e:  ldarg.0
-    IL_001f:  ldc.i4.0
-    IL_0020:  dup
-    IL_0021:  stloc.0
-    IL_0022:  stfld      ""int C.<Main>d__0.<>1__state""
-    IL_0027:  ldarg.0
-    IL_0028:  ldloc.1
-    IL_0029:  stfld      ""System.Runtime.CompilerServices.TaskAwaiter<string> C.<Main>d__0.<>u__1""
-    IL_002e:  ldarg.0
-    IL_002f:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder C.<Main>d__0.<>t__builder""
-    IL_0034:  ldloca.s   V_1
-    IL_0036:  ldarg.0
-    IL_0037:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.AwaitUnsafeOnCompleted<System.Runtime.CompilerServices.TaskAwaiter<string>, C.<Main>d__0>(ref System.Runtime.CompilerServices.TaskAwaiter<string>, ref C.<Main>d__0)""
-    IL_003c:  leave.s    IL_008e
-    IL_003e:  ldarg.0
-    IL_003f:  ldfld      ""System.Runtime.CompilerServices.TaskAwaiter<string> C.<Main>d__0.<>u__1""
-    IL_0044:  stloc.1
-    IL_0045:  ldarg.0
-    IL_0046:  ldflda     ""System.Runtime.CompilerServices.TaskAwaiter<string> C.<Main>d__0.<>u__1""
-    IL_004b:  initobj    ""System.Runtime.CompilerServices.TaskAwaiter<string>""
-    IL_0051:  ldarg.0
-    IL_0052:  ldc.i4.m1
-    IL_0053:  dup
-    IL_0054:  stloc.0
-    IL_0055:  stfld      ""int C.<Main>d__0.<>1__state""
-    IL_005a:  ldloca.s   V_1
-    IL_005c:  call       ""string System.Runtime.CompilerServices.TaskAwaiter<string>.GetResult()""
-    IL_0061:  pop
-    IL_0062:  leave.s    IL_007b
+    IL_0000:  ldnull
+    IL_0001:  dup
+    IL_0002:  brtrue.s   IL_0009
+    IL_0004:  call       ""void System.Runtime.CompilerServices.ThrowHelper.NullReturn()""
+    IL_0009:  stloc.0
+    IL_000a:  leave.s    IL_0023
   }
   catch System.Exception
   {
-    IL_0064:  stloc.2
-    IL_0065:  ldarg.0
-    IL_0066:  ldc.i4.s   -2
-    IL_0068:  stfld      ""int C.<Main>d__0.<>1__state""
-    IL_006d:  ldarg.0
-    IL_006e:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder C.<Main>d__0.<>t__builder""
-    IL_0073:  ldloc.2
-    IL_0074:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.SetException(System.Exception)""
-    IL_0079:  leave.s    IL_008e
+    IL_000c:  stloc.1
+    IL_000d:  ldarg.0
+    IL_000e:  ldc.i4.s   -2
+    IL_0010:  stfld      ""int C.<Async>d__1.<>1__state""
+    IL_0015:  ldarg.0
+    IL_0016:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder<string> C.<Async>d__1.<>t__builder""
+    IL_001b:  ldloc.1
+    IL_001c:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<string>.SetException(System.Exception)""
+    IL_0021:  leave.s    IL_0037
   }
-  IL_007b:  ldarg.0
-  IL_007c:  ldc.i4.s   -2
-  IL_007e:  stfld      ""int C.<Main>d__0.<>1__state""
-  IL_0083:  ldarg.0
-  IL_0084:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder C.<Main>d__0.<>t__builder""
-  IL_0089:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.SetResult()""
-  IL_008e:  ret
+  IL_0023:  ldarg.0
+  IL_0024:  ldc.i4.s   -2
+  IL_0026:  stfld      ""int C.<Async>d__1.<>1__state""
+  IL_002b:  ldarg.0
+  IL_002c:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder<string> C.<Async>d__1.<>t__builder""
+  IL_0031:  ldloc.0
+  IL_0032:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<string>.SetResult(string)""
+  IL_0037:  ret
 }");
         }
 
@@ -792,21 +931,164 @@ class C
     {
         await Async();
         Console.WriteLine(""ok"");
-        }
+    }
 
     static async Task<string?> Async()
     {
-        await Task.Delay(10);
         return null;
     }
 }";
 
             var comp = CreateCompilation(source);
-            CompileAndVerify(comp, expectedOutput: "ok");
+            var verifier = CompileAndVerify(comp, expectedOutput: "ok");
+            verifier.VerifyIL("C.<Async>d__1.System.Runtime.CompilerServices.IAsyncStateMachine.MoveNext()", @"
+{
+  // Code size       48 (0x30)
+  .maxstack  2
+  .locals init (string V_0,
+                System.Exception V_1)
+  .try
+  {
+    IL_0000:  ldnull
+    IL_0001:  stloc.0
+    IL_0002:  leave.s    IL_001b
+  }
+  catch System.Exception
+  {
+    IL_0004:  stloc.1
+    IL_0005:  ldarg.0
+    IL_0006:  ldc.i4.s   -2
+    IL_0008:  stfld      ""int C.<Async>d__1.<>1__state""
+    IL_000d:  ldarg.0
+    IL_000e:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder<string> C.<Async>d__1.<>t__builder""
+    IL_0013:  ldloc.1
+    IL_0014:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<string>.SetException(System.Exception)""
+    IL_0019:  leave.s    IL_002f
+  }
+  IL_001b:  ldarg.0
+  IL_001c:  ldc.i4.s   -2
+  IL_001e:  stfld      ""int C.<Async>d__1.<>1__state""
+  IL_0023:  ldarg.0
+  IL_0024:  ldflda     ""System.Runtime.CompilerServices.AsyncTaskMethodBuilder<string> C.<Async>d__1.<>t__builder""
+  IL_0029:  ldloc.0
+  IL_002a:  call       ""void System.Runtime.CompilerServices.AsyncTaskMethodBuilder<string>.SetResult(string)""
+  IL_002f:  ret
+}");
         }
 
         [Fact]
-        public void LambdaReturn()
+        public void AsyncEnumerable_YieldReturn_NotAnnotatedT()
+        {
+            const string source = @"
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+class C
+{
+    static async Task Main()
+    {
+        await foreach (string s in M())
+        {
+        }
+    }
+
+    static async IAsyncEnumerable<string> M()
+    {
+        yield return null!;
+    }
+}";
+
+            var comp = CreateCompilation(source, useAsyncStreams: true);
+            var verifier = CompileAndVerifyException<InvalidOperationException>(comp);
+            verifier.VerifyIL("C.<M>d__1.System.Runtime.CompilerServices.IAsyncStateMachine.MoveNext()", @"
+{
+  // Code size      162 (0xa2)
+  .maxstack  3
+  .locals init (int V_0,
+                string V_1,
+                System.Exception V_2)
+  IL_0000:  ldarg.0
+  IL_0001:  ldfld      ""int C.<M>d__1.<>1__state""
+  IL_0006:  stloc.0
+  .try
+  {
+    IL_0007:  ldloc.0
+    IL_0008:  ldc.i4.s   -4
+    IL_000a:  beq.s      IL_0041
+    IL_000c:  ldloc.0
+    IL_000d:  ldc.i4.s   -3
+    IL_000f:  pop
+    IL_0010:  pop
+    IL_0011:  ldarg.0
+    IL_0012:  ldfld      ""bool C.<M>d__1.<>w__disposeMode""
+    IL_0017:  brfalse.s  IL_001b
+    IL_0019:  leave.s    IL_0075
+    IL_001b:  ldarg.0
+    IL_001c:  ldc.i4.m1
+    IL_001d:  dup
+    IL_001e:  stloc.0
+    IL_001f:  stfld      ""int C.<M>d__1.<>1__state""
+    IL_0024:  ldnull
+    IL_0025:  stloc.1
+    IL_0026:  ldloc.1
+    IL_0027:  brtrue.s   IL_002e
+    IL_0029:  call       ""void System.Runtime.CompilerServices.ThrowHelper.NullReturn()""
+    IL_002e:  ldarg.0
+    IL_002f:  ldloc.1
+    IL_0030:  stfld      ""string C.<M>d__1.<>2__current""
+    IL_0035:  ldarg.0
+    IL_0036:  ldc.i4.s   -4
+    IL_0038:  dup
+    IL_0039:  stloc.0
+    IL_003a:  stfld      ""int C.<M>d__1.<>1__state""
+    IL_003f:  leave.s    IL_0095
+    IL_0041:  ldarg.0
+    IL_0042:  ldc.i4.m1
+    IL_0043:  dup
+    IL_0044:  stloc.0
+    IL_0045:  stfld      ""int C.<M>d__1.<>1__state""
+    IL_004a:  ldarg.0
+    IL_004b:  ldfld      ""bool C.<M>d__1.<>w__disposeMode""
+    IL_0050:  pop
+    IL_0051:  leave.s    IL_0075
+  }
+  catch System.Exception
+  {
+    IL_0053:  stloc.2
+    IL_0054:  ldarg.0
+    IL_0055:  ldc.i4.s   -2
+    IL_0057:  stfld      ""int C.<M>d__1.<>1__state""
+    IL_005c:  ldarg.0
+    IL_005d:  ldflda     ""System.Runtime.CompilerServices.AsyncIteratorMethodBuilder C.<M>d__1.<>t__builder""
+    IL_0062:  call       ""void System.Runtime.CompilerServices.AsyncIteratorMethodBuilder.Complete()""
+    IL_0067:  ldarg.0
+    IL_0068:  ldflda     ""System.Threading.Tasks.Sources.ManualResetValueTaskSourceCore<bool> C.<M>d__1.<>v__promiseOfValueOrEnd""
+    IL_006d:  ldloc.2
+    IL_006e:  call       ""void System.Threading.Tasks.Sources.ManualResetValueTaskSourceCore<bool>.SetException(System.Exception)""
+    IL_0073:  leave.s    IL_00a1
+  }
+  IL_0075:  ldarg.0
+  IL_0076:  ldc.i4.s   -2
+  IL_0078:  stfld      ""int C.<M>d__1.<>1__state""
+  IL_007d:  ldarg.0
+  IL_007e:  ldflda     ""System.Runtime.CompilerServices.AsyncIteratorMethodBuilder C.<M>d__1.<>t__builder""
+  IL_0083:  call       ""void System.Runtime.CompilerServices.AsyncIteratorMethodBuilder.Complete()""
+  IL_0088:  ldarg.0
+  IL_0089:  ldflda     ""System.Threading.Tasks.Sources.ManualResetValueTaskSourceCore<bool> C.<M>d__1.<>v__promiseOfValueOrEnd""
+  IL_008e:  ldc.i4.0
+  IL_008f:  call       ""void System.Threading.Tasks.Sources.ManualResetValueTaskSourceCore<bool>.SetResult(bool)""
+  IL_0094:  ret
+  IL_0095:  ldarg.0
+  IL_0096:  ldflda     ""System.Threading.Tasks.Sources.ManualResetValueTaskSourceCore<bool> C.<M>d__1.<>v__promiseOfValueOrEnd""
+  IL_009b:  ldc.i4.1
+  IL_009c:  call       ""void System.Threading.Tasks.Sources.ManualResetValueTaskSourceCore<bool>.SetResult(bool)""
+  IL_00a1:  ret
+}");
+        }
+
+        [Fact]
+        public void Lambda_ReturnValue()
         {
             const string source = @"
 using System;
@@ -814,14 +1096,84 @@ class C
 {
     static void Main()
     {
-        Func<string> lambda = () => null;
-        lambda();
+        Func<string> f = () => null;
+        f();
     }
 }";
 
             var comp = CreateCompilation(source);
             var verifier = CompileAndVerifyException<InvalidOperationException>(comp);
+            verifier.VerifyIL("C.<>c.<Main>b__0_0", @"
+{
+  // Code size       10 (0xa)
+  .maxstack  2
+  IL_0000:  ldnull
+  IL_0001:  dup
+  IL_0002:  brtrue.s   IL_0009
+  IL_0004:  call       ""void System.Runtime.CompilerServices.ThrowHelper.NullReturn()""
+  IL_0009:  ret
+}");
+        }
 
+        [Fact]
+        public void LocalFunction_ReturnValue()
+        {
+            const string source = @"
+using System;
+class C
+{
+    static void Main()
+    {
+        static string localFunc() => null!;
+        _ = localFunc();
+    }
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerifyException<InvalidOperationException>(comp);
+            verifier.VerifyIL("C.<Main>g__localFunc|0_0()", @"
+            {
+  // Code size       10 (0xa)
+  .maxstack  2
+  IL_0000:  ldnull
+  IL_0001:  dup
+  IL_0002:  brtrue.s   IL_0009
+  IL_0004:  call       ""void System.Runtime.CompilerServices.ThrowHelper.NullReturn()""
+  IL_0009:  ret
+}");
+        }
+
+        [Fact]
+        public void LocalFunction_RefParameter()
+        {
+            const string source = @"
+using System;
+class C
+{
+    static void Main()
+    {
+        static void init(ref string s) => s = null!;
+        string s = string.Empty;
+        init(ref s);
+    }
+}";
+
+            var comp = CreateCompilation(source);
+            var verifier = CompileAndVerifyException<ArgumentException>(comp);
+            verifier.VerifyIL("C.<Main>g__init|0_0(ref string)", @"
+{
+  // Code size       18 (0x12)
+  .maxstack  2
+  IL_0000:  ldarg.0
+  IL_0001:  ldnull
+  IL_0002:  stind.ref
+  IL_0003:  ldarg.0
+  IL_0004:  ldind.ref
+  IL_0005:  brtrue.s   IL_0011
+  IL_0007:  ldstr      ""s""
+  IL_000c:  call       ""void System.Runtime.CompilerServices.ThrowHelper.OutParameterNull(string)""
+  IL_0011:  ret
+}");
         }
 
         private CSharpCompilation CreateCompilation(string source, bool nullableContext = true, bool useAsyncStreams = false)
