@@ -192,13 +192,13 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
             return ReturnPointRewriter.InsertChecks(
                 body,
                 retVal => GenerateReturnValueCheck(methodSymbol, retVal, retStmtKind, nodeFactory, assemblyBuilder),
-                () => generateChecks(paramsToCheck));
+                () => generateArgumentChecks(paramsToCheck));
 
-            BoundStatement? generateChecks(ImmutableArray<ParameterSymbol> paramsToCheck)
+            BoundStatement? generateArgumentChecks(ImmutableArray<ParameterSymbol> parameters)
             {
-                if (paramsToCheck.IsEmpty) { return null; }
+                if (parameters.IsEmpty) { return null; }
                 var stmts = ArrayBuilder<BoundStatement>.GetInstance();
-                foreach (var parameter in paramsToCheck)
+                foreach (var parameter in parameters)
                 {
                     stmts.Add(GenerateArgumentCheck(methodSymbol, parameter, ArgumentCheckKind.Output, null, nodeFactory, assemblyBuilder));
                 }
@@ -379,9 +379,15 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
             SyntheticBoundNodeFactory factory,
             PEAssemblyBuilderBase assemblyBuilder)
         {
-            if (returnValue.Type is null) { return null; }
+            if (returnValue is { Type: null } or { ConstantValue: { IsNull: false } })
+            {
+                return null;
+            }
             var F = factory;
             F.CurrentFunction = method;
+            // Looks like SynthesizedLocalKind.InstrumentationPayload is the only option when we need to introduce a ref variable
+            // inside a synthesized method such as an auto property accessor. It prevents CalculateLocalSyntaxOffset from being called
+            // for our synthesized local.
             var tempLocal = F.StoreToTemp(returnValue, out var assignment, method.RefKind, SynthesizedLocalKind.InstrumentationPayload);
 
             BoundExpression left = tempLocal;
@@ -414,6 +420,8 @@ namespace Microsoft.CodeAnalysis.CSharp.RuntimeChecks
 #endif
                 var returnType = GetReturnValueType(method).Type;
                 var conversion = F.Compilation.Conversions.ClassifyConversionFromType(expression.Type, returnType, ref useSiteInfo);
+                Debug.Assert(useSiteInfo.Diagnostics.IsNullOrEmpty());
+                Debug.Assert(conversion.Kind != ConversionKind.NoConversion);
                 if (conversion.Kind != ConversionKind.Identity)
                 {
                     Debug.Assert(method.RefKind == RefKind.None);
