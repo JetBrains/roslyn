@@ -1392,7 +1392,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (mayEmitRuntimeChecks)
                 {
                     var mode = compilationState.Compilation.Options.RuntimeChecksMode;
-                    if (method.IsIterator || method.IsAsync)
+                    if (method.IsIterator)
                     {
                         mode = mode.GeneratePostconditionChecks()
                             ? RuntimeChecksMode.PostconditionsOnly
@@ -1467,7 +1467,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 Debug.Assert((object)iteratorStateMachine == null || (object)asyncStateMachine == null);
                 stateMachineTypeOpt = (StateMachineTypeSymbol)iteratorStateMachine ?? asyncStateMachine;
 
-                if (mayEmitRuntimeChecks && (method.IsIterator || method.IsAsync))
+                if (mayEmitRuntimeChecks && method.IsIterator)
                 {
                     var mode = compilationState.Compilation.Options.RuntimeChecksMode;
                     mode = mode.GeneratePreconditionChecks()
