@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Shared.Extensions;
 using Microsoft.CodeAnalysis.Text;
-using Microsoft.VisualStudio.Debugger.Contracts.EditAndContinue;
+
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.EditAndContinue
@@ -145,6 +145,8 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
             Contract.ThrowIfNull(debuggingSession);
             debuggingSession.BreakStateOrCapabilitiesChanged(inBreakState, out documentsToReanalyze);
         }
+
+        public DebuggingSession? GetDebuggingSession(DebuggingSessionId id) => TryGetDebuggingSession(id);
 
         public ValueTask<ImmutableArray<Diagnostic>> GetDocumentDiagnosticsAsync(Document document, ActiveStatementSpanProvider activeStatementSpanProvider, CancellationToken cancellationToken)
         {

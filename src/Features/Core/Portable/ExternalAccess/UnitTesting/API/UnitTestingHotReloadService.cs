@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.EditAndContinue;
 using Microsoft.CodeAnalysis.Host;
-using Microsoft.VisualStudio.Debugger.Contracts.EditAndContinue;
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.ExternalAccess.UnitTesting.Api

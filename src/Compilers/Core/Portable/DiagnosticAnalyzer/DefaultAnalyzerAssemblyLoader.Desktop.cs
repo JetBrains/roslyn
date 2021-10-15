@@ -25,29 +25,10 @@ namespace Microsoft.CodeAnalysis
     /// </remarks>
     internal class DefaultAnalyzerAssemblyLoader : AnalyzerAssemblyLoader
     {
-        private int _hookedAssemblyResolve;
-
         protected override Assembly LoadFromPathImpl(string fullPath)
         {
-            if (Interlocked.CompareExchange(ref _hookedAssemblyResolve, 0, 1) == 0)
-            {
-                AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            }
-
             var pathToLoad = GetPathToLoad(fullPath);
             return Assembly.LoadFrom(pathToLoad);
-        }
-
-        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            try
-            {
-                return Load(AppDomain.CurrentDomain.ApplyPolicy(args.Name));
-            }
-            catch
-            {
-                return null;
-            }
         }
     }
 }

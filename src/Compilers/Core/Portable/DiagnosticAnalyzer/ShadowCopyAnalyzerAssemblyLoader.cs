@@ -8,8 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
 using System.Threading;
 using System.Threading.Tasks;
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -35,6 +38,9 @@ namespace Microsoft.CodeAnalysis
         /// Used to generate unique names for per-assembly directories. Should be updated with <see cref="Interlocked.Increment(ref int)"/>.
         /// </summary>
         private int _assemblyDirectoryId;
+
+        private object _guard = new();
+        private readonly Dictionary<TempDirInfo, string> _tempDirCache = new();
 
         public ShadowCopyAnalyzerAssemblyLoader(string baseDirectory = null)
         {
@@ -101,7 +107,7 @@ namespace Microsoft.CodeAnalysis
 #nullable enable
         protected override string GetPathToLoad(string fullPath)
         {
-            string assemblyDirectory = CreateUniqueDirectoryForAssembly();
+            string assemblyDirectory = GetOrCreateUniqueDirectoryForAssembly(fullPath);
             string shadowCopyPath = CopyFileAndResources(fullPath, assemblyDirectory);
             return shadowCopyPath;
         }
@@ -111,6 +117,11 @@ namespace Microsoft.CodeAnalysis
         {
             string fileNameWithExtension = Path.GetFileName(fullPath);
             string shadowCopyPath = Path.Combine(assemblyDirectory, fileNameWithExtension);
+
+            if (File.Exists(shadowCopyPath))
+              return shadowCopyPath;
+
+            Directory.CreateDirectory(assemblyDirectory);
 
             CopyFile(fullPath, shadowCopyPath);
 
@@ -176,14 +187,52 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        private string CreateUniqueDirectoryForAssembly()
+        private string GetOrCreateUniqueDirectoryForAssembly(string fullPath)
         {
-            int directoryId = Interlocked.Increment(ref _assemblyDirectoryId);
+          lock (_guard)
+          {
+            var tempDirInfo = CreateTempDirInfo(fullPath);
 
-            string directory = Path.Combine(_shadowCopyDirectoryAndMutex.Value.directory, directoryId.ToString());
+            if (tempDirInfo != null)
+            {
+              if (_tempDirCache.TryGetValue(tempDirInfo.Value, out var dirPath))
+                return dirPath;
+            }
 
-            Directory.CreateDirectory(directory);
+            _assemblyDirectoryId++;
+
+            var directory = Path.Combine(_shadowCopyDirectoryAndMutex.Value.directory, _assemblyDirectoryId.ToString());
+
+            if (tempDirInfo != null) 
+              _tempDirCache[tempDirInfo.Value] = directory;
+
             return directory;
+          }
+        }
+
+        private static TempDirInfo? CreateTempDirInfo(string filePath)
+        {
+          try
+          {
+            var mvid = ReadMvid(filePath);
+            var assemblyName = AssemblyName.GetAssemblyName(filePath);
+
+            return new TempDirInfo(mvid, assemblyName);
+          }
+          catch
+          {
+            return null;
+          }
+        }
+
+        private static Guid ReadMvid(string filePath)
+        {
+          using var reader = new PEReader(FileUtilities.OpenRead(filePath));
+          var metadataReader = reader.GetMetadataReader();
+          var mvidHandle = metadataReader.GetModuleDefinition().Mvid;
+          var fileMvid = metadataReader.GetGuid(mvidHandle);
+
+          return fileMvid;
         }
 
         private (string directory, Mutex mutex) CreateUniqueDirectoryForProcess()
@@ -196,6 +245,34 @@ namespace Microsoft.CodeAnalysis
             Directory.CreateDirectory(directory);
 
             return (directory, mutex);
+        }
+
+        private readonly struct TempDirInfo : IEquatable<TempDirInfo>
+        {
+          public TempDirInfo(Guid mvid, AssemblyName assemblyName)
+          {
+            Mvid = mvid;
+            AssemblyName = assemblyName;
+          }
+
+          private Guid Mvid { get; }
+
+          private AssemblyName AssemblyName { get; }
+
+          public bool Equals(TempDirInfo other)
+          {
+            return Mvid.Equals(other.Mvid) && AssemblyName.ReferenceMatchesDefinition(AssemblyName, other.AssemblyName);
+          }
+
+          public override bool Equals(object obj)
+          {
+            return obj is TempDirInfo other && Equals(other);
+          }
+
+          public override int GetHashCode()
+          {
+            return Mvid.GetHashCode();
+          }
         }
     }
 }

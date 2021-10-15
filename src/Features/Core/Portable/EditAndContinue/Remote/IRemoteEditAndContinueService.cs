@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Remote;
 using Microsoft.CodeAnalysis.Text;
-using Microsoft.VisualStudio.Debugger.Contracts.EditAndContinue;
+
 
 namespace Microsoft.CodeAnalysis.EditAndContinue
 {
