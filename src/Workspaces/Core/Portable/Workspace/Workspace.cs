@@ -593,7 +593,27 @@ namespace Microsoft.CodeAnalysis
                 return oldSolution.RemoveProjectReference(projectId, projectReference);
             }, WorkspaceChangeKind.ProjectChanged, projectId);
         }
+        
+        internal void OnProjectReferencesAdded(ProjectId projectId, ImmutableArray<ProjectReference> projectReferences)
+        {
+            using (_serializationLock.DisposableWait())
+            {
+                var oldSolution = this.CurrentSolution;
+                var newSolution = this.SetCurrentSolution(oldSolution.AddProjectReferences(projectId, projectReferences));
+                this.RaiseWorkspaceChangedEventAsync(WorkspaceChangeKind.ProjectChanged, oldSolution, newSolution, projectId);
+            }
+        }
 
+        internal void OnProjectReferencesRemoved(ProjectId projectId, ImmutableArray<ProjectReference> projectReferences)
+        {
+            using (_serializationLock.DisposableWait())
+            {
+                var oldSolution = this.CurrentSolution;
+                var newSolution = this.SetCurrentSolution(oldSolution.RemoveProjectReferences(projectId, projectReferences));
+                this.RaiseWorkspaceChangedEventAsync(WorkspaceChangeKind.ProjectChanged, oldSolution, newSolution, projectId);
+            }
+        }
+        
         /// <summary>
         /// Call this method when a metadata reference is added to a project in the host environment.
         /// </summary>

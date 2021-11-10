@@ -1,8 +1,8 @@
 {
   "sdk": {
     "version": "7.0.100-preview.5.22307.18",
-    "allowPrerelease": true,
-    "rollForward": "latestPatch"
+    "rollForward": "latestPatch",
+    "allowPrerelease": true
   },
   "tools": {
     "dotnet": "7.0.100-preview.5.22307.18",

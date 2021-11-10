@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             // (Necessary for VB in particular since the EENamedTypeSymbol.Locations
             // is tied to the expression syntax in VB.)
             var synthesizedTypes = syntaxNodes.SelectAsArray(
-                (syntax, i, _) => (NamedTypeSymbol)CreateSynthesizedType(syntax, typeNameBase + i, methodName, ImmutableArray<Alias>.Empty),
+                (syntax, i, _) => (NamedTypeSymbol)CreateSynthesizedType(syntax, typeNameBase + i, methodName, ImmutableArray<Alias>.Empty, ImmutableArray<NamespaceOrTypeAndUsingDirective>.Empty),
                 arg: (object?)null);
 
             if (synthesizedTypes.Length == 0)
@@ -136,11 +136,12 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             string methodName,
             ImmutableArray<Alias> aliases,
             CompilationTestData? testData,
+            ImmutableArray<NamespaceOrTypeAndUsingDirective> usings,
             DiagnosticBag diagnostics,
             [NotNullWhen(true)] out CommonPEModuleBuilder? module,
             [NotNullWhen(true)] out EEMethodSymbol? synthesizedMethod)
         {
-            var synthesizedType = CreateSynthesizedType(syntax, typeName, methodName, aliases);
+            var synthesizedType = CreateSynthesizedType(syntax, typeName, methodName, aliases, usings);
 
             module = CreateModuleBuilder(
                 Compilation,
@@ -170,7 +171,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             CSharpSyntaxNode syntax,
             string typeName,
             string methodName,
-            ImmutableArray<Alias> aliases)
+            ImmutableArray<Alias> aliases,
+            ImmutableArray<NamespaceOrTypeAndUsingDirective> usings)
         {
             var objectType = Compilation.GetSpecialType(SpecialType.System_Object);
             var synthesizedType = new EENamedTypeSymbol(
@@ -187,6 +189,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                     var binder = ExtendBinderChain(
                         syntax,
                         aliases,
+                        usings,
                         method,
                         NamespaceBinder,
                         hasDisplayClassThis,
@@ -207,6 +210,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             string methodName,
             ImmutableArray<Alias> aliases,
             CompilationTestData? testData,
+            ImmutableArray<NamespaceOrTypeAndUsingDirective> usings,
             DiagnosticBag diagnostics,
             [NotNullWhen(true)] out CommonPEModuleBuilder? module,
             [NotNullWhen(true)] out EEMethodSymbol? synthesizedMethod)
@@ -226,6 +230,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                     var binder = ExtendBinderChain(
                         syntax,
                         aliases,
+                        usings,
                         method,
                         NamespaceBinder,
                         hasDisplayClassThis,
@@ -845,6 +850,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
         private static Binder ExtendBinderChain(
             CSharpSyntaxNode syntax,
             ImmutableArray<Alias> aliases,
+            ImmutableArray<NamespaceOrTypeAndUsingDirective> usings,
             EEMethodSymbol method,
             Binder binder,
             bool hasDisplayClassThis,
@@ -864,7 +870,9 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             {
                 substitutedSourceType = stack.Pop();
 
-                binder = new InContainerBinder(substitutedSourceType, binder);
+                var usingBinder = WithUsingNamespacesAndTypesBinder.Create(usings, binder);
+                binder = new InContainerBinder(substitutedSourceType, usingBinder);
+
                 if (substitutedSourceType.Arity > 0)
                 {
                     binder = new WithTypeArgumentsBinder(substitutedSourceType.TypeArgumentsWithAnnotationsNoUseSiteDiagnostics, binder);

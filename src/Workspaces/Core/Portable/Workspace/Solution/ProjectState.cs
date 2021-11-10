@@ -750,6 +750,57 @@ namespace Microsoft.CodeAnalysis
         public static bool IsSameLanguage(ProjectState project1, ProjectState project2)
             => project1.LanguageServices == project2.LanguageServices;
 
+        public ProjectState RemoveProjectReference(ProjectReference projectReference)
+        {
+            Debug.Assert(this.ProjectReferences.Contains(projectReference));
+
+            return this.With(
+                projectInfo: this.ProjectInfo.WithProjectReferences(this.ProjectReferences.ToImmutableArray().Remove(projectReference)).WithVersion(this.Version.GetNewerVersion()));
+        }        
+        
+        internal ProjectState RemoveProjectReferences(ImmutableArray<ProjectReference> projectReferences)
+        {
+            var references = this.ProjectReferences.ToImmutableHashSet();
+            var newProjectReferences = references.Except(projectReferences);
+            return this.With(
+                projectInfo: this.ProjectInfo.WithProjectReferences(newProjectReferences).WithVersion(this.Version.GetNewerVersion()));
+        }
+
+        public ProjectState AddProjectReferences(IEnumerable<ProjectReference> projectReferences)
+        {
+            var newProjectRefs = this.ProjectReferences;
+            foreach (var projectReference in projectReferences)
+            {
+                Debug.Assert(!newProjectRefs.Contains(projectReference));
+                newProjectRefs = newProjectRefs.ToImmutableArray().Add(projectReference);
+            }
+
+            return this.With(
+                projectInfo: this.ProjectInfo.WithProjectReferences(newProjectRefs).WithVersion(this.Version.GetNewerVersion()));
+        }
+
+        public ProjectState WithProjectReferences(IEnumerable<ProjectReference> projectReferences)
+        {
+            return this.With(
+                projectInfo: this.ProjectInfo.WithProjectReferences(projectReferences).WithVersion(this.Version.GetNewerVersion()));
+        }
+
+        public ProjectState AddMetadataReference(MetadataReference toMetadata)
+        {
+            Debug.Assert(!this.MetadataReferences.Contains(toMetadata));
+
+            return this.With(
+                projectInfo: this.ProjectInfo.WithMetadataReferences(this.MetadataReferences.ToImmutableArray().Add(toMetadata)).WithVersion(this.Version.GetNewerVersion()));
+        }
+
+        public ProjectState RemoveMetadataReference(MetadataReference toMetadata)
+        {
+            Debug.Assert(this.MetadataReferences.Contains(toMetadata));
+
+            return this.With(
+                projectInfo: this.ProjectInfo.WithMetadataReferences(this.MetadataReferences.ToImmutableArray().Remove(toMetadata)).WithVersion(this.Version.GetNewerVersion()));
+        }
+
         /// <summary>
         /// Determines whether <see cref="ProjectReferences"/> contains a reference to a specified project.
         /// </summary>

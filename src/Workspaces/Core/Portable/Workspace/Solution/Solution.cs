@@ -621,6 +621,16 @@ namespace Microsoft.CodeAnalysis
 
             return new Solution(newState);
         }
+        
+        internal Solution RemoveProjectReferences(ProjectId projectId, ImmutableArray<ProjectReference> projectReference)
+        {
+            // todo optimize?
+            SolutionState newState = _state;
+            foreach (var reference in projectReference) 
+                newState = _state.RemoveProjectReference(projectId, reference);
+            
+            return newState == _state ? this : new Solution(newState);
+        }
 
         /// <summary>
         /// Create a new solution instance with the project specified updated to no longer

@@ -146,6 +146,8 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
             debuggingSession.BreakStateOrCapabilitiesChanged(inBreakState, out documentsToReanalyze);
         }
 
+        public DebuggingSession? GetDebuggingSession(DebuggingSessionId id) => TryGetDebuggingSession(id);
+
         public ValueTask<ImmutableArray<Diagnostic>> GetDocumentDiagnosticsAsync(Document document, ActiveStatementSpanProvider activeStatementSpanProvider, CancellationToken cancellationToken)
         {
             return GetDiagnosticReportingDebuggingSessions().SelectManyAsArrayAsync(

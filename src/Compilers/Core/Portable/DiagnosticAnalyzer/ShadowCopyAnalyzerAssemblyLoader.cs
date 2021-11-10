@@ -1,12 +1,17 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
 using System.Threading;
 using System.Threading.Tasks;
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -32,6 +37,9 @@ namespace Microsoft.CodeAnalysis
         /// Used to generate unique names for per-assembly directories. Should be updated with <see cref="Interlocked.Increment(ref int)"/>.
         /// </summary>
         private int _assemblyDirectoryId;
+
+        private readonly object _guard = new();
+        private readonly Dictionary<ShadowCopyDirectoryInfo, string> _directoryInfo = new();
 
         public ShadowCopyAnalyzerAssemblyLoader(string? baseDirectory = null)
         {
@@ -97,15 +105,36 @@ namespace Microsoft.CodeAnalysis
 
         protected override string GetPathToLoad(string fullPath)
         {
-            string assemblyDirectory = CreateUniqueDirectoryForAssembly();
+            string assemblyDirectory = GetOrCreateUniqueDirectoryForAssembly(fullPath);
             string shadowCopyPath = CopyFileAndResources(fullPath, assemblyDirectory);
             return shadowCopyPath;
+        }
+        
+        protected override string? GetDirectoryToLoad(string fullPath)
+        {
+            lock (_guard)
+            {
+                var directoryInfo = CreateShadowCopyDirectoryInfo(fullPath);
+
+                if (directoryInfo == null)
+                    return null;
+
+                if (_directoryInfo.TryGetValue(directoryInfo.Value, out var dirPath))
+                    return dirPath;
+
+                return null;
+            }
         }
 
         private static string CopyFileAndResources(string fullPath, string assemblyDirectory)
         {
             string fileNameWithExtension = Path.GetFileName(fullPath);
             string shadowCopyPath = Path.Combine(assemblyDirectory, fileNameWithExtension);
+
+            if (File.Exists(shadowCopyPath))
+              return shadowCopyPath;
+
+            Directory.CreateDirectory(assemblyDirectory);
 
             CopyFile(fullPath, shadowCopyPath);
 
@@ -171,14 +200,52 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        private string CreateUniqueDirectoryForAssembly()
+        private string GetOrCreateUniqueDirectoryForAssembly(string fullPath)
         {
-            int directoryId = Interlocked.Increment(ref _assemblyDirectoryId);
+            lock (_guard)
+            {
+                var directoryInfo = CreateShadowCopyDirectoryInfo(fullPath);
 
-            string directory = Path.Combine(_shadowCopyDirectoryAndMutex.Value.directory, directoryId.ToString());
+                if (directoryInfo != null)
+                {
+                    if (_directoryInfo.TryGetValue(directoryInfo.Value, out var findUniqueDirectory))
+                        return findUniqueDirectory;
+                }
 
-            Directory.CreateDirectory(directory);
-            return directory;
+                _assemblyDirectoryId++;
+
+                var uniqueDirectory = Path.Combine(_shadowCopyDirectoryAndMutex.Value.directory, _assemblyDirectoryId.ToString());
+
+                if (directoryInfo != null)
+                    _directoryInfo[directoryInfo.Value] = uniqueDirectory;
+
+                return uniqueDirectory;
+            }
+        }
+
+        private static ShadowCopyDirectoryInfo? CreateShadowCopyDirectoryInfo(string filePath)
+        {
+            try
+            {
+                var mvid = ReadMvid(filePath);
+                var assemblyName = AssemblyName.GetAssemblyName(filePath);
+
+                return new ShadowCopyDirectoryInfo(mvid, assemblyName);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static Guid ReadMvid(string filePath)
+        {
+            using var reader = new PEReader(FileUtilities.OpenRead(filePath));
+            var metadataReader = reader.GetMetadataReader();
+            var mvidHandle = metadataReader.GetModuleDefinition().Mvid;
+            var fileMvid = metadataReader.GetGuid(mvidHandle);
+
+            return fileMvid;
         }
 
         private (string directory, Mutex mutex) CreateUniqueDirectoryForProcess()
@@ -191,6 +258,34 @@ namespace Microsoft.CodeAnalysis
             Directory.CreateDirectory(directory);
 
             return (directory, mutex);
+        }
+
+        private readonly struct ShadowCopyDirectoryInfo : IEquatable<ShadowCopyDirectoryInfo>
+        {
+            public ShadowCopyDirectoryInfo(Guid mvid, AssemblyName assemblyName)
+            {
+                Mvid = mvid;
+                AssemblyName = assemblyName;
+            }
+
+            private Guid Mvid { get; }
+
+            private AssemblyName AssemblyName { get; }
+
+            public bool Equals(ShadowCopyDirectoryInfo other)
+            {
+                return Mvid.Equals(other.Mvid) && AssemblyName.FullName.Equals(other.AssemblyName.FullName, StringComparison.OrdinalIgnoreCase);
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is ShadowCopyDirectoryInfo other && Equals(other);
+            }
+
+            public override int GetHashCode()
+            {
+                return Hash.Combine(Mvid.GetHashCode(), AssemblyName.FullName.GetHashCode());
+            }
         }
     }
 }
