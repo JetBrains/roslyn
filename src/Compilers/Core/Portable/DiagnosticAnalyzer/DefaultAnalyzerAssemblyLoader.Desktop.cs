@@ -2,88 +2,100 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 #if !NETCOREAPP
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using System.IO;
 using System.Reflection;
-using System.Threading;
-using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
 {
-    /// <summary>
-    /// Loads analyzer assemblies from their original locations in the file system.
-    /// Assemblies will only be loaded from the locations specified when the loader
-    /// is instantiated.
-    /// </summary>
-    /// <remarks>
-    /// This type is meant to be used in scenarios where it is OK for the analyzer
-    /// assemblies to be locked on disk for the lifetime of the host; for example,
-    /// csc.exe and vbc.exe. In scenarios where support for updating or deleting
-    /// the analyzer on disk is required a different loader should be used.
-    /// </remarks>
     internal class DefaultAnalyzerAssemblyLoader : AnalyzerAssemblyLoader
     {
+        private readonly Type _assemblyLoadContextType;
+        private readonly Delegate _relatedAssemblyResolveDelegate;
+        private readonly Delegate _resourcesResolveDelegate;
+        private readonly EventInfo _resolveEvent;
+        private readonly MethodInfo _loadFromAssemblyPathMethod;
+        private readonly MethodInfo _unloadMethod;
+        private readonly PropertyInfo _assemblyLoadName;
+
+        public DefaultAnalyzerAssemblyLoader()
+        {
+            _assemblyLoadContextType = Type.GetType("System.Runtime.Loader.AssemblyLoadContext") ?? throw new InvalidOperationException();
+            _resolveEvent = _assemblyLoadContextType.GetEvent("Resolving", BindingFlags.Instance | BindingFlags.Public) ?? throw new InvalidOperationException();
+
+            var handlerType = _resolveEvent.EventHandlerType;
+            var relatedAssemblyResolveMethodInfo = GetType().GetMethod("RelatedAssemblyResolve", BindingFlags.Instance | BindingFlags.Public) ?? throw new InvalidOperationException();
+            var resourcesResolveMethodInfo = GetType().GetMethod("ResourcesResolve", BindingFlags.Instance | BindingFlags.Public) ?? throw new InvalidOperationException();
+
+            _relatedAssemblyResolveDelegate = Delegate.CreateDelegate(handlerType, this, relatedAssemblyResolveMethodInfo);
+            _resourcesResolveDelegate = Delegate.CreateDelegate(handlerType, this, resourcesResolveMethodInfo);
+            _loadFromAssemblyPathMethod = _assemblyLoadContextType.GetMethod("LoadFromAssemblyPath", BindingFlags.Instance | BindingFlags.Public) ?? throw new InvalidOperationException();
+            _assemblyLoadName = _assemblyLoadContextType.GetProperty("Name", BindingFlags.Instance | BindingFlags.Public) ?? throw new InvalidOperationException();
+            _unloadMethod = _assemblyLoadContextType.GetMethod("Unload", BindingFlags.Instance | BindingFlags.Public) ?? throw new InvalidOperationException();
+        }
+
+        private readonly Dictionary<string, object> _loadContexts = new();
         private readonly object _guard = new();
-
-        private readonly Dictionary<AssemblyIdentity, Assembly> _loadedAssembliesByIdentity = new();
-        private readonly Dictionary<string, AssemblyIdentity?> _loadedAssemblyIdentitiesByPath = new();
-
-        private int _hookedAssemblyResolve;
 
         protected override Assembly LoadFromPathUncheckedImpl(string fullPath)
         {
-            if (Interlocked.CompareExchange(ref _hookedAssemblyResolve, 0, 1) == 0)
-            {
-                AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            }
-
-            AssemblyIdentity? identity;
+            object loadContext;
 
             lock (_guard)
             {
-                identity = GetOrAddAssemblyIdentity(fullPath);
-                if (identity != null && _loadedAssembliesByIdentity.TryGetValue(identity, out var existingAssembly))
+                if (_loadContexts.TryGetValue(fullPath, out loadContext))
                 {
-                    return existingAssembly;
+                    _unloadMethod.Invoke(loadContext, Array.Empty<object>());
+                    _loadContexts.Remove(fullPath);
                 }
+
+                loadContext = Activator.CreateInstance(_assemblyLoadContextType, fullPath, true);
+
+                _resolveEvent.AddEventHandler(loadContext, _relatedAssemblyResolveDelegate);
+                _resolveEvent.AddEventHandler(loadContext, _resourcesResolveDelegate);
+
+                _loadContexts.Add(fullPath, loadContext);
             }
 
-            var pathToLoad = GetPathToLoad(fullPath);
-            var loadedAssembly = Assembly.LoadFrom(pathToLoad);
-
-            lock (_guard)
-            {
-                identity ??= identity ?? AssemblyIdentity.FromAssemblyDefinition(loadedAssembly);
-
-                // The same assembly may be loaded from two different full paths (e.g. when loaded from GAC, etc.),
-                // or another thread might have loaded the assembly after we checked above.
-                if (_loadedAssembliesByIdentity.TryGetValue(identity, out var existingAssembly))
-                {
-                    loadedAssembly = existingAssembly;
-                }
-                else
-                {
-                    _loadedAssembliesByIdentity.Add(identity, loadedAssembly);
-                }
-
-                return loadedAssembly;
-            }
+            return LoadFromAssemblyPath(loadContext, fullPath);
         }
 
-        private Assembly? CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        public Assembly RelatedAssemblyResolve(object loadContext, AssemblyName assemblyName)
         {
-            // In the .NET Framework, if a handler to AssemblyResolve throws an exception, other handlers
-            // are not called. To avoid any bug in our handler breaking other handlers running in the same process
-            // we catch exceptions here. We do not expect exceptions to be thrown though.
             try
             {
-                return GetOrLoad(AppDomain.CurrentDomain.ApplyPolicy(args.Name));
+                var paths = GetPaths(assemblyName.Name);
+
+                if (paths == null || paths.Count == 0)
+                    return null;
+
+                AssemblyName bestCandidateName = null;
+                string bestCandidatePath = null;
+
+                foreach (var candidatePath in paths)
+                {
+                    var candidateName = AssemblyName.GetAssemblyName(candidatePath);
+
+                    if (candidateName.FullName.Equals(assemblyName.FullName, StringComparison.OrdinalIgnoreCase))
+                        return LoadFromAssemblyPath(loadContext, candidatePath);
+
+                    if (bestCandidateName != null && bestCandidateName.Version >= candidateName.Version)
+                        continue;
+
+                    bestCandidateName = candidateName;
+                    bestCandidatePath = candidatePath;
+                }
+
+                if (bestCandidatePath == null)
+                    return null;
+
+                return LoadFromAssemblyPath(loadContext, bestCandidatePath);
             }
             catch
             {
@@ -91,91 +103,48 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        private AssemblyIdentity? GetOrAddAssemblyIdentity(string fullPath)
+        public Assembly ResourcesResolve(object loadContext, AssemblyName assemblyName)
         {
-            Debug.Assert(PathUtilities.IsAbsolute(fullPath));
-
-            lock (_guard)
+            try
             {
-                if (_loadedAssemblyIdentitiesByPath.TryGetValue(fullPath, out var existingIdentity))
+                string GetResourcePath(string loadAssemblyDirectory, string cultureName)
                 {
-                    return existingIdentity;
+                    return Path.Combine(loadAssemblyDirectory, cultureName, assemblyName.Name + ".dll");
                 }
+
+                if (!assemblyName.Name.EndsWith(".resources", StringComparison.OrdinalIgnoreCase))
+                    return null;
+
+                var fullName = (string)_assemblyLoadName.GetValue(loadContext);
+
+                var loadAssemblyDirectory = GetDirectoryToLoad(fullName);
+                if (loadAssemblyDirectory == null)
+                    return null;
+
+                var resourcePaths = new[]
+                {
+                    GetResourcePath(loadAssemblyDirectory, assemblyName.CultureInfo.TwoLetterISOLanguageName),
+                    GetResourcePath(loadAssemblyDirectory, assemblyName.CultureInfo.Name)
+                };
+
+                foreach (var resourcePath in resourcePaths)
+                {
+                    if (File.Exists(resourcePath))
+                        return (Assembly)_loadFromAssemblyPathMethod.Invoke(loadContext, new object[] { resourcePath });
+                }
+
+                return null;
             }
-
-            var identity = AssemblyIdentityUtils.TryGetAssemblyIdentity(fullPath);
-
-            lock (_guard)
-            {
-                if (_loadedAssemblyIdentitiesByPath.TryGetValue(fullPath, out var existingIdentity) && existingIdentity != null)
-                {
-                    // Somebody else beat us, so used the cached value
-                    identity = existingIdentity;
-                }
-                else
-                {
-                    _loadedAssemblyIdentitiesByPath[fullPath] = identity;
-                }
-            }
-
-            return identity;
-        }
-
-        private Assembly? GetOrLoad(string displayName)
-        {
-            if (!AssemblyIdentity.TryParseDisplayName(displayName, out var requestedIdentity))
+            catch
             {
                 return null;
             }
+        }
 
-            ImmutableHashSet<string> candidatePaths;
-            lock (_guard)
-            {
-
-                // First, check if this loader already loaded the requested assembly:
-                if (_loadedAssembliesByIdentity.TryGetValue(requestedIdentity, out var existingAssembly))
-                {
-                    return existingAssembly;
-                }
-                // Second, check if an assembly file of the same simple name was registered with the loader:
-                candidatePaths = GetPaths(requestedIdentity.Name);
-                if (candidatePaths is null)
-                {
-                    return null;
-                }
-
-                Debug.Assert(candidatePaths.Count > 0);
-            }
-
-            // Find the highest version that satisfies the original request. We'll match for the highest version we can, assuming it
-            // actually matches the original request
-            string? bestPath = null;
-            Version? bestIdentityVersion = null;
-
-            // Sort the candidate paths by ordinal, to ensure determinism with the same inputs if you were to have multiple assemblies
-            // providing the same version.
-            foreach (var candidatePath in candidatePaths.OrderBy(StringComparer.Ordinal))
-            {
-                var candidateIdentity = GetOrAddAssemblyIdentity(candidatePath);
-
-                if (candidateIdentity is not null &&
-                    candidateIdentity.Version >= requestedIdentity.Version &&
-                    candidateIdentity.PublicKeyToken.SequenceEqual(requestedIdentity.PublicKeyToken))
-                {
-                    if (bestIdentityVersion is null || candidateIdentity.Version > bestIdentityVersion)
-                    {
-                        bestPath = candidatePath;
-                        bestIdentityVersion = candidateIdentity.Version;
-                    }
-                }
-            }
-
-            if (bestPath != null)
-            {
-                return LoadFromPathUnchecked(bestPath);
-            }
-
-            return null;
+        private Assembly LoadFromAssemblyPath(object loadContext, string fullPath)
+        {
+            var pathToLoad = GetPathToLoad(fullPath);
+            return (Assembly)_loadFromAssemblyPathMethod.Invoke(loadContext, new object[] { pathToLoad });
         }
     }
 }
