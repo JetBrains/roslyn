@@ -8,7 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -69,9 +72,29 @@ namespace Microsoft.CodeAnalysis
             {
                 if (_loadedAssembliesByPath.TryGetValue(fullPath, out var existingAssembly))
                 {
-                    loadedAssembly = existingAssembly;
+                    Module module = existingAssembly.ManifestModule;
+                    Guid runtimeMvid = module.ModuleVersionId;
+                    Guid assemblyMvid = ReadMvid(fullPath);
+                    if (runtimeMvid == assemblyMvid)
+                    {
+                        loadedAssembly = existingAssembly;
+                    }
+                    else
+                    {
+                        _loadedAssembliesByPath.Remove(fullPath);
+                        if (_loadedAssemblyIdentitiesByPath.TryGetValue(fullPath, out var oldIdentity))
+                        {
+                            _loadedAssembliesByIdentity.Remove(oldIdentity);
+                            _loadedAssemblyIdentitiesByPath.Remove(fullPath);
+                        }
+
+                        string simpleName = PathUtilities.GetFileName(fullPath, includeExtension: false);
+                        if (_knownAssemblyPathsBySimpleName.TryGetValue(simpleName, out var set))
+                            set.Remove(fullPath);
+                    }
                 }
-                else
+                
+                if (loadedAssembly == null)
                 {
                     identity ??= GetOrAddAssemblyIdentity(fullPath);
                     if (identity != null && _loadedAssembliesByIdentity.TryGetValue(identity, out existingAssembly))
@@ -89,6 +112,20 @@ namespace Microsoft.CodeAnalysis
 
             // Add the loaded assembly to both path and identity cache.
             return AddToCache(loadedAssembly, fullPath, identity);
+        }        
+        
+        private static Guid ReadMvid(string filePath)
+        {
+            RoslynDebug.Assert(PathUtilities.IsAbsolute(filePath));
+
+            using (var reader = new PEReader(FileUtilities.OpenRead(filePath)))
+            {
+                var metadataReader = reader.GetMetadataReader();
+                var mvidHandle = metadataReader.GetModuleDefinition().Mvid;
+                var fileMvid = metadataReader.GetGuid(mvidHandle);
+
+                return fileMvid;
+            }
         }
 
         private Assembly AddToCache(Assembly assembly, string fullPath, AssemblyIdentity identity)
@@ -169,6 +206,12 @@ namespace Microsoft.CodeAnalysis
         {
             return fullPath;
         }
+        
+        protected virtual string? GetDirectoryToLoad(string fullPath)
+        {
+            return Path.GetDirectoryName(fullPath);
+        }
+
 #nullable disable
 
         public Assembly Load(string displayName)
