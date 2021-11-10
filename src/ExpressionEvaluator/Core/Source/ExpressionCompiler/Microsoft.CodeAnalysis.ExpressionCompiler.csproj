@@ -14,6 +14,28 @@
     <Compile Include="..\..\..\..\Test\PdbUtilities\Shared\DateTimeUtilities.cs">
       <Link>Shared\DateTimeUtilities.cs</Link>
     </Compile>
+    <Compile Include="..\..\Test\ResultProvider\Debugger\Engine\DkmClrCustomTypeInfo.cs">
+      <Link>Stubs\DkmClrCustomTypeInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Test\ResultProvider\Debugger\Engine\DkmEvaluationFlags.cs">
+      <Link>DkmEvaluationFlags.cs</Link>
+    </Compile>
+    <Compile Remove="ExpressionCompiler.cs" />
+    <Compile Remove="FrameDecoder.cs" />
+    <Compile Remove="InstructionDecoder.cs" />
+    <Compile Remove="LanguageInstructionDecoder.cs" />
+    <Compile Include="..\..\Test\ResultProvider\Debugger\Engine\DkmEvaluationResultCategory.cs">
+      <Link>Stubs\DkmEvaluationResultCategory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Test\ResultProvider\Debugger\Engine\DkmException.cs">
+      <Link>Stubs\DkmException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Test\ResultProvider\Debugger\Engine\DkmExceptionCode.cs">
+      <Link>Stubs\DkmExceptionCode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Test\ResultProvider\Debugger\Engine\DkmMisc.cs">
+      <Link>Stubs\DkmMisc.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup Label="Project References">
     <ProjectReference Include="..\..\..\..\Compilers\Core\Portable\Microsoft.CodeAnalysis.csproj" />
@@ -25,12 +47,17 @@
     <InternalsVisibleTo Include="Microsoft.CodeAnalysis.VisualBasic.ExpressionEvaluator.ExpressionCompiler.UnitTests" />
     <InternalsVisibleTo Include="Microsoft.CodeAnalysis.ExpressionEvaluator.ExpressionCompiler.Utilities" />
     <InternalsVisibleTo Include="Microsoft.VisualStudio.ProductionBreakpoints.CodeAnalysis" Key="$(VisualStudioDebuggerKey)" WorkItem="https://github.com/dotnet/roslyn/issues/35084" />
+
+    <InternalsVisibleTo Include="Mono.Debugging" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="Mono.Debugging.Win32" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="Mono.Debugging.Soft" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="JetBrains.Roslyn.Worker" Key="$(JetBrainsKey)"/>
+
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\WindowsProxy.winmd" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Debugger.Engine-implementation" Version="$(MicrosoftVisualStudioDebuggerEngineimplementationVersion)" />
     <PackageReference Include="Microsoft.DiaSymReader" Version="$(MicrosoftDiaSymReaderVersion)" />
   </ItemGroup>
 </Project>

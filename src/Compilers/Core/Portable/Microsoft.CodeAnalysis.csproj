@@ -93,6 +93,14 @@
     <InternalsVisibleTo Include="VBCSCompiler.UnitTests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" Key="$(MoqPublicKey)" LoadsWithinVisualStudio="false" />
     <InternalsVisibleTo Include="CompilerBenchmarks" />
+
+    <InternalsVisibleTo Include="Mono.Debugging" Key="$(JetBrainsKey)" />
+    <InternalsVisibleTo Include="Mono.Debugging.Win32" Key="$(JetBrainsKey)" />
+    <InternalsVisibleTo Include="Mono.Debugging.Soft" Key="$(JetBrainsKey)" />
+    <InternalsVisibleTo Include="JetBrains.Debugger.Worker" Key="$(JetBrainsKey)" />
+    <InternalsVisibleTo Include="JetBrains.Roslyn.Worker" Key="$(JetBrainsKey)" />
+    <InternalsVisibleTo Include="Debugger.Common" Key="$(JetBrainsKey)" />
+
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="CodeAnalysisResources.resx" GenerateSource="true" />
