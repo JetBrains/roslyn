@@ -56,11 +56,9 @@
     <ProjectReference Include="..\..\VisualStudio\Xaml\Impl\Microsoft.VisualStudio.LanguageServices.Xaml.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\..\ExpressionEvaluator\Core\Source\ExpressionCompiler\Microsoft.CodeAnalysis.ExpressionCompiler.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\..\ExpressionEvaluator\CSharp\Source\ExpressionCompiler\Microsoft.CodeAnalysis.CSharp.ExpressionCompiler.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\..\ExpressionEvaluator\VisualBasic\Source\ExpressionCompiler\Microsoft.CodeAnalysis.VisualBasic.ExpressionCompiler.vbproj" PrivateAssets="all" />
     <ProjectReference Include="..\..\ExpressionEvaluator\Core\Source\FunctionResolver\Microsoft.CodeAnalysis.FunctionResolver.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\..\ExpressionEvaluator\Core\Source\ResultProvider\Portable\Microsoft.CodeAnalysis.ResultProvider.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\..\ExpressionEvaluator\CSharp\Source\ResultProvider\Portable\Microsoft.CodeAnalysis.CSharp.ResultProvider.csproj" PrivateAssets="all" />
-    <ProjectReference Include="..\..\ExpressionEvaluator\VisualBasic\Source\ResultProvider\Portable\Microsoft.CodeAnalysis.VisualBasic.ResultProvider.vbproj" PrivateAssets="all" />
   </ItemGroup>
 
   <Target Name="_GetFilesToPackage">

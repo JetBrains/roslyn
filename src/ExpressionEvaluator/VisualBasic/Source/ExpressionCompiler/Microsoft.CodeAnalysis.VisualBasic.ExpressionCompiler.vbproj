@@ -20,6 +20,14 @@
   <ItemGroup>
     <InternalsVisibleTo Include="Microsoft.CodeAnalysis.VisualBasic.ExpressionEvaluator.ExpressionCompiler.UnitTests" />
     <InternalsVisibleTo Include="Microsoft.VisualStudio.ProductionBreakpoints.CodeAnalysis" Key="$(VisualStudioDebuggerKey)" WorkItem="https://github.com/dotnet/roslyn/issues/35084" />
+
+    <InternalsVisibleTo Include="Mono.Debugging" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="Mono.Debugging.Win32" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="Mono.Debugging.Soft" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="JetBrains.Debugger.Worker" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="JetBrains.Roslyn.Worker" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="Debugger.Common" Key="$(JetBrainsKey)"/>
+
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources.resx" GenerateSource="true" Namespace="Microsoft.CodeAnalysis.VisualBasic.ExpressionEvaluator" />

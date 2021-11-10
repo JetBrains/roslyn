@@ -601,6 +601,32 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
             return ProjectAnalysisSummary.ValidChanges;
         }
 
+        internal Task<ImmutableArray<Document>> GetChangedDocumentsAsync(Solution solution, CancellationToken cancellationToken)
+        {
+            var baseSolution = DebuggingSession.LastCommittedSolution;
+            if (baseSolution.HasNoChanges(solution))
+                return Task.FromResult(ImmutableArray<Document>.Empty);
+
+            return Task.Factory.StartNew(async () =>
+            {
+                var tasks = solution.Projects.Select(async project =>
+                {
+                    using var changedDocumentsDisposer = ArrayBuilder<Document>.GetInstance(out var changedDocuments);
+                    var oldProject = baseSolution.GetProject(project.Id);
+                    if (oldProject == null)
+                    {
+                        EditAndContinueWorkspaceService.Log.Write("GetChangedDocumentsAsync: EnC state of '{0}' [0x{1:X8}] queried: project not loaded", project.Id.DebugName, project.Id);
+                        return ImmutableArray<Document>.Empty;
+                    }
+                    await PopulateChangedAndAddedDocumentsAsync(oldProject, project, changedDocuments, cancellationToken).ConfigureAwait(false);
+                    return changedDocuments.ToImmutableArray();
+                }).ToList();
+
+                var arrays = await Task.WhenAll(tasks).ConfigureAwait(false);
+                return arrays.SelectMany(x => x).ToImmutableArray();
+            }, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default).Unwrap();
+        }
+
         internal static async ValueTask<ProjectChanges> GetProjectChangesAsync(
             ActiveStatementsMap baseActiveStatements,
             Compilation oldCompilation,
@@ -632,11 +658,12 @@ namespace Microsoft.CodeAnalysis.EditAndContinue
                     // Active statements are calculated if document changed and has no syntax errors:
                     Contract.ThrowIfTrue(analysis.ActiveStatements.IsDefault);
 
-                    allEdits.AddRange(analysis.SemanticEdits);
+                    if (!analysis.SemanticEdits.IsDefault)
+                        allEdits.AddRange(analysis.SemanticEdits);
                     allLineEdits.AddRange(analysis.LineEdits);
                     requiredCapabilities |= analysis.RequiredCapabilities;
 
-                    if (analysis.ActiveStatements.Length > 0)
+                    if (!analysis.ActiveStatements.IsDefault &&analysis.ActiveStatements.Length > 0)
                     {
                         var oldDocument = await oldProject.GetDocumentAsync(analysis.DocumentId, includeSourceGenerated: true, cancellationToken).ConfigureAwait(false);
 
