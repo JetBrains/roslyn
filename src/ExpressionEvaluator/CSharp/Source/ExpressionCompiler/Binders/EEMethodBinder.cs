@@ -19,8 +19,9 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
         private readonly int _parameterOffset;
         private readonly ImmutableArray<ParameterSymbol> _targetParameters;
         private readonly Binder _sourceBinder;
+        private readonly bool _isMethodBodyCompilation;
 
-        internal EEMethodBinder(EEMethodSymbol method, MethodSymbol containingMethod, Binder next) : base(next, next.Flags | BinderFlags.InEEMethodBinder)
+        internal EEMethodBinder(EEMethodSymbol method, MethodSymbol containingMethod, Binder next, bool isMethodBodyCompilation = false) : base(next, next.Flags | BinderFlags.InEEMethodBinder)
         {
             Debug.Assert(method.DeclaringCompilation is not null);
 
@@ -41,6 +42,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             //      parameters we bind to from (3) will be replaced by the corresponding parameters from (1).
 
             _containingMethod = containingMethod;
+            _isMethodBodyCompilation = isMethodBodyCompilation;
             var substitutedSourceMethod = method.SubstitutedSourceMethod;
             _parameterOffset = substitutedSourceMethod.IsStatic ? 0 : 1;
             _targetParameters = method.Parameters;
@@ -65,6 +67,16 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             }
         }
 
+        internal override TypeWithAnnotations GetIteratorElementType()
+        {
+            if (_isMethodBodyCompilation)
+            {
+                return _sourceBinder.GetIteratorElementType();
+            }
+
+            return base.GetIteratorElementType();
+        }
+        
         internal override void AddLookupSymbolsInfoInSingleBinder(LookupSymbolsInfo info, LookupOptions options, Binder originalBinder)
         {
             throw new NotImplementedException();

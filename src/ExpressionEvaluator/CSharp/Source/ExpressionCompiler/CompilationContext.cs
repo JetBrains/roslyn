@@ -266,7 +266,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             return true;
         }
 
-        private static EEMethodSymbol GetSynthesizedMethod(EENamedTypeSymbol synthesizedType)
+        public static EEMethodSymbol GetSynthesizedMethod(EENamedTypeSymbol synthesizedType)
             => (EEMethodSymbol)synthesizedType.Methods[0];
 
         private static string GetNextMethodName(ArrayBuilder<MethodSymbol> builder)
@@ -509,7 +509,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             return new CSharpLocalAndMethod(escapedName, displayName, method, flags);
         }
 
-        private static EEAssemblyBuilder CreateModuleBuilder(
+        internal static EEAssemblyBuilder CreateModuleBuilder(
             CSharpCompilation compilation,
             ImmutableArray<NamedTypeSymbol> additionalTypes,
             CompilationTestData? testData,
@@ -700,7 +700,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             return new BoundExpressionStatement(expression.Syntax, expression) { WasCompilerGenerated = true };
         }
 
-        private static Binder CreateBinderChain(
+        internal static Binder CreateBinderChain(
             CSharpCompilation compilation,
             NamespaceSymbol @namespace,
             ImmutableArray<ImmutableArray<ImportRecord>> importRecordGroups,

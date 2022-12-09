@@ -4,6 +4,7 @@
 
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 
 namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
@@ -27,12 +28,14 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
 
         private readonly ImmutableArray<TypeParameterSymbol> _typeParameters;
         private readonly ImmutableArray<ParameterSymbol> _parameters;
+        private readonly bool _isMethodBodyCompilation;
 
-        public EECompilationContextMethod(CSharpCompilation compilation, MethodSymbol underlyingMethod)
+        public EECompilationContextMethod(CSharpCompilation compilation, MethodSymbol underlyingMethod, bool isMethodBodyCompilation = false)
         {
             Debug.Assert(underlyingMethod.IsDefinition);
 
             _compilation = compilation;
+            _isMethodBodyCompilation = isMethodBodyCompilation;
 
             var typeMap = underlyingMethod.ContainingType.TypeSubstitution ?? TypeMap.Empty;
             typeMap.WithAlphaRename(underlyingMethod, this, out _typeParameters);
@@ -98,6 +101,55 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                 ? new ThisParameterSymbol(this)
                 : null;
             return true;
+        }
+        
+        public override bool IsAsync
+        {
+            get
+            {
+                if (_isMethodBodyCompilation)
+                {
+                    return _underlyingMethod.GetAttributes().Any(x => x.AttributeClass?.Name == "AsyncStateMachineAttribute");
+                }
+
+                return base.IsAsync;
+            }
+        }
+
+        internal override bool IsIterator
+        {
+            get
+            {
+                if (_isMethodBodyCompilation)
+                {
+                    return _underlyingMethod.GetAttributes().Any(x => x.AttributeClass?.Name == "IteratorStateMachineAttribute");
+                }
+
+                return base.IsIterator;
+            }
+        }
+
+        internal override TypeWithAnnotations IteratorElementTypeWithAnnotations
+        {
+            get
+            {
+                if (_isMethodBodyCompilation)
+                {
+                    if (IsIterator)
+                    {
+                        // Copy pasted from LocalFunctionOrSourceMemberMethodSymbol
+                        TypeWithAnnotations elementType = InMethodBinder.GetIteratorElementTypeFromReturnType(DeclaringCompilation, RefKind, ReturnType, errorLocation: null, diagnostics: null);
+                        if (elementType.IsDefault)
+                        {
+                            elementType = TypeWithAnnotations.Create(new ExtendedErrorTypeSymbol(DeclaringCompilation, name: "", arity: 0, errorInfo: null, unreported: false));
+                        }
+
+                        return elementType;
+                    }
+                }
+
+                return base.IteratorElementTypeWithAnnotations;
+            }
         }
     }
 }

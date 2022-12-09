@@ -58,6 +58,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
         /// exactly once, otherwise it may be skipped.)
         /// </summary>
         private readonly GenerateMethodBody _generateMethodBody;
+        private readonly bool _isMethodBodyCompilation;
         private TypeWithAnnotations _lazyReturnType;
         private ResultProperties _lazyResultProperties;
 
@@ -72,7 +73,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             ImmutableArray<LocalSymbol> sourceLocals,
             ImmutableArray<LocalSymbol> sourceLocalsForBinding,
             ImmutableDictionary<string, DisplayClassVariable> sourceDisplayClassVariables,
-            GenerateMethodBody generateMethodBody)
+            GenerateMethodBody generateMethodBody, bool isMethodBodyCompilation = false)
         {
             Debug.Assert(sourceMethod.IsDefinition);
             Debug.Assert(TypeSymbol.Equals((TypeSymbol)sourceMethod.ContainingSymbol, container.SubstitutedSourceType.OriginalDefinition, TypeCompareKind.ConsiderEverything2));
@@ -81,6 +82,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             _container = container;
             _name = name;
             _locations = ImmutableArray.Create(location);
+            _isMethodBodyCompilation = isMethodBodyCompilation;
 
             // What we want is to map all original type parameters to the corresponding new type parameters
             // (since the old ones have the wrong owners).  Unfortunately, we have a circular dependency:
@@ -94,7 +96,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             var sourceMethodTypeParameters = sourceMethod.TypeParameters;
             var allSourceTypeParameters = container.SourceTypeParameters.Concat(sourceMethodTypeParameters);
 
-            sourceMethod = new EECompilationContextMethod(DeclaringCompilation, sourceMethod);
+            sourceMethod = new EECompilationContextMethod(DeclaringCompilation, sourceMethod, _isMethodBodyCompilation);
 
             sourceMethodTypeParameters = sourceMethod.TypeParameters;
             allSourceTypeParameters = allSourceTypeParameters.Concat(sourceMethodTypeParameters);
@@ -186,6 +188,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             _generateMethodBody = generateMethodBody;
         }
 
+        internal override string GetDebuggerDisplay() => ContainingType.Name + "." + Name;
+        
         private ParameterSymbol MakeParameterSymbol(int ordinal, string name, ParameterSymbol sourceParameter)
         {
             return SynthesizedParameterSymbol.Create(this, sourceParameter.TypeWithAnnotations, ordinal, sourceParameter.RefKind, name, DeclarationScope.Unscoped, sourceParameter.RefCustomModifiers);
@@ -294,7 +298,40 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
 
         public override bool IsAsync
         {
-            get { return false; }
+            get
+            {
+                if (_isMethodBodyCompilation)
+                {
+                    return SubstitutedSourceMethod.IsAsync;
+                }
+                return false;
+            }
+        }
+
+        internal override bool IsIterator
+        {
+            get
+            {
+                if (_isMethodBodyCompilation)
+                {
+                    return SubstitutedSourceMethod.IsIterator;
+                }
+
+                return false;
+            }
+        }
+
+        internal override TypeWithAnnotations IteratorElementTypeWithAnnotations
+        {
+            get
+            {
+                if (_isMethodBodyCompilation)
+                {
+                    return SubstitutedSourceMethod.IteratorElementTypeWithAnnotations;
+                }
+
+                return base.IteratorElementTypeWithAnnotations;
+            }
         }
 
         public override TypeWithAnnotations ReturnTypeWithAnnotations
@@ -449,7 +486,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             var body = _generateMethodBody(this, diagnostics.DiagnosticBag, out declaredLocalsArray, out _lazyResultProperties);
             var compilation = compilationState.Compilation;
 
-            _lazyReturnType = TypeWithAnnotations.Create(CalculateReturnType(compilation, body));
+            _lazyReturnType = _isMethodBodyCompilation ? SubstitutedSourceMethod.ReturnTypeWithAnnotations : TypeWithAnnotations.Create(CalculateReturnType(compilation, body));
 
             // Can't do this until the return type has been computed.
             TypeParameterChecker.Check(this, _allTypeParameters);
@@ -501,7 +538,10 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                     }
 
                     // Rewrite references to placeholder "locals".
-                    body = (BoundStatement)PlaceholderLocalRewriter.Rewrite(compilation, _container, declaredLocals, body, diagnostics.DiagnosticBag);
+                    if (!_isMethodBodyCompilation)
+                    {
+                        body = (BoundStatement)PlaceholderLocalRewriter.Rewrite(compilation, _container, declaredLocals, body, diagnostics.DiagnosticBag);
+                    }
 
                     if (diagnostics.HasAnyErrors())
                     {
