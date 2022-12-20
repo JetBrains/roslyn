@@ -27,7 +27,8 @@ public static class MethodInContextCompile
     private const string TypeName = "<>x";
     private const string MethodName = "<>m0";
 
-    internal static CSharpCompileResult CompileExpression(CSharpCompilation Compilation, BlockSyntax methodBody, PEMethodSymbol currentMethod, MethodDebugInfo<TypeSymbol, LocalSymbol> methodDebugInfo, DiagnosticBag diagnostics)
+    internal static CSharpCompileResult CompileExpression(CSharpCompilation Compilation, BlockSyntax methodBody, PEMethodSymbol currentMethod, MethodDebugInfo<TypeSymbol, LocalSymbol> methodDebugInfo, DiagnosticBag diagnostics, 
+        CancellationToken token)
     {
         var namespaceBinder = CompilationContext.CreateBinderChain(
             Compilation,
@@ -56,7 +57,8 @@ public static class MethodInContextCompile
                         namespaceBinder,
                         out var declaredLocals);
 
-                    var result = binder.BindEmbeddedBlock(methodBody, new BindingDiagnosticBag(diagnostics));
+                    var bindingDiagnosticBag = new BindingDiagnosticBag(diagnostics);
+                    var result = binder.BindEmbeddedBlock(methodBody, bindingDiagnosticBag);
                     if (result.HasErrors)
                         throw new InvalidOperationException("Has errors");
                     return result;
@@ -88,7 +90,7 @@ public static class MethodInContextCompile
             emittingPdb: false,
             diagnostics,
             filterOpt: null,
-            CancellationToken.None);
+            token);
 
         if (diagnostics.HasAnyErrors())
         {
@@ -109,7 +111,7 @@ public static class MethodInContextCompile
             isDeterministic: false,
             emitTestCoverageData: false,
             privateKeyOpt: null,
-            CancellationToken.None);
+            token);
 
         if (diagnostics.HasAnyErrors())
         {

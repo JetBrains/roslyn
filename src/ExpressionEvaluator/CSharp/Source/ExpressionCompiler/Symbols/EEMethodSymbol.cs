@@ -589,7 +589,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                     {
                         // TODO: Probably we don't need this analysis, we need only add ReturnBoundStatement to the end of method if it's void
                         var originalBodyNested = false; // TODO: what is that?
-                        body = FlowAnalysisPass.Rewrite(this, (BoundBlock)body, compilationState, diagnostics, hasTrailingExpression: false, originalBodyNested: originalBodyNested);
+                        var d = new BindingDiagnosticBag(); // this pass generates some exception, we skip it
+                        body = FlowAnalysisPass.Rewrite(this, (BoundBlock)body, compilationState, d, hasTrailingExpression: false, originalBodyNested: originalBodyNested);
                     }
 
                     Debug.Assert(!diagnostics.HasAnyErrors());
