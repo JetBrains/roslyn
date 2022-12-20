@@ -27,7 +27,7 @@ public static class MethodInContextCompile
     private const string TypeName = "<>x";
     private const string MethodName = "<>m0";
 
-    private static CSharpCompileResult CompileExpression(CSharpCompilation Compilation, BlockSyntax methodBody, PEMethodSymbol currentMethod, MethodDebugInfo<TypeSymbol, LocalSymbol> methodDebugInfo, DiagnosticBag diagnostics)
+    internal static CSharpCompileResult CompileExpression(CSharpCompilation Compilation, BlockSyntax methodBody, PEMethodSymbol currentMethod, MethodDebugInfo<TypeSymbol, LocalSymbol> methodDebugInfo, DiagnosticBag diagnostics)
     {
         var namespaceBinder = CompilationContext.CreateBinderChain(
             Compilation,

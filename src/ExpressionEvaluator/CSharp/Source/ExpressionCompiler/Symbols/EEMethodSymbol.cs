@@ -407,7 +407,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
 
         internal override bool GenerateDebugInfo
         {
-            get { return false; }
+            // to generate debug IL code to have evaluation stack empty at the point we stay at
+            get { return _isMethodBodyCompilation; }
         }
 
         public override Symbol ContainingSymbol
@@ -513,44 +514,44 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
 
             try
             {
-                var declaredLocals = PooledHashSet<LocalSymbol>.GetInstance();
-                try
+                if (!_isMethodBodyCompilation)
                 {
-                    // Rewrite local declaration statement.
-                    body = (BoundStatement)LocalDeclarationRewriter.Rewrite(
-                        compilation,
-                        _container,
-                        declaredLocals,
-                        body,
-                        declaredLocalsArray,
-                        diagnostics.DiagnosticBag);
-
-                    // Verify local declaration names.
-                    foreach (var local in declaredLocals)
+                    var declaredLocals = PooledHashSet<LocalSymbol>.GetInstance();
+                    try
                     {
-                        Debug.Assert(local.Locations.Length > 0);
-                        var name = local.Name;
-                        if (name.StartsWith("$", StringComparison.Ordinal))
+                        // Rewrite local declaration statement.
+                        body = (BoundStatement)LocalDeclarationRewriter.Rewrite(
+                            compilation,
+                            _container,
+                            declaredLocals,
+                            body,
+                            declaredLocalsArray,
+                            diagnostics.DiagnosticBag);
+
+                        // Verify local declaration names.
+                        foreach (var local in declaredLocals)
                         {
-                            diagnostics.Add(ErrorCode.ERR_UnexpectedCharacter, local.Locations[0], name[0]);
+                            Debug.Assert(local.Locations.Length > 0);
+                            var name = local.Name;
+                            if (name.StartsWith("$", StringComparison.Ordinal))
+                            {
+                                diagnostics.Add(ErrorCode.ERR_UnexpectedCharacter, local.Locations[0], name[0]);
+                                return;
+                            }
+                        }
+
+                        // Rewrite references to placeholder "locals".
+                        body = (BoundStatement)PlaceholderLocalRewriter.Rewrite(compilation, _container, declaredLocals, body, diagnostics.DiagnosticBag);
+
+                        if (diagnostics.HasAnyErrors())
+                        {
                             return;
                         }
                     }
-
-                    // Rewrite references to placeholder "locals".
-                    if (!_isMethodBodyCompilation)
+                    finally
                     {
-                        body = (BoundStatement)PlaceholderLocalRewriter.Rewrite(compilation, _container, declaredLocals, body, diagnostics.DiagnosticBag);
+                        declaredLocals.Free();
                     }
-
-                    if (diagnostics.HasAnyErrors())
-                    {
-                        return;
-                    }
-                }
-                finally
-                {
-                    declaredLocals.Free();
                 }
 
                 var syntax = body.Syntax;
@@ -580,7 +581,16 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                         }
                     }
 
-                    body = new BoundBlock(syntax, localsBuilder.ToImmutableAndFree(), statementsBuilder.ToImmutableAndFree()) { WasCompilerGenerated = true };
+                    if (!_isMethodBodyCompilation)
+                    {
+                        body = new BoundBlock(syntax, localsBuilder.ToImmutableAndFree(), statementsBuilder.ToImmutableAndFree()) { WasCompilerGenerated = true };
+                    }
+                    else
+                    {
+                        // TODO: Probably we don't need this analysis, we need only add ReturnBoundStatement to the end of method if it's void
+                        var originalBodyNested = false; // TODO: what is that?
+                        body = FlowAnalysisPass.Rewrite(this, (BoundBlock)body, compilationState, diagnostics, hasTrailingExpression: false, originalBodyNested: originalBodyNested);
+                    }
 
                     Debug.Assert(!diagnostics.HasAnyErrors());
                     Debug.Assert(!body.HasErrors);
@@ -636,6 +646,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                     // the locals <1> and z, and a corresponding local <2>: F(() => <2>.<1>.x + <2>.z)
                     // And a preamble is added to initialize the fields of <2>:
                     //     <2> = new <>c__DisplayClass0();
+                    // TODO: in methodBodyCompiler we don't need it, it can interfere
                     //     <2>.<1> = <1>;
                     //     <2>.z = z;
 
