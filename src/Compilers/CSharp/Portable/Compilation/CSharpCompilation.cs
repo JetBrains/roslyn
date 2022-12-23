@@ -3198,8 +3198,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                 excludeDiagnostics = PooledHashSet<int>.GetInstance();
                 excludeDiagnostics.Add((int)ErrorCode.ERR_ConcreteMissingBody);
             }
-            bool hasDeclarationErrors = !FilterAndAppendDiagnostics(diagnostics, GetDiagnostics(CompilationStage.Declare, true, cancellationToken), excludeDiagnostics, cancellationToken);
+            // bool hasDeclarationErrors = !FilterAndAppendDiagnostics(diagnostics, GetDiagnostics(CompilationStage.Declare, true, cancellationToken), excludeDiagnostics, cancellationToken);
+            bool hasDeclarationErrors = !FilterAndAppendDiagnostics(new DiagnosticBag(), GetDiagnostics(CompilationStage.Declare, true, cancellationToken), excludeDiagnostics, cancellationToken);
+            hasDeclarationErrors = false;
             excludeDiagnostics?.Free();
+
 
             // TODO (tomat): NoPIA:
             // EmbeddedSymbolManager.MarkAllDeferredSymbolsAsReferenced(this)

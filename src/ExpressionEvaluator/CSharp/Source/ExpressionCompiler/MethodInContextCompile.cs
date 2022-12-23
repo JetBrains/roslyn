@@ -8,8 +8,10 @@ using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
+using System.Text;
 using System.Threading;
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
@@ -20,14 +22,28 @@ using Microsoft.CodeAnalysis.ExpressionEvaluator;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.DiaSymReader;
 using Roslyn.Utilities;
+
 namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator;
 
 public static class MethodInContextCompile
 {
     private const string TypeName = "<>x";
     private const string MethodName = "<>m0";
+    internal static byte[] CompleClass(CSharpCompilation sharpCompilation, string classCode)
+    {
+        var pe = new MemoryStream();
+        var emitResult = sharpCompilation.Emit(pe);
+        if (!emitResult.Success)
+        {
+        }
 
-    internal static CSharpCompileResult CompileExpression(CSharpCompilation Compilation, BlockSyntax methodBody, PEMethodSymbol currentMethod, MethodDebugInfo<TypeSymbol, LocalSymbol> methodDebugInfo, DiagnosticBag diagnostics, 
+        pe.Seek(0, SeekOrigin.Begin);
+        var assembly = pe.ToArray();
+        File.WriteAllBytes(@"C:\Users\Evgeny.Terekhin\Documents\a2.dll", assembly);
+        return assembly;
+    }
+
+    internal static CSharpCompileResult CompileExpression(CSharpCompilation Compilation, BlockSyntax methodBody, PEMethodSymbol currentMethod, MethodDebugInfo<TypeSymbol, LocalSymbol> methodDebugInfo, DiagnosticBag diagnostics,
         CancellationToken token)
     {
         var namespaceBinder = CompilationContext.CreateBinderChain(
@@ -59,8 +75,6 @@ public static class MethodInContextCompile
 
                     var bindingDiagnosticBag = new BindingDiagnosticBag(diagnostics);
                     var result = binder.BindEmbeddedBlock(methodBody, bindingDiagnosticBag);
-                    if (result.HasErrors)
-                        throw new InvalidOperationException("Has errors");
                     return result;
                 };
 

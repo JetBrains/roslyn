@@ -485,6 +485,10 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
         {
             ImmutableArray<LocalSymbol> declaredLocalsArray;
             var body = _generateMethodBody(this, diagnostics.DiagnosticBag, out declaredLocalsArray, out _lazyResultProperties);
+            if (body.HasAnyErrors)
+            {
+                return;
+            }
             var compilation = compilationState.Compilation;
 
             _lazyReturnType = _isMethodBodyCompilation ? SubstitutedSourceMethod.ReturnTypeWithAnnotations : TypeWithAnnotations.Create(CalculateReturnType(compilation, body));
