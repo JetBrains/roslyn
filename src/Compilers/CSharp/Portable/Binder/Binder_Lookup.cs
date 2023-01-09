@@ -15,6 +15,11 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp
 {
+    internal class BinderIgnoreAccessibility
+    {
+        internal static string AssemblyName { get; set; }
+    }
+
     internal partial class Binder
     {
         /// <summary>
@@ -1682,6 +1687,15 @@ symIsHidden:;
             {
                 failedThroughTypeCheck = false;
                 return true;
+            }
+            
+            if (symbol.ContainingAssembly?.Name is { } assemblyName && BinderIgnoreAccessibility.AssemblyName is { } ignoringAssemblyName)
+            {
+                if (assemblyName == ignoringAssemblyName)
+                {
+                    failedThroughTypeCheck = false;
+                    return true;
+                }
             }
 
             return IsAccessibleHelper(symbol, accessThroughType, out failedThroughTypeCheck, ref useSiteInfo, basesBeingResolved);

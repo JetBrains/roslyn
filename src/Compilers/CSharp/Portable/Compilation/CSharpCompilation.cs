@@ -3198,7 +3198,38 @@ namespace Microsoft.CodeAnalysis.CSharp
                 excludeDiagnostics = PooledHashSet<int>.GetInstance();
                 excludeDiagnostics.Add((int)ErrorCode.ERR_ConcreteMissingBody);
             }
-            bool hasDeclarationErrors = !FilterAndAppendDiagnostics(diagnostics, GetDiagnostics(CompilationStage.Declare, true, cancellationToken), excludeDiagnostics, cancellationToken);
+
+            bool hasDeclarationErrors;
+            if (_options.IgnoreErrorsForDfa)
+            {
+                // bool hasDeclarationErrors = !FilterAndAppendDiagnostics(diagnostics, GetDiagnostics(CompilationStage.Declare, true, cancellationToken), excludeDiagnostics, cancellationToken);
+                var diagnosticBag = new DiagnosticBag();
+                hasDeclarationErrors = !FilterAndAppendDiagnostics(diagnosticBag, GetDiagnostics(CompilationStage.Declare, true, cancellationToken), excludeDiagnostics, cancellationToken);
+                int[] skip =
+                {
+                    101, 111, 51,
+                    // (28,7): error CS0138: A 'using namespace' directive can only be applied to namespaces; 'TestMetadata' is a type not a namespace. Consider a 'using static' directive instead
+                    138,
+                    // (1084,39): error CS0227: Unsafe code may only appear if compiling with /unsafe
+                    227,
+                    // (4,22): error CS0234: The type or namespace name 'Linq' does not exist in the namespace 'System' (are you missing an assembly reference?)
+                    234
+                };
+                foreach (Diagnostic diagnostic in diagnosticBag.AsEnumerable())
+                {
+                    // if (!diagnostic.IsUnsuppressedError || !skip.Contains(diagnostic.Code))
+                    // {
+                    //     diagnostics.Add(diagnostic);
+                    // }
+                }
+
+                hasDeclarationErrors = !FilterAndAppendDiagnostics(diagnosticBag, diagnostics.ToReadOnly(), excludeDiagnostics, cancellationToken);
+                hasDeclarationErrors = false;
+            }
+            else
+            {
+                hasDeclarationErrors = !FilterAndAppendDiagnostics(diagnostics, GetDiagnostics(CompilationStage.Declare, true, cancellationToken), excludeDiagnostics, cancellationToken);
+            }
             excludeDiagnostics?.Free();
 
             // TODO (tomat): NoPIA:
@@ -3256,9 +3287,25 @@ namespace Microsoft.CodeAnalysis.CSharp
                     GenerateModuleInitializer(moduleBeingBuilt, methodBodyDiagnosticBag);
                 }
 
-                bool hasDuplicateFilePaths = CheckDuplicateFilePaths(diagnostics);
+                bool hasDuplicateFilePaths;
+                if (_options.IgnoreErrorsForDfa)
+                {
+                    var newDiagn = new DiagnosticBag();
+                    hasDuplicateFilePaths = CheckDuplicateFilePaths(newDiagn);
+                }
+                else { hasDuplicateFilePaths = CheckDuplicateFilePaths(diagnostics); }
 
-                bool hasMethodBodyError = !FilterAndAppendAndFreeDiagnostics(diagnostics, ref methodBodyDiagnosticBag, cancellationToken);
+
+                bool hasMethodBodyError;
+                if (_options.IgnoreErrorsForDfa)
+                {
+                    var newDiagn2 = new DiagnosticBag();
+                    hasMethodBodyError = !FilterAndAppendAndFreeDiagnostics(newDiagn2, ref methodBodyDiagnosticBag, cancellationToken);
+                }
+                else
+                {
+                    hasMethodBodyError = !FilterAndAppendAndFreeDiagnostics(diagnostics, ref methodBodyDiagnosticBag, cancellationToken);
+                }
 
                 if (hasDeclarationErrors || hasMethodBodyError || hasDuplicateFilePaths)
                 {

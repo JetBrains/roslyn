@@ -772,7 +772,18 @@ namespace Microsoft.CodeAnalysis.CSharp
             ref CompoundUseSiteInfo<AssemblySymbol> useSiteInfo,
             TypeSymbol? throughTypeOpt = null)
         {
-            return this.Flags.Includes(BinderFlags.IgnoreAccessibility) || AccessCheck.IsSymbolAccessible(symbol, within, ref useSiteInfo, throughTypeOpt);
+            if (this.Flags.Includes(BinderFlags.IgnoreAccessibility))
+                return true;
+            
+            if (symbol.ContainingAssembly?.Name is { } assemblyName && BinderIgnoreAccessibility.AssemblyName is { } ignoringAssemblyName)
+            {
+                if (ignoringAssemblyName == assemblyName)
+                {
+                    return true;
+                }
+            }
+
+            return AccessCheck.IsSymbolAccessible(symbol, within, ref useSiteInfo, throughTypeOpt);
         }
 
         internal bool IsSymbolAccessibleConditional(
@@ -787,6 +798,15 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 failedThroughTypeCheck = false;
                 return true;
+            }
+            
+            if (symbol.ContainingAssembly?.Name is { } assemblyName && BinderIgnoreAccessibility.AssemblyName is { } ignoringAssemblyName)
+            {
+                if (assemblyName == ignoringAssemblyName)
+                {
+                    failedThroughTypeCheck = false;
+                    return true;
+                }
             }
 
             return AccessCheck.IsSymbolAccessible(symbol, within, throughTypeOpt, out failedThroughTypeCheck, ref useSiteInfo, basesBeingResolved);

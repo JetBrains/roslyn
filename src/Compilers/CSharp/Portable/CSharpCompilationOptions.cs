@@ -43,6 +43,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public override NullableContextOptions NullableContextOptions { get; protected set; }
 
+        internal bool IgnoreErrorsForDfa { get; set; }
+        internal void WithIgnoreErrorsForDfa(bool value) { IgnoreErrorsForDfa = value; }
+
         // Defaults correspond to the compiler's defaults or indicate that the user did not specify when that is significant.
         // That's significant when one option depends on another's setting. SubsystemVersion depends on Platform and Target.
         public CSharpCompilationOptions(
