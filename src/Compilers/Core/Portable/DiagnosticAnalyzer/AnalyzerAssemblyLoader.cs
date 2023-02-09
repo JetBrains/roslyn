@@ -6,7 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
 using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis
@@ -25,6 +28,8 @@ namespace Microsoft.CodeAnalysis
 
         // lock _guard to read/write
         private readonly Dictionary<string, Assembly> _loadedAssembliesByPath = new();
+        private readonly Dictionary<string, AssemblyIdentity?> _loadedAssemblyIdentitiesByPath = new();
+        private readonly Dictionary<AssemblyIdentity, Assembly> _loadedAssembliesByIdentity = new();
 
         // maps file name to a full path (lock _guard to read/write):
         private readonly Dictionary<string, ImmutableHashSet<string>> _knownAssemblyPathsBySimpleName = new(StringComparer.OrdinalIgnoreCase);
@@ -73,11 +78,43 @@ namespace Microsoft.CodeAnalysis
 
             // Check if we have already loaded an assembly from the given path.
             Assembly? loadedAssembly = null;
+            AssemblyIdentity? identity = null;
             lock (_guard)
             {
                 if (_loadedAssembliesByPath.TryGetValue(fullPath, out var existingAssembly))
                 {
-                    loadedAssembly = existingAssembly;
+                    Module module = existingAssembly.ManifestModule;
+                    Guid runtimeMvid = module.ModuleVersionId;
+                    Guid assemblyMvid = ReadMvid(fullPath);
+                    if (runtimeMvid == assemblyMvid)
+                    {
+                        loadedAssembly = existingAssembly;
+                    }
+                    else
+                    {
+                        _loadedAssembliesByPath.Remove(fullPath);
+                        if (_loadedAssemblyIdentitiesByPath.TryGetValue(fullPath, out var oldIdentity))
+                        {
+                            _loadedAssembliesByIdentity.Remove(oldIdentity);
+                            _loadedAssemblyIdentitiesByPath.Remove(fullPath);
+                        }
+
+                        string simpleName = PathUtilities.GetFileName(fullPath, includeExtension: false);
+                        if (_knownAssemblyPathsBySimpleName.TryGetValue(simpleName, out var set))
+                        {
+                            _knownAssemblyPathsBySimpleName.Remove(simpleName);
+                            _knownAssemblyPathsBySimpleName[simpleName] = set.Remove(fullPath);
+                        }
+                    }
+                }
+
+                if (loadedAssembly == null)
+                {
+                    identity = GetOrAddAssemblyIdentity(fullPath);
+                    if (identity != null && _loadedAssembliesByIdentity.TryGetValue(identity, out existingAssembly))
+                    {
+                        loadedAssembly = existingAssembly;
+                    }
                 }
             }
 
@@ -87,13 +124,55 @@ namespace Microsoft.CodeAnalysis
                 loadedAssembly = LoadFromPathUncheckedImpl(fullPath);
             }
 
-            // Add the loaded assembly to the path cache.
+            identity ??= identity ?? AssemblyIdentity.FromAssemblyDefinition(loadedAssembly);
+
             lock (_guard)
             {
+                // The same assembly may be loaded from two different full paths (e.g. when loaded from GAC, etc.),
+                // or another thread might have loaded the assembly after we checked above.
+                if (_loadedAssembliesByIdentity.TryGetValue(identity, out var existingAssembly))
+                {
+                    loadedAssembly = existingAssembly;
+                }
+                else
+                {
+                    _loadedAssembliesByIdentity.Add(identity, loadedAssembly);
+                }
+
+                // Add the loaded assembly to the path cache.
                 _loadedAssembliesByPath[fullPath] = loadedAssembly;
+
+                return loadedAssembly;
+            }
+        }
+
+        private AssemblyIdentity? GetOrAddAssemblyIdentity(string fullPath)
+        {
+            Debug.Assert(PathUtilities.IsAbsolute(fullPath));
+
+            lock (_guard)
+            {
+                if (_loadedAssemblyIdentitiesByPath.TryGetValue(fullPath, out var existingIdentity))
+                {
+                    return existingIdentity;
+                }
             }
 
-            return loadedAssembly;
+            var identity = AssemblyIdentityUtils.TryGetAssemblyIdentity(fullPath);
+
+            lock (_guard)
+            {
+                if (_loadedAssemblyIdentitiesByPath.TryGetValue(fullPath, out var existingIdentity) && existingIdentity != null)
+                {
+                    identity = existingIdentity;
+                }
+                else
+                {
+                    _loadedAssemblyIdentitiesByPath[fullPath] = identity;
+                }
+            }
+
+            return identity;
         }
 
         protected ImmutableHashSet<string>? GetPaths(string simpleName)
@@ -113,6 +192,23 @@ namespace Microsoft.CodeAnalysis
         protected virtual string GetPathToLoad(string fullPath)
         {
             return fullPath;
+        }
+
+        protected virtual string? GetDirectoryToLoad(string fullPath)
+        {
+            return Path.GetDirectoryName(fullPath);
+        }
+
+        private static Guid ReadMvid(string filePath)
+        {
+            RoslynDebug.Assert(PathUtilities.IsAbsolute(filePath));
+
+            using var reader = new PEReader(FileUtilities.OpenRead(filePath));
+            var metadataReader = reader.GetMetadataReader();
+            var mvidHandle = metadataReader.GetModuleDefinition().Mvid;
+            var fileMvid = metadataReader.GetGuid(mvidHandle);
+
+            return fileMvid;
         }
     }
 }
