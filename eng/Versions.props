@@ -250,7 +250,7 @@
     <SystemRuntimeInteropServicesNFloatInternalVersion>6.0.1</SystemRuntimeInteropServicesNFloatInternalVersion>
     <SystemRuntimeLoaderVersion>4.3.0</SystemRuntimeLoaderVersion>
     <SystemSecurityPrincipalVersion>4.3.0</SystemSecurityPrincipalVersion>
-    <SystemTextEncodingCodePagesVersion>6.0.0</SystemTextEncodingCodePagesVersion>
+    <SystemTextEncodingCodePagesVersion>7.0.0</SystemTextEncodingCodePagesVersion>
     <SystemTextEncodingExtensionsVersion>4.3.0</SystemTextEncodingExtensionsVersion>
     <!-- Note: When updating SystemTextJsonVersion ensure that the version is no higher than what is used by MSBuild. -->
     <SystemTextJsonVersion>7.0.0</SystemTextJsonVersion>
