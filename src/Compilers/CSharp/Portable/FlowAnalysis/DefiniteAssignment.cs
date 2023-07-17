@@ -173,12 +173,13 @@ namespace Microsoft.CodeAnalysis.CSharp
             HashSet<PrefixUnaryExpressionSyntax>? unassignedVariableAddressOfSyntaxes = null,
             bool requireOutParamsAssigned = true,
             bool trackClassFields = false,
-            bool trackStaticMembers = false)
+            bool trackStaticMembers = false, 
+            HashSet<Symbol>? initiallyAssignedVariables = null)
             : base(compilation, member, node,
                    strictAnalysis ? EmptyStructTypeCache.CreatePrecise() : EmptyStructTypeCache.CreateForDev12Compatibility(compilation),
                    trackUnassignments)
         {
-            this.initiallyAssignedVariables = null;
+            this.initiallyAssignedVariables = initiallyAssignedVariables;
             _sourceAssembly = GetSourceAssembly(compilation, member, node);
             _unassignedVariableAddressOfSyntaxes = unassignedVariableAddressOfSyntaxes;
             _requireOutParamsAssigned = requireOutParamsAssigned;
@@ -604,12 +605,14 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 DiagnosticBag result = DiagnosticBag.GetInstance();
                 ImmutableArray<FieldSymbol> implicitlyInitializedFieldsOpt = default;
+                var unassignedVariables = compilation.Options.IgnoreUnassignedVariables ? UnassignedVariablesWalker.Analyze(compilation, member, node) : null;
                 var walker = new DefiniteAssignmentPass(
                     compilation,
                     member,
                     node,
                     strictAnalysis: strictAnalysis,
-                    requireOutParamsAssigned: requireOutParamsAssigned);
+                    requireOutParamsAssigned: requireOutParamsAssigned,
+                    initiallyAssignedVariables: unassignedVariables);
                 walker._convertInsufficientExecutionStackExceptionToCancelledByStackGuardException = true;
 
                 try
