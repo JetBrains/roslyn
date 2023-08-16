@@ -103,7 +103,7 @@
     <MicrosoftDevDivOptimizationDataPowerShellVersion>1.0.339</MicrosoftDevDivOptimizationDataPowerShellVersion>
     <MicrosoftDiagnosticsRuntimeVersion>0.8.31-beta</MicrosoftDiagnosticsRuntimeVersion>
     <MicrosoftDiagnosticsTracingTraceEventVersion>1.0.35</MicrosoftDiagnosticsTracingTraceEventVersion>
-    <MicrosoftDiaSymReaderVersion>2.0.0</MicrosoftDiaSymReaderVersion>
+    <MicrosoftDiaSymReaderVersion>1.4.0</MicrosoftDiaSymReaderVersion>
     <MicrosoftDiaSymReaderConverterVersion>1.1.0-beta2-22302-02</MicrosoftDiaSymReaderConverterVersion>
     <MicrosoftDiaSymReaderConverterXmlVersion>1.1.0-beta2-22302-02</MicrosoftDiaSymReaderConverterXmlVersion>
     <MicrosoftDiaSymReaderNativeVersion>17.0.0-beta1.21524.1</MicrosoftDiaSymReaderNativeVersion>
@@ -237,7 +237,7 @@
     <RoslynMicrosoftVisualStudioExtensionManagerVersion>0.0.4</RoslynMicrosoftVisualStudioExtensionManagerVersion>
     <SourceBrowserVersion>1.0.21</SourceBrowserVersion>
     <SystemBuffersVersion>4.5.1</SystemBuffersVersion>
-    <SystemCompositionVersion>7.0.0</SystemCompositionVersion>
+    <SystemCompositionVersion>6.0.0</SystemCompositionVersion>
     <SystemCodeDomVersion>7.0.0</SystemCodeDomVersion>
     <SystemCommandLineVersion>2.0.0-beta4.22272.1</SystemCommandLineVersion>
     <SystemCommandLineExperimentalVersion>0.3.0-alpha.19577.1</SystemCommandLineExperimentalVersion>
@@ -250,13 +250,13 @@
     <SystemIOPipesAccessControlVersion>5.0.0</SystemIOPipesAccessControlVersion>
     <SystemIOPipelinesVersion>7.0.0</SystemIOPipelinesVersion>
     <SystemManagementVersion>7.0.0</SystemManagementVersion>
-    <SystemMemoryVersion>4.5.5</SystemMemoryVersion>
+    <SystemMemoryVersion>4.5.4</SystemMemoryVersion>
     <SystemResourcesExtensionsVersion>7.0.0</SystemResourcesExtensionsVersion>
     <SystemRuntimeCompilerServicesUnsafeVersion>6.0.0</SystemRuntimeCompilerServicesUnsafeVersion>
     <SystemRuntimeInteropServicesNFloatInternalVersion>6.0.1</SystemRuntimeInteropServicesNFloatInternalVersion>
     <SystemRuntimeLoaderVersion>4.3.0</SystemRuntimeLoaderVersion>
     <SystemSecurityPrincipalVersion>4.3.0</SystemSecurityPrincipalVersion>
-    <SystemTextEncodingCodePagesVersion>7.0.0</SystemTextEncodingCodePagesVersion>
+    <SystemTextEncodingCodePagesVersion>6.0.0</SystemTextEncodingCodePagesVersion>
     <SystemTextEncodingExtensionsVersion>4.3.0</SystemTextEncodingExtensionsVersion>
     <!-- Note: When updating SystemTextJsonVersion ensure that the version is no higher than what is used by MSBuild. -->
     <SystemTextJsonVersion>7.0.0</SystemTextJsonVersion>
@@ -303,8 +303,8 @@
       When updating the S.C.I or S.R.M version please let the MSBuild team know in advance so they
       can update to the same version. Version changes require a VS test insertion for validation.
     -->
-    <SystemCollectionsImmutableVersion>7.0.0</SystemCollectionsImmutableVersion>
-    <SystemReflectionMetadataVersion>7.0.0</SystemReflectionMetadataVersion>
+    <SystemCollectionsImmutableVersion>5.0.0</SystemCollectionsImmutableVersion>
+    <SystemReflectionMetadataVersion>5.0.0</SystemReflectionMetadataVersion>
     <MicrosoftBclAsyncInterfacesVersion>7.0.0</MicrosoftBclAsyncInterfacesVersion>
   </PropertyGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">

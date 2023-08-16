@@ -42,6 +42,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// Global Nullable context options.
         /// </summary>
         public override NullableContextOptions NullableContextOptions { get; protected set; }
+        
+        internal IgnoreAccessibilityOptions IgnoreAccessibilityOptions { get; private set; }
 
         // Defaults correspond to the compiler's defaults or indicate that the user did not specify when that is significant.
         // That's significant when one option depends on another's setting. SubsystemVersion depends on Platform and Target.
@@ -657,6 +659,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected override CompilationOptions CommonWithFeatures(ImmutableArray<string> features)
         {
             throw new NotImplementedException();
+        }
+
+        internal CompilationOptions WithIgnoreAccessibilityOptions(ImmutableArray<string> assembliesToGiveAccessTo, string assembly)
+        {
+            this.IgnoreAccessibilityOptions = new IgnoreAccessibilityOptions(assembliesToGiveAccessTo, assembly);
+            return this;
         }
 
         internal override void ValidateOptions(ArrayBuilder<Diagnostic> builder)
