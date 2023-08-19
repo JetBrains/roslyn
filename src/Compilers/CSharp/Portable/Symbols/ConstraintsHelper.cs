@@ -878,7 +878,7 @@ hasRelatedInterfaces:
             ArrayBuilder<TypeParameterDiagnosticInfo> nullabilityDiagnosticsBuilderOpt,
             ref ArrayBuilder<TypeParameterDiagnosticInfo> useSiteDiagnosticsBuilder)
         {
-            if (typeArgument.Type.IsPointerOrFunctionPointer() || typeArgument.IsRestrictedType() || typeArgument.IsVoidType())
+            if (typeArgument.Type.IsPointerOrFunctionPointer() || typeArgument.IsRestrictedType(containingSymbol is MethodSymbol { DeclaringCompilation.Options.AllowRefStructAsMethodGenericParameters: true }) || typeArgument.IsVoidType())
             {
                 // "The type '{0}' may not be used as a type argument"
                 diagnosticsBuilder.Add(new TypeParameterDiagnosticInfo(typeParameter, new UseSiteInfo<AssemblySymbol>(new CSDiagnosticInfo(ErrorCode.ERR_BadTypeArgument, typeArgument.Type))));

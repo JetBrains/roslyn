@@ -48,6 +48,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal bool IgnoreUnassignedVariables { get; private set; }
         internal bool IgnoreReturnExpectedDiagnostics { get; private set; }
         internal ITypeSymbolAdditionalEqualityComparer? AdditionTypeEqualityComparer { get; private set; }
+        internal bool AllowRefStructAsMethodGenericParameters { get; private set; }
+
 
         // Defaults correspond to the compiler's defaults or indicate that the user did not specify when that is significant.
         // That's significant when one option depends on another's setting. SubsystemVersion depends on Platform and Target.
@@ -686,6 +688,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         internal CSharpCompilationOptions WithAdditionalTypeEqualityComparer(ITypeSymbolAdditionalEqualityComparer comparer)
         {
             this.AdditionTypeEqualityComparer = comparer;
+            return this;
+        }
+
+        internal CSharpCompilationOptions WithAllowRefStructAsMethodGenericParameters(bool allowRefStructAsMethodGenericParameters)
+        {
+            this.AllowRefStructAsMethodGenericParameters = allowRefStructAsMethodGenericParameters;
             return this;
         }
         
