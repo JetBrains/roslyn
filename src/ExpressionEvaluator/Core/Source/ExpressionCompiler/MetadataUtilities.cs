@@ -392,7 +392,7 @@ namespace Microsoft.CodeAnalysis.ExpressionEvaluator
 
         private static byte[] GetWindowsProxyBytes()
         {
-            var assembly = typeof(ExpressionCompiler).GetTypeInfo().Assembly;
+            var assembly = typeof(MetadataUtilities).GetTypeInfo().Assembly;
             using (var stream = assembly.GetManifestResourceStream("Microsoft.CodeAnalysis.ExpressionEvaluator.Resources.WindowsProxy.winmd"))
             {
                 var bytes = new byte[stream.Length];

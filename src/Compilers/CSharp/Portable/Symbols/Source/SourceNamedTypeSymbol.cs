@@ -1758,6 +1758,9 @@ next:;
 
         internal override bool Equals(TypeSymbol t2, TypeCompareKind comparison)
         {
+            if (DeclaringCompilation?.Options.AdditionTypeEqualityComparer?.Equals(this, t2) == true)
+                return true;
+            
             return t2 is NativeIntegerTypeSymbol nativeInteger ?
                 nativeInteger.Equals(this, comparison) :
                 base.Equals(t2, comparison);

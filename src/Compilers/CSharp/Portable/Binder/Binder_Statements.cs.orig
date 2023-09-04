@@ -622,8 +622,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
                         else
                         {
+<<<<<<< HEAD
+                            blockDiagnostics.Add(ErrorCode.ERR_ReturnExpected, localSymbol.GetFirstLocation(), localSymbol);
+=======
                             if (!Compilation.Options.IgnoreReturnExpectedDiagnostics)
                                 blockDiagnostics.Add(ErrorCode.ERR_ReturnExpected, localSymbol.Locations[0], localSymbol);
+>>>>>>> 96a8fa481e2 (DFA patch)
                         }
                     }
                 }
