@@ -622,8 +622,12 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
                         else
                         {
+<<<<<<< HEAD
+                            blockDiagnostics.Add(ErrorCode.ERR_ReturnExpected, localSymbol.GetFirstLocation(), localSymbol);
+=======
                             if (!Compilation.Options.IgnoreReturnExpectedDiagnostics)
                                 blockDiagnostics.Add(ErrorCode.ERR_ReturnExpected, localSymbol.Locations[0], localSymbol);
+>>>>>>> 96a8fa481e2 (DFA patch)
                         }
                     }
                 }
@@ -2363,10 +2367,10 @@ namespace Microsoft.CodeAnalysis.CSharp
                         Debug.Assert(reportedError);
                         return;
                     }
-                case BoundKind.UnconvertedCollectionLiteralExpression:
+                case BoundKind.UnconvertedCollectionExpression:
                     {
                         Debug.Assert(operand.Type is null);
-                        Error(diagnostics, ErrorCode.ERR_CollectionLiteralTargetTypeNotConstructible, syntax, targetType);
+                        Error(diagnostics, ErrorCode.ERR_CollectionExpressionTargetTypeNotConstructible, syntax, targetType);
                         return;
                     }
                 case BoundKind.AddressOfOperator when targetType.IsFunctionPointer():

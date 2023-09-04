@@ -84,7 +84,7 @@ namespace Microsoft.CodeAnalysis
                 throw new ArgumentException(string.Format(CodeAnalysisResources.SourceTextRequiresEncoding, hintName), nameof(source));
             }
 
-            if (Path.IsPathRooted(hintName) || !Path.GetFullPath(hintName).StartsWith(Environment.CurrentDirectory, _hintNameComparison))
+            if (Path.IsPathRooted(hintName)) // Crash on MAC OS (FileNotFoundException) || !Path.GetFullPath(hintName).StartsWith(Environment.CurrentDirectory, _hintNameComparison))
             {
                 throw new ArgumentException(string.Format(CodeAnalysisResources.HintNameNotWithinCurrentDirectory, hintName), nameof(hintName));
             }
