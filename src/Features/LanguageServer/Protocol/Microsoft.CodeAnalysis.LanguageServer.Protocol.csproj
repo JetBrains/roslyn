@@ -74,6 +74,14 @@
     <InternalsVisibleTo Include="IdeBenchmarks" />
     <InternalsVisibleTo Include="AnalyzerRunner" />
     <InternalsVisibleTo Include="Microsoft.CodeAnalysis.ExternalAccess.CompilerDeveloperSDK" />
+
+    <InternalsVisibleTo Include="Mono.Debugging" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="Mono.Debugging.Win32" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="Mono.Debugging.Soft" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="JetBrains.Debugger.Worker" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="JetBrains.Roslyn.Worker" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="Debugger.Common" Key="$(JetBrainsKey)"/>
+
   </ItemGroup>
 
   <ItemGroup>

@@ -2129,6 +2129,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal override bool AreInternalsVisibleToThisAssembly(AssemblySymbol potentialGiverOfAccess)
         {
+            if (this._compilation.Options.IgnoreAccessibilityOptions is { } accessOptions && accessOptions.Assembly == Name && accessOptions.GiveInternalAccessTo.Contains(potentialGiverOfAccess.Name))
+            {
+                return true;
+            }
             // Ensure that optimistic IVT access is only granted to requests that originated on the thread
             //that is trying to compute the assembly identity. This gives us deterministic behavior when
             //two threads are checking IVT access but only one of them is in the process of computing identity.

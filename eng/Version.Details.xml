@@ -37,9 +37,9 @@
       <Sha>194f32828726c3f1f63f79f3dc09b9e99c157b11</Sha>
       <SourceBuild RepoName="xliff-tasks" ManagedOnly="true" />
     </Dependency>
-    <Dependency Name="Microsoft.DiaSymReader" Version="2.0.0">
+    <Dependency Name="Microsoft.DiaSymReader" Version="1.4.0">
       <Uri>https://github.com/dotnet/symreader</Uri>
-      <Sha>27e584661980ee6d82c419a2a471ae505b7d122e</Sha>
+      <Sha>636a10b9d0aa317736c57d95f80e1c0849450715</Sha>
     </Dependency>
     <Dependency Name="Microsoft.SourceBuild.Intermediate.symreader" Version="2.0.0-beta-23228-04">
       <Uri>https://github.com/dotnet/symreader</Uri>
