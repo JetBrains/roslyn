@@ -2595,6 +2595,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
 
             internal override bool Equals(TypeSymbol t2, TypeCompareKind comparison)
             {
+                if (t2?.DeclaringCompilation?.Options.AdditionTypeEqualityComparer?.Equals(this, t2) == true)
+                    return true;
+                
                 return t2 is NativeIntegerTypeSymbol nativeInteger ?
                     nativeInteger.Equals(this, comparison) :
                     base.Equals(t2, comparison);
@@ -2671,6 +2674,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE
                     // This is always the instance type, so the type arguments are the same as the type parameters.
                     return GetTypeParametersAsTypeArguments();
                 }
+            }
+
+            internal override bool Equals(TypeSymbol t2, TypeCompareKind comparison)
+            {
+                if (t2?.DeclaringCompilation?.Options.AdditionTypeEqualityComparer?.Equals(this, t2) == true)
+                    return true;
+                
+                return base.Equals(t2, comparison);
             }
 
             public override ImmutableArray<TypeParameterSymbol> TypeParameters
