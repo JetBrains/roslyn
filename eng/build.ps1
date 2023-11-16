@@ -234,6 +234,8 @@ function RestoreInternalTooling() {
 }
 
 function BuildSolution() {
+  $solution = "JetRoslyn.sln"
+
   Write-Host "$($solution):"
 
   $bl = ""
