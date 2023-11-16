@@ -116,6 +116,15 @@
     <RestrictedInternalsVisibleTo Include="Microsoft.VisualStudio.LanguageServices.Razor" Partner="Razor" Key="$(RazorKey)" />
     <RestrictedInternalsVisibleTo Include="Microsoft.VisualStudio.LanguageServices.Razor.Test" Partner="Razor" Key="$(RazorKey)" />
     <RestrictedInternalsVisibleTo Include="Microsoft.VisualStudio.TestWindow.Core" Partner="UnitTesting" Key="$(UnitTestingKey)" />
+
+    <InternalsVisibleTo Include="Mono.Debugging" Key="$(JetBrainsKey)" />
+    <InternalsVisibleTo Include="Mono.Debugging.Win32" Key="$(JetBrainsKey)" />
+    <InternalsVisibleTo Include="Mono.Debugging.Soft" Key="$(JetBrainsKey)" />
+    <InternalsVisibleTo Include="JetBrains.Debugger.Worker" Key="$(JetBrainsKey)" />
+    <InternalsVisibleTo Include="JetBrains.Roslyn.Worker" Key="$(JetBrainsKey)" />
+    <InternalsVisibleTo Include="Debugger.Common" Key="$(JetBrainsKey)" />
+
+
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="SymbolSearch\Windows\**\*.cs" Condition="'$(DotNetBuildSourceOnly)' == 'true'" />
