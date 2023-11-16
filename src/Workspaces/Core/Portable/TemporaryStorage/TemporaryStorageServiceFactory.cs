@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.Host;
 /// <summary>
 /// Temporarily stores text and streams in memory mapped files.
 /// </summary>
-#if NETCOREAPP
+#if NETCOREAPP && !NETCOREAPP3_1
 [SupportedOSPlatform("windows")]
 #endif
 internal partial class TemporaryStorageService : ITemporaryStorageService2
