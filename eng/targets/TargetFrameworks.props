@@ -39,10 +39,10 @@
       <PropertyGroup>
         <!-- TODO until we figure out what is up with NetPrevious -->
         <NetPrevious>$(NetMinimum)</NetPrevious>
-        <NetRoslyn>$(NetPrevious)</NetRoslyn>
-        <NetRoslynSourceBuild>$(NetCurrent);$(NetPrevious)</NetRoslynSourceBuild>
-        <NetRoslynAll>$(NetCurrent);$(NetPrevious)</NetRoslynAll>
-        <NetRoslynBuildHostNetCoreVersion>$(NetPrevious)</NetRoslynBuildHostNetCoreVersion>
+        <NetRoslyn>$(NetPrevious);netcoreapp3.1</NetRoslyn>
+        <NetRoslynSourceBuild>$(NetCurrent);$(NetPrevious);netcoreapp3.1</NetRoslynSourceBuild>
+        <NetRoslynAll>$(NetCurrent);$(NetPrevious);netcoreapp3.1</NetRoslynAll>
+        <NetRoslynBuildHostNetCoreVersion>$(NetPrevious);netcoreapp3.1</NetRoslynBuildHostNetCoreVersion>
         <NetRoslynNext>$(NetPrevious)</NetRoslynNext>
       </PropertyGroup>
     </When>
@@ -52,11 +52,11 @@
     -->
     <When Condition="'$(DotNetBuildSourceOnly)' == 'true' AND '$(DotNetBuildFromVMR)' == 'true'">
       <PropertyGroup>
-        <NetRoslyn>$(NetCurrent)</NetRoslyn>
-        <NetRoslynSourceBuild>$(NetCurrent)</NetRoslynSourceBuild>
-        <NetRoslynAll>$(NetCurrent)</NetRoslynAll>
-        <NetRoslynBuildHostNetCoreVersion>$(NetCurrent)</NetRoslynBuildHostNetCoreVersion>
-        <NetRoslynNext>$(NetCurrent)</NetRoslynNext>
+        <NetRoslyn>$(NetCurrent);netcoreapp3.1</NetRoslyn>
+        <NetRoslynSourceBuild>$(NetCurrent);netcoreapp3.1</NetRoslynSourceBuild>
+        <NetRoslynAll>$(NetCurrent);netcoreapp3.1</NetRoslynAll>
+        <NetRoslynBuildHostNetCoreVersion>$(NetCurrent);netcoreapp3.1</NetRoslynBuildHostNetCoreVersion>
+        <NetRoslynNext>$(NetCurrent);netcoreapp3.1</NetRoslynNext>
       </PropertyGroup>
     </When>
 
@@ -67,7 +67,7 @@
     -->
     <Otherwise>
       <PropertyGroup>
-        <NetRoslynSourceBuild>$(NetRoslynAll)</NetRoslynSourceBuild>
+        <NetRoslynSourceBuild>$(NetRoslynAll);netcoreapp3.1</NetRoslynSourceBuild>
       </PropertyGroup>
     </Otherwise>
   </Choose>
