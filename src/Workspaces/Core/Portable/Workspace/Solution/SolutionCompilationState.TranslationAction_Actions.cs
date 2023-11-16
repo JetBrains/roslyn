@@ -138,7 +138,7 @@ internal partial class SolutionCompilationState
 
             public override async Task<Compilation> TransformCompilationAsync(Compilation oldCompilation, CancellationToken cancellationToken)
             {
-#if NETSTANDARD
+#if NETSTANDARD || NETCOREAPP3_1
                 using var _1 = ArrayBuilder<Task>.GetInstance(this.Documents.Length, out var tasks);
 
                 // We want to parse in parallel.  But we don't want to have too many parses going on at the same time.

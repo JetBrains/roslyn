@@ -708,7 +708,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
 
             private bool IsTuple(object obj)
             {
-#if NETSTANDARD2_0
+#if NETSTANDARD2_0 || NETCOREAPP3_1
                 if (obj is null)
                 {
                     return false;
