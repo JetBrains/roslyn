@@ -17,7 +17,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Serialization;
 
-#if NET
+#if NET && !NETCOREAPP3_1
 [SupportedOSPlatform("windows")]
 #endif
 [method: Obsolete(MefConstruction.FactoryMethodMessage, error: true)]
