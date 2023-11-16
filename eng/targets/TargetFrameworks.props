@@ -39,10 +39,10 @@
       <PropertyGroup>
         <!-- TODO until we figure out what is up with NetPrevious -->
         <NetPrevious>$(NetMinimum)</NetPrevious>
-        <NetRoslyn>$(NetPrevious)</NetRoslyn>
-        <NetRoslynSourceBuild>$(NetCurrent);$(NetPrevious)</NetRoslynSourceBuild>
-        <NetRoslynAll>$(NetCurrent);$(NetPrevious)</NetRoslynAll>
-        <NetRoslynBuildHostNetCoreVersion>$(NetPrevious)</NetRoslynBuildHostNetCoreVersion>
+        <NetRoslyn>$(NetPrevious);netcoreapp3.1</NetRoslyn>
+        <NetRoslynSourceBuild>$(NetCurrent);$(NetPrevious);netcoreapp3.1</NetRoslynSourceBuild>
+        <NetRoslynAll>$(NetCurrent);$(NetPrevious);netcoreapp3.1</NetRoslynAll>
+        <NetRoslynBuildHostNetCoreVersion>$(NetPrevious);netcoreapp3.1</NetRoslynBuildHostNetCoreVersion>
         <NetRoslynNext>$(NetPrevious)</NetRoslynNext>
       </PropertyGroup>
     </When>
@@ -52,10 +52,10 @@
     -->
     <When Condition="'$(DotNetBuildFromSource)' == 'true' AND '$(DotNetBuildFromSourceFlavor)' == 'Product'">
       <PropertyGroup>
-        <NetRoslyn>$(NetCurrent)</NetRoslyn>
-        <NetRoslynSourceBuild>$(NetCurrent);$(NetPrevious)</NetRoslynSourceBuild>
-        <NetRoslynAll>$(NetCurrent);$(NetPrevious)</NetRoslynAll>
-        <NetRoslynBuildHostNetCoreVersion>$(NetCurrent)</NetRoslynBuildHostNetCoreVersion>
+        <NetRoslyn>$(NetCurrent);netcoreapp3.1</NetRoslyn>
+        <NetRoslynSourceBuild>$(NetCurrent);$(NetPrevious);netcoreapp3.1</NetRoslynSourceBuild>
+        <NetRoslynAll>$(NetCurrent);$(NetPrevious);netcoreapp3.1</NetRoslynAll>
+        <NetRoslynBuildHostNetCoreVersion>$(NetCurrent);netcoreapp3.1</NetRoslynBuildHostNetCoreVersion>
         <NetRoslynNext>$(NetCurrent)</NetRoslynNext>
       </PropertyGroup>
     </When>
@@ -67,8 +67,8 @@
     -->
     <Otherwise>
       <PropertyGroup>
-        <NetRoslyn>net8.0</NetRoslyn>
-        <NetRoslynSourceBuild>net7.0;net8.0</NetRoslynSourceBuild>
+        <NetRoslyn>net8.0;netcoreapp3.1</NetRoslyn>
+        <NetRoslynSourceBuild>net7.0;net8.0;netcoreapp3.1</NetRoslynSourceBuild>
       </PropertyGroup>
     </Otherwise>
   </Choose>

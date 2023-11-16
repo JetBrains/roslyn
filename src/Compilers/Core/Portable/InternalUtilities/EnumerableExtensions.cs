@@ -878,7 +878,7 @@ namespace System.Linq
             }
         }
 
-#if NETSTANDARD
+#if NETSTANDARD || NETCOREAPP3_1
 
         // Copied from https://github.com/dotnet/runtime/blob/main/src/libraries/System.Linq/src/System/Linq/Chunk.cs
         public static IEnumerable<TSource[]> Chunk<TSource>(this IEnumerable<TSource> source, int size)

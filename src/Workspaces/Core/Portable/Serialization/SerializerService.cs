@@ -16,7 +16,7 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Serialization;
 
-#if NETCOREAPP
+#if NETCOREAPP && !NETCOREAPP3_1
 [SupportedOSPlatform("windows")]
 #endif
 internal partial class SerializerService : ISerializerService

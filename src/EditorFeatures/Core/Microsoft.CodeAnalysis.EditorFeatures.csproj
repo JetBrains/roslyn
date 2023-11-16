@@ -93,6 +93,14 @@
     <RestrictedInternalsVisibleTo Include="Microsoft.CodeAnalysis.UnitTesting.SourceBasedTestDiscovery.Core" Partner="UnitTesting" Key="$(UnitTestingKey)" />
     <RestrictedInternalsVisibleTo Include="Microsoft.VisualStudio.IntelliCode" Key="$(IntelliCodeKey)" Partner="IntelliCode" />
     <RestrictedInternalsVisibleTo Include="UnitTestGenerator" Key="$(UnitTestGeneratorKey)" Partner="UnitTestGenerator" />
+
+    <InternalsVisibleTo Include="Mono.Debugging" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="Mono.Debugging.Win32" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="Mono.Debugging.Soft" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="JetBrains.Debugger.Worker" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="JetBrains.Roslyn.Worker" Key="$(JetBrainsKey)"/>
+    <InternalsVisibleTo Include="Debugger.Common" Key="$(JetBrainsKey)"/>
+
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="EditorFeaturesResources.resx" GenerateSource="true" />
