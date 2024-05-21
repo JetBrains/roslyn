@@ -95,7 +95,7 @@ internal abstract class AbstractChangeSignatureService : ILanguageService
         var context = await GetChangeSignatureContextAsync(document, span.Start, restrictToDeclarations: true, fallbackOptions, cancellationToken).ConfigureAwait(false);
 
         return context is ChangeSignatureAnalysisSucceededContext changeSignatureAnalyzedSucceedContext
-            ? [new ChangeSignatureCodeAction(this, changeSignatureAnalyzedSucceedContext)]
+            ? ImmutableArray.Create(new ChangeSignatureCodeAction(this, changeSignatureAnalyzedSucceedContext))
             : ImmutableArray<ChangeSignatureCodeAction>.Empty;
     }
 
@@ -341,7 +341,7 @@ internal abstract class AbstractChangeSignatureService : ILanguageService
 
                     if (!nodesToUpdate.ContainsKey(documentId))
                     {
-                        nodesToUpdate.Add(documentId, []);
+                        nodesToUpdate.Add(documentId, new());
                     }
 
                     telemetryNumberOfDeclarationsToUpdate++;
@@ -365,7 +365,7 @@ internal abstract class AbstractChangeSignatureService : ILanguageService
 
                 if (!nodesToUpdate.ContainsKey(documentId2))
                 {
-                    nodesToUpdate.Add(documentId2, []);
+                    nodesToUpdate.Add(documentId2, new());
                 }
 
                 telemetryNumberOfReferencesToUpdate++;

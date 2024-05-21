@@ -876,7 +876,7 @@ public class UseImplicitObjectCreationTests
 
                 class C
                 {
-                    C[] list = new C[] { new [|C|]() };
+                    Cnew() list = new Cnew() { new [|C|]() };
                 }
                 """,
             FixedCode = """
@@ -884,7 +884,7 @@ public class UseImplicitObjectCreationTests
                 
                 class C
                 {
-                    C[] list = new C[] { new() };
+                    Cnew() list = new Cnew() { new() };
                 }
                 """,
             LanguageVersion = CodeAnalysis.CSharp.LanguageVersion.CSharp9,
@@ -901,7 +901,7 @@ public class UseImplicitObjectCreationTests
 
                 class C
                 {
-                    C[] list = { new [|C|]() };
+                    Cnew() list = { new [|C|]() };
                 }
                 """,
             FixedCode = """
@@ -909,7 +909,7 @@ public class UseImplicitObjectCreationTests
                 
                 class C
                 {
-                    C[] list = { new() };
+                    Cnew() list = { new() };
                 }
                 """,
             LanguageVersion = CodeAnalysis.CSharp.LanguageVersion.CSharp9,
@@ -926,7 +926,7 @@ public class UseImplicitObjectCreationTests
 
                 class C
                 {
-                    C[] list = new[] { new C() };
+                    Cnew() list = new[] { new C() };
                 }
                 """,
             LanguageVersion = CodeAnalysis.CSharp.LanguageVersion.CSharp9,
@@ -960,7 +960,7 @@ public class UseImplicitObjectCreationTests
 
                 class C
                 {
-                    C[][] list = new C[][] { new C[] { new [|C|]() } };
+                    Cnew()[] list = new Cnew()[] { new Cnew() { new [|C|]() } };
                 }
                 """,
             FixedCode = """
@@ -968,7 +968,7 @@ public class UseImplicitObjectCreationTests
 
                 class C
                 {
-                    C[][] list = new C[][] { new C[] { new() } };
+                    Cnew()[] list = new Cnew()[] { new Cnew() { new() } };
                 }
                 """,
             LanguageVersion = CodeAnalysis.CSharp.LanguageVersion.CSharp9,

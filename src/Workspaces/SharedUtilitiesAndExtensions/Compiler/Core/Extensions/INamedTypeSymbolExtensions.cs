@@ -334,18 +334,18 @@ internal static partial class INamedTypeSymbolExtensions
 
         if (classOrStructType.TypeKind is not TypeKind.Class and not TypeKind.Struct)
         {
-            return [];
+            return new();
         }
 
         if (!interfacesOrAbstractClasses.Any())
         {
-            return [];
+            return new();
         }
 
         if (!interfacesOrAbstractClasses.All(i => i.TypeKind == TypeKind.Interface) &&
             !interfacesOrAbstractClasses.All(i => i.IsAbstractClass()))
         {
-            return [];
+            return new();
         }
 
         var typesToImplement = GetTypesToImplement(classOrStructType, interfacesOrAbstractClasses, allowReimplementation, cancellationToken);

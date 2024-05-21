@@ -78,7 +78,7 @@ internal readonly partial struct RemoteEditAndContinueServiceProxy(Workspace wor
             }
             catch (Exception e) when (FatalError.ReportAndCatchUnlessCanceled(e, cancellationToken))
             {
-                return [];
+                return new();
             }
         }
 
@@ -114,7 +114,7 @@ internal readonly partial struct RemoteEditAndContinueServiceProxy(Workspace wor
             }
             catch (Exception e) when (FatalError.ReportAndCatchUnlessCanceled(e, cancellationToken))
             {
-                return [];
+                return new();
             }
         }
     }
@@ -163,7 +163,7 @@ internal readonly partial struct RemoteEditAndContinueServiceProxy(Workspace wor
         // filter out documents that are not synchronized to remote process before we attempt remote invoke:
         if (!RemoteSupportedLanguages.IsSupported(document.Project.Language))
         {
-            return [];
+            return new();
         }
 
         var client = await RemoteHostClient.TryGetClientAsync(Workspace, cancellationToken).ConfigureAwait(false);
@@ -188,7 +188,7 @@ internal readonly partial struct RemoteEditAndContinueServiceProxy(Workspace wor
 
         if (!diagnosticData.HasValue)
         {
-            return [];
+            return new();
         }
 
         var project = document.Project;
@@ -228,7 +228,7 @@ internal readonly partial struct RemoteEditAndContinueServiceProxy(Workspace wor
         var span = data.DataLocation.UnmappedFileSpan != data.DataLocation.MappedFileSpan ? data.DataLocation.MappedFileSpan.Span : default;
         var location = Location.Create(designTimeDocument.FilePath, textSpan: default, span);
 
-        return data.ToDiagnostic(location, []);
+        return data.ToDiagnostic(location, new());
     }
 
     public async ValueTask SetFileLoggingDirectoryAsync(string? logDirectory, CancellationToken cancellationToken)

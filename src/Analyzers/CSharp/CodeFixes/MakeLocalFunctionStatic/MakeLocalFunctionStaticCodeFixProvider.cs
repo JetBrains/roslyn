@@ -26,7 +26,7 @@ internal class MakeLocalFunctionStaticCodeFixProvider : SyntaxEditorBasedCodeFix
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.MakeLocalFunctionStaticDiagnosticId];
+        ImmutableArray.Create(IDEDiagnosticIds.MakeLocalFunctionStaticDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

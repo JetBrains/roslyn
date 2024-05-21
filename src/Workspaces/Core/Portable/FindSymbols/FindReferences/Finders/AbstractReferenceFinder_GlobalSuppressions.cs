@@ -57,22 +57,22 @@ internal abstract partial class AbstractReferenceFinder : IReferenceFinder
         CancellationToken cancellationToken)
     {
         if (!ShouldFindReferencesInGlobalSuppressions(symbol, out var docCommentId))
-            return [];
+            return new();
 
         // Check if we have any relevant global attributes in this document.
         var info = await SyntaxTreeIndex.GetRequiredIndexAsync(state.Document, cancellationToken).ConfigureAwait(false);
         if (!info.ContainsGlobalSuppressMessageAttribute)
-            return [];
+            return new();
 
         var semanticModel = state.SemanticModel;
         var suppressMessageAttribute = semanticModel.Compilation.SuppressMessageAttributeType();
         if (suppressMessageAttribute == null)
-            return [];
+            return new();
 
         // Check if we have any instances of the symbol documentation comment ID string literals within global attributes.
         // These string literals represent references to the symbol.
         if (!TryGetExpectedDocumentationCommentId(docCommentId, out var expectedDocCommentId))
-            return [];
+            return new();
 
         var syntaxFacts = state.SyntaxFacts;
 

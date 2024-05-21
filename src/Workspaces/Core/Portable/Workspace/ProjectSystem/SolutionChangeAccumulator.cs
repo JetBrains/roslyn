@@ -18,7 +18,7 @@ internal sealed class SolutionChangeAccumulator(Solution startingSolution)
     /// <see cref="WorkspaceChangeKind.SolutionChanged"/> if we can't give a more precise type.
     /// </summary>
     private WorkspaceChangeKind? _workspaceChangeKind;
-    private readonly List<DocumentId> _documentIdsRemoved = [];
+    private readonly List<DocumentId> _documentIdsRemoved = new();
 
     public Solution Solution { get; private set; } = startingSolution;
     public IEnumerable<DocumentId> DocumentIdsRemoved => _documentIdsRemoved;

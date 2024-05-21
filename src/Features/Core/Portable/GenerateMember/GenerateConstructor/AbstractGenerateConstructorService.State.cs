@@ -618,11 +618,11 @@ internal abstract partial class AbstractGenerateConstructorService<TService, TEx
 
             var members = withFields ? SyntaxGeneratorExtensions.CreateFieldsForParameters(_parameters, ParameterToNewFieldMap, IsContainedInUnsafeType) :
                           withProperties ? SyntaxGeneratorExtensions.CreatePropertiesForParameters(_parameters, ParameterToNewPropertyMap, IsContainedInUnsafeType) :
-                          [];
+                          new();
 
             var semanticModel = await document.GetRequiredSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             var assignments = !withFields && !withProperties
-                ? []
+                ? new()
                 : provider.GetRequiredService<SyntaxGenerator>().CreateAssignmentStatements(
                     semanticModel, _parameters,
                     _parameterToExistingMemberMap,

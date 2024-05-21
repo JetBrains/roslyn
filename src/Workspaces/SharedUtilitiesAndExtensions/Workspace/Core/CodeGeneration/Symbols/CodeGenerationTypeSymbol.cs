@@ -38,10 +38,10 @@ internal abstract class CodeGenerationTypeSymbol : CodeGenerationNamespaceOrType
     public virtual INamedTypeSymbol BaseType => null;
 
     public virtual ImmutableArray<INamedTypeSymbol> Interfaces
-        => [];
+        => ImmutableArray.Create<INamedTypeSymbol>();
 
     public ImmutableArray<INamedTypeSymbol> AllInterfaces
-        => [];
+        => ImmutableArray.Create<INamedTypeSymbol>();
 
     public bool IsReferenceType => false;
 

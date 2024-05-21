@@ -31,7 +31,7 @@ internal class RemoveNewModifierCodeFixProvider : CodeFixProvider
     public override FixAllProvider GetFixAllProvider()
         => WellKnownFixAllProviders.BatchFixer;
 
-    public override ImmutableArray<string> FixableDiagnosticIds => [CS0109];
+    public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CS0109);
 
     public override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

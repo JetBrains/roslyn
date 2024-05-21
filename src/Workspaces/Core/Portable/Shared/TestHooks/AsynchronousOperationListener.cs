@@ -17,10 +17,10 @@ internal sealed partial class AsynchronousOperationListener : IAsynchronousOpera
 {
     private readonly NonReentrantLock _gate = new();
 
-    private readonly HashSet<TaskCompletionSource<bool>> _pendingTasks = [];
+    private readonly HashSet<TaskCompletionSource<bool>> _pendingTasks = new();
     private CancellationTokenSource _expeditedDelayCancellationTokenSource;
 
-    private List<DiagnosticAsyncToken> _diagnosticTokenList = [];
+    private List<DiagnosticAsyncToken> _diagnosticTokenList = new();
     private int _counter;
     private bool _trackActiveTokens;
 
@@ -208,7 +208,7 @@ internal sealed partial class AsynchronousOperationListener : IAsynchronousOpera
                 }
 
                 _trackActiveTokens = value;
-                _diagnosticTokenList = [];
+                _diagnosticTokenList = new();
             }
         }
     }
@@ -232,7 +232,7 @@ internal sealed partial class AsynchronousOperationListener : IAsynchronousOpera
             {
                 if (_diagnosticTokenList == null)
                 {
-                    return [];
+                    return new();
                 }
 
                 return _diagnosticTokenList.ToImmutableArray();

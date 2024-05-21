@@ -283,7 +283,7 @@ internal abstract partial class AbstractInlineMethodRefactoringProvider<
                     removeCalleeDeclarationNode: false, cancellationToken: cancellationToken),
             nameof(FeaturesResources.Inline_and_keep_0) + "_" + calleeMethodName);
 
-        return [codeActionRemovesCallee, codeActionKeepsCallee];
+        return ImmutableArray.Create<CodeAction>(codeActionRemovesCallee, codeActionKeepsCallee);
     }
 
     private async Task<Solution> InlineMethodAsync(Document document,

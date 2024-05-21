@@ -249,15 +249,15 @@ internal partial class AbstractGenerateMethodService<TService, TSimpleNameSyntax
             ITypeSymbol expressionType)
         {
             return CodeGenerationSymbolFactory.CreateMethodSymbol(
-                attributes: [],
+                attributes: new(),
                 accessibility: default,
                 modifiers: default,
                 returnType: expressionType,
                 refKind: RefKind.None,
                 explicitInterfaceImplementations: default,
                 name: null,
-                typeParameters: [],
-                parameters: []);
+                typeParameters: new(),
+                parameters: new());
         }
     }
 }

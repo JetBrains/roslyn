@@ -65,7 +65,7 @@ internal abstract class AbstractSyntaxFormatting : ISyntaxFormatting
                 continue;
             }
 
-            results ??= [];
+            results ??= new();
             results.Add(Format(node, options, rules, startToken, endToken, cancellationToken));
         }
 

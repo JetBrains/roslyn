@@ -39,7 +39,7 @@ internal class MetadataReferenceCache(Func<string, MetadataReferenceProperties, 
         private readonly NonReentrantLock _gate = new();
 
         // metadata references are held weakly, so even though this is a cache that enables reuse, it does not control lifetime.
-        private readonly Dictionary<MetadataReferenceProperties, WeakReference<MetadataReference>> _references = [];
+        private readonly Dictionary<MetadataReferenceProperties, WeakReference<MetadataReference>> _references = new();
 
         public MetadataReference GetAddOrUpdate(string path, MetadataReferenceProperties properties)
         {

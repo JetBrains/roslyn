@@ -17,7 +17,7 @@ internal partial class ISymbolExtensions
     /// </summary>
     private class RequiresUnsafeModifierVisitor : SymbolVisitor<bool>
     {
-        private readonly HashSet<ISymbol> _visited = [];
+        private readonly HashSet<ISymbol> _visited = new();
 
         public override bool DefaultVisit(ISymbol node)
         {

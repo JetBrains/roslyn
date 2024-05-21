@@ -455,7 +455,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// <summary>
         /// Check all generic constraints on the given type and any containing types
         /// (such as A&lt;T&gt; in A&lt;T&gt;.B&lt;U&gt;). This includes checking constraints
-        /// on generic types within the type (such as B&lt;T&gt; in A&lt;B&lt;T&gt;[]&gt;).
+        /// on generic types within the type (such as B&lt;T&gt; in A&lt;B&lt;T&gt;new()&gt;).
         /// </summary>
         public static void CheckAllConstraints(
             this TypeSymbol type,

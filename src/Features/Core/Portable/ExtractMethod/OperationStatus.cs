@@ -14,7 +14,7 @@ internal partial class OperationStatus
     public OperationStatus(bool succeeded, string reason)
     {
         Succeeded = succeeded;
-        Reasons = reason == null ? [] : [reason];
+        Reasons = reason == null ? new() : ImmutableArray.Create(reason);
     }
 
     private OperationStatus(bool succeeded, ImmutableArray<string> reasons)

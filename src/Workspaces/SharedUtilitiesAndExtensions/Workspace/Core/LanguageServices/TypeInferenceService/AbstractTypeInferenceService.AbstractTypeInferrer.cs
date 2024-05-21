@@ -21,8 +21,8 @@ internal partial class AbstractTypeInferenceService : ITypeInferenceService
         protected readonly SemanticModel SemanticModel;
         protected readonly Func<TypeInferenceInfo, bool> IsUsableTypeFunc;
 
-        private readonly HashSet<SyntaxNode> _seenExpressionInferType = [];
-        private readonly HashSet<SyntaxNode> _seenExpressionGetType = [];
+        private readonly HashSet<SyntaxNode> _seenExpressionInferType = new();
+        private readonly HashSet<SyntaxNode> _seenExpressionGetType = new();
 
         private static readonly Func<TypeInferenceInfo, bool> s_isNotNull = t => t.InferredType != null;
 
@@ -57,7 +57,7 @@ internal partial class AbstractTypeInferenceService : ITypeInferenceService
                 }
             }
 
-            return [];
+            return new();
         }
 
         protected IEnumerable<TypeInferenceInfo> GetTypes(SyntaxNode expression, bool objectAsDefault = false)

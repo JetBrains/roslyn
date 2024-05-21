@@ -50,7 +50,7 @@ internal abstract partial class AbstractDocumentHighlightsService :
 
             if (!result.HasValue)
             {
-                return [];
+                return new();
             }
 
             return await result.Value.SelectAsArrayAsync(h => h.RehydrateAsync(solution)).ConfigureAwait(false);
@@ -73,7 +73,7 @@ internal abstract partial class AbstractDocumentHighlightsService :
         var symbol = await SymbolFinder.FindSymbolAtPositionAsync(
             semanticModel, position, solution.Services, cancellationToken).ConfigureAwait(false);
         if (symbol == null)
-            return [];
+            return new();
 
         // Get unique tags for referenced symbols
         var tags = await GetTagsForReferencedSymbolAsync(
@@ -84,7 +84,7 @@ internal abstract partial class AbstractDocumentHighlightsService :
         // SymbolFinder will consider that the symbol `X`. However, the doc highlights won't include
         // the `new` part, so it's not appropriate for us to highlight `X` in that case.
         if (!tags.Any(static (t, position) => t.HighlightSpans.Any(static (hs, position) => hs.TextSpan.IntersectsWith(position), position), position))
-            return [];
+            return new();
 
         return tags;
     }
@@ -129,7 +129,7 @@ internal abstract partial class AbstractDocumentHighlightsService :
                 symbol, options, cancellationToken).ConfigureAwait(false);
         }
 
-        return [];
+        return new();
     }
 
     private static bool ShouldConsiderSymbol(ISymbol symbol)
@@ -266,7 +266,12 @@ internal abstract partial class AbstractDocumentHighlightsService :
         using var _1 = ArrayBuilder<DocumentHighlights>.GetInstance(tagMap.Count, out var list);
         foreach (var kvp in tagMap)
         {
-            list.Add(new DocumentHighlights(kvp.Key, [.. kvp.Value]));
+            using var _2 = ArrayBuilder<HighlightSpan>.GetInstance(kvp.Value.Count, out var spans);
+            foreach (var span in kvp.Value)
+                spans.Add(span);
+
+            list.Add(new DocumentHighlights(kvp.Key, spans.ToImmutableAndClear()));
+
         }
 
         return list.ToImmutableAndClear();

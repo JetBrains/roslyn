@@ -19,7 +19,7 @@ internal abstract class AbstractRemoveUnnecessaryImportsCodeFixProvider : CodeFi
     protected abstract ISyntaxFormatting GetSyntaxFormatting();
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds
-        => [RemoveUnnecessaryImportsConstants.DiagnosticFixableId];
+        => ImmutableArray.Create(RemoveUnnecessaryImportsConstants.DiagnosticFixableId);
 
     public sealed override FixAllProvider GetFixAllProvider()
         => WellKnownFixAllProviders.BatchFixer;

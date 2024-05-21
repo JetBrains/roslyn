@@ -40,7 +40,7 @@ internal sealed class SolutionOptionSet : OptionSet
     }
 
     internal SolutionOptionSet(ILegacyGlobalOptionService globalOptions)
-        : this(globalOptions, values: ImmutableDictionary<OptionKey, object?>.Empty, changedOptionKeys: [])
+        : this(globalOptions, values: ImmutableDictionary<OptionKey, object?>.Empty, changedOptionKeys: ImmutableHashSet<OptionKey>.Empty)
     {
     }
 

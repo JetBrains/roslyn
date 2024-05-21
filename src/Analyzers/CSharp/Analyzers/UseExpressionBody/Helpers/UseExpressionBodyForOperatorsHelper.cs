@@ -24,7 +24,7 @@ internal class UseExpressionBodyForOperatorsHelper :
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_expression_body_for_operator), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_block_body_for_operator), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                CSharpCodeStyleOptions.PreferExpressionBodiedOperators,
-               [SyntaxKind.OperatorDeclaration])
+               ImmutableArray.Create(SyntaxKind.OperatorDeclaration))
     {
     }
 

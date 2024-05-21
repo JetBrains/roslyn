@@ -26,7 +26,7 @@ internal class PreferFrameworkTypeCodeFixProvider : SyntaxEditorBasedCodeFixProv
     }
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds { get; }
-        = [IDEDiagnosticIds.PreferBuiltInOrFrameworkTypeDiagnosticId];
+        = ImmutableArray.Create(IDEDiagnosticIds.PreferBuiltInOrFrameworkTypeDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

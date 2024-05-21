@@ -48,7 +48,7 @@ internal static partial class SyntaxGeneratorExtensions
                 factory.InvocationExpression(
                     factory.MemberAccessExpression(factory.TypeExpression(hashCodeType), "Combine"),
                     memberReferences));
-            return [statement];
+            return ImmutableArray.Create(statement);
         }
 
         const string hashName = "hash";
@@ -89,7 +89,7 @@ internal static partial class SyntaxGeneratorExtensions
 
         if (components.Length == 0)
         {
-            return [factory.ReturnStatement(factory.LiteralExpression(0))];
+            return ImmutableArray.Create(factory.ReturnStatement(factory.LiteralExpression(0)));
         }
 
         const int hashFactor = -1521134295;
@@ -119,10 +119,10 @@ internal static partial class SyntaxGeneratorExtensions
             //      return someHash + this.S1.GetHashCode();    // or
 
             var multiplyResult = initHash * hashFactor;
-            return [factory.ReturnStatement(
+            return ImmutableArray.Create(factory.ReturnStatement(
                 factory.AddExpression(
                     CreateLiteralExpression(factory, multiplyResult),
-                    components[0]))];
+                    components[0])));
         }
 
         var statements = ArrayBuilder<SyntaxNode>.GetInstance();

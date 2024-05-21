@@ -22,7 +22,7 @@ internal abstract class AbstractUseIsNullCheckForReferenceEqualsCodeFixProvider<
     where TExpressionSyntax : SyntaxNode
 {
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseIsNullCheckDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseIsNullCheckDiagnosticId);
 
     protected abstract string GetTitle(bool negated, ParseOptions options);
 

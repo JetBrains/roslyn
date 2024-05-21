@@ -25,7 +25,7 @@ internal class UseExpressionBodyForLocalFunctionHelper :
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_expression_body_for_local_function), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_block_body_for_local_function), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                CSharpCodeStyleOptions.PreferExpressionBodiedLocalFunctions,
-               [SyntaxKind.LocalFunctionStatement])
+               ImmutableArray.Create(SyntaxKind.LocalFunctionStatement))
     {
     }
 

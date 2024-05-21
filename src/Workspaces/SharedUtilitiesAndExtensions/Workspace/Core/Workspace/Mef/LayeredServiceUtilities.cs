@@ -15,7 +15,7 @@ internal static class LayeredServiceUtilities
     /// <summary>
     /// Layers in the priority order. <see cref="ServiceLayer.Host"/> services override <see cref="ServiceLayer.Editor"/> services, etc.
     /// </summary>
-    private static readonly ImmutableArray<string> s_orderedProductLayers = [ServiceLayer.Host, ServiceLayer.Editor, ServiceLayer.Desktop, ServiceLayer.Default];
+    private static readonly ImmutableArray<string> s_orderedProductLayers = ImmutableArray.Create(ServiceLayer.Host, ServiceLayer.Editor, ServiceLayer.Desktop, ServiceLayer.Default);
 
     public static string GetAssemblyQualifiedServiceTypeName(Type type, string argName)
         => (type ?? throw new ArgumentNullException(argName)).AssemblyQualifiedName ?? throw new ArgumentException("Invalid service type", argName);

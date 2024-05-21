@@ -44,7 +44,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
             {
                 // If this is a preview, just return an ApplyChangesOperation for the updated document
                 var operation = new ApplyChangesOperation(newProject.Solution);
-                return [operation];
+                return ImmutableArray.Create<CodeActionOperation>(operation);
             }
             else
             {
@@ -53,7 +53,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                     FixData.AssemblyReferenceAssemblyName,
                     FixData.AssemblyReferenceFullyQualifiedTypeName,
                     newProject);
-                return [operation];
+                return ImmutableArray.Create<CodeActionOperation>(operation);
             }
         }
 

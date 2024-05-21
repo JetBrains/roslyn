@@ -30,7 +30,7 @@ internal sealed class ConsecutiveBracePlacementCodeFixProvider : CodeFixProvider
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.ConsecutiveBracePlacementDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.ConsecutiveBracePlacementDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {
@@ -46,7 +46,7 @@ internal sealed class ConsecutiveBracePlacementCodeFixProvider : CodeFixProvider
     }
 
     private static Task<Document> UpdateDocumentAsync(Document document, Diagnostic diagnostic, CancellationToken cancellationToken)
-        => FixAllAsync(document, [diagnostic], cancellationToken);
+        => FixAllAsync(document, ImmutableArray.Create(diagnostic), cancellationToken);
 
     public static async Task<Document> FixAllAsync(Document document, ImmutableArray<Diagnostic> diagnostics, CancellationToken cancellationToken)
     {

@@ -32,7 +32,7 @@ internal abstract partial class AbstractBuiltInCodeStyleDiagnosticAnalyzer : Dia
         Debug.Assert(!isUnnecessary || this is AbstractBuiltInUnnecessaryCodeStyleDiagnosticAnalyzer);
 
         Descriptor = CreateDescriptorWithId(descriptorId, enforceOnBuild, hasAnyCodeStyleOption, title, messageFormat ?? title, isUnnecessary: isUnnecessary, isConfigurable: configurable);
-        SupportedDiagnostics = [Descriptor];
+        SupportedDiagnostics = ImmutableArray.Create(Descriptor);
     }
 
     /// <summary>

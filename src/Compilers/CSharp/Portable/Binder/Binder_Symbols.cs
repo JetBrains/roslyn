@@ -1352,7 +1352,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             // was intended so you would get a specific error in CheckBasicConstraints.CheckBasicConstraints for a type
             // like (like `List<int*>`). i.e. you would get the error about an unsafe type not being a legal type argument,
             // but not the error about not being in an unsafe context.  This had the unfortunate consequence though of 
-            // preventing the latter check for something like `List<int*[]>`.  Here, this is a legal generic type, but we 
+            // preventing the latter check for something like `List<int*new()>`.  Here, this is a legal generic type, but we 
             // still want to report the error that you need to be in an unsafe context.  So, to maintain compat, we only
             // do the suppression if you're on C# 11 and prior.  In later versions we do the correct check.
             var binder = !Compilation.IsFeatureEnabled(MessageID.IDS_FeatureUsingTypeAlias)

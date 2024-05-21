@@ -97,7 +97,7 @@ internal partial class CSharpMethodExtractor
             statements = WrapInCheckStatementIfNeeded(statements);
 
             var methodSymbol = CodeGenerationSymbolFactory.CreateMethodSymbol(
-                attributes: [],
+                attributes: new(),
                 accessibility: Accessibility.Private,
                 modifiers: CreateMethodModifiers(),
                 returnType: AnalyzerResult.ReturnType,
@@ -150,7 +150,7 @@ internal partial class CSharpMethodExtractor
                 IsExpressionBodiedAccessor(selectedNode))
             {
                 var statement = await GetStatementOrInitializerContainingInvocationToExtractedMethodAsync(cancellationToken).ConfigureAwait(false);
-                return [statement];
+                return ImmutableArray.Create(statement);
             }
 
             // regular case
@@ -278,8 +278,8 @@ internal partial class CSharpMethodExtractor
                 return statements;
 
             return statements is [BlockSyntax block]
-                ? [SyntaxFactory.CheckedStatement(kind, block)]
-                : [SyntaxFactory.CheckedStatement(kind, SyntaxFactory.Block(statements))];
+                ? ImmutableArray.Create<StatementSyntax>(SyntaxFactory.CheckedStatement(kind, block))
+                : ImmutableArray.Create<StatementSyntax>(SyntaxFactory.CheckedStatement(kind, SyntaxFactory.Block(statements)));
         }
 
         private static ImmutableArray<StatementSyntax> CleanupCode(ImmutableArray<StatementSyntax> statements)

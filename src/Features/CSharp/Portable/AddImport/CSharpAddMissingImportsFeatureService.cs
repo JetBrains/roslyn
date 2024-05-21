@@ -28,5 +28,5 @@ internal class CSharpAddMissingImportsFeatureService : AbstractAddMissingImports
     protected sealed override ImmutableArray<string> FixableDiagnosticIds => AddImportDiagnosticIds.FixableDiagnosticIds;
 
     protected override ImmutableArray<AbstractFormattingRule> GetFormatRules(SourceText text)
-        => [new CleanUpNewLinesFormatter(text), new IndentBlockFormattingRule()];
+        => ImmutableArray.Create<AbstractFormattingRule>(new CleanUpNewLinesFormatter(text), new IndentBlockFormattingRule());
 }

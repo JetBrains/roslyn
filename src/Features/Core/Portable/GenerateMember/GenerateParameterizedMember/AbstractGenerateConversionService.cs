@@ -38,7 +38,7 @@ internal abstract partial class AbstractGenerateConversionService<TService, TSim
             var state = await State.GenerateConversionStateAsync((TService)this, semanticDocument, node, cancellationToken).ConfigureAwait(false);
             if (state == null)
             {
-                return [];
+                return new();
             }
 
             return await GetActionsAsync(document, state, fallbackOptions, cancellationToken).ConfigureAwait(false);

@@ -27,13 +27,13 @@ internal sealed class MethodTypeParameterSymbolReferenceFinder : AbstractTypePar
         if (ordinal >= 0)
         {
             if (method.PartialDefinitionPart != null && ordinal < method.PartialDefinitionPart.TypeParameters.Length)
-                return new([method.PartialDefinitionPart.TypeParameters[ordinal]]);
+                return new(ImmutableArray.Create<ISymbol>(method.PartialDefinitionPart.TypeParameters[ordinal]));
 
             if (method.PartialImplementationPart != null && ordinal < method.PartialImplementationPart.TypeParameters.Length)
-                return new([method.PartialImplementationPart.TypeParameters[ordinal]]);
+                return new(ImmutableArray.Create<ISymbol>(method.PartialImplementationPart.TypeParameters[ordinal]));
         }
 
-        return new([]);
+        return new(ImmutableArray<ISymbol>.Empty);
     }
 
     protected sealed override Task<ImmutableArray<Document>> DetermineDocumentsToSearchAsync(

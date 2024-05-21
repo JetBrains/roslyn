@@ -32,7 +32,7 @@ internal class CSharpSimplifyPropertyPatternCodeFixProvider : SyntaxEditorBasedC
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.SimplifyPropertyPatternDiagnosticId];
+        ImmutableArray.Create(IDEDiagnosticIds.SimplifyPropertyPatternDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

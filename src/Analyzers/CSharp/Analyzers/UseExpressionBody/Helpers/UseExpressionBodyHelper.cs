@@ -33,7 +33,7 @@ internal abstract class UseExpressionBodyHelper
     public abstract Location GetDiagnosticLocation(SyntaxNode declaration);
 
     public static readonly ImmutableArray<UseExpressionBodyHelper> Helpers =
-        [
+        ImmutableArray.Create<UseExpressionBodyHelper>(
             UseExpressionBodyForConstructorsHelper.Instance,
             UseExpressionBodyForConversionOperatorsHelper.Instance,
             UseExpressionBodyForIndexersHelper.Instance,
@@ -41,6 +41,5 @@ internal abstract class UseExpressionBodyHelper
             UseExpressionBodyForOperatorsHelper.Instance,
             UseExpressionBodyForPropertiesHelper.Instance,
             UseExpressionBodyForAccessorsHelper.Instance,
-            UseExpressionBodyForLocalFunctionHelper.Instance,
-        ];
+            UseExpressionBodyForLocalFunctionHelper.Instance);
 }

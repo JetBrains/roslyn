@@ -460,7 +460,7 @@ internal static class CSharpCollectionExpressionRewriter
 
                 if (ifStatement.Else is null)
                 {
-                    // Create: `x ? [y] : []` for `if (x) collection.Add(y)`
+                    // Create: `x ? [y] : new()` for `if (x) collection.Add(y)`
                     var expression = ConditionalExpression(
                         condition,
                         CollectionExpression([
@@ -764,7 +764,7 @@ internal static class CSharpCollectionExpressionRewriter
         static ImmutableArray<ExpressionSyntax> ConvertAssignment(
             AssignmentExpressionSyntax assignment, Func<ExpressionSyntax, ExpressionSyntax> indent)
         {
-            return [indent(assignment.Right)];
+            return ImmutableArray.Create(indent(assignment.Right));
         }
 
         static ImmutableArray<ExpressionSyntax> ConvertInvocation(

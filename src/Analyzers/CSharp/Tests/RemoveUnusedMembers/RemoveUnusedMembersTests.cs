@@ -1773,7 +1773,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.RemoveUnusedMembers
                 }
                 """;
 
-            await VerifyCS.VerifyAnalyzerAsync(code, []);
+            await VerifyCS.VerifyAnalyzerAsync(code, new());
         }
 
         [Fact]
@@ -1833,7 +1833,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.RemoveUnusedMembers
                 }
                 """;
 
-            await VerifyCS.VerifyAnalyzerAsync(code, []);
+            await VerifyCS.VerifyAnalyzerAsync(code, new());
         }
 
         [Fact]
@@ -1949,7 +1949,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.RemoveUnusedMembers
                 }
                 """;
 
-            await VerifyCS.VerifyAnalyzerAsync(code, []);
+            await VerifyCS.VerifyAnalyzerAsync(code, new());
         }
 
         [Fact]
@@ -2009,7 +2009,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.RemoveUnusedMembers
                 }
                 """;
 
-            await VerifyCS.VerifyAnalyzerAsync(code, []);
+            await VerifyCS.VerifyAnalyzerAsync(code, new());
         }
 
         [Fact]

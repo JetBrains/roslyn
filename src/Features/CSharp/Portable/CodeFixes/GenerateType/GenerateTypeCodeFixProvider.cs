@@ -40,7 +40,7 @@ internal class GenerateTypeCodeFixProvider : AbstractGenerateMemberCodeFixProvid
 
     public override ImmutableArray<string> FixableDiagnosticIds
     {
-        get { return [CS0103, CS0117, CS0234, CS0246, CS0305, CS0308, CS0426, CS0616, IDEDiagnosticIds.UnboundIdentifierId]; }
+        get { return ImmutableArray.Create(CS0103, CS0117, CS0234, CS0246, CS0305, CS0308, CS0426, CS0616, IDEDiagnosticIds.UnboundIdentifierId); }
     }
 
     protected override bool IsCandidate(SyntaxNode node, SyntaxToken token, Diagnostic diagnostic)

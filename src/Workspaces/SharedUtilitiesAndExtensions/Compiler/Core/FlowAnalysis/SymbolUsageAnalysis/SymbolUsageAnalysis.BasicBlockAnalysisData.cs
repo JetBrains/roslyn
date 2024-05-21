@@ -30,7 +30,7 @@ internal static partial class SymbolUsageAnalysis
         private readonly Dictionary<ISymbol, PooledHashSet<IOperation>> _reachingWrites;
 
         private BasicBlockAnalysisData()
-            => _reachingWrites = [];
+            => _reachingWrites = new();
 
         public static BasicBlockAnalysisData GetInstance() => s_pool.Allocate();
 

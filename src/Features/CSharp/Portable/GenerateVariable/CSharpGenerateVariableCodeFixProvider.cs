@@ -39,7 +39,7 @@ internal class CSharpGenerateVariableCodeFixProvider : AbstractGenerateMemberCod
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [CS1061, CS0103, CS0117, CS0539, CS0246, CS0120, CS0118];
+        => ImmutableArray.Create(CS1061, CS0103, CS0117, CS0539, CS0246, CS0120, CS0118);
 
     protected override bool IsCandidate(SyntaxNode node, SyntaxToken token, Diagnostic diagnostic)
         => node is SimpleNameSyntax or PropertyDeclarationSyntax or MemberBindingExpressionSyntax;

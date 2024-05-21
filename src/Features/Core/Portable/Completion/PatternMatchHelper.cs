@@ -35,14 +35,14 @@ internal sealed class PatternMatchHelper(string pattern) : IDisposable
     }
 
     private readonly object _gate = new();
-    private readonly Dictionary<(CultureInfo, bool includeMatchedSpans), PatternMatcher> _patternMatcherMap = [];
+    private readonly Dictionary<(CultureInfo, bool includeMatchedSpans), PatternMatcher> _patternMatcherMap = new();
 
     public string Pattern { get; } = pattern;
 
     public ImmutableArray<TextSpan> GetHighlightedSpans(string text, CultureInfo culture)
     {
         var match = GetMatch(text, includeMatchSpans: true, culture: culture);
-        return match == null ? [] : match.Value.MatchedSpans;
+        return match == null ? new() : match.Value.MatchedSpans;
     }
 
     public PatternMatch? GetMatch(string text, bool includeMatchSpans, CultureInfo culture)

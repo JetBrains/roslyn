@@ -92,7 +92,7 @@ internal sealed class ModuleCancellationInstrumenter(
     }
 
     private BoundExpression InstrumentExpression(BoundExpression expression)
-        => _factory.Sequence([], [_factory.ThrowIfModuleCancellationRequested()], expression);
+        => _factory.Sequence(ImmutableArray<LocalSymbol>.Empty, ImmutableArray.Create(_factory.ThrowIfModuleCancellationRequested()), expression);
 
     private BoundStatement InstrumentStatement(BoundStatement statement)
         => _factory.StatementList(_factory.ExpressionStatement(_factory.ThrowIfModuleCancellationRequested()), statement);
@@ -134,15 +134,29 @@ internal sealed class ModuleCancellationInstrumenter(
             // The last argument is a CancellationToken. Replace it with the module-level token.
             // Keep the previous expression so that side-effects are preserved.
 
-            arguments = [.. arguments[0..^1], _factory.Sequence([lastArgument], _factory.ModuleCancellationToken())];
+            var builder = ImmutableArray.CreateBuilder<BoundExpression>();
+            builder.AddRange(arguments[0..^1]);
+            builder.Add(_factory.Sequence([lastArgument], _factory.ModuleCancellationToken()));
+            arguments = builder.ToImmutable();
+            // old: arguments = [.. arguments[0..^1], _factory.Sequence([lastArgument], _factory.ModuleCancellationToken())];
         }
         else if (FindOverloadWithCancellationToken(method) is { } cancellableOverload)
         {
             // The method being invoked does not have a CancellationToken as the last parameter, but there is an overload that does.
             // Invoke the other overload instead and pass in module-level token. 
             method = cancellableOverload;
-            arguments = [.. arguments, _factory.ModuleCancellationToken()];
-            argumentRefKindsOpt = argumentRefKindsOpt.IsDefault ? default : [.. argumentRefKindsOpt, RefKind.None];
+
+            var builder1 = ImmutableArray.CreateBuilder<BoundExpression>();
+            builder1.AddRange(arguments);
+            builder1.Add(_factory.ModuleCancellationToken());
+            arguments = builder1.ToImmutable();
+            //old: arguments = [.. arguments, _factory.ModuleCancellationToken()];
+
+            var builder2 = ImmutableArray.CreateBuilder<RefKind>();
+            builder2.AddRange(argumentRefKindsOpt);
+            builder2.Add(RefKind.None);
+            argumentRefKindsOpt = builder2.ToImmutable();
+            //old: argumentRefKindsOpt = argumentRefKindsOpt.IsDefault ? default : [.. argumentRefKindsOpt, RefKind.None];
         }
     }
 

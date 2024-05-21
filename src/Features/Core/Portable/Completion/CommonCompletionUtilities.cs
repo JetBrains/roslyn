@@ -113,7 +113,7 @@ internal static class CommonCompletionUtilities
         var formatter = workspaceServices.GetRequiredLanguageService<IDocumentationCommentFormattingService>(semanticModel.Language);
 
         // TODO(cyrusn): Figure out a way to cancel this.
-        var sections = await symbolDisplayService.ToDescriptionGroupsAsync(semanticModel, position, [symbol], options, cancellationToken).ConfigureAwait(false);
+        var sections = await symbolDisplayService.ToDescriptionGroupsAsync(semanticModel, position, ImmutableArray.Create(symbol), options, cancellationToken).ConfigureAwait(false);
 
         if (!sections.TryGetValue(SymbolDescriptionGroups.MainDescription, out var mainDescriptionTexts))
         {
@@ -257,6 +257,6 @@ internal static class CommonCompletionUtilities
             return lspProvider.TriggerCharacters;
         }
 
-        return [];
+        return ImmutableHashSet<char>.Empty;
     }
 }

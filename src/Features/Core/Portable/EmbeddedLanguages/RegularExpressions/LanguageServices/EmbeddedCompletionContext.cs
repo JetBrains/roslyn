@@ -17,13 +17,13 @@ internal partial class RegexEmbeddedCompletionProvider
     {
         private readonly RegexEmbeddedLanguage _language;
         private readonly CompletionContext _context;
-        private readonly HashSet<string> _names = [];
+        private readonly HashSet<string> _names = new();
 
         public readonly RegexTree Tree;
         public readonly SyntaxToken StringToken;
         public readonly int Position;
         public readonly CompletionTrigger Trigger;
-        public readonly List<RegexItem> Items = [];
+        public readonly List<RegexItem> Items = new();
 
         public EmbeddedCompletionContext(
             RegexEmbeddedLanguage language,

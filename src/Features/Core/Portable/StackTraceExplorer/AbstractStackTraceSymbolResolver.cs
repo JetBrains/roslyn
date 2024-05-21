@@ -51,7 +51,7 @@ internal abstract class AbstractStackTraceSymbolResolver
             // match the element types in an array.
             // Ex: string[,][] 
             // [,] is a 2 dimension array with element type string[]
-            // [] is a 1 dimension array with element type string
+            // new() is a 1 dimension array with element type string
             foreach (var arrayExpression in arrayTypeNode.ArrayRankSpecifiers)
             {
                 if (currentType is not IArrayTypeSymbol currentArrayType)

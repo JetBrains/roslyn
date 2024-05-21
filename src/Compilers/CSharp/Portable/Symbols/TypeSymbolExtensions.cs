@@ -684,7 +684,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         /// <summary>
         /// Visit the given type and, in the case of compound types, visit all "sub type"
-        /// (such as A in A[], or { A&lt;T&gt;, T, U } in A&lt;T&gt;.B&lt;U&gt;) invoking 'predicate'
+        /// (such as A in Anew(), or { A&lt;T&gt;, T, U } in A&lt;T&gt;.B&lt;U&gt;) invoking 'predicate'
         /// with the type and 'arg' at each sub type. If the predicate returns true for any type,
         /// traversal stops and that type is returned from this method. Otherwise if traversal
         /// completes without the predicate returning true for any type, this method returns null.
@@ -732,7 +732,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             RoslynDebug.Assert(canDigThroughNullable == false || visitCustomModifiers == false);
             RoslynDebug.Assert(visitCustomModifiers == false || typePredicate is { });
 
-            // In order to handle extremely "deep" types like "int[][][][][][][][][]...[]"
+            // In order to handle extremely "deep" types like "int[][][][][][][][][]...new()"
             // or int*****************...* we implement manual tail recursion rather than 
             // doing the natural recursion.
 

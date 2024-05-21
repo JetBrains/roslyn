@@ -20,7 +20,7 @@ internal partial class AbstractMetadataAsSourceService
             get
             {
                 return CanImplementImplicitly
-                    ? []
+                    ? ImmutableArray.Create<IPropertySymbol>()
                     : _symbol.ExplicitInterfaceImplementations;
             }
         }

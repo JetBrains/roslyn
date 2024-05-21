@@ -69,7 +69,7 @@ internal abstract partial class AbstractAddImportCodeFixProvider : CodeFixProvid
 
         var packageSources = installerService?.IsEnabled(document.Project.Id) == true
             ? installerService.TryGetPackageSources()
-            : [];
+            : new();
 
         if (packageSources.IsEmpty)
         {

@@ -33,7 +33,7 @@ internal class RemoveInKeywordCodeFixProvider : CodeFixProvider
     public override FixAllProvider GetFixAllProvider()
         => WellKnownFixAllProviders.BatchFixer;
 
-    public override ImmutableArray<string> FixableDiagnosticIds => [CS1615];
+    public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CS1615);
 
     public override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

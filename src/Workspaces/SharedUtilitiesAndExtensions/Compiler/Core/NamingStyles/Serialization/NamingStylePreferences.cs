@@ -298,7 +298,7 @@ internal sealed class NamingStylePreferences : IEquatable<NamingStylePreferences
     }
 
     public static NamingStylePreferences Default { get; } = FromXElement(XElement.Parse(DefaultNamingPreferencesString));
-    public static NamingStylePreferences Empty { get; } = new([], [], []);
+    public static NamingStylePreferences Empty { get; } = new(new(), new(), new());
 
     public static string DefaultNamingPreferencesString => _defaultNamingPreferencesString;
 

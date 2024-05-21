@@ -19,7 +19,7 @@ internal class CSharpSyntaxFormatting : AbstractSyntaxFormatting
     public static readonly CSharpSyntaxFormatting Instance = new();
 
     private readonly ImmutableArray<AbstractFormattingRule> _rules =
-    [
+    ImmutableArray.Create<AbstractFormattingRule>(
         new WrappingFormattingRule(),
         new SpacingFormattingRule(),
         new NewLineUserSettingFormattingRule(),
@@ -32,8 +32,7 @@ internal class CSharpSyntaxFormatting : AbstractSyntaxFormatting
         new AnchorIndentationFormattingRule(),
         new QueryExpressionFormattingRule(),
         new TokenBasedFormattingRule(),
-        DefaultOperationProvider.Instance,
-    ];
+        DefaultOperationProvider.Instance);
 
     public override ImmutableArray<AbstractFormattingRule> GetDefaultFormattingRules()
         => _rules;

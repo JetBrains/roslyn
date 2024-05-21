@@ -11,7 +11,7 @@ internal static partial class ITypeSymbolExtensions
     public static IList<ITypeParameterSymbol> GetReferencedMethodTypeParameters(
         this ITypeSymbol? type, IList<ITypeParameterSymbol>? result = null)
     {
-        result ??= [];
+        result ??= new List<ITypeParameterSymbol>();
         type?.Accept(new CollectTypeParameterSymbolsVisitor(result, onlyMethodTypeParameters: true));
         return result;
     }
@@ -19,7 +19,7 @@ internal static partial class ITypeSymbolExtensions
     public static IList<ITypeParameterSymbol> GetReferencedTypeParameters(
         this ITypeSymbol? type, IList<ITypeParameterSymbol>? result = null)
     {
-        result ??= [];
+        result ??= new List<ITypeParameterSymbol>();
         type?.Accept(new CollectTypeParameterSymbolsVisitor(result, onlyMethodTypeParameters: false));
         return result;
     }

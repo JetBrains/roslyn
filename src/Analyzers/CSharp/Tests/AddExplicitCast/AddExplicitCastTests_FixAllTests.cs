@@ -1247,9 +1247,9 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
 
                     void Foo5(string j, int i, Derived2 d, int x = 1) { }
 
-                    void Foo5(string j, int i, Derived1 d, params Derived2[] d2list) { }
+                    void Foo5(string j, int i, Derived1 d, params Derived2new() d2list) { }
 
-                    void Foo6(Derived1 d, params Derived2[] d2list) { }
+                    void Foo6(Derived1 d, params Derived2new() d2list) { }
 
                     private void M2(Base1 b1, Base2 b2, Base3 b3, Derived1 d1, Derived2 d2)
                     {
@@ -1271,9 +1271,9 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
                         Foo5(1, "", d: b1, b2, b3, d1); // part of arguments out of order - mismatch
                         Foo5("", 1, d: b1, b2, b3, d1); // part of arguments out of order - match
 
-                        var d2list = new Derived2[] { };
+                        var d2list = new Derived2new() { };
                         Foo5(d2list: d2list, j: "", i: 1, d: b2);
-                        var d1list = new Derived1[] { };
+                        var d1list = new Derived1new() { };
                         Foo5(d2list: d1list, j: "", i: 1, d: b2); 
 
                         Foo6(b1);
@@ -1414,9 +1414,9 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
 
                     void Foo5(string j, int i, Derived2 d, int x = 1) { }
 
-                    void Foo5(string j, int i, Derived1 d, params Derived2[] d2list) { }
+                    void Foo5(string j, int i, Derived1 d, params Derived2new() d2list) { }
 
-                    void Foo6(Derived1 d, params Derived2[] d2list) { }
+                    void Foo6(Derived1 d, params Derived2new() d2list) { }
 
                     private void M2(Base1 b1, Base2 b2, Base3 b3, Derived1 d1, Derived2 d2)
                     {
@@ -1438,10 +1438,10 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
                         Foo5(1, "", d: b1, b2, b3, d1); // part of arguments out of order - mismatch
                         Foo5("", 1, d: (Derived1)b1, (Derived2)b2, (Derived2)b3, (Derived2)d1); // part of arguments out of order - match
 
-                        var d2list = new Derived2[] { };
+                        var d2list = new Derived2new() { };
                         Foo5(d2list: d2list, j: "", i: 1, d: (Derived1)b2);
-                        var d1list = new Derived1[] { };
-                        Foo5(d2list: (Derived2[])d1list, j: "", i: 1, d: (Derived1)b2); 
+                        var d1list = new Derived1new() { };
+                        Foo5(d2list: (Derived2new())d1list, j: "", i: 1, d: (Derived1)b2); 
 
                         Foo6((Derived1)b1);
 

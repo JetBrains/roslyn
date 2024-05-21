@@ -34,7 +34,7 @@ internal class CSharpImplementInterfaceCodeFixProvider : CodeFixProvider
     }
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds { get; }
-        = [CS0535, CS0737, CS0738];
+        = ImmutableArray.Create(CS0535, CS0737, CS0738);
 
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

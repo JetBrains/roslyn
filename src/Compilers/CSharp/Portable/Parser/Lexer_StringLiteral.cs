@@ -266,7 +266,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             // need to match up any braces that appear between them.
             // But in order to do that, we also need to match up any
             // /**/ comments, ' characters quotes, () parens
-            // [] brackets, and "" strings, including interpolated holes in the latter.
+            // new() brackets, and "" strings, including interpolated holes in the latter.
 
             ScanInterpolatedStringLiteralTop(
                 ref info,

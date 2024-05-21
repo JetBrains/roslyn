@@ -41,7 +41,7 @@ internal sealed class AddInheritdocCodeFixProvider : SyntaxEditorBasedCodeFixPro
     {
     }
 
-    public override ImmutableArray<string> FixableDiagnosticIds => [CS1591];
+    public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CS1591);
 
     public override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

@@ -49,7 +49,7 @@ internal abstract class AbstractGoToBaseService : IGoToBaseService
         {
             var nextConstructor = await FindNextConstructorInChainAsync(solution, constructor, cancellationToken).ConfigureAwait(false);
             if (nextConstructor != null)
-                bases = [nextConstructor];
+                bases = ImmutableArray.Create<ISymbol>(nextConstructor);
         }
 
         await context.SetSearchTitleAsync(

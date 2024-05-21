@@ -321,14 +321,14 @@ internal partial struct SymbolKey
     {
         private static readonly ObjectPool<SymbolKeyReader> s_readerPool = SharedPools.Default<SymbolKeyReader>();
 
-        private readonly Dictionary<int, SymbolKeyResolution> _idToResult = [];
+        private readonly Dictionary<int, SymbolKeyResolution> _idToResult = new();
         private readonly ReadFunction<Location?> _readLocation;
 
         public Compilation Compilation { get; private set; }
         public bool IgnoreAssemblyKey { get; private set; }
         public SymbolEquivalenceComparer Comparer { get; private set; }
 
-        private readonly List<IMethodSymbol?> _methodSymbolStack = [];
+        private readonly List<IMethodSymbol?> _methodSymbolStack = new();
         private readonly Stack<ISymbol?> _contextualSymbolStack = new();
 
         public SymbolKeyReader()

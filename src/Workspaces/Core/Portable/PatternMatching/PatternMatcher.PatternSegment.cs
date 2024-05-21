@@ -77,7 +77,7 @@ internal partial class PatternMatcher
 
             if (partCount == 0)
             {
-                return [];
+                return Array.Empty<TextChunk>();
             }
 
             var result = new TextChunk[partCount];

@@ -22,8 +22,8 @@ internal class TriviaRewriter : CSharpSyntaxRewriter
     private readonly TextSpanIntervalTree _spans;
     private readonly CancellationToken _cancellationToken;
 
-    private readonly Dictionary<SyntaxToken, SyntaxTriviaList> _trailingTriviaMap = [];
-    private readonly Dictionary<SyntaxToken, SyntaxTriviaList> _leadingTriviaMap = [];
+    private readonly Dictionary<SyntaxToken, SyntaxTriviaList> _trailingTriviaMap = new();
+    private readonly Dictionary<SyntaxToken, SyntaxTriviaList> _leadingTriviaMap = new();
 
     public TriviaRewriter(
         SyntaxNode node,

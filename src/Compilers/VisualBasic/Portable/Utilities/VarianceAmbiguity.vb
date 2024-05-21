@@ -35,13 +35,13 @@ Namespace Microsoft.CodeAnalysis.VisualBasic
         ''' Determine if two interfaces that were constructed from the same original definition
         ''' have variance ambiguity.
         ''' 
-        ''' We have something like left=ICocon(Of Mammal, int32[]), right=ICocon(Of Fish, int32[])
+        ''' We have something like left=ICocon(Of Mammal, int32new()), right=ICocon(Of Fish, int32new())
         ''' for some interface ICocon(Of Out T, In U). And we have to decide if left and right 
         ''' might lead to ambiguous member-lookup later on in execution.
         '''
         ''' To do this: go through each type parameter T, U...
         '''   * For "Out T", judge whether the arguments Mammal/Fish cause ambiguity or prevent it.
-        '''   * For "In T", judge whether the arguments int32[]/int32[] cause ambiguity or prevent it.
+        '''   * For "In T", judge whether the arguments int32new()/int32new() cause ambiguity or prevent it.
         '''
         ''' "Causing/preventing ambiguity" is described further below.
         ''' 

@@ -22,7 +22,7 @@ internal class HighlightingService(
     [ImportMany] IEnumerable<Lazy<IHighlighter, LanguageMetadata>> highlighters) : IHighlightingService
 {
     private readonly List<Lazy<IHighlighter, LanguageMetadata>> _highlighters = highlighters.ToList();
-    private static readonly PooledObjects.ObjectPool<List<TextSpan>> s_listPool = new(() => []);
+    private static readonly PooledObjects.ObjectPool<List<TextSpan>> s_listPool = new(() => new());
 
     public void AddHighlights(
          SyntaxNode root, int position, List<TextSpan> highlights, CancellationToken cancellationToken)

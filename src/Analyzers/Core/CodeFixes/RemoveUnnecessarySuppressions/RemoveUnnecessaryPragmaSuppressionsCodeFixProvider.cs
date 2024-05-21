@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis.RemoveUnnecessarySuppressions;
 internal sealed class RemoveUnnecessaryInlineSuppressionsCodeFixProvider() : SyntaxEditorBasedCodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.RemoveUnnecessarySuppressionDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.RemoveUnnecessarySuppressionDiagnosticId);
 
     public override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

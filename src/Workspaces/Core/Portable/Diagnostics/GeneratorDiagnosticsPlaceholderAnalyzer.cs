@@ -18,7 +18,7 @@ internal sealed class GeneratorDiagnosticsPlaceholderAnalyzer : DiagnosticAnalyz
     }
 
     // We don't have any diagnostics to directly state here, since it could be any underlying type.
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [];
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => new();
 
 #pragma warning disable RS1026 // Enable concurrent execution
 #pragma warning disable RS1025 // Configure generated code analysis

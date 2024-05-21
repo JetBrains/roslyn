@@ -119,7 +119,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 defaultSeverity: DiagnosticSeverity.Warning,
                 isEnabledByDefault: true,
                 warningLevel: 0,
-                customTags: [],
+                customTags: new(),
                 properties: ImmutableDictionary<string, string?>.Empty,
                 projectId: projectId,
                 location: new DiagnosticDataLocation(new FileLinePositionSpan(fullPath, span: default)),
@@ -254,7 +254,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             }
             catch (Exception e) when (!IsCanceled(e, cancellationToken))
             {
-                diagnostics = [CreateAnalyzerExceptionDiagnostic(analyzer, e)];
+                diagnostics = ImmutableArray.Create(CreateAnalyzerExceptionDiagnostic(analyzer, e));
             }
 
             if (compilation != null)
@@ -286,7 +286,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             }
             catch (Exception e) when (!IsCanceled(e, cancellationToken))
             {
-                diagnostics = [CreateAnalyzerExceptionDiagnostic(analyzer, e)];
+                diagnostics = ImmutableArray.Create(CreateAnalyzerExceptionDiagnostic(analyzer, e));
             }
 
             // Apply filtering from compilation options (source suppressions, ruleset, etc.)

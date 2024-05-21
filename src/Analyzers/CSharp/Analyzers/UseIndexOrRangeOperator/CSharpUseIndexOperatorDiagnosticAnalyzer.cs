@@ -208,7 +208,7 @@ internal sealed partial class CSharpUseIndexOperatorDiagnosticAnalyzer : Abstrac
                 binaryExpression.GetLocation(),
                 option.Notification,
                 context.Options,
-                [],
+                Array.Empty<Location>(),
                 ImmutableDictionary<string, string?>.Empty));
     }
 

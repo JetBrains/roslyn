@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.UseCoalesceExpression;
 internal class UseCoalesceExpressionForTernaryConditionalCheckCodeFixProvider() : SyntaxEditorBasedCodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseCoalesceExpressionForTernaryConditionalCheckDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseCoalesceExpressionForTernaryConditionalCheckDiagnosticId);
 
     protected override bool IncludeDiagnosticDuringFixAll(Diagnostic diagnostic)
         => !diagnostic.Descriptor.ImmutableCustomTags().Contains(WellKnownDiagnosticTags.Unnecessary);

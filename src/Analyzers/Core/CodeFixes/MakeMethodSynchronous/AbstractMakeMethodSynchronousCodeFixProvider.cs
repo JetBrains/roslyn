@@ -135,7 +135,7 @@ internal abstract class AbstractMakeMethodSynchronousCodeFixProvider : CodeFixPr
 #else
 
                 var references = await SymbolFinder.FindRenamableReferencesAsync(
-                    [methodSymbol], document.Project.Solution, cancellationToken).ConfigureAwait(false);
+                    ImmutableArray.Create<ISymbol>(methodSymbol), document.Project.Solution, cancellationToken).ConfigureAwait(false);
 
 #endif
 

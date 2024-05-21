@@ -24,7 +24,7 @@ internal abstract class AbstractMakeFieldReadonlyCodeFixProvider<TSymbolSyntax, 
     where TFieldDeclarationSyntax : SyntaxNode
 {
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.MakeFieldReadonlyDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.MakeFieldReadonlyDiagnosticId);
 
     protected abstract SyntaxNode? GetInitializerNode(TSymbolSyntax declaration);
     protected abstract ImmutableList<TSymbolSyntax> GetVariableDeclarators(TFieldDeclarationSyntax declaration);

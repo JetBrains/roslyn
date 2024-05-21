@@ -44,7 +44,7 @@ internal sealed class CopyConstructorDeclarationBody(RecordDeclarationSyntax rec
         => InitializerActiveStatementSpan;
 
     public override ImmutableArray<ISymbol> GetCapturedVariables(SemanticModel model)
-        => [];
+        => new();
 
     public override IEnumerable<SyntaxToken>? GetActiveTokens()
         => BreakpointSpans.GetActiveTokensForCopyConstructor(recordDeclaration);

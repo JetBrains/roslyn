@@ -46,7 +46,7 @@ internal abstract class AbstractRemoveUnnecessaryAttributeSuppressionsDiagnostic
         hasAnyCodeStyleOption: false, isUnnecessary: false);
 
     protected AbstractRemoveUnnecessaryAttributeSuppressionsDiagnosticAnalyzer()
-        : base([s_invalidScopeDescriptor, s_invalidOrMissingTargetDescriptor, LegacyFormatTargetDescriptor], GeneratedCodeAnalysisFlags.None)
+        : base(ImmutableArray.Create(s_invalidScopeDescriptor, s_invalidOrMissingTargetDescriptor, LegacyFormatTargetDescriptor), GeneratedCodeAnalysisFlags.None)
     {
     }
 

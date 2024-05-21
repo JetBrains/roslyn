@@ -31,7 +31,7 @@ internal class CSharpAddDocCommentNodesCodeFixProvider
     {
     }
 
-    public override ImmutableArray<string> FixableDiagnosticIds { get; } = [CS1573];
+    public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(CS1573);
 
     protected override string NodeName { get; } = "param";
 
@@ -67,7 +67,7 @@ internal class CSharpAddDocCommentNodesCodeFixProvider
             .FirstOrDefault(f => f is ParameterListSyntax);
 
         return parameterList == null
-            ? []
+            ? new()
             : parameterList.Parameters.SelectAsArray(s => s.Identifier.ValueText);
     }
 

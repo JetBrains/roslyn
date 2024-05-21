@@ -446,8 +446,8 @@ internal abstract partial class AbstractIntroduceParameterCodeRefactoringProvide
             var info = await _originalDocument.GetCodeGenerationInfoAsync(CodeGenerationContext.Default, _fallbackOptions, cancellationToken).ConfigureAwait(false);
 
             var newMethod = isTrampoline
-                ? CodeGenerationSymbolFactory.CreateMethodSymbol(_methodSymbol, name: newMethodIdentifier, parameters: validParameters, statements: [newStatement], returnType: typeSymbol)
-                : CodeGenerationSymbolFactory.CreateMethodSymbol(_methodSymbol, statements: [newStatement], containingType: _methodSymbol.ContainingType);
+                ? CodeGenerationSymbolFactory.CreateMethodSymbol(_methodSymbol, name: newMethodIdentifier, parameters: validParameters, statements: ImmutableArray.Create(newStatement), returnType: typeSymbol)
+                : CodeGenerationSymbolFactory.CreateMethodSymbol(_methodSymbol, statements: ImmutableArray.Create(newStatement), containingType: _methodSymbol.ContainingType);
 
             var newMethodDeclaration = info.Service.CreateMethodDeclaration(newMethod, CodeGenerationDestination.Unspecified, info, cancellationToken);
             Contract.ThrowIfNull(newMethodDeclaration);

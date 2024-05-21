@@ -35,7 +35,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
             var operation = await GetChangeSolutionOperationAsync(isPreview: true, cancellationToken).ConfigureAwait(false);
             if (operation is null)
             {
-                return [];
+                return Array.Empty<CodeActionOperation>();
             }
 
             return SpecializedCollections.SingletonEnumerable(operation);
@@ -47,10 +47,10 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
             var operation = await GetChangeSolutionOperationAsync(isPreview: false, cancellationToken).ConfigureAwait(false);
             if (operation is null)
             {
-                return [];
+                return new();
             }
 
-            return [operation];
+            return ImmutableArray.Create(operation);
         }
 
         private async Task<CodeActionOperation?> GetChangeSolutionOperationAsync(bool isPreview, CancellationToken cancellationToken)

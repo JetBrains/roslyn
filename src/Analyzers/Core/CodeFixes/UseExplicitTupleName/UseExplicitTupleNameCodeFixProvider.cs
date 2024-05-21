@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.UseExplicitTupleName;
 internal partial class UseExplicitTupleNameCodeFixProvider() : SyntaxEditorBasedCodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds { get; }
-        = [IDEDiagnosticIds.UseExplicitTupleNameDiagnosticId];
+        = ImmutableArray.Create(IDEDiagnosticIds.UseExplicitTupleNameDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

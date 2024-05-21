@@ -36,5 +36,5 @@ internal abstract class AbstractNativeIntegerKeywordRecommender : IKeywordRecomm
     }
 
     public ImmutableArray<RecommendedKeyword> RecommendKeywords(int position, CSharpSyntaxContext context, CancellationToken cancellationToken)
-        => IsValidContext(context) ? [Keyword] : [];
+        => IsValidContext(context) ? ImmutableArray.Create(Keyword) : new();
 }

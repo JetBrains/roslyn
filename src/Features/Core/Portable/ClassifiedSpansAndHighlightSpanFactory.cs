@@ -78,11 +78,10 @@ internal static class ClassifiedSpansAndHighlightSpanFactory
         // For languages that don't expose a classification service, we show the entire
         // item as plain text. Break the text into three spans so that we can properly
         // highlight the 'narrow-span' later on when we display the item.
-        return
-        [
+        return ImmutableArray.Create(
             new ClassifiedSpan(ClassificationTypeNames.Text, TextSpan.FromBounds(widenedSpan.Start, narrowSpan.Start)),
             new ClassifiedSpan(ClassificationTypeNames.Text, narrowSpan),
-            new ClassifiedSpan(ClassificationTypeNames.Text, TextSpan.FromBounds(narrowSpan.End, widenedSpan.End)),
-        ];
+            new ClassifiedSpan(ClassificationTypeNames.Text, TextSpan.FromBounds(narrowSpan.End, widenedSpan.End))
+        );
     }
 }

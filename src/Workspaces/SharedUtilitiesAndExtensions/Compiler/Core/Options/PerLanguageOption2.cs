@@ -72,7 +72,7 @@ internal partial class PerLanguageOption2<T> : IPerLanguageValuedOption<T>
     object? IOption.DefaultValue => Definition.DefaultValue;
     bool IOption.IsPerLanguage => true;
     Type IOption.Type => Definition.Type;
-    ImmutableArray<OptionStorageLocation> IOption.StorageLocations => [];
+    ImmutableArray<OptionStorageLocation> IOption.StorageLocations => new();
 #endif
     public override string ToString() => Definition.ToString();
 

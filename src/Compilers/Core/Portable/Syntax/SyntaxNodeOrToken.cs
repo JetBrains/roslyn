@@ -882,7 +882,7 @@ namespace Microsoft.CodeAnalysis
                 if (trivia.GetStructure() is TDirective directive &&
                     filter?.Invoke(directive) != false)
                 {
-                    directives ??= [];
+                    directives ??= new();
                     directives.Add(directive);
                 }
             }

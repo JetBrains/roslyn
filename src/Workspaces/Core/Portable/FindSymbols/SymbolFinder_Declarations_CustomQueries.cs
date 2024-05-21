@@ -50,7 +50,7 @@ public static partial class SymbolFinder
 
         if (query.Name != null && string.IsNullOrWhiteSpace(query.Name))
         {
-            return [];
+            return new();
         }
 
         using (Logger.LogBlock(FunctionId.SymbolFinder_Solution_Predicate_FindSourceDeclarationsAsync, cancellationToken))
@@ -95,7 +95,7 @@ public static partial class SymbolFinder
 
         if (query.Name != null && string.IsNullOrWhiteSpace(query.Name))
         {
-            return [];
+            return new();
         }
 
         using (Logger.LogBlock(FunctionId.SymbolFinder_Project_Predicate_FindSourceDeclarationsAsync, cancellationToken))
@@ -111,6 +111,6 @@ public static partial class SymbolFinder
             }
         }
 
-        return [];
+        return new();
     }
 }

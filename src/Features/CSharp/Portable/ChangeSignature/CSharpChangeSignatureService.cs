@@ -37,7 +37,7 @@ internal sealed class CSharpChangeSignatureService : AbstractChangeSignatureServ
     protected override ISyntaxFacts SyntaxFacts => CSharpSyntaxFacts.Instance;
 
     private static readonly ImmutableArray<SyntaxKind> _declarationKinds =
-    [
+    ImmutableArray.Create(
         SyntaxKind.MethodDeclaration,
         SyntaxKind.ConstructorDeclaration,
         SyntaxKind.IndexerDeclaration,
@@ -48,12 +48,11 @@ internal sealed class CSharpChangeSignatureService : AbstractChangeSignatureServ
         SyntaxKind.RecordStructDeclaration,
         SyntaxKind.RecordDeclaration,
         SyntaxKind.StructDeclaration,
-        SyntaxKind.ClassDeclaration,
-    ];
+        SyntaxKind.ClassDeclaration);
 
     private static readonly ImmutableArray<SyntaxKind> _declarationAndInvocableKinds =
         _declarationKinds.Concat(
-        [
+        ImmutableArray.Create(
             SyntaxKind.InvocationExpression,
             SyntaxKind.ElementAccessExpression,
             SyntaxKind.ThisConstructorInitializer,
@@ -61,11 +60,10 @@ internal sealed class CSharpChangeSignatureService : AbstractChangeSignatureServ
             SyntaxKind.ObjectCreationExpression,
             SyntaxKind.ImplicitObjectCreationExpression,
             SyntaxKind.Attribute,
-            SyntaxKind.NameMemberCref,
-        ]);
+            SyntaxKind.NameMemberCref));
 
     private static readonly ImmutableArray<SyntaxKind> _updatableAncestorKinds =
-    [
+    ImmutableArray.Create(
         SyntaxKind.ConstructorDeclaration,
         SyntaxKind.IndexerDeclaration,
         SyntaxKind.InvocationExpression,
@@ -77,11 +75,10 @@ internal sealed class CSharpChangeSignatureService : AbstractChangeSignatureServ
         SyntaxKind.DelegateDeclaration,
         SyntaxKind.SimpleLambdaExpression,
         SyntaxKind.ParenthesizedLambdaExpression,
-        SyntaxKind.NameMemberCref,
-    ];
+        SyntaxKind.NameMemberCref);
 
     private static readonly ImmutableArray<SyntaxKind> _updatableNodeKinds =
-    [
+    ImmutableArray.Create(
         SyntaxKind.MethodDeclaration,
         SyntaxKind.LocalFunctionStatement,
         SyntaxKind.ConstructorDeclaration,
@@ -101,8 +98,7 @@ internal sealed class CSharpChangeSignatureService : AbstractChangeSignatureServ
         SyntaxKind.RecordStructDeclaration,
         SyntaxKind.RecordDeclaration,
         SyntaxKind.StructDeclaration,
-        SyntaxKind.ClassDeclaration,
-    ];
+        SyntaxKind.ClassDeclaration);
 
     [ImportingConstructor]
     [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
@@ -769,7 +765,7 @@ internal sealed class CSharpChangeSignatureService : AbstractChangeSignatureServ
     {
         if (!node.HasLeadingTrivia)
         {
-            return [];
+            return new();
         }
 
         var paramNodes = node
@@ -780,7 +776,7 @@ internal sealed class CSharpChangeSignatureService : AbstractChangeSignatureServ
         var permutedParamNodes = VerifyAndPermuteParamNodes(paramNodes, declarationSymbol, updatedSignature);
         if (permutedParamNodes.IsEmpty)
         {
-            return [];
+            return new();
         }
 
         var options = await document.GetLineFormattingOptionsAsync(fallbackOptions, cancellationToken).ConfigureAwait(false);
@@ -797,13 +793,13 @@ internal sealed class CSharpChangeSignatureService : AbstractChangeSignatureServ
 
         if (paramNodes.Count() != declaredParameters.Length)
         {
-            return [];
+            return new();
         }
 
         // No parameters originally, so no param nodes to permute.
         if (declaredParameters.Length == 0)
         {
-            return [];
+            return new();
         }
 
         var dictionary = new Dictionary<string, XmlElementSyntax>();
@@ -813,13 +809,13 @@ internal sealed class CSharpChangeSignatureService : AbstractChangeSignatureServ
             var nameAttribute = paramNode.StartTag.Attributes.FirstOrDefault(a => a.Name.ToString().Equals("name", StringComparison.OrdinalIgnoreCase));
             if (nameAttribute == null)
             {
-                return [];
+                return new();
             }
 
             var identifier = nameAttribute.DescendantNodes(descendIntoTrivia: true).OfType<IdentifierNameSyntax>().FirstOrDefault();
             if (identifier == null || identifier.ToString() != declaredParameters.ElementAt(i).Name)
             {
-                return [];
+                return new();
             }
 
             dictionary.Add(originalParameters[i].Name.ToString(), paramNode);

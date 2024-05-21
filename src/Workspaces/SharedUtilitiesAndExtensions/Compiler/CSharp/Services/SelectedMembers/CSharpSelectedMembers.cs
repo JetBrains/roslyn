@@ -35,7 +35,7 @@ internal class CSharpSelectedMembers : AbstractSelectedMembers<
                 v => (declaration: (SyntaxNode)v, identifier: v.Identifier)),
             EventFieldDeclarationSyntax eventFieldDeclaration => eventFieldDeclaration.Declaration.Variables.SelectAsArray(
                 v => (declaration: (SyntaxNode)v, identifier: v.Identifier)),
-            _ => [(declaration: (SyntaxNode)member, identifier: member.GetNameToken())],
+            _ => ImmutableArray.Create((declaration: (SyntaxNode)member, identifier: member.GetNameToken())),
         };
     }
 

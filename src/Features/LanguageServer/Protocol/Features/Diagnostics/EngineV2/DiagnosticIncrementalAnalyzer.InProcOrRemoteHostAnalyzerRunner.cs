@@ -93,7 +93,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         public async Task<ImmutableArray<Diagnostic>> GetSourceGeneratorDiagnosticsAsync(Project project, CancellationToken cancellationToken)
         {
             if (!_enabled)
-                return [];
+                return new();
 
             var options = project.Solution.Services.GetRequiredService<IWorkspaceConfigurationService>().Options;
             var remoteHostClient = await RemoteHostClient.TryGetClientAsync(project, cancellationToken).ConfigureAwait(false);
@@ -105,7 +105,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                     cancellationToken).ConfigureAwait(false);
 
                 if (!result.HasValue)
-                    return [];
+                    return new();
 
                 return await result.Value.ToDiagnosticsAsync(project, cancellationToken).ConfigureAwait(false);
             }

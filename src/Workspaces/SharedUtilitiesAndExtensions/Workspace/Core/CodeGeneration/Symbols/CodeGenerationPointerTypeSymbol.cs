@@ -34,7 +34,7 @@ internal class CodeGenerationPointerTypeSymbol(ITypeSymbol pointedAtType) : Code
     {
         get
         {
-            return [];
+            return ImmutableArray.Create<CustomModifier>();
         }
     }
 }

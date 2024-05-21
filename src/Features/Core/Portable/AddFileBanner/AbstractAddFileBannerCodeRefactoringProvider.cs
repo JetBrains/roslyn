@@ -33,7 +33,7 @@ internal abstract class AbstractAddFileBannerCodeRefactoringProvider : SyntaxEdi
     protected abstract SyntaxTrivia CreateTrivia(SyntaxTrivia trivia, string text);
 
     protected sealed override ImmutableArray<FixAllScope> SupportedFixAllScopes { get; }
-        = [FixAllScope.Project, FixAllScope.Solution];
+        = ImmutableArray.Create(FixAllScope.Project, FixAllScope.Solution);
 
     public override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
     {
@@ -181,7 +181,7 @@ internal abstract class AbstractAddFileBannerCodeRefactoringProvider : SyntaxEdi
         {
             // Didn't start with a comment character, don't bother looking at 
             // this file.
-            return [];
+            return new();
         }
 
         var token = syntaxFacts.ParseToken(text.ToString());

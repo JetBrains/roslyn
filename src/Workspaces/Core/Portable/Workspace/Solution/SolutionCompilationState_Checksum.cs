@@ -27,7 +27,7 @@ internal partial class SolutionCompilationState
     /// Mapping from project-id to the checksums needed to synchronize it over to an OOP host.  Lock this specific
     /// field before reading/writing to it.
     /// </summary>
-    private readonly Dictionary<ProjectId, AsyncLazy<(SolutionCompilationStateChecksums checksums, ProjectCone projectCone)>> _lazyProjectChecksums = [];
+    private readonly Dictionary<ProjectId, AsyncLazy<(SolutionCompilationStateChecksums checksums, ProjectCone projectCone)>> _lazyProjectChecksums = new();
 
     public bool TryGetStateChecksums([NotNullWhen(true)] out SolutionCompilationStateChecksums? stateChecksums)
         => _lazyChecksums.TryGetValue(out stateChecksums);

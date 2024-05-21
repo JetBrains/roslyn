@@ -38,7 +38,7 @@ internal sealed class CSharpAddImportsService : AbstractAddImportsService<
 
     // C# doesn't have global imports.
     protected override ImmutableArray<SyntaxNode> GetGlobalImports(Compilation compilation, SyntaxGenerator generator)
-        => [];
+        => new();
 
     protected override SyntaxNode? GetAlias(UsingDirectiveSyntax usingOrAlias)
         => usingOrAlias.Alias;

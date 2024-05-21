@@ -503,7 +503,7 @@ internal class CSharpGenerateTypeService :
             return GetTypeParameters(state, semanticModel, typeArguments, cancellationToken);
         }
 
-        return [];
+        return new();
     }
 
     protected override bool TryGetArgumentList(ObjectCreationExpressionSyntax objectCreationExpression, out IList<ArgumentSyntax> argumentList)
@@ -812,7 +812,7 @@ internal class CSharpGenerateTypeService :
         SimpleNameSyntax propertyName, ITypeSymbol propertyType)
     {
         return CodeGenerationSymbolFactory.CreatePropertySymbol(
-            attributes: [],
+            attributes: new(),
             accessibility: Accessibility.Public,
             modifiers: new DeclarationModifiers(),
             explicitInterfaceImplementations: default,

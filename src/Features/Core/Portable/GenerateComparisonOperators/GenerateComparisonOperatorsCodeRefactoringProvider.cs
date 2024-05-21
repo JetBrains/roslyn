@@ -28,12 +28,11 @@ internal class GenerateComparisonOperatorsCodeRefactoringProvider : CodeRefactor
     private const string RightName = "right";
 
     private static readonly ImmutableArray<CodeGenerationOperatorKind> s_operatorKinds =
-        [
+        ImmutableArray.Create(
             CodeGenerationOperatorKind.LessThan,
             CodeGenerationOperatorKind.LessThanOrEqual,
             CodeGenerationOperatorKind.GreaterThan,
-            CodeGenerationOperatorKind.GreaterThanOrEqual,
-        ];
+            CodeGenerationOperatorKind.GreaterThanOrEqual);
 
     [ImportingConstructor]
     [SuppressMessage("RoslynDiagnosticsReliability", "RS0033:Importing constructor should be [Obsolete]", Justification = "Used in test code: https://github.com/dotnet/roslyn/issues/42814")]
@@ -201,7 +200,7 @@ internal class GenerateComparisonOperatorsCodeRefactoringProvider : CodeRefactor
                     boolType,
                     kind,
                     parameters,
-                    [GenerateStatement(generator, kind, thisExpression)]));
+                    ImmutableArray.Create(GenerateStatement(generator, kind, thisExpression))));
             }
         }
 

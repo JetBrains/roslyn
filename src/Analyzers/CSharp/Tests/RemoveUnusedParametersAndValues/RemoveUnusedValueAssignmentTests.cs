@@ -9986,7 +9986,7 @@ class C
                 {
                     void M(string[] ss)
                     {
-                        if (ss is [[] {|IDE0059:str|}])
+                        if (ss is [new() {|IDE0059:str|}])
                         {
 
                         }
@@ -9999,7 +9999,7 @@ class C
                 {
                     void M(string[] ss)
                     {
-                        if (ss is [[]])
+                        if (ss is [new()])
                         {
 
                         }
@@ -10028,7 +10028,7 @@ class C
                 {
                     void M(string[] ss)
                     {
-                        if (ss is [[] {|IDE0059:str|}] {|IDE0059:strings|})
+                        if (ss is [new() {|IDE0059:str|}] {|IDE0059:strings|})
                         {
 
                         }
@@ -10041,7 +10041,7 @@ class C
                 {
                     void M(string[] ss)
                     {
-                        if (ss is [[]])
+                        if (ss is [new()])
                         {
 
                         }

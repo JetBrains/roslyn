@@ -47,13 +47,13 @@ internal static partial class ITypeSymbolExtensions
         // TODO(cyrusn): Implement this using the actual code for
         // TypeSymbol.FindImplementationForInterfaceMember
         if (typeSymbol == null || interfaceMember == null)
-            return [];
+            return new();
 
         if (interfaceMember.Kind is not SymbolKind.Event and
             not SymbolKind.Method and
             not SymbolKind.Property)
         {
-            return [];
+            return new();
         }
 
         // WorkItem(4843)
@@ -77,7 +77,7 @@ internal static partial class ITypeSymbolExtensions
         // that.  in this case, that means only classes C or B.
         var interfaceType = interfaceMember.ContainingType;
         if (!typeSymbol.ImplementsIgnoringConstruction(interfaceType))
-            return [];
+            return new();
 
         // We've ascertained that the type T implements some constructed type of the form I<X>.
         // However, we're not precisely sure which constructions of I<X> are being used.  For

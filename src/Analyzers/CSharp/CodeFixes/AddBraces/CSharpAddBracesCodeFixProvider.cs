@@ -25,7 +25,7 @@ internal sealed class CSharpAddBracesCodeFixProvider : SyntaxEditorBasedCodeFixP
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.AddBracesDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.AddBracesDiagnosticId);
 
     public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

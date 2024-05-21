@@ -25,7 +25,7 @@ internal abstract class AbstractForEachCastCodeFixProvider<TForEachStatementSynt
     protected abstract ITypeSymbol GetForEachElementType(SemanticModel semanticModel, TForEachStatementSyntax forEachStatement);
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.ForEachCastDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.ForEachCastDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

@@ -34,9 +34,9 @@ internal sealed partial class TopLevelSyntaxTreeIndex
         /// 
         /// For complex types, the receiver type name is "".
         /// 
-        /// For any kind of array types, it's "{element's receiver type name}[]".
+        /// For any kind of array types, it's "{element's receiver type name}new()".
         /// e.g. 
-        /// int[][,] => "Int32[]"
+        /// int[][,] => "Int32new()"
         /// T (where T is a type parameter) => ""
         /// T[,] (where T is a type parameter) => "T[]"
         /// </summary>

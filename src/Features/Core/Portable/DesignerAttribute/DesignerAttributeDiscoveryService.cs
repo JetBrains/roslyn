@@ -45,7 +45,7 @@ internal sealed partial class DesignerAttributeDiscoveryService() : IDesignerAtt
     /// Keep track of the last information we reported.  We will avoid notifying the host if we recompute and these
     /// don't change.
     /// </summary>
-    private readonly ConcurrentDictionary<DocumentId, (string? category, VersionStamp projectVersion)> _documentToLastReportedInformation = [];
+    private readonly ConcurrentDictionary<DocumentId, (string? category, VersionStamp projectVersion)> _documentToLastReportedInformation = new();
 
     private static async ValueTask<bool> HasDesignerCategoryTypeAsync(Project project, CancellationToken cancellationToken)
     {

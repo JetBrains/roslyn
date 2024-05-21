@@ -4,10 +4,12 @@
 
 #nullable disable
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.Editing;
 using Microsoft.CodeAnalysis.LanguageService;
 using Microsoft.CodeAnalysis.Shared.Extensions;
@@ -55,8 +57,8 @@ internal abstract partial class AbstractMoveTypeService<TService, TTypeDeclarati
             var syntaxGenerator = editor.Generator;
             var index = childNodes.IndexOf(typeToMove);
 
-            var itemsBefore = index > 0 ? childNodes.Take(index) : [];
-            var itemsAfter = index < childNodes.Count - 1 ? childNodes.Skip(index + 1) : [];
+            var itemsBefore = index > 0 ? childNodes.Take(index) : Array.Empty<SyntaxNode>();
+            var itemsAfter = index < childNodes.Count - 1 ? childNodes.Skip(index + 1) : Array.Empty<SyntaxNode>();
 
             var name = syntaxFactsService.GetDisplayName(namespaceDeclaration, DisplayNameOptions.IncludeNamespaces);
             var newNamespaceDeclaration = syntaxGenerator.NamespaceDeclaration(name, WithElasticTrivia(typeToMove)).WithAdditionalAnnotations(NamespaceScopeMovedAnnotation);

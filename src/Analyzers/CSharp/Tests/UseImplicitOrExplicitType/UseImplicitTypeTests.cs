@@ -1926,7 +1926,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.UseImplicit
                 {
                     static void M()
                     {
-                        [|C[]|] n1 = new[] { new C() }; // type not apparent and not intrinsic
+                        [|Cnew()|] n1 = new[] { new C() }; // type not apparent and not intrinsic
                     }
                 }
                 """;
@@ -1971,7 +1971,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.UseImplicit
         [Fact, WorkItem("https://github.com/dotnet/roslyn/issues/23893")]
         public async Task SuggestVarOnLocalWithCustomArrayType()
         {
-            var before = @"class C { static void M() { [|C[]|] s = new C[0]; } }";
+            var before = @"class C { static void M() { [|Cnew()|] s = new C[0]; } }";
             var after = @"class C { static void M() { var s = new C[0]; } }";
 
             //The type is not intrinsic but apparent
@@ -1983,7 +1983,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.UseImplicit
         [Fact, WorkItem("https://github.com/dotnet/roslyn/issues/23893")]
         public async Task SuggestVarOnLocalWithNonApparentCustomArrayType()
         {
-            var before = @"class C { static void M() { [|C[]|] s = new[] { new C() }; } }";
+            var before = @"class C { static void M() { [|Cnew()|] s = new[] { new C() }; } }";
             var after = @"class C { static void M() { var s = new[] { new C() }; } }";
 
             //The type is not intrinsic and not apparent

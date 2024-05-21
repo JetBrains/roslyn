@@ -57,7 +57,7 @@ internal abstract class AbstractRemoveUnusedMembersDiagnosticAnalyzer<
         hasAnyCodeStyleOption: false, isUnnecessary: true);
 
     protected AbstractRemoveUnusedMembersDiagnosticAnalyzer()
-        : base([s_removeUnusedMembersRule, s_removeUnreadMembersRule],
+        : base(ImmutableArray.Create(s_removeUnusedMembersRule, s_removeUnreadMembersRule),
                GeneratedCodeAnalysisFlags.Analyze) // We want to analyze references in generated code, but not report unused members in generated code.
     {
     }
@@ -89,7 +89,7 @@ internal abstract class AbstractRemoveUnusedMembersDiagnosticAnalyzer<
         /// <summary>
         /// State map for candidate member symbols, with the value indicating how each symbol is used in executable code.
         /// </summary>
-        private readonly Dictionary<ISymbol, ValueUsageInfo> _symbolValueUsageStateMap = [];
+        private readonly Dictionary<ISymbol, ValueUsageInfo> _symbolValueUsageStateMap = new();
         /// <summary>
         /// List of properties that have a 'get' accessor usage, while the value itself is not used, e.g.:
         /// <code>
@@ -101,7 +101,7 @@ internal abstract class AbstractRemoveUnusedMembersDiagnosticAnalyzer<
         /// </code>
         /// Here, 'get' accessor is used in an increment operation, but the result of the increment operation isn't used and 'P' itself is not used anywhere else, so it can be safely removed
         /// </summary>
-        private readonly HashSet<IPropertySymbol> _propertiesWithShadowGetAccessorUsages = [];
+        private readonly HashSet<IPropertySymbol> _propertiesWithShadowGetAccessorUsages = new();
         private readonly INamedTypeSymbol? _taskType, _genericTaskType, _debuggerDisplayAttributeType, _structLayoutAttributeType;
         private readonly INamedTypeSymbol? _eventArgsType;
         private readonly INamedTypeSymbol? _iNotifyCompletionType;

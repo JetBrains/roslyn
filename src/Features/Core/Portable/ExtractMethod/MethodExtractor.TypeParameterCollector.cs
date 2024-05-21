@@ -14,7 +14,7 @@ internal abstract partial class MethodExtractor<TSelectionResult, TStatementSynt
 {
     protected class TypeParameterCollector : SymbolVisitor
     {
-        private readonly List<ITypeParameterSymbol> _typeParameters = [];
+        private readonly List<ITypeParameterSymbol> _typeParameters = new();
 
         public static IEnumerable<ITypeParameterSymbol> Collect(ITypeSymbol typeSymbol)
         {

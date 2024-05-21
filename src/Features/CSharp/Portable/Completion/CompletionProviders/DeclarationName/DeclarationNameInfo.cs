@@ -25,10 +25,10 @@ internal readonly struct NameDeclarationInfo(
     ISymbol? symbol = null)
 {
     private static readonly ImmutableArray<SymbolKindOrTypeKind> s_parameterSyntaxKind =
-        [new SymbolKindOrTypeKind(SymbolKind.Parameter)];
+        ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Parameter));
 
     private static readonly ImmutableArray<SymbolKindOrTypeKind> s_propertySyntaxKind =
-        [new SymbolKindOrTypeKind(SymbolKind.Property)];
+        ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Property));
 
     private readonly ImmutableArray<SymbolKindOrTypeKind> _possibleSymbolKinds = possibleSymbolKinds;
 
@@ -102,7 +102,7 @@ internal readonly struct NameDeclarationInfo(
             semanticModel,
             tupleElement => tupleElement.Type,
             _ => default(SyntaxTokenList),
-            _ => [new SymbolKindOrTypeKind(SymbolKind.Local)], cancellationToken);
+            _ => ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Local)), cancellationToken);
 
         return result.Type != null;
     }
@@ -124,7 +124,7 @@ internal readonly struct NameDeclarationInfo(
                 semanticModel,
                 GetNodeDenotingTheTypeOfTupleArgument,
                 _ => default(SyntaxTokenList),
-                _ => [new SymbolKindOrTypeKind(SymbolKind.Local)], cancellationToken);
+                _ => ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Local)), cancellationToken);
             return result.Type != null;
         }
 
@@ -151,7 +151,7 @@ internal readonly struct NameDeclarationInfo(
                         semanticModel, argument, allowUncertainCandidates: true, allowParams: false, cancellationToken);
 
                     result = new NameDeclarationInfo(
-                        [new SymbolKindOrTypeKind(SymbolKind.Local)],
+                        ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Local)),
                         Accessibility.NotApplicable,
                         type: type,
                         symbol: parameter);
@@ -172,7 +172,9 @@ internal readonly struct NameDeclarationInfo(
             token, semanticModel,
             e => e.Expression,
             _ => default,
-            _ => [new SymbolKindOrTypeKind(SymbolKind.Local), new SymbolKindOrTypeKind(MethodKind.LocalFunction)],
+            _ => ImmutableArray.Create(
+                    new SymbolKindOrTypeKind(SymbolKind.Local),
+                    new SymbolKindOrTypeKind(MethodKind.LocalFunction)),
             cancellationToken,
             out var expression);
 
@@ -345,7 +347,7 @@ internal readonly struct NameDeclarationInfo(
         // If we only have a type, this can still end up being a local function (depending on the modifiers).
         var possibleDeclarationComputer = token.IsKind(SyntaxKind.CommaToken)
             ? (Func<DeclarationModifiers, ImmutableArray<SymbolKindOrTypeKind>>)
-                (_ => [new SymbolKindOrTypeKind(SymbolKind.Local)])
+                (_ => ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Local)))
             : GetPossibleLocalDeclarations;
 
         result = IsFollowingTypeOrComma<VariableDeclarationSyntax>(token, semanticModel,
@@ -392,7 +394,7 @@ internal readonly struct NameDeclarationInfo(
             modifierGetter: v => v.Parent is UsingStatementSyntax or ForStatementSyntax
                 ? default(SyntaxTokenList)
                 : null, // Return null to bail out.
-            possibleDeclarationComputer: d => [new SymbolKindOrTypeKind(SymbolKind.Local)],
+            possibleDeclarationComputer: d => ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Local)),
             cancellationToken);
         return result.Type != null;
     }
@@ -408,7 +410,7 @@ internal readonly struct NameDeclarationInfo(
                 f is ForEachVariableStatementSyntax forEachVariableStatement ? forEachVariableStatement.Variable :
                 null, // Return null to bail out.
             modifierGetter: f => default,
-            possibleDeclarationComputer: d => [new SymbolKindOrTypeKind(SymbolKind.Local)],
+            possibleDeclarationComputer: d => ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Local)),
             cancellationToken);
         return result.Type != null;
     }
@@ -419,7 +421,7 @@ internal readonly struct NameDeclarationInfo(
             token.Parent.IsKind(SyntaxKind.TypeParameterList))
         {
             result = new NameDeclarationInfo(
-                [new SymbolKindOrTypeKind(SymbolKind.TypeParameter)],
+                ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.TypeParameter)),
                 Accessibility.NotApplicable);
 
             return true;
@@ -508,7 +510,7 @@ internal readonly struct NameDeclarationInfo(
     {
         if (modifiers.IsConst || modifiers.IsReadOnly)
         {
-            return [new SymbolKindOrTypeKind(SymbolKind.Field)];
+            return ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Field));
         }
 
         var possibleTypes = ImmutableArray.Create(
@@ -535,10 +537,12 @@ internal readonly struct NameDeclarationInfo(
     {
         return
             modifiers.IsConst
-                ? [new SymbolKindOrTypeKind(SymbolKind.Local)] :
+                ? ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Local)) :
             modifiers.IsAsync || modifiers.IsUnsafe
-                ? [new SymbolKindOrTypeKind(MethodKind.LocalFunction)] :
-            [new SymbolKindOrTypeKind(SymbolKind.Local), new SymbolKindOrTypeKind(MethodKind.LocalFunction)];
+                ? ImmutableArray.Create(new SymbolKindOrTypeKind(MethodKind.LocalFunction)) :
+                ImmutableArray.Create(
+            new SymbolKindOrTypeKind(SymbolKind.Local),
+                    new SymbolKindOrTypeKind(MethodKind.LocalFunction));
     }
 
     private static DeclarationModifiers GetDeclarationModifiers(SyntaxTokenList modifiers)

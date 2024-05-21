@@ -207,7 +207,7 @@ internal abstract partial class AbstractFindUsagesService
         else
         {
             // This is something boring like a regular method or type, so we'll just go there directly
-            return [symbol];
+            return ImmutableArray.Create(symbol);
         }
     }
 }

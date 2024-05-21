@@ -169,7 +169,7 @@ internal sealed class UseExpressionBodyForLambdaCodeRefactoringProvider : CodeRe
         var lambdaNode = await document.TryGetRelevantNodeAsync<LambdaExpressionSyntax>(span, cancellationToken).ConfigureAwait(false);
         if (lambdaNode == null)
         {
-            return [];
+            return new();
         }
 
         var root = await document.GetRequiredSyntaxRootAsync(cancellationToken).ConfigureAwait(false);

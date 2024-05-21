@@ -27,7 +27,7 @@ internal class CSharpAliasAmbiguousTypeCodeFixProvider : AbstractAliasAmbiguousT
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [CS0104];
+        => ImmutableArray.Create(CS0104);
 
     protected override string GetTextPreviewOfChange(string alias, ITypeSymbol typeSymbol)
         => $"using {alias} = {typeSymbol.ToNameDisplayString()};";

@@ -20,7 +20,7 @@ internal abstract class AbstractUseInferredMemberNameCodeFixProvider : SyntaxEdi
     protected abstract void LanguageSpecificRemoveSuggestedNode(SyntaxEditor editor, SyntaxNode node);
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; }
-        = [IDEDiagnosticIds.UseInferredMemberNameDiagnosticId];
+        = ImmutableArray.Create(IDEDiagnosticIds.UseInferredMemberNameDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

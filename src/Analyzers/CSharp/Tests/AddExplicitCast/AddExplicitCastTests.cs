@@ -1900,7 +1900,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
 
                 class Derived2 : Derived { }
 
-                void Goo(string s, Derived d, params Derived2[] list) { }
+                void Goo(string s, Derived d, params Derived2new() list) { }
 
                 void M()
                 {
@@ -1917,7 +1917,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
 
                 class Derived2 : Derived { }
 
-                void Goo(string s, Derived d, params Derived2[] list) { }
+                void Goo(string s, Derived d, params Derived2new() list) { }
 
                 void M()
                 {
@@ -1940,7 +1940,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
 
                 class Derived2 : Derived { }
 
-                void Goo(string s, Derived d, params Derived2[] list) { }
+                void Goo(string s, Derived d, params Derived2new() list) { }
 
                 void M()
                 {
@@ -1957,7 +1957,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
 
                 class Derived2 : Derived { }
 
-                void Goo(string s, Derived d, params Derived2[] list) { }
+                void Goo(string s, Derived d, params Derived2new() list) { }
 
                 void M()
                 {
@@ -2307,7 +2307,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
 
                 class Derived2 : Derived { }
 
-                void Goo(string s, Derived d, params Derived2[] d2list) { }
+                void Goo(string s, Derived d, params Derived2new() d2list) { }
 
                 void M()
                 {
@@ -2325,13 +2325,13 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
 
                 class Derived2 : Derived { }
 
-                void Goo(string s, Derived d, params Derived2[] d2list) { }
+                void Goo(string s, Derived d, params Derived2new() d2list) { }
 
                 void M()
                 {
                     Base b = new Base();
                     var dlist = new Derived[] {};
-                    Goo("", d: b, (Derived2[])dlist);
+                    Goo("", d: b, (Derived2new())dlist);
                 }
             }
             """);
@@ -2349,7 +2349,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
 
                 class Derived2 : Derived { }
 
-                void Goo(params Derived2[] d2list) { }
+                void Goo(params Derived2new() d2list) { }
 
                 void M()
                 {
@@ -2373,7 +2373,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.AddExplicit
 
                 class Derived2 : Derived { }
 
-                void Goo(params Derived2[] d2list) { }
+                void Goo(params Derived2new() d2list) { }
 
                 void M()
                 {

@@ -61,7 +61,8 @@ internal abstract class AbstractRemoveUnusedValuesCodeFixProvider<TExpressionSyn
     private static readonly SyntaxAnnotation s_existingLocalDeclarationWithoutInitializerAnnotation = new();
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.ExpressionValueIsUnusedDiagnosticId, IDEDiagnosticIds.ValueAssignedIsUnusedDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.ExpressionValueIsUnusedDiagnosticId,
+                                     IDEDiagnosticIds.ValueAssignedIsUnusedDiagnosticId);
 
     protected abstract ISyntaxFormatting GetSyntaxFormatting();
 

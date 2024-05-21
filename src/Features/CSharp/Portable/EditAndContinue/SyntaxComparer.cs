@@ -1367,7 +1367,7 @@ internal sealed class SyntaxComparer(
 
     private static void GetLocalNames(SyntaxToken syntaxToken, [NotNull] ref List<SyntaxToken>? result)
     {
-        result ??= [];
+        result ??= new();
         result.Add(syntaxToken);
     }
 
@@ -1607,7 +1607,7 @@ internal sealed class SyntaxComparer(
             newToken.Text, Math.Min(newToken.Text.Length, LongestCommonSubsequence.MaxSequenceLengthForDistanceCalculation));
 
     private static ImmutableArray<T> CreateArrayForDistanceCalculation<T>(IEnumerable<T>? enumerable)
-        => enumerable is null ? [] : enumerable.Take(LongestCommonSubsequence.MaxSequenceLengthForDistanceCalculation).ToImmutableArray();
+        => enumerable is null ? new() : enumerable.Take(LongestCommonSubsequence.MaxSequenceLengthForDistanceCalculation).ToImmutableArray();
 
     /// <summary>
     /// Calculates the distance between two sequences of syntax tokens, disregarding trivia. 

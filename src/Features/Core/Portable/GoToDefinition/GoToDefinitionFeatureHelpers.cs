@@ -64,7 +64,7 @@ internal static class GoToDefinitionFeatureHelpers
     {
         symbol = await TryGetPreferredSymbolAsync(solution, symbol, cancellationToken).ConfigureAwait(false);
         if (symbol is null)
-            return [];
+            return ImmutableArray.Create<DefinitionItem>();
 
         using var _ = ArrayBuilder<DefinitionItem>.GetInstance(out var definitions);
 

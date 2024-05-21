@@ -44,7 +44,7 @@ internal readonly struct StructuralTypeDisplayInfo
         out List<SymbolDisplayPart> newParts)
     {
         var changed = false;
-        newParts = [];
+        newParts = new();
 
         foreach (var part in parts)
         {

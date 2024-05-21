@@ -59,5 +59,5 @@ internal class CodeGenerationEventSymbol(
 
     public IEventSymbol? OverriddenEvent => null;
 
-    public static ImmutableArray<CustomModifier> TypeCustomModifiers => [];
+    public static ImmutableArray<CustomModifier> TypeCustomModifiers => ImmutableArray.Create<CustomModifier>();
 }

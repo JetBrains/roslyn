@@ -63,7 +63,7 @@ internal abstract partial class AbstractImplementInterfaceService
                 updatedProperty,
                 accessibility: accessibility,
                 modifiers: modifiers,
-                explicitInterfaceImplementations: useExplicitInterfaceSymbol ? [property] : default,
+                explicitInterfaceImplementations: useExplicitInterfaceSymbol ? ImmutableArray.Create(property) : default,
                 name: memberName,
                 getMethod: getAccessor,
                 setMethod: setAccessor);
@@ -109,7 +109,7 @@ internal abstract partial class AbstractImplementInterfaceService
                 setMethod,
                 attributes: default,
                 accessibility: accessibility,
-                explicitInterfaceImplementations: useExplicitInterfaceSymbol ? [property.SetMethod] : default,
+                explicitInterfaceImplementations: useExplicitInterfaceSymbol ? ImmutableArray.Create(property.SetMethod) : default,
                 statements: GetSetAccessorStatements(
                     compilation, property, generateAbstractly, propertyGenerationBehavior));
         }
@@ -136,7 +136,7 @@ internal abstract partial class AbstractImplementInterfaceService
                 getMethod,
                 attributes: default,
                 accessibility: accessibility,
-                explicitInterfaceImplementations: useExplicitInterfaceSymbol ? [property.GetMethod] : default,
+                explicitInterfaceImplementations: useExplicitInterfaceSymbol ? ImmutableArray.Create(property.GetMethod) : default,
                 statements: GetGetAccessorStatements(
                     compilation, property, generateAbstractly, propertyGenerationBehavior));
         }

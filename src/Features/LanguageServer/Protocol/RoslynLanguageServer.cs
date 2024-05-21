@@ -97,7 +97,7 @@ namespace Microsoft.CodeAnalysis.LanguageServer
 
             void AddBaseServiceFromFunc<T>(Func<ILspServices, object> creatorFunc)
             {
-                var added = baseServices.GetValueOrDefault(typeof(T), []).Add(creatorFunc);
+                var added = baseServices.GetValueOrDefault(typeof(T), new()).Add(creatorFunc);
                 baseServices[typeof(T)] = added;
             }
         }

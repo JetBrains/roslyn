@@ -29,7 +29,7 @@ internal class ConvertToProgramMainCodeFixProvider : SyntaxEditorBasedCodeFixPro
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseProgramMainId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseProgramMainId);
 
     public override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

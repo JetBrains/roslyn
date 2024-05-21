@@ -30,7 +30,7 @@ internal partial class CSharpMethodExtractor
             {
                 Contract.ThrowIfFalse(this.SelectionResult.IsExtractMethodOnSingleStatement());
 
-                return [this.SelectionResult.GetFirstStatement()];
+                return ImmutableArray.Create(this.SelectionResult.GetFirstStatement());
             }
 
             protected override SyntaxNode GetFirstStatementOrInitializerSelectedAtCallSite()

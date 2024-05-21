@@ -66,7 +66,7 @@ internal abstract class AbstractBraceCompletionService : IBraceCompletionService
         // The caret location should be in between the braces.
         var originalOpeningLinePosition = context.Document.Text.Lines.GetLinePosition(context.OpeningPoint);
         var caretLocation = new LinePosition(originalOpeningLinePosition.Line, originalOpeningLinePosition.Character + 1);
-        return new BraceCompletionResult([braceTextEdit], caretLocation);
+        return new BraceCompletionResult(ImmutableArray.Create(braceTextEdit), caretLocation);
     }
 
     public virtual BraceCompletionResult? GetTextChangesAfterCompletion(BraceCompletionContext braceCompletionContext, IndentationOptions options, CancellationToken cancellationToken)

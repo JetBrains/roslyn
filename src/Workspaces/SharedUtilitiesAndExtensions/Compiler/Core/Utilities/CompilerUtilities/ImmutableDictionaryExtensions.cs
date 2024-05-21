@@ -20,7 +20,7 @@ internal static class ImmutableDictionaryExtensions
     {
         if (!map.TryGetValue(key, out var values))
         {
-            values = [];
+            values = ImmutableHashSet.Create<V>();
             return map.Add(key, values.Add(value));
         }
 

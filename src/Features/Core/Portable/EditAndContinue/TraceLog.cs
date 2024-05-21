@@ -105,7 +105,7 @@ internal sealed class TraceLog(int logSize, string id, string fileName)
         public readonly Arg[]? Args = args;
 
         internal string GetDebuggerDisplay()
-            => (MessageFormat == null) ? "" : string.Format(MessageFormat, Args?.Select(a => a.GetDebuggerDisplay()).ToArray() ?? []);
+            => (MessageFormat == null) ? "" : string.Format(MessageFormat, Args?.Select(a => a.GetDebuggerDisplay()).ToArray() ?? Array.Empty<object>());
     }
 
     internal sealed class FileLogger(string logDirectory, TraceLog traceLog)

@@ -260,7 +260,7 @@ internal abstract class AbstractChangeNamespaceService<TNamespaceDeclarationSynt
         solutionAfterImportsRemoved = await RemoveUnnecessaryImportsAsync(
             solutionAfterImportsRemoved,
             referenceDocuments.ToImmutableArray(),
-            [declaredNamespace, targetNamespace],
+            ImmutableArray.Create(declaredNamespace, targetNamespace),
             fallbackOptions,
             cancellationToken).ConfigureAwait(false);
 
@@ -610,7 +610,7 @@ internal abstract class AbstractChangeNamespaceService<TNamespaceDeclarationSynt
         {
             // If there's no reference to types declared in this document,
             // we will use root node as import container.
-            containersToAddImports = [await document.GetRequiredSyntaxRootAsync(cancellationToken).ConfigureAwait(false)];
+            containersToAddImports = ImmutableArray.Create(await document.GetRequiredSyntaxRootAsync(cancellationToken).ConfigureAwait(false));
         }
 
         Debug.Assert(containersToAddImports.Length > 0);
@@ -671,7 +671,7 @@ internal abstract class AbstractChangeNamespaceService<TNamespaceDeclarationSynt
             documentWithRefFixed,
             addImportService,
             containers,
-            [newNamespace],
+            ImmutableArray.Create(newNamespace),
             documentOptions.AddImportOptions,
             cancellationToken).ConfigureAwait(false);
 

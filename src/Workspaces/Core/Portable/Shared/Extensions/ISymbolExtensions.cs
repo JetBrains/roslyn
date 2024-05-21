@@ -379,7 +379,7 @@ internal static partial class ISymbolExtensions
             }
         }
 
-        visitedSymbols ??= [];
+        visitedSymbols ??= new();
         if (!visitedSymbols.Add(symbol))
         {
             // Prevent recursion
@@ -391,7 +391,7 @@ internal static partial class ISymbolExtensions
             var inheritedDocumentation = GetDocumentationComment(symbol, visitedSymbols, compilation, preferredCulture: null, expandIncludes: true, expandInheritdoc: true, cancellationToken);
             if (inheritedDocumentation == DocumentationComment.Empty)
             {
-                return [];
+                return Array.Empty<XNode>();
             }
 
             var document = XDocument.Parse(inheritedDocumentation.FullXmlFragment, LoadOptions.PreserveWhitespace);
@@ -452,11 +452,11 @@ internal static partial class ISymbolExtensions
             }
 
             var loadedElements = TrySelectNodes(document, xpathValue);
-            return loadedElements ?? [];
+            return loadedElements ?? Array.Empty<XNode>();
         }
         catch (XmlException)
         {
-            return [];
+            return Array.Empty<XNode>();
         }
         finally
         {

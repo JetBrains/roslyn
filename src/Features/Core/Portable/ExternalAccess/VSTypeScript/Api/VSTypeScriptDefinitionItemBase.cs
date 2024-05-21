@@ -15,7 +15,7 @@ internal abstract class VSTypeScriptDefinitionItemBase : DefinitionItem
         : base(
             tags,
             displayParts,
-            [],
+            new(),
             sourceSpans: default,
             metadataLocations: ImmutableArray<AssemblyLocation>.Empty,
             classifiedSpans: default,

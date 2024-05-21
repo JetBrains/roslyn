@@ -34,10 +34,10 @@ internal abstract partial class AbstractGenerateEnumMemberService<TService, TSim
             var state = await State.GenerateAsync((TService)this, semanticDocument, node, cancellationToken).ConfigureAwait(false);
             if (state == null)
             {
-                return [];
+                return new();
             }
 
-            return [new GenerateEnumMemberCodeAction(document, state, fallbackOptions)];
+            return ImmutableArray.Create<CodeAction>(new GenerateEnumMemberCodeAction(document, state, fallbackOptions));
         }
     }
 }

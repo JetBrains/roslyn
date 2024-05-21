@@ -365,7 +365,7 @@ internal abstract partial class AbstractConvertTupleToStructCodeRefactoringProvi
                 // If we were given specific nodes to update, only update those.  Otherwise
                 // updated everything from the root down.
                 var nodesToUpdate = documentToUpdate.NodesToUpdate.IsDefault
-                    ? [syntaxRoot]
+                    ? ImmutableArray.Create(syntaxRoot)
                     : documentToUpdate.NodesToUpdate;
 
                 var editor = new SyntaxEditor(syntaxRoot, generator);
@@ -538,7 +538,7 @@ internal abstract partial class AbstractConvertTupleToStructCodeRefactoringProvi
         Contract.ThrowIfNull(containingMember,
             "We should always get a containing member since we already checked for that to support Scope.ContainingMember.");
 
-        return [new DocumentToUpdate(document, [containingMember])];
+        return ImmutableArray.Create(new DocumentToUpdate(document, ImmutableArray.Create(containingMember)));
     }
 
     private static async Task GenerateStructIntoContainingNamespaceAsync(
@@ -889,12 +889,12 @@ internal abstract partial class AbstractConvertTupleToStructCodeRefactoringProvi
             tupleType,
             CodeGenerationSymbolFactory.CreateParameterSymbol(structType, ValueName),
             isImplicit: true,
-            statements: [convertToTupleStatement]));
+            statements: ImmutableArray.Create(convertToTupleStatement)));
         members.Add(CodeGenerationSymbolFactory.CreateConversionSymbol(
             structType,
             CodeGenerationSymbolFactory.CreateParameterSymbol(tupleType, ValueName),
             isImplicit: true,
-            statements: [convertToStructStatement]));
+            statements: ImmutableArray.Create(convertToStructStatement)));
     }
 
     private static INamedTypeSymbol CreateNamedType(

@@ -448,7 +448,7 @@ internal static class ConvertToRecordEngine
             // but then decide that we want to keep the definition, then the attribute can stay on the original
             // definition, and our primary constructor param can associate that attribute when we add:
             // public int Foo { get; private set; } = Foo;
-            return [];
+            return new();
         }
 
         return [.. result.Declaration.AttributeLists.SelectAsArray(attributeList =>
@@ -582,7 +582,7 @@ internal static class ConvertToRecordEngine
             {
                 if (result.IsInherited)
                 {
-                    return [];
+                    return Array.Empty<SyntaxTrivia>();
                 }
 
                 var p = result.Declaration;

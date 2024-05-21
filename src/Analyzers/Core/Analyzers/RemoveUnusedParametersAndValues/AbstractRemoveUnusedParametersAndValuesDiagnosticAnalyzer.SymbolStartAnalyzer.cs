@@ -35,7 +35,7 @@ internal abstract partial class AbstractRemoveUnusedParametersAndValuesDiagnosti
         private readonly INamedTypeSymbol _eventArgsTypeOpt = eventArgsTypeOpt;
         private readonly ImmutableHashSet<INamedTypeSymbol> _attributeSetForMethodsToIgnore = attributeSetForMethodsToIgnore;
         private readonly DeserializationConstructorCheck _deserializationConstructorCheck = deserializationConstructorCheck;
-        private readonly ConcurrentDictionary<IMethodSymbol, bool> _methodsUsedAsDelegates = [];
+        private readonly ConcurrentDictionary<IMethodSymbol, bool> _methodsUsedAsDelegates = new();
         private readonly INamedTypeSymbol _iCustomMarshaler = iCustomMarshaler;
         private readonly SymbolStartAnalysisContext _symbolStartAnalysisContext = symbolStartAnalysisContext;
 
@@ -44,7 +44,7 @@ internal abstract partial class AbstractRemoveUnusedParametersAndValuesDiagnosti
         /// For example, a parameter whose initial value is overwritten before any reads
         /// is an unused parameter with read reference(s).
         /// </summary>
-        private readonly ConcurrentDictionary<IParameterSymbol, bool> _unusedParameters = [];
+        private readonly ConcurrentDictionary<IParameterSymbol, bool> _unusedParameters = new();
 
         public static void CreateAndRegisterActions(
             CompilationStartAnalysisContext context,

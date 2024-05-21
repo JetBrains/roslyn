@@ -228,7 +228,7 @@ internal static class SerializableBytes
         {
             if (this.Length == 0)
             {
-                return [];
+                return Array.Empty<byte>();
             }
 
             var array = new byte[this.Length];

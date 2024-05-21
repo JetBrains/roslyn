@@ -45,13 +45,13 @@ internal abstract class AbstractInlineParameterNameHintsService : IInlineParamet
     {
         var enabledForParameters = displayAllOverride || options.EnabledForParameters;
         if (!enabledForParameters)
-            return [];
+            return new();
 
         var literalParameters = displayAllOverride || options.ForLiteralParameters;
         var objectCreationParameters = displayAllOverride || options.ForObjectCreationParameters;
         var otherParameters = displayAllOverride || options.ForOtherParameters;
         if (!literalParameters && !objectCreationParameters && !otherParameters)
-            return [];
+            return new();
 
         var indexerParameters = displayAllOverride || options.ForIndexerParameters;
         var suppressForParametersThatDifferOnlyBySuffix = !displayAllOverride && options.SuppressForParametersThatDifferOnlyBySuffix;
@@ -111,7 +111,7 @@ internal abstract class AbstractInlineParameterNameHintsService : IInlineParamet
 
                     result.Add(new InlineHint(
                         textSpan,
-                        [new TaggedText(TextTags.Text, parameter.Name + ": ")],
+                        ImmutableArray.Create(new TaggedText(TextTags.Text, parameter.Name + ": ")),
                         replacementTextChange,
                         ranking: InlineHintsConstants.ParameterRanking,
                         InlineHintHelpers.GetDescriptionFunction(position, parameter.GetSymbolKey(cancellationToken: cancellationToken), displayOptions)));

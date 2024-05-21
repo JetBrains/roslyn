@@ -113,7 +113,7 @@ internal abstract class AbstractSyncNamespacesService<TSyntaxKind, TNamespaceSyn
         var context = new CodeFixContext(
             document,
             firstDiagnostic.Location.SourceSpan,
-            [firstDiagnostic],
+            ImmutableArray.Create(firstDiagnostic),
             (a, _) => action ??= a,
             options,
             cancellationToken);

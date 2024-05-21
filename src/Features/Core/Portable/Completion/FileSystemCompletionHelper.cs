@@ -53,7 +53,7 @@ internal class FileSystemCompletionHelper
 
     // virtual for testing
     protected virtual string[] GetLogicalDrives()
-        => IOUtilities.PerformIO(Directory.GetLogicalDrives, []);
+        => IOUtilities.PerformIO(Directory.GetLogicalDrives, Array.Empty<string>());
 
     // virtual for testing
     protected virtual bool DirectoryExists(string fullPath)
@@ -66,14 +66,14 @@ internal class FileSystemCompletionHelper
     protected virtual IEnumerable<string> EnumerateDirectories(string fullDirectoryPath)
     {
         Debug.Assert(PathUtilities.IsAbsolute(fullDirectoryPath));
-        return IOUtilities.PerformIO(() => Directory.EnumerateDirectories(fullDirectoryPath), []);
+        return IOUtilities.PerformIO(() => Directory.EnumerateDirectories(fullDirectoryPath), Array.Empty<string>());
     }
 
     // virtual for testing
     protected virtual IEnumerable<string> EnumerateFiles(string fullDirectoryPath)
     {
         Debug.Assert(PathUtilities.IsAbsolute(fullDirectoryPath));
-        return IOUtilities.PerformIO(() => Directory.EnumerateFiles(fullDirectoryPath), []);
+        return IOUtilities.PerformIO(() => Directory.EnumerateFiles(fullDirectoryPath), Array.Empty<string>());
     }
 
     // virtual for testing
@@ -123,7 +123,7 @@ internal class FileSystemCompletionHelper
         if (!PathUtilities.IsUnixLikePlatform && directoryPath == "\\")
         {
             // The user has typed only "\".  In this case, we want to add "\\" to the list.  
-            return [CreateNetworkRoot()];
+            return ImmutableArray.Create(CreateNetworkRoot());
         }
 
         var result = ArrayBuilder<CompletionItem>.GetInstance();

@@ -52,7 +52,7 @@ internal class CSharpUsePatternCombinatorsCodeFixProvider : SyntaxEditorBasedCod
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UsePatternCombinatorsDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UsePatternCombinatorsDiagnosticId);
 
     protected override bool IncludeDiagnosticDuringFixAll(
         Diagnostic diagnostic, Document document, string? equivalenceKey, CancellationToken cancellationToken)

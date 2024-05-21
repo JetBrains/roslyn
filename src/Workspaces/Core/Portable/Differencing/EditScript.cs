@@ -185,7 +185,7 @@ public sealed partial class EditScript<TNode>
         {
             if (_match.TryGetPartnerInTree2(e, out var pw) && Comparer.GetParent(pw).Equals(x))
             {
-                s1 ??= [];
+                s1 ??= new();
 
                 s1.Add(e);
             }
@@ -196,7 +196,7 @@ public sealed partial class EditScript<TNode>
         {
             if (_match.TryGetPartnerInTree1(e, out var px) && Comparer.GetParent(px).Equals(w))
             {
-                s2 ??= [];
+                s2 ??= new();
 
                 s2.Add(e);
             }

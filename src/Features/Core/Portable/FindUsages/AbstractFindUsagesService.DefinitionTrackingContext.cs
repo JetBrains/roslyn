@@ -28,7 +28,7 @@ internal abstract partial class AbstractFindUsagesService
     {
         private readonly IFindUsagesContext _underlyingContext = underlyingContext;
         private readonly object _gate = new();
-        private readonly List<DefinitionItem> _definitions = [];
+        private readonly List<DefinitionItem> _definitions = new();
 
         public IStreamingProgressTracker ProgressTracker
             => _underlyingContext.ProgressTracker;

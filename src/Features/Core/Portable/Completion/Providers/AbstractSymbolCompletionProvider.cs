@@ -368,7 +368,7 @@ internal abstract partial class AbstractSymbolCompletionProvider<TSyntaxContext>
         {
             var symbolsMissingInLinkedContext = symbolToContext.Keys.Except(symbols);
             foreach (var (symbol, _) in symbolsMissingInLinkedContext)
-                missingSymbols.GetOrAdd(symbol, m => []).Add(documentId.ProjectId);
+                missingSymbols.GetOrAdd(symbol, m => new()).Add(documentId.ProjectId);
         }
 
         return missingSymbols;

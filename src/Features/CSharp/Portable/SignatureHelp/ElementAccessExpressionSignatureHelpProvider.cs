@@ -203,7 +203,7 @@ internal sealed class ElementAccessExpressionSignatureHelpProvider : AbstractCSh
 
         if (expressionType == null)
         {
-            indexers = [];
+            indexers = new();
             return false;
         }
 

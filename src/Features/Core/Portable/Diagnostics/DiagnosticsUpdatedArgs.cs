@@ -48,6 +48,6 @@ internal sealed class DiagnosticsUpdatedArgs : UpdatedEventArgs
         ProjectId? projectId,
         DocumentId? documentId)
     {
-        return new DiagnosticsUpdatedArgs(id, solution, projectId, documentId, [], DiagnosticsUpdatedKind.DiagnosticsRemoved);
+        return new DiagnosticsUpdatedArgs(id, solution, projectId, documentId, new(), DiagnosticsUpdatedKind.DiagnosticsRemoved);
     }
 }

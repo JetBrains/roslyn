@@ -33,7 +33,7 @@ internal static partial class ClassifierHelper
         bool includeAdditiveSpans,
         CancellationToken cancellationToken)
     {
-        return await GetClassifiedSpansAsync(document, [span], options, includeAdditiveSpans, cancellationToken)
+        return await GetClassifiedSpansAsync(document, ImmutableArray.Create(span), options, includeAdditiveSpans, cancellationToken)
             .ConfigureAwait(false);
     }
 

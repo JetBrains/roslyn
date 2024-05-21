@@ -28,7 +28,7 @@ internal abstract partial class AbstractImplementInterfaceService
     // Parts of the name `disposedValue`.  Used so we can generate a field correctly with 
     // the naming style that the user has specified.
     private static readonly ImmutableArray<string> s_disposedValueNameParts =
-        ["disposed", "value"];
+        ImmutableArray.Create("disposed", "value");
 
     // C#: `Dispose(bool disposed)`.  VB: `Dispose(disposed As Boolean)`
     private static readonly SymbolDisplayFormat s_format = new(
@@ -139,7 +139,7 @@ internal abstract partial class AbstractImplementInterfaceService
                 unimplementedMembers.WhereAsArray(m => !m.type.Equals(disposeMethod.ContainingType)),
                 classType,
                 classDecl,
-                extraMembers: [disposedValueField],
+                extraMembers: ImmutableArray.Create<ISymbol>(disposedValueField),
                 cancellationToken).ConfigureAwait(false);
 
             // Next, add the Dispose pattern methods at the end of the type (we want to keep all
@@ -237,7 +237,7 @@ internal abstract partial class AbstractImplementInterfaceService
             // {
             //     // TODO: dispose managed state...
             // }
-            var ifDisposingStatement = g.IfStatement(g.IdentifierName(DisposingName), []);
+            var ifDisposingStatement = g.IfStatement(g.IdentifierName(DisposingName), Array.Empty<SyntaxNode>());
             ifDisposingStatement = Service.AddCommentInsideIfStatement(
                 ifDisposingStatement,
                 CreateCommentTrivia(g, FeaturesResources.TODO_colon_dispose_managed_state_managed_objects))
@@ -266,7 +266,7 @@ internal abstract partial class AbstractImplementInterfaceService
                     CodeGenerationSymbolFactory.CreateParameterSymbol(
                         compilation.GetSpecialType(SpecialType.System_Boolean),
                         DisposingName)),
-                statements: [ifStatement]);
+                statements: ImmutableArray.Create(ifStatement));
         }
 
         private IMethodSymbol CreateDisposeInterfaceMethod(

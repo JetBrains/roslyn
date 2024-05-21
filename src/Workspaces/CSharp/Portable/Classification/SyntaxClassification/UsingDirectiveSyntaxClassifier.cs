@@ -30,7 +30,7 @@ internal class UsingDirectiveSyntaxClassifier : AbstractSyntaxClassifier
         }
     }
 
-    public override ImmutableArray<Type> SyntaxNodeTypes { get; } = [typeof(UsingDirectiveSyntax)];
+    public override ImmutableArray<Type> SyntaxNodeTypes { get; } = ImmutableArray.Create(typeof(UsingDirectiveSyntax));
 
     private static void ClassifyUsingDirectiveSyntax(
         UsingDirectiveSyntax usingDirective,

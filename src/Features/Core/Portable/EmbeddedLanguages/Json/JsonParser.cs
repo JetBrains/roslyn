@@ -140,8 +140,8 @@ internal partial struct JsonParser
         var diagnostic = Earliest(Earliest(diagnostic1, diagnostic2), diagnostic3);
 
         return new JsonTree(_lexer.Text, root, diagnostic == null
-            ? []
-            : [diagnostic.Value]);
+            ? new()
+            : ImmutableArray.Create(diagnostic.Value));
     }
 
     private static EmbeddedDiagnostic? Earliest(EmbeddedDiagnostic? d1, EmbeddedDiagnostic? d2)
@@ -396,10 +396,10 @@ internal partial struct JsonParser
         minusToken = CreateToken(
             JsonKind.MinusToken, literalToken.LeadingTrivia,
             literalToken.VirtualChars.GetSubSequence(new TextSpan(0, 1)),
-            []);
+            new());
         newLiteralToken = CreateToken(
             literalToken.Kind,
-            [],
+            new(),
             literalToken.VirtualChars.GetSubSequence(TextSpan.FromBounds(1, literalToken.VirtualChars.Length)),
             literalToken.TrailingTrivia,
             literalToken.Diagnostics);

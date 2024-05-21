@@ -141,7 +141,7 @@ internal abstract class AbstractFileBannerFacts : IFileBannerFacts
         else
         {
             leadingTriviaToKeep = new List<SyntaxTrivia>(leadingTrivia);
-            leadingTriviaToStrip = [];
+            leadingTriviaToStrip = new();
         }
 
         // Now, consume as many banners as we can.  s_fileBannerMatcher will only be matched at

@@ -15,7 +15,7 @@ internal class FindReferencesDocumentState(
     FindReferenceCache cache,
     HashSet<string>? globalAliases)
 {
-    private static readonly HashSet<string> s_empty = [];
+    private static readonly HashSet<string> s_empty = new();
 
     public readonly Document Document = document;
     public readonly SemanticModel SemanticModel = semanticModel;

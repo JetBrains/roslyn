@@ -28,8 +28,8 @@ internal class AnnotationTable<TAnnotation>(string annotationKind) where TAnnota
 {
     private int _globalId;
 
-    private readonly Dictionary<TAnnotation, SyntaxAnnotation> _realAnnotationMap = [];
-    private readonly Dictionary<string, TAnnotation> _annotationMap = [];
+    private readonly Dictionary<TAnnotation, SyntaxAnnotation> _realAnnotationMap = new();
+    private readonly Dictionary<string, TAnnotation> _annotationMap = new();
 
     private IEnumerable<SyntaxAnnotation> GetOrCreateRealAnnotations(TAnnotation[] annotations)
     {

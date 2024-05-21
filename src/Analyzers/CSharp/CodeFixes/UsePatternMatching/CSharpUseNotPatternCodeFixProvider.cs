@@ -28,7 +28,7 @@ internal sealed class CSharpUseNotPatternCodeFixProvider : SyntaxEditorBasedCode
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseNotPatternDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseNotPatternDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

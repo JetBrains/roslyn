@@ -42,7 +42,7 @@ internal sealed class EditAndContinueService : IEditAndContinueService
     /// <summary>
     /// List of active debugging sessions (small number of simoultaneously active sessions is expected).
     /// </summary>
-    private readonly List<DebuggingSession> _debuggingSessions = [];
+    private readonly List<DebuggingSession> _debuggingSessions = new();
     private static int s_debuggingSessionId;
 
     [ImportingConstructor]

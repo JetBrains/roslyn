@@ -22,7 +22,7 @@ internal class UseExpressionBodyForConstructorsHelper :
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_expression_body_for_constructor), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_block_body_for_constructor), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                CSharpCodeStyleOptions.PreferExpressionBodiedConstructors,
-               [SyntaxKind.ConstructorDeclaration])
+               ImmutableArray.Create(SyntaxKind.ConstructorDeclaration))
     {
     }
 

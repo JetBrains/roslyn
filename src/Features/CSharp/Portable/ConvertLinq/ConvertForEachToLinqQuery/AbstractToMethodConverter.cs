@@ -47,7 +47,7 @@ internal abstract class AbstractToMethodConverter(
     public override void Convert(SyntaxEditor editor, bool convertToQuery, CancellationToken cancellationToken)
     {
         var queryOrLinqInvocationExpression = CreateQueryExpressionOrLinqInvocation(
-            _selectExpression, [], [], convertToQuery);
+            _selectExpression, Enumerable.Empty<SyntaxToken>(), Enumerable.Empty<SyntaxToken>(), convertToQuery);
 
         var previous = ForEachInfo.ForEachStatement.GetPreviousStatement();
 

@@ -278,7 +278,7 @@ internal abstract class AbstractTriviaFormatter
             return changes.ToImmutable();
         }
 
-        return [];
+        return new();
     }
 
     private LineColumn FormatTrivia<T>(Formatter<T> formatter, WhitespaceAppender<T> whitespaceAdder, ArrayBuilder<T> changes, CancellationToken cancellationToken)

@@ -54,7 +54,7 @@ internal abstract class CodeGenerationSymbol : ISymbol
     internal SyntaxAnnotation[] GetAnnotations()
     {
         annotationsTable.TryGetValue(this, out var annotations);
-        return annotations ?? [];
+        return annotations ?? Array.Empty<SyntaxAnnotation>();
     }
 
     internal CodeGenerationSymbol WithAdditionalAnnotations(params SyntaxAnnotation[] annotations)
@@ -141,7 +141,7 @@ internal abstract class CodeGenerationSymbol : ISymbol
     {
         get
         {
-            return [];
+            return ImmutableArray.Create<Location>();
         }
     }
 
@@ -149,7 +149,7 @@ internal abstract class CodeGenerationSymbol : ISymbol
     {
         get
         {
-            return [];
+            return ImmutableArray.Create<SyntaxNode>();
         }
     }
 
@@ -157,7 +157,7 @@ internal abstract class CodeGenerationSymbol : ISymbol
     {
         get
         {
-            return [];
+            return ImmutableArray.Create<SyntaxReference>();
         }
     }
 

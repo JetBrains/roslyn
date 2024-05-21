@@ -33,7 +33,7 @@ public static partial class Renamer
         private readonly CodeCleanupOptionsProvider _fallbackOptions;
 
         private SyncNamespaceDocumentAction(AnalysisResult analysis, CodeCleanupOptionsProvider fallbackOptions)
-            : base([])
+            : base(new())
         {
             _analysis = analysis;
             _fallbackOptions = fallbackOptions;

@@ -201,7 +201,7 @@ internal abstract partial class AbstractSuppressionCodeFixProvider : IConfigurat
 
             if (!diagnosticsMapBuilder.TryGetValue(targetSymbol, out var diagnosticsForSymbol))
             {
-                diagnosticsForSymbol = [];
+                diagnosticsForSymbol = new();
                 diagnosticsMapBuilder.Add(targetSymbol, diagnosticsForSymbol);
             }
 

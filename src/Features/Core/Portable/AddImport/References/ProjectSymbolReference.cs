@@ -36,7 +36,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
         protected override ImmutableArray<string> GetTags(Document document)
         {
             return document.Project.Id == _project.Id
-                ? []
+                ? new()
                 : _project.Language == LanguageNames.CSharp
                     ? WellKnownTagArrays.CSharpProject
                     : _project.Language == LanguageNames.VisualBasic

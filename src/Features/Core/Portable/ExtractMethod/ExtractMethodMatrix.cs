@@ -16,7 +16,7 @@ internal class ExtractMethodMatrix
 
     static ExtractMethodMatrix()
     {
-        s_matrix = [];
+        s_matrix = new();
         BuildMatrix();
     }
 

@@ -604,7 +604,7 @@ internal static partial class SymbolUsageAnalysis
                     return true;
                 }
 
-                targets = [];
+                targets = ImmutableHashSet<IOperation>.Empty;
                 return false;
             }
 

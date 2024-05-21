@@ -31,7 +31,7 @@ internal class GenerateEnumMemberCodeFixProvider : AbstractGenerateMemberCodeFix
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [CS0117, CS1061];
+        ImmutableArray.Create(CS0117, CS1061);
 
     protected override Task<ImmutableArray<CodeAction>> GetCodeActionsAsync(Document document, SyntaxNode node, CleanCodeGenerationOptionsProvider fallbackOptions, CancellationToken cancellationToken)
     {

@@ -100,7 +100,7 @@ internal struct RegexLexer
     {
         if (!allowTrivia)
         {
-            return [];
+            return new();
         }
 
         using var _ = ArrayBuilder<RegexTrivia>.GetInstance(out var result);
@@ -244,7 +244,7 @@ internal struct RegexLexer
             return null;
         }
 
-        var token = CreateToken(RegexKind.EscapeCategoryToken, [], GetSubPatternToCurrentPos(start));
+        var token = CreateToken(RegexKind.EscapeCategoryToken, new(), GetSubPatternToCurrentPos(start));
         var category = token.VirtualChars.CreateString();
 
         if (!RegexCharClass.IsEscapeCategory(category))
@@ -297,7 +297,7 @@ internal struct RegexLexer
             return null;
         }
 
-        var token = CreateToken(RegexKind.NumberToken, [], GetSubPatternToCurrentPos(start));
+        var token = CreateToken(RegexKind.NumberToken, new(), GetSubPatternToCurrentPos(start));
         token = token.With(value: value);
 
         if (error)
@@ -328,7 +328,7 @@ internal struct RegexLexer
             return null;
         }
 
-        var token = CreateToken(RegexKind.CaptureNameToken, [], GetSubPatternToCurrentPos(start));
+        var token = CreateToken(RegexKind.CaptureNameToken, new(), GetSubPatternToCurrentPos(start));
         token = token.With(value: token.VirtualChars.CreateString());
         return token;
     }
@@ -389,7 +389,7 @@ internal struct RegexLexer
         }
 
         var result = CreateToken(
-            RegexKind.TextToken, [], GetSubPatternToCurrentPos(start));
+            RegexKind.TextToken, new(), GetSubPatternToCurrentPos(start));
 
         var length = Position - start;
         if (length != count)
@@ -450,7 +450,7 @@ internal struct RegexLexer
         Debug.Assert(Position - start > 0);
 
         var result = CreateToken(
-            RegexKind.TextToken, [], GetSubPatternToCurrentPos(start));
+            RegexKind.TextToken, new(), GetSubPatternToCurrentPos(start));
 
         return result;
     }

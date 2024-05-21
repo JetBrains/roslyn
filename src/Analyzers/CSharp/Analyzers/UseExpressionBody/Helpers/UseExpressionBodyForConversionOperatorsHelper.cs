@@ -22,7 +22,7 @@ internal class UseExpressionBodyForConversionOperatorsHelper :
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_expression_body_for_conversion_operator), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_block_body_for_conversion_operator), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                CSharpCodeStyleOptions.PreferExpressionBodiedOperators,
-               [SyntaxKind.ConversionOperatorDeclaration])
+               ImmutableArray.Create(SyntaxKind.ConversionOperatorDeclaration))
     {
     }
 

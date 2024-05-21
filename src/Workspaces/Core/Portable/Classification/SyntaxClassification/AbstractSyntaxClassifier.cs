@@ -28,8 +28,8 @@ internal abstract class AbstractSyntaxClassifier : ISyntaxClassifier
     }
 
     public virtual ImmutableArray<Type> SyntaxNodeTypes
-        => [];
+        => new();
 
     public virtual ImmutableArray<int> SyntaxTokenKinds
-        => [];
+        => new();
 }

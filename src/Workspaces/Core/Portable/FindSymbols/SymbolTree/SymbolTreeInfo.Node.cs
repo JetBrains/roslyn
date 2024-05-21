@@ -75,7 +75,7 @@ internal partial class SymbolTreeInfo
         /// Indicate if the type of parameter is any kind of array.
         /// This is relevant for both simple and complex types. For example:
         /// - array of simple type like int[], int[][], int[][,], etc. are all ultimately represented as "int[]" in index.
-        /// - array of complex type like T[], T[][], etc are all represented as "[]" in index, 
+        /// - array of complex type like T[], T[][], etc are all represented as "new()" in index, 
         ///   in contrast to just "" for non-array types.
         /// </summary>
         public readonly bool IsArray = isArray;

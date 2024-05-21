@@ -16,6 +16,6 @@ internal abstract class AbstractSingleChangeSnippetProvider : AbstractSnippetPro
     protected sealed override async Task<ImmutableArray<TextChange>> GenerateSnippetTextChangesAsync(Document document, int position, CancellationToken cancellationToken)
     {
         var change = await GenerateSnippetTextChangeAsync(document, position, cancellationToken).ConfigureAwait(false);
-        return [change];
+        return ImmutableArray.Create(change);
     }
 }

@@ -39,11 +39,11 @@ internal static class DiagnosticDataExtensions
                 using var stream = new MemoryStream(Encoding.UTF8.GetBytes(indicesProperty));
                 var serializer = new DataContractJsonSerializer(typeof(IEnumerable<int>));
                 var result = serializer.ReadObject(stream) as IEnumerable<int>;
-                return result ?? [];
+                return result ?? Array.Empty<int>();
             }
             catch (Exception e) when (FatalError.ReportAndCatch(e))
             {
-                return [];
+                return Array.Empty<int>();
             }
         }
     }

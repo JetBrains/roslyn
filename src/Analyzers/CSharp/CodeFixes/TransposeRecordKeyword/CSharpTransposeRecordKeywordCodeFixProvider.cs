@@ -30,7 +30,7 @@ internal class CSharpTransposeRecordKeywordCodeFixProvider : SyntaxEditorBasedCo
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [CS9012];
+        => ImmutableArray.Create(CS9012);
 
     private static bool TryGetRecordDeclaration(
         Diagnostic diagnostic, CancellationToken cancellationToken, [NotNullWhen(true)] out RecordDeclarationSyntax? recordDeclaration)

@@ -62,13 +62,13 @@ public partial class ProjectDependencyGraph
     ///    has been calculated, forks of this PDG will calculate their new reverse references in a non-lazy fashion.
     /// </remarks>
     internal static readonly ProjectDependencyGraph Empty = new(
-        [],
+        ImmutableHashSet<ProjectId>.Empty, 
         ImmutableDictionary<ProjectId, ImmutableHashSet<ProjectId>>.Empty,
         reverseReferencesMap: null,
         ImmutableDictionary<ProjectId, ImmutableHashSet<ProjectId>>.Empty,
         ImmutableDictionary<ProjectId, ImmutableHashSet<ProjectId>>.Empty,
-        [],
-        []);
+        new(),
+        new());
 
     internal ProjectDependencyGraph(
         ImmutableHashSet<ProjectId> projectIds,
@@ -148,7 +148,7 @@ public partial class ProjectDependencyGraph
         // The only thing we can reuse is our actual map of project references for all the other projects, so we'll do that.
 
         // only include projects contained in the solution:
-        var referencedProjectIds = projectReferences.IsEmpty() ? [] :
+        var referencedProjectIds = projectReferences.IsEmpty() ? ImmutableHashSet<ProjectId>.Empty : 
             projectReferences
                 .Where(r => _projectIds.Contains(r.ProjectId))
                 .Select(r => r.ProjectId)
@@ -170,7 +170,7 @@ public partial class ProjectDependencyGraph
             throw new ArgumentNullException(nameof(projectId));
         }
 
-        return _referencesMap.GetValueOrDefault(projectId, []);
+        return _referencesMap.GetValueOrDefault(projectId, ImmutableHashSet<ProjectId>.Empty);
     }
 
     /// <summary>
@@ -205,7 +205,7 @@ public partial class ProjectDependencyGraph
             ValidateReverseReferences(_projectIds, _referencesMap, _lazyReverseReferencesMap);
         }
 
-        return _lazyReverseReferencesMap.GetValueOrDefault(projectId, []);
+        return _lazyReverseReferencesMap.GetValueOrDefault(projectId, ImmutableHashSet<ProjectId>.Empty);
     }
 
     private ImmutableDictionary<ProjectId, ImmutableHashSet<ProjectId>> ComputeReverseReferencesMap()

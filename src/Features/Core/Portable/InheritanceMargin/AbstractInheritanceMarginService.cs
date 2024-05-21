@@ -62,7 +62,7 @@ internal abstract partial class AbstractInheritanceMarginService : IInheritanceM
 
             if (!result.HasValue)
             {
-                return [];
+                return new();
             }
 
             return result.Value;

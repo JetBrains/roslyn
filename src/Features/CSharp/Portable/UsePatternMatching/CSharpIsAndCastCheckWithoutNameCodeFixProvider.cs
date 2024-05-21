@@ -33,7 +33,7 @@ internal partial class CSharpIsAndCastCheckWithoutNameCodeFixProvider : SyntaxEd
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.InlineIsTypeWithoutNameCheckDiagnosticsId];
+        => ImmutableArray.Create(IDEDiagnosticIds.InlineIsTypeWithoutNameCheckDiagnosticsId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

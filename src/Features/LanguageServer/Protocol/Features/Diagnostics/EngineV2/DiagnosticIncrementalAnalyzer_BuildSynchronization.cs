@@ -115,7 +115,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
         {
             if (lookup == null)
             {
-                return [];
+                return new();
             }
 
             ImmutableArray<DiagnosticData>.Builder? builder = null;
@@ -138,7 +138,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
                 builder.AddRange(items.Select(d => CreateLiveDiagnostic(descriptor, d)));
             }
 
-            return builder == null ? [] : builder.ToImmutable();
+            return builder == null ? new() : builder.ToImmutable();
         }
 
         private static DiagnosticData CreateLiveDiagnostic(DiagnosticDescriptor descriptor, DiagnosticData diagnostic)

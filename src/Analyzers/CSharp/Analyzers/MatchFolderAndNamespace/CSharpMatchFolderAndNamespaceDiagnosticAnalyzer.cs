@@ -34,5 +34,5 @@ internal class CSharpMatchFolderAndNamespaceDiagnosticAnalyzer
     protected override ISyntaxFacts GetSyntaxFacts() => CSharpSyntaxFacts.Instance;
 
     protected override ImmutableArray<SyntaxKind> GetSyntaxKindsToAnalyze()
-        => [SyntaxKind.NamespaceDeclaration, SyntaxKind.FileScopedNamespaceDeclaration];
+        => ImmutableArray.Create(SyntaxKind.NamespaceDeclaration, SyntaxKind.FileScopedNamespaceDeclaration);
 }

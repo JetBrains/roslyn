@@ -20,7 +20,10 @@ internal abstract class AbstractEmbeddedLanguagesProvider : IEmbeddedLanguagesPr
     protected AbstractEmbeddedLanguagesProvider(EmbeddedLanguageInfo info)
     {
         EmbeddedLanguageInfo = info;
-        Languages = [new DateAndTimeEmbeddedLanguage(info), new RegexEmbeddedLanguage(this, info), new JsonEmbeddedLanguage()];
+        Languages = ImmutableArray.Create<IEmbeddedLanguage>(
+                new DateAndTimeEmbeddedLanguage(info),
+                new RegexEmbeddedLanguage(this, info),
+                new JsonEmbeddedLanguage());
     }
 
     /// <summary>Escapes <paramref name="text"/> appropriately so it can be inserted into 

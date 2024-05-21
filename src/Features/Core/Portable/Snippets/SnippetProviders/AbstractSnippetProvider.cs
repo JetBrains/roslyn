@@ -25,7 +25,7 @@ internal abstract class AbstractSnippetProvider : ISnippetProvider
     public abstract string Identifier { get; }
     public abstract string Description { get; }
 
-    public virtual ImmutableArray<string> AdditionalFilterTexts => [];
+    public virtual ImmutableArray<string> AdditionalFilterTexts => new();
 
     protected readonly SyntaxAnnotation CursorAnnotation = new();
     protected readonly SyntaxAnnotation FindSnippetAnnotation = new();

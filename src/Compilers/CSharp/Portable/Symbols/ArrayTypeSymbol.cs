@@ -367,7 +367,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         public override int GetHashCode()
         {
-            // We don't want to blow the stack if we have a type like T[][][][][][][][]....[][],
+            // We don't want to blow the stack if we have a type like T[][][][][][][][]....new()[],
             // so we do not recurse until we have a non-array. Rather, hash all the ranks together
             // and then hash that with the "T" type.
 

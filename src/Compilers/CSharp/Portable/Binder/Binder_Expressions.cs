@@ -5159,7 +5159,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     case TypeKind.Dynamic:
                     // we didn't find any type called "dynamic" so we are using the builtin dynamic type, which has no constructors:
                     case TypeKind.Array:
-                        // ex: new ref[]
+                        // ex: new refnew()
                         type = new ExtendedErrorTypeSymbol(type, LookupResultKind.NotCreatable,
                             diagnostics.Add(ErrorCode.ERR_InvalidObjectCreation, node.Type.Location));
                         goto case TypeKind.Class;

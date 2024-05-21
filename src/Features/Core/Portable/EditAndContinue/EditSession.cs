@@ -90,7 +90,7 @@ internal sealed class EditSession
     /// rude edits or module diagnostics. At the end of the session we ask the diagnostic analyzer to reanalyze
     /// the documents to clean up the diagnostics.
     /// </summary>
-    private readonly HashSet<DocumentId> _documentsWithReportedDiagnostics = [];
+    private readonly HashSet<DocumentId> _documentsWithReportedDiagnostics = new();
     private readonly object _documentsWithReportedDiagnosticsGuard = new();
 
     internal EditSession(
@@ -683,7 +683,7 @@ internal sealed class EditSession
                 {
                     var oldDocument = await oldProject.GetDocumentAsync(analysis.DocumentId, includeSourceGenerated: true, cancellationToken).ConfigureAwait(false);
 
-                    var oldActiveStatements = (oldDocument == null) ? [] :
+                    var oldActiveStatements = (oldDocument == null) ? new() :
                         await baseActiveStatements.GetOldActiveStatementsAsync(analyzer, oldDocument, cancellationToken).ConfigureAwait(false);
 
                     activeStatementsInChangedDocuments.Add(new(oldActiveStatements, analysis.ActiveStatements, analysis.ExceptionRegions));
@@ -889,7 +889,7 @@ internal sealed class EditSession
                     // The error hasn't been reported by GetDocumentDiagnosticsAsync since it might have been intermittent.
                     // The MVID is required for emit so we consider the error permanent and report it here.
                     // Bail before analyzing documents as the analysis needs to read the PDB which will likely fail if we can't even read the MVID.
-                    diagnostics.Add(new(newProject.Id, [mvidReadError]));
+                    diagnostics.Add(new(newProject.Id, ImmutableArray.Create(mvidReadError)));
 
                     Telemetry.LogProjectAnalysisSummary(ProjectAnalysisSummary.ValidChanges, newProject.State.ProjectInfo.Attributes.TelemetryId, ImmutableArray.Create(mvidReadError.Descriptor.Id));
                     isBlocked = true;
@@ -1077,7 +1077,7 @@ internal sealed class EditSession
                     var unsupportedChangesDiagnostic = await GetUnsupportedChangesDiagnosticAsync(emitResult, cancellationToken).ConfigureAwait(false);
                     if (unsupportedChangesDiagnostic is not null)
                     {
-                        diagnostics.Add(new(newProject.Id, [unsupportedChangesDiagnostic]));
+                        diagnostics.Add(new(newProject.Id, ImmutableArray.Create(unsupportedChangesDiagnostic)));
                         isBlocked = true;
                     }
                     else

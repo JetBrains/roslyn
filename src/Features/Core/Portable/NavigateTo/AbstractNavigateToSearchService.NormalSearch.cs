@@ -47,7 +47,7 @@ internal abstract partial class AbstractNavigateToSearchService
     public static Task SearchDocumentInCurrentProcessAsync(Document document, string searchPattern, IImmutableSet<string> kinds, Func<RoslynNavigateToItem, Task> onItemFound, CancellationToken cancellationToken)
     {
         return SearchProjectInCurrentProcessAsync(
-            document.Project, priorityDocuments: [], document, searchPattern, kinds,
+            document.Project, priorityDocuments: new(), document, searchPattern, kinds,
             onItemFound, () => Task.CompletedTask, cancellationToken);
     }
 

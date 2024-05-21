@@ -54,7 +54,7 @@ public sealed class CompletionItem : IComparable<CompletionItem>
     /// However, there's a key difference: matches of <see cref="AdditionalFilterTexts"/> is considered inferior than matches
     /// of <see cref="FilterText"/> when they have identical pattern matching result.
     /// </summary>
-    internal ImmutableArray<string> AdditionalFilterTexts { get; init; } = [];
+    internal ImmutableArray<string> AdditionalFilterTexts { get; init; } = new();
 
     /// <summary>
     /// Returns <see langword="true"/> if <see cref="DisplayText"/> is identical to  <see cref="FilterText"/>. 

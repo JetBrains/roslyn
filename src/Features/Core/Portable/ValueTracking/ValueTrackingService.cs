@@ -43,7 +43,7 @@ internal partial class ValueTrackingService : IValueTrackingService
 
             if (!result.HasValue)
             {
-                return [];
+                return new();
             }
 
             return await result.Value.SelectAsArrayAsync(
@@ -73,7 +73,7 @@ internal partial class ValueTrackingService : IValueTrackingService
 
             if (!result.HasValue)
             {
-                return [];
+                return new();
             }
 
             return await result.Value.SelectAsArrayAsync(

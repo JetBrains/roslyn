@@ -97,11 +97,11 @@ internal readonly struct DiagnosticAnalysisResult
         return new DiagnosticAnalysisResult(
             projectId,
             version,
-            documentIds: [],
+            documentIds: ImmutableHashSet<DocumentId>.Empty,
             syntaxLocals: ImmutableDictionary<DocumentId, ImmutableArray<DiagnosticData>>.Empty,
             semanticLocals: ImmutableDictionary<DocumentId, ImmutableArray<DiagnosticData>>.Empty,
             nonLocals: ImmutableDictionary<DocumentId, ImmutableArray<DiagnosticData>>.Empty,
-            others: [],
+            others: new(),
             fromBuild: false);
     }
 
@@ -197,7 +197,7 @@ internal readonly struct DiagnosticAnalysisResult
     public bool IsDefault => DocumentIds == null;
 
     // make sure we don't return null
-    public ImmutableHashSet<DocumentId> DocumentIdsOrEmpty => DocumentIds ?? [];
+    public ImmutableHashSet<DocumentId> DocumentIdsOrEmpty => DocumentIds ?? ImmutableHashSet<DocumentId>.Empty;
 
     private ImmutableDictionary<DocumentId, ImmutableArray<DiagnosticData>>? GetMap(AnalysisKind kind)
         => kind switch
@@ -213,7 +213,7 @@ internal readonly struct DiagnosticAnalysisResult
         // PERF: don't allocation anything if not needed
         if (IsAggregatedForm || IsEmpty)
         {
-            return [];
+            return new();
         }
 
         Contract.ThrowIfNull(_syntaxLocals);
@@ -250,7 +250,7 @@ internal readonly struct DiagnosticAnalysisResult
     {
         if (IsAggregatedForm || IsEmpty)
         {
-            return [];
+            return new();
         }
 
         var map = GetMap(kind);
@@ -262,11 +262,11 @@ internal readonly struct DiagnosticAnalysisResult
             return diagnostics;
         }
 
-        return [];
+        return new();
     }
 
     public ImmutableArray<DiagnosticData> GetOtherDiagnostics()
-        => (IsAggregatedForm || IsEmpty) ? [] : _others;
+        => (IsAggregatedForm || IsEmpty) ? new() : _others;
 
     public DiagnosticAnalysisResult ToAggregatedForm()
         => new(ProjectId, Version, DocumentIds, IsEmpty, FromBuild);
@@ -292,7 +292,7 @@ internal readonly struct DiagnosticAnalysisResult
            _syntaxLocals,
            semanticLocals: ImmutableDictionary<DocumentId, ImmutableArray<DiagnosticData>>.Empty,
            nonLocals: ImmutableDictionary<DocumentId, ImmutableArray<DiagnosticData>>.Empty,
-           others: [],
+           others: new(),
            documentIds: null,
            fromBuild: false);
     }
@@ -306,7 +306,7 @@ internal readonly struct DiagnosticAnalysisResult
         var allEmpty = syntaxLocals ?? semanticLocals ?? nonLocals;
         if (allEmpty == null)
         {
-            return [];
+            return ImmutableHashSet<DocumentId>.Empty;
         }
 
         var documents = SpecializedCollections.EmptyEnumerable<DocumentId>();

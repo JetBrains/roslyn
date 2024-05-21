@@ -33,7 +33,7 @@ internal sealed class CSharpUseNullCheckOverTypeCheckCodeFixProvider : SyntaxEdi
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseNullCheckOverTypeCheckDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseNullCheckOverTypeCheckDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

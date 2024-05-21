@@ -33,7 +33,7 @@ internal abstract partial class AbstractCSharpReducer
         // This is e.g. useful in the name simplification, where a whole qualified name is annotated
         protected bool alwaysSimplify;
 
-        private readonly HashSet<SyntaxNode> _processedParentNodes = [];
+        private readonly HashSet<SyntaxNode> _processedParentNodes = new();
 
         protected AbstractReductionRewriter(ObjectPool<IReductionRewriter> pool)
             => _pool = pool;

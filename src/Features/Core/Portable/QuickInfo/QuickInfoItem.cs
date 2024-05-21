@@ -37,9 +37,9 @@ public sealed class QuickInfoItem
         ImmutableArray<TextSpan> relatedSpans)
     {
         Span = span;
-        Tags = tags.IsDefault ? [] : tags;
-        Sections = sections.IsDefault ? [] : sections;
-        RelatedSpans = relatedSpans.IsDefault ? [] : relatedSpans;
+        Tags = tags.IsDefault ? new() : tags;
+        Sections = sections.IsDefault ? new() : sections;
+        RelatedSpans = relatedSpans.IsDefault ? new() : relatedSpans;
     }
 
     public static QuickInfoItem Create(

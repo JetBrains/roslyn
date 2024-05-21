@@ -484,9 +484,9 @@ Microsoft.CodeAnalysis.CommandLineSourceFile.IsInputRedirected.get -> bool
 Microsoft.CodeAnalysis.CommandLineSourceFile.IsScript.get -> bool
 Microsoft.CodeAnalysis.CommandLineSourceFile.Path.get -> string!
 Microsoft.CodeAnalysis.Compilation
-Microsoft.CodeAnalysis.Compilation.AddReferences(params Microsoft.CodeAnalysis.MetadataReference![]! references) -> Microsoft.CodeAnalysis.Compilation!
+Microsoft.CodeAnalysis.Compilation.AddReferences(params Microsoft.CodeAnalysis.MetadataReference!new()! references) -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.Compilation.AddReferences(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference!>! references) -> Microsoft.CodeAnalysis.Compilation!
-Microsoft.CodeAnalysis.Compilation.AddSyntaxTrees(params Microsoft.CodeAnalysis.SyntaxTree![]! trees) -> Microsoft.CodeAnalysis.Compilation!
+Microsoft.CodeAnalysis.Compilation.AddSyntaxTrees(params Microsoft.CodeAnalysis.SyntaxTree!new()! trees) -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.Compilation.AddSyntaxTrees(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTree!>! trees) -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.Compilation.Assembly.get -> Microsoft.CodeAnalysis.IAssemblySymbol!
 Microsoft.CodeAnalysis.Compilation.AssemblyName.get -> string?
@@ -534,9 +534,9 @@ Microsoft.CodeAnalysis.Compilation.Options.get -> Microsoft.CodeAnalysis.Compila
 Microsoft.CodeAnalysis.Compilation.References.get -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference!>!
 Microsoft.CodeAnalysis.Compilation.RemoveAllReferences() -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.Compilation.RemoveAllSyntaxTrees() -> Microsoft.CodeAnalysis.Compilation!
-Microsoft.CodeAnalysis.Compilation.RemoveReferences(params Microsoft.CodeAnalysis.MetadataReference![]! references) -> Microsoft.CodeAnalysis.Compilation!
+Microsoft.CodeAnalysis.Compilation.RemoveReferences(params Microsoft.CodeAnalysis.MetadataReference!new()! references) -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.Compilation.RemoveReferences(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference!>! references) -> Microsoft.CodeAnalysis.Compilation!
-Microsoft.CodeAnalysis.Compilation.RemoveSyntaxTrees(params Microsoft.CodeAnalysis.SyntaxTree![]! trees) -> Microsoft.CodeAnalysis.Compilation!
+Microsoft.CodeAnalysis.Compilation.RemoveSyntaxTrees(params Microsoft.CodeAnalysis.SyntaxTree!new()! trees) -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.Compilation.RemoveSyntaxTrees(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTree!>! trees) -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.Compilation.ReplaceReference(Microsoft.CodeAnalysis.MetadataReference! oldReference, Microsoft.CodeAnalysis.MetadataReference? newReference) -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.Compilation.ReplaceSyntaxTree(Microsoft.CodeAnalysis.SyntaxTree! oldTree, Microsoft.CodeAnalysis.SyntaxTree! newTree) -> Microsoft.CodeAnalysis.Compilation!
@@ -547,7 +547,7 @@ Microsoft.CodeAnalysis.Compilation.SupportsRuntimeCapability(Microsoft.CodeAnaly
 Microsoft.CodeAnalysis.Compilation.SyntaxTrees.get -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTree!>!
 Microsoft.CodeAnalysis.Compilation.WithAssemblyName(string? assemblyName) -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.Compilation.WithOptions(Microsoft.CodeAnalysis.CompilationOptions! options) -> Microsoft.CodeAnalysis.Compilation!
-Microsoft.CodeAnalysis.Compilation.WithReferences(params Microsoft.CodeAnalysis.MetadataReference![]! newReferences) -> Microsoft.CodeAnalysis.Compilation!
+Microsoft.CodeAnalysis.Compilation.WithReferences(params Microsoft.CodeAnalysis.MetadataReference!new()! newReferences) -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.Compilation.WithReferences(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.MetadataReference!>! newReferences) -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.Compilation.WithScriptCompilationInfo(Microsoft.CodeAnalysis.ScriptCompilationInfo? info) -> Microsoft.CodeAnalysis.Compilation!
 Microsoft.CodeAnalysis.CompilationOptions
@@ -628,8 +628,8 @@ Microsoft.CodeAnalysis.DiagnosticDescriptor.Category.get -> string!
 Microsoft.CodeAnalysis.DiagnosticDescriptor.CustomTags.get -> System.Collections.Generic.IEnumerable<string!>!
 Microsoft.CodeAnalysis.DiagnosticDescriptor.DefaultSeverity.get -> Microsoft.CodeAnalysis.DiagnosticSeverity
 Microsoft.CodeAnalysis.DiagnosticDescriptor.Description.get -> Microsoft.CodeAnalysis.LocalizableString!
-Microsoft.CodeAnalysis.DiagnosticDescriptor.DiagnosticDescriptor(string! id, Microsoft.CodeAnalysis.LocalizableString! title, Microsoft.CodeAnalysis.LocalizableString! messageFormat, string! category, Microsoft.CodeAnalysis.DiagnosticSeverity defaultSeverity, bool isEnabledByDefault, Microsoft.CodeAnalysis.LocalizableString? description = null, string? helpLinkUri = null, params string![]! customTags) -> void
-Microsoft.CodeAnalysis.DiagnosticDescriptor.DiagnosticDescriptor(string! id, string! title, string! messageFormat, string! category, Microsoft.CodeAnalysis.DiagnosticSeverity defaultSeverity, bool isEnabledByDefault, string? description = null, string? helpLinkUri = null, params string![]! customTags) -> void
+Microsoft.CodeAnalysis.DiagnosticDescriptor.DiagnosticDescriptor(string! id, Microsoft.CodeAnalysis.LocalizableString! title, Microsoft.CodeAnalysis.LocalizableString! messageFormat, string! category, Microsoft.CodeAnalysis.DiagnosticSeverity defaultSeverity, bool isEnabledByDefault, Microsoft.CodeAnalysis.LocalizableString? description = null, string? helpLinkUri = null, params string!new()! customTags) -> void
+Microsoft.CodeAnalysis.DiagnosticDescriptor.DiagnosticDescriptor(string! id, string! title, string! messageFormat, string! category, Microsoft.CodeAnalysis.DiagnosticSeverity defaultSeverity, bool isEnabledByDefault, string? description = null, string? helpLinkUri = null, params string!new()! customTags) -> void
 Microsoft.CodeAnalysis.DiagnosticDescriptor.Equals(Microsoft.CodeAnalysis.DiagnosticDescriptor? other) -> bool
 Microsoft.CodeAnalysis.DiagnosticDescriptor.GetEffectiveSeverity(Microsoft.CodeAnalysis.CompilationOptions! compilationOptions) -> Microsoft.CodeAnalysis.ReportDiagnostic
 Microsoft.CodeAnalysis.DiagnosticDescriptor.HelpLinkUri.get -> string!
@@ -790,8 +790,8 @@ Microsoft.CodeAnalysis.Diagnostics.CompilationWithAnalyzersOptions.ReportSuppres
 Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer
 Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer.DiagnosticAnalyzer() -> void
 Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzerAttribute
-Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzerAttribute.DiagnosticAnalyzerAttribute(string! firstLanguage, params string![]! additionalLanguages) -> void
-Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzerAttribute.Languages.get -> string![]!
+Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzerAttribute.DiagnosticAnalyzerAttribute(string! firstLanguage, params string!new()! additionalLanguages) -> void
+Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzerAttribute.Languages.get -> string!new()!
 Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzerExtensions
 Microsoft.CodeAnalysis.Diagnostics.DiagnosticSuppressor
 Microsoft.CodeAnalysis.Diagnostics.DiagnosticSuppressor.DiagnosticSuppressor() -> void
@@ -1166,8 +1166,8 @@ Microsoft.CodeAnalysis.GeneratedSourceResult.SourceText.get -> Microsoft.CodeAna
 Microsoft.CodeAnalysis.GeneratedSourceResult.SyntaxTree.get -> Microsoft.CodeAnalysis.SyntaxTree!
 Microsoft.CodeAnalysis.GeneratorAttribute
 Microsoft.CodeAnalysis.GeneratorAttribute.GeneratorAttribute() -> void
-Microsoft.CodeAnalysis.GeneratorAttribute.GeneratorAttribute(string! firstLanguage, params string![]! additionalLanguages) -> void
-Microsoft.CodeAnalysis.GeneratorAttribute.Languages.get -> string![]!
+Microsoft.CodeAnalysis.GeneratorAttribute.GeneratorAttribute(string! firstLanguage, params string!new()! additionalLanguages) -> void
+Microsoft.CodeAnalysis.GeneratorAttribute.Languages.get -> string!new()!
 Microsoft.CodeAnalysis.GeneratorAttributeSyntaxContext
 Microsoft.CodeAnalysis.GeneratorAttributeSyntaxContext.Attributes.get -> System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.AttributeData!>
 Microsoft.CodeAnalysis.GeneratorAttributeSyntaxContext.GeneratorAttributeSyntaxContext() -> void
@@ -1331,7 +1331,7 @@ Microsoft.CodeAnalysis.IMethodSymbol.Arity.get -> int
 Microsoft.CodeAnalysis.IMethodSymbol.AssociatedAnonymousDelegate.get -> Microsoft.CodeAnalysis.INamedTypeSymbol?
 Microsoft.CodeAnalysis.IMethodSymbol.AssociatedSymbol.get -> Microsoft.CodeAnalysis.ISymbol?
 Microsoft.CodeAnalysis.IMethodSymbol.CallingConvention.get -> System.Reflection.Metadata.SignatureCallingConvention
-Microsoft.CodeAnalysis.IMethodSymbol.Construct(params Microsoft.CodeAnalysis.ITypeSymbol![]! typeArguments) -> Microsoft.CodeAnalysis.IMethodSymbol!
+Microsoft.CodeAnalysis.IMethodSymbol.Construct(params Microsoft.CodeAnalysis.ITypeSymbol!new()! typeArguments) -> Microsoft.CodeAnalysis.IMethodSymbol!
 Microsoft.CodeAnalysis.IMethodSymbol.Construct(System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.ITypeSymbol!> typeArguments, System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.NullableAnnotation> typeArgumentNullableAnnotations) -> Microsoft.CodeAnalysis.IMethodSymbol!
 Microsoft.CodeAnalysis.IMethodSymbol.ConstructedFrom.get -> Microsoft.CodeAnalysis.IMethodSymbol!
 Microsoft.CodeAnalysis.IMethodSymbol.ExplicitInterfaceImplementations.get -> System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.IMethodSymbol!>
@@ -1388,7 +1388,7 @@ Microsoft.CodeAnalysis.ImportedXmlNamespace.XmlNamespace.get -> string!
 Microsoft.CodeAnalysis.INamedTypeSymbol
 Microsoft.CodeAnalysis.INamedTypeSymbol.Arity.get -> int
 Microsoft.CodeAnalysis.INamedTypeSymbol.AssociatedSymbol.get -> Microsoft.CodeAnalysis.ISymbol?
-Microsoft.CodeAnalysis.INamedTypeSymbol.Construct(params Microsoft.CodeAnalysis.ITypeSymbol![]! typeArguments) -> Microsoft.CodeAnalysis.INamedTypeSymbol!
+Microsoft.CodeAnalysis.INamedTypeSymbol.Construct(params Microsoft.CodeAnalysis.ITypeSymbol!new()! typeArguments) -> Microsoft.CodeAnalysis.INamedTypeSymbol!
 Microsoft.CodeAnalysis.INamedTypeSymbol.Construct(System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.ITypeSymbol!> typeArguments, System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.NullableAnnotation> typeArgumentNullableAnnotations) -> Microsoft.CodeAnalysis.INamedTypeSymbol!
 Microsoft.CodeAnalysis.INamedTypeSymbol.ConstructedFrom.get -> Microsoft.CodeAnalysis.INamedTypeSymbol!
 Microsoft.CodeAnalysis.INamedTypeSymbol.Constructors.get -> System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.IMethodSymbol!>
@@ -1644,7 +1644,7 @@ Microsoft.CodeAnalysis.LineVisibility.Hidden = 1 -> Microsoft.CodeAnalysis.LineV
 Microsoft.CodeAnalysis.LineVisibility.Visible = 2 -> Microsoft.CodeAnalysis.LineVisibility
 Microsoft.CodeAnalysis.LocalizableResourceString
 Microsoft.CodeAnalysis.LocalizableResourceString.LocalizableResourceString(string! nameOfLocalizableResource, System.Resources.ResourceManager! resourceManager, System.Type! resourceSource) -> void
-Microsoft.CodeAnalysis.LocalizableResourceString.LocalizableResourceString(string! nameOfLocalizableResource, System.Resources.ResourceManager! resourceManager, System.Type! resourceSource, params string![]! formatArguments) -> void
+Microsoft.CodeAnalysis.LocalizableResourceString.LocalizableResourceString(string! nameOfLocalizableResource, System.Resources.ResourceManager! resourceManager, System.Type! resourceSource, params string!new()! formatArguments) -> void
 Microsoft.CodeAnalysis.LocalizableString
 Microsoft.CodeAnalysis.LocalizableString.Equals(Microsoft.CodeAnalysis.LocalizableString? other) -> bool
 Microsoft.CodeAnalysis.LocalizableString.LocalizableString() -> void
@@ -2866,12 +2866,12 @@ Microsoft.CodeAnalysis.SyntaxNode.FullSpan.get -> Microsoft.CodeAnalysis.Text.Te
 Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedNodes(Microsoft.CodeAnalysis.SyntaxAnnotation! syntaxAnnotation) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxNode!>!
 Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedNodes(string! annotationKind) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxNode!>!
 Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedNodesAndTokens(Microsoft.CodeAnalysis.SyntaxAnnotation! annotation) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxNodeOrToken>!
-Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedNodesAndTokens(params string![]! annotationKinds) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxNodeOrToken>!
+Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedNodesAndTokens(params string!new()! annotationKinds) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxNodeOrToken>!
 Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedNodesAndTokens(string! annotationKind) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxNodeOrToken>!
 Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedTokens(Microsoft.CodeAnalysis.SyntaxAnnotation! syntaxAnnotation) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxToken>!
 Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedTokens(string! annotationKind) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxToken>!
 Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedTrivia(Microsoft.CodeAnalysis.SyntaxAnnotation! annotation) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTrivia>!
-Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedTrivia(params string![]! annotationKinds) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTrivia>!
+Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedTrivia(params string!new()! annotationKinds) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTrivia>!
 Microsoft.CodeAnalysis.SyntaxNode.GetAnnotatedTrivia(string! annotationKind) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTrivia>!
 Microsoft.CodeAnalysis.SyntaxNode.GetAnnotations(string! annotationKind) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>!
 Microsoft.CodeAnalysis.SyntaxNode.GetAnnotations(System.Collections.Generic.IEnumerable<string!>! annotationKinds) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>!
@@ -2936,11 +2936,11 @@ Microsoft.CodeAnalysis.SyntaxNodeOrToken.SpanStart.get -> int
 Microsoft.CodeAnalysis.SyntaxNodeOrToken.SyntaxNodeOrToken() -> void
 Microsoft.CodeAnalysis.SyntaxNodeOrToken.SyntaxTree.get -> Microsoft.CodeAnalysis.SyntaxTree?
 Microsoft.CodeAnalysis.SyntaxNodeOrToken.ToFullString() -> string!
-Microsoft.CodeAnalysis.SyntaxNodeOrToken.WithAdditionalAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation![]! annotations) -> Microsoft.CodeAnalysis.SyntaxNodeOrToken
+Microsoft.CodeAnalysis.SyntaxNodeOrToken.WithAdditionalAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation!new()! annotations) -> Microsoft.CodeAnalysis.SyntaxNodeOrToken
 Microsoft.CodeAnalysis.SyntaxNodeOrToken.WithAdditionalAnnotations(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>! annotations) -> Microsoft.CodeAnalysis.SyntaxNodeOrToken
 Microsoft.CodeAnalysis.SyntaxNodeOrToken.WithLeadingTrivia(params Microsoft.CodeAnalysis.SyntaxTrivia[]! trivia) -> Microsoft.CodeAnalysis.SyntaxNodeOrToken
 Microsoft.CodeAnalysis.SyntaxNodeOrToken.WithLeadingTrivia(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTrivia>! trivia) -> Microsoft.CodeAnalysis.SyntaxNodeOrToken
-Microsoft.CodeAnalysis.SyntaxNodeOrToken.WithoutAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation![]! annotations) -> Microsoft.CodeAnalysis.SyntaxNodeOrToken
+Microsoft.CodeAnalysis.SyntaxNodeOrToken.WithoutAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation!new()! annotations) -> Microsoft.CodeAnalysis.SyntaxNodeOrToken
 Microsoft.CodeAnalysis.SyntaxNodeOrToken.WithoutAnnotations(string! annotationKind) -> Microsoft.CodeAnalysis.SyntaxNodeOrToken
 Microsoft.CodeAnalysis.SyntaxNodeOrToken.WithoutAnnotations(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>! annotations) -> Microsoft.CodeAnalysis.SyntaxNodeOrToken
 Microsoft.CodeAnalysis.SyntaxNodeOrToken.WithTrailingTrivia(params Microsoft.CodeAnalysis.SyntaxTrivia[]! trivia) -> Microsoft.CodeAnalysis.SyntaxNodeOrToken
@@ -2995,7 +2995,7 @@ Microsoft.CodeAnalysis.SyntaxToken.CopyAnnotationsTo(Microsoft.CodeAnalysis.Synt
 Microsoft.CodeAnalysis.SyntaxToken.Equals(Microsoft.CodeAnalysis.SyntaxToken other) -> bool
 Microsoft.CodeAnalysis.SyntaxToken.FullSpan.get -> Microsoft.CodeAnalysis.Text.TextSpan
 Microsoft.CodeAnalysis.SyntaxToken.GetAllTrivia() -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTrivia>!
-Microsoft.CodeAnalysis.SyntaxToken.GetAnnotations(params string![]! annotationKinds) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>!
+Microsoft.CodeAnalysis.SyntaxToken.GetAnnotations(params string!new()! annotationKinds) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>!
 Microsoft.CodeAnalysis.SyntaxToken.GetAnnotations(string! annotationKind) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>!
 Microsoft.CodeAnalysis.SyntaxToken.GetAnnotations(System.Collections.Generic.IEnumerable<string!>! annotationKinds) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>!
 Microsoft.CodeAnalysis.SyntaxToken.GetDiagnostics() -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic!>!
@@ -3003,7 +3003,7 @@ Microsoft.CodeAnalysis.SyntaxToken.GetLocation() -> Microsoft.CodeAnalysis.Locat
 Microsoft.CodeAnalysis.SyntaxToken.GetNextToken(bool includeZeroWidth = false, bool includeSkipped = false, bool includeDirectives = false, bool includeDocumentationComments = false) -> Microsoft.CodeAnalysis.SyntaxToken
 Microsoft.CodeAnalysis.SyntaxToken.GetPreviousToken(bool includeZeroWidth = false, bool includeSkipped = false, bool includeDirectives = false, bool includeDocumentationComments = false) -> Microsoft.CodeAnalysis.SyntaxToken
 Microsoft.CodeAnalysis.SyntaxToken.HasAnnotation(Microsoft.CodeAnalysis.SyntaxAnnotation? annotation) -> bool
-Microsoft.CodeAnalysis.SyntaxToken.HasAnnotations(params string![]! annotationKinds) -> bool
+Microsoft.CodeAnalysis.SyntaxToken.HasAnnotations(params string!new()! annotationKinds) -> bool
 Microsoft.CodeAnalysis.SyntaxToken.HasAnnotations(string! annotationKind) -> bool
 Microsoft.CodeAnalysis.SyntaxToken.HasLeadingTrivia.get -> bool
 Microsoft.CodeAnalysis.SyntaxToken.HasStructuredTrivia.get -> bool
@@ -3025,12 +3025,12 @@ Microsoft.CodeAnalysis.SyntaxToken.ToFullString() -> string!
 Microsoft.CodeAnalysis.SyntaxToken.TrailingTrivia.get -> Microsoft.CodeAnalysis.SyntaxTriviaList
 Microsoft.CodeAnalysis.SyntaxToken.Value.get -> object?
 Microsoft.CodeAnalysis.SyntaxToken.ValueText.get -> string!
-Microsoft.CodeAnalysis.SyntaxToken.WithAdditionalAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation![]! annotations) -> Microsoft.CodeAnalysis.SyntaxToken
+Microsoft.CodeAnalysis.SyntaxToken.WithAdditionalAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation!new()! annotations) -> Microsoft.CodeAnalysis.SyntaxToken
 Microsoft.CodeAnalysis.SyntaxToken.WithAdditionalAnnotations(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>! annotations) -> Microsoft.CodeAnalysis.SyntaxToken
 Microsoft.CodeAnalysis.SyntaxToken.WithLeadingTrivia(Microsoft.CodeAnalysis.SyntaxTriviaList trivia) -> Microsoft.CodeAnalysis.SyntaxToken
 Microsoft.CodeAnalysis.SyntaxToken.WithLeadingTrivia(params Microsoft.CodeAnalysis.SyntaxTrivia[]? trivia) -> Microsoft.CodeAnalysis.SyntaxToken
 Microsoft.CodeAnalysis.SyntaxToken.WithLeadingTrivia(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTrivia>? trivia) -> Microsoft.CodeAnalysis.SyntaxToken
-Microsoft.CodeAnalysis.SyntaxToken.WithoutAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation![]! annotations) -> Microsoft.CodeAnalysis.SyntaxToken
+Microsoft.CodeAnalysis.SyntaxToken.WithoutAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation!new()! annotations) -> Microsoft.CodeAnalysis.SyntaxToken
 Microsoft.CodeAnalysis.SyntaxToken.WithoutAnnotations(string! annotationKind) -> Microsoft.CodeAnalysis.SyntaxToken
 Microsoft.CodeAnalysis.SyntaxToken.WithoutAnnotations(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>! annotations) -> Microsoft.CodeAnalysis.SyntaxToken
 Microsoft.CodeAnalysis.SyntaxToken.WithTrailingTrivia(Microsoft.CodeAnalysis.SyntaxTriviaList trivia) -> Microsoft.CodeAnalysis.SyntaxToken
@@ -3089,13 +3089,13 @@ Microsoft.CodeAnalysis.SyntaxTrivia.ContainsDiagnostics.get -> bool
 Microsoft.CodeAnalysis.SyntaxTrivia.CopyAnnotationsTo(Microsoft.CodeAnalysis.SyntaxTrivia trivia) -> Microsoft.CodeAnalysis.SyntaxTrivia
 Microsoft.CodeAnalysis.SyntaxTrivia.Equals(Microsoft.CodeAnalysis.SyntaxTrivia other) -> bool
 Microsoft.CodeAnalysis.SyntaxTrivia.FullSpan.get -> Microsoft.CodeAnalysis.Text.TextSpan
-Microsoft.CodeAnalysis.SyntaxTrivia.GetAnnotations(params string![]! annotationKinds) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>!
+Microsoft.CodeAnalysis.SyntaxTrivia.GetAnnotations(params string!new()! annotationKinds) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>!
 Microsoft.CodeAnalysis.SyntaxTrivia.GetAnnotations(string! annotationKind) -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>!
 Microsoft.CodeAnalysis.SyntaxTrivia.GetDiagnostics() -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic!>!
 Microsoft.CodeAnalysis.SyntaxTrivia.GetLocation() -> Microsoft.CodeAnalysis.Location!
 Microsoft.CodeAnalysis.SyntaxTrivia.GetStructure() -> Microsoft.CodeAnalysis.SyntaxNode?
 Microsoft.CodeAnalysis.SyntaxTrivia.HasAnnotation(Microsoft.CodeAnalysis.SyntaxAnnotation? annotation) -> bool
-Microsoft.CodeAnalysis.SyntaxTrivia.HasAnnotations(params string![]! annotationKinds) -> bool
+Microsoft.CodeAnalysis.SyntaxTrivia.HasAnnotations(params string!new()! annotationKinds) -> bool
 Microsoft.CodeAnalysis.SyntaxTrivia.HasAnnotations(string! annotationKind) -> bool
 Microsoft.CodeAnalysis.SyntaxTrivia.HasStructure.get -> bool
 Microsoft.CodeAnalysis.SyntaxTrivia.IsDirective.get -> bool
@@ -3109,9 +3109,9 @@ Microsoft.CodeAnalysis.SyntaxTrivia.SyntaxTree.get -> Microsoft.CodeAnalysis.Syn
 Microsoft.CodeAnalysis.SyntaxTrivia.SyntaxTrivia() -> void
 Microsoft.CodeAnalysis.SyntaxTrivia.ToFullString() -> string!
 Microsoft.CodeAnalysis.SyntaxTrivia.Token.get -> Microsoft.CodeAnalysis.SyntaxToken
-Microsoft.CodeAnalysis.SyntaxTrivia.WithAdditionalAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation![]! annotations) -> Microsoft.CodeAnalysis.SyntaxTrivia
+Microsoft.CodeAnalysis.SyntaxTrivia.WithAdditionalAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation!new()! annotations) -> Microsoft.CodeAnalysis.SyntaxTrivia
 Microsoft.CodeAnalysis.SyntaxTrivia.WithAdditionalAnnotations(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>! annotations) -> Microsoft.CodeAnalysis.SyntaxTrivia
-Microsoft.CodeAnalysis.SyntaxTrivia.WithoutAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation![]! annotations) -> Microsoft.CodeAnalysis.SyntaxTrivia
+Microsoft.CodeAnalysis.SyntaxTrivia.WithoutAnnotations(params Microsoft.CodeAnalysis.SyntaxAnnotation!new()! annotations) -> Microsoft.CodeAnalysis.SyntaxTrivia
 Microsoft.CodeAnalysis.SyntaxTrivia.WithoutAnnotations(string! annotationKind) -> Microsoft.CodeAnalysis.SyntaxTrivia
 Microsoft.CodeAnalysis.SyntaxTrivia.WithoutAnnotations(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>! annotations) -> Microsoft.CodeAnalysis.SyntaxTrivia
 Microsoft.CodeAnalysis.SyntaxTrivia.WriteTo(System.IO.TextWriter! writer) -> void
@@ -3496,9 +3496,9 @@ static Microsoft.CodeAnalysis.AnalyzerConfig.Parse(Microsoft.CodeAnalysis.Text.S
 static Microsoft.CodeAnalysis.AnalyzerConfig.Parse(string! text, string? pathToFile) -> Microsoft.CodeAnalysis.AnalyzerConfig!
 static Microsoft.CodeAnalysis.AnalyzerConfigSet.Create<TList>(TList analyzerConfigs) -> Microsoft.CodeAnalysis.AnalyzerConfigSet!
 static Microsoft.CodeAnalysis.AnalyzerConfigSet.Create<TList>(TList analyzerConfigs, out System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.Diagnostic!> diagnostics) -> Microsoft.CodeAnalysis.AnalyzerConfigSet!
-static Microsoft.CodeAnalysis.AnnotationExtensions.WithAdditionalAnnotations<TNode>(this TNode! node, params Microsoft.CodeAnalysis.SyntaxAnnotation![]! annotations) -> TNode!
+static Microsoft.CodeAnalysis.AnnotationExtensions.WithAdditionalAnnotations<TNode>(this TNode! node, params Microsoft.CodeAnalysis.SyntaxAnnotation!new()! annotations) -> TNode!
 static Microsoft.CodeAnalysis.AnnotationExtensions.WithAdditionalAnnotations<TNode>(this TNode! node, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>! annotations) -> TNode!
-static Microsoft.CodeAnalysis.AnnotationExtensions.WithoutAnnotations<TNode>(this TNode! node, params Microsoft.CodeAnalysis.SyntaxAnnotation![]! annotations) -> TNode!
+static Microsoft.CodeAnalysis.AnnotationExtensions.WithoutAnnotations<TNode>(this TNode! node, params Microsoft.CodeAnalysis.SyntaxAnnotation!new()! annotations) -> TNode!
 static Microsoft.CodeAnalysis.AnnotationExtensions.WithoutAnnotations<TNode>(this TNode! node, string! annotationKind) -> TNode!
 static Microsoft.CodeAnalysis.AnnotationExtensions.WithoutAnnotations<TNode>(this TNode! node, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxAnnotation!>! annotations) -> TNode!
 static Microsoft.CodeAnalysis.AssemblyIdentity.FromAssemblyDefinition(System.Reflection.Assembly! assembly) -> Microsoft.CodeAnalysis.AssemblyIdentity!
@@ -3510,7 +3510,7 @@ static Microsoft.CodeAnalysis.AssemblyIdentityComparer.CultureComparer.get -> Sy
 static Microsoft.CodeAnalysis.AssemblyIdentityComparer.Default.get -> Microsoft.CodeAnalysis.AssemblyIdentityComparer!
 static Microsoft.CodeAnalysis.AssemblyIdentityComparer.SimpleNameComparer.get -> System.StringComparer!
 static Microsoft.CodeAnalysis.AssemblyMetadata.Create(Microsoft.CodeAnalysis.ModuleMetadata! module) -> Microsoft.CodeAnalysis.AssemblyMetadata!
-static Microsoft.CodeAnalysis.AssemblyMetadata.Create(params Microsoft.CodeAnalysis.ModuleMetadata![]! modules) -> Microsoft.CodeAnalysis.AssemblyMetadata!
+static Microsoft.CodeAnalysis.AssemblyMetadata.Create(params Microsoft.CodeAnalysis.ModuleMetadata!new()! modules) -> Microsoft.CodeAnalysis.AssemblyMetadata!
 static Microsoft.CodeAnalysis.AssemblyMetadata.Create(System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.ModuleMetadata!>! modules) -> Microsoft.CodeAnalysis.AssemblyMetadata!
 static Microsoft.CodeAnalysis.AssemblyMetadata.Create(System.Collections.Immutable.ImmutableArray<Microsoft.CodeAnalysis.ModuleMetadata!> modules) -> Microsoft.CodeAnalysis.AssemblyMetadata!
 static Microsoft.CodeAnalysis.AssemblyMetadata.CreateFromFile(string! path) -> Microsoft.CodeAnalysis.AssemblyMetadata!
@@ -3721,7 +3721,7 @@ static Microsoft.CodeAnalysis.SyntaxNodeExtensions.ReplaceTokens<TRoot>(this TRo
 static Microsoft.CodeAnalysis.SyntaxNodeExtensions.ReplaceTrivia<TRoot>(this TRoot! root, Microsoft.CodeAnalysis.SyntaxTrivia oldTrivia, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTrivia>! newTrivia) -> TRoot!
 static Microsoft.CodeAnalysis.SyntaxNodeExtensions.ReplaceTrivia<TRoot>(this TRoot! root, Microsoft.CodeAnalysis.SyntaxTrivia trivia, Microsoft.CodeAnalysis.SyntaxTrivia newTrivia) -> TRoot!
 static Microsoft.CodeAnalysis.SyntaxNodeExtensions.ReplaceTrivia<TRoot>(this TRoot! root, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxTrivia>! trivia, System.Func<Microsoft.CodeAnalysis.SyntaxTrivia, Microsoft.CodeAnalysis.SyntaxTrivia, Microsoft.CodeAnalysis.SyntaxTrivia>! computeReplacementTrivia) -> TRoot!
-static Microsoft.CodeAnalysis.SyntaxNodeExtensions.TrackNodes<TRoot>(this TRoot! root, params Microsoft.CodeAnalysis.SyntaxNode![]! nodes) -> TRoot!
+static Microsoft.CodeAnalysis.SyntaxNodeExtensions.TrackNodes<TRoot>(this TRoot! root, params Microsoft.CodeAnalysis.SyntaxNode!new()! nodes) -> TRoot!
 static Microsoft.CodeAnalysis.SyntaxNodeExtensions.TrackNodes<TRoot>(this TRoot! root, System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.SyntaxNode!>! nodes) -> TRoot!
 static Microsoft.CodeAnalysis.SyntaxNodeExtensions.WithLeadingTrivia<TSyntax>(this TSyntax! node, Microsoft.CodeAnalysis.SyntaxTriviaList trivia) -> TSyntax!
 static Microsoft.CodeAnalysis.SyntaxNodeExtensions.WithLeadingTrivia<TSyntax>(this TSyntax! node, params Microsoft.CodeAnalysis.SyntaxTrivia[]? trivia) -> TSyntax!

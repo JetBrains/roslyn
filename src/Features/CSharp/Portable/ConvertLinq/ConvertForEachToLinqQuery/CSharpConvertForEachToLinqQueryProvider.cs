@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -90,7 +91,7 @@ internal sealed class CSharpConvertForEachToLinqQueryProvider
                     else
                     {
                         // Silly case: the block is empty. Stop processing.
-                        statementsCannotBeConverted = [];
+                        statementsCannotBeConverted = Array.Empty<StatementSyntax>();
                     }
 
                     break;
@@ -99,7 +100,7 @@ internal sealed class CSharpConvertForEachToLinqQueryProvider
                     // foreach can always be converted to a from clause.
                     var currentForEachStatement = (ForEachStatementSyntax)current;
                     identifiersBuilder.Add(currentForEachStatement.Identifier);
-                    convertingNodesBuilder.Add(new ExtendedSyntaxNode(currentForEachStatement, currentLeadingTokens.ToImmutableAndFree(), []));
+                    convertingNodesBuilder.Add(new ExtendedSyntaxNode(currentForEachStatement, currentLeadingTokens.ToImmutableAndFree(), Array.Empty<SyntaxToken>()));
                     currentLeadingTokens = ArrayBuilder<SyntaxToken>.GetInstance();
                     // Proceed the loop with the nested statement.
                     current = currentForEachStatement.Statement;
@@ -112,7 +113,7 @@ internal sealed class CSharpConvertForEachToLinqQueryProvider
                     if (ifStatement.Else == null)
                     {
                         convertingNodesBuilder.Add(new ExtendedSyntaxNode(
-                            ifStatement, currentLeadingTokens.ToImmutableAndFree(), []));
+                            ifStatement, currentLeadingTokens.ToImmutableAndFree(), Array.Empty<SyntaxToken>()));
                         currentLeadingTokens = ArrayBuilder<SyntaxToken>.GetInstance();
                         // Proceed the loop with the nested statement.
                         current = ifStatement.Statement;
@@ -129,7 +130,7 @@ internal sealed class CSharpConvertForEachToLinqQueryProvider
                     var localDeclaration = (LocalDeclarationStatementSyntax)current;
                     if (TryProcessLocalDeclarationStatement(localDeclaration))
                     {
-                        statementsCannotBeConverted = [];
+                        statementsCannotBeConverted = Array.Empty<StatementSyntax>();
                     }
                     else
                     {
@@ -146,7 +147,7 @@ internal sealed class CSharpConvertForEachToLinqQueryProvider
                     // {
                     //    ;<- empty statement
                     // }
-                    statementsCannotBeConverted = [];
+                    statementsCannotBeConverted = Array.Empty<StatementSyntax>();
                     break;
 
                 default:

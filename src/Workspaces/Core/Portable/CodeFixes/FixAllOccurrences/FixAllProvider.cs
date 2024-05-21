@@ -19,7 +19,7 @@ namespace Microsoft.CodeAnalysis.CodeFixes;
 public abstract class FixAllProvider : IFixAllProvider
 {
     private protected static ImmutableArray<FixAllScope> DefaultSupportedFixAllScopes
-        = [FixAllScope.Document, FixAllScope.Project, FixAllScope.Solution];
+        = ImmutableArray.Create(FixAllScope.Document, FixAllScope.Project, FixAllScope.Solution);
 
     /// <summary>
     /// Gets the supported scopes for fixing all occurrences of a diagnostic.

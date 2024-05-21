@@ -186,7 +186,7 @@ internal class InvokeDelegateWithConditionalAccessAnalyzer : AbstractBuiltInCode
             NotificationOption2.ForSeverity(Descriptor.DefaultSeverity),
             syntaxContext.Options,
             additionalLocations,
-            additionalUnnecessaryLocations: [fadeLocation],
+            additionalUnnecessaryLocations: ImmutableArray.Create(fadeLocation),
             properties));
 
         // Put a diagnostic with the appropriate severity on the expression-statement itself.
@@ -207,7 +207,7 @@ internal class InvokeDelegateWithConditionalAccessAnalyzer : AbstractBuiltInCode
                 NotificationOption2.ForSeverity(Descriptor.DefaultSeverity),
                 syntaxContext.Options,
                 additionalLocations,
-                additionalUnnecessaryLocations: [fadeLocation],
+                additionalUnnecessaryLocations: ImmutableArray.Create(fadeLocation),
                 properties));
         }
     }

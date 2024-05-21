@@ -41,7 +41,7 @@ internal sealed class InternalsVisibleToCompletionProvider : AbstractInternalsVi
         }
 
         return builder == null
-            ? []
+            ? ImmutableList<SyntaxNode>.Empty
             : builder.ToImmutable();
     }
 

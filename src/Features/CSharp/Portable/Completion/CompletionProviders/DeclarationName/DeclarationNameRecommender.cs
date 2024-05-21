@@ -52,7 +52,7 @@ internal sealed partial class DeclarationNameRecommender : IDeclarationNameRecom
 
         // If we have a direct symbol this binds to, offer its name as a potential name here.
         if (nameInfo.Symbol != null)
-            names = names.Insert(0, [nameInfo.Symbol.Name]);
+            names = names.Insert(0, ImmutableArray.Create(nameInfo.Symbol.Name));
 
         if (!names.IsDefaultOrEmpty)
         {
@@ -71,7 +71,7 @@ internal sealed partial class DeclarationNameRecommender : IDeclarationNameRecom
         if (!IsValidType(nameInfo.Type))
             return default;
 
-        var (type, plural) = UnwrapType(nameInfo.Type, semanticModel.Compilation, wasPlural: false, seenTypes: []);
+        var (type, plural) = UnwrapType(nameInfo.Type, semanticModel.Compilation, wasPlural: false, seenTypes: new());
 
         var baseNames = NameGenerator.GetBaseNames(type, plural);
         return baseNames;
@@ -255,7 +255,7 @@ internal sealed partial class DeclarationNameRecommender : IDeclarationNameRecom
                                 container: null,
                                 baseName: name,
                                 filter: s => IsRelevantSymbolKind(s),
-                                usedNames: [],
+                                usedNames: Array.Empty<string>(),
                                 cancellationToken: cancellationToken);
 
                             if (seenUniqueNames.Add(uniqueName.Text))
@@ -320,7 +320,7 @@ internal sealed partial class DeclarationNameRecommender : IDeclarationNameRecom
             {
                 MethodDeclarationSyntax method => namedType.GetMembers(method.Identifier.ValueText).OfType<IMethodSymbol>().ToImmutableArray(),
                 ConstructorDeclarationSyntax constructor => namedType.GetMembers(WellKnownMemberNames.InstanceConstructorName).OfType<IMethodSymbol>().ToImmutableArray(),
-                _ => []
+                _ => new()
             };
         }
     }

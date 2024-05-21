@@ -19,7 +19,7 @@ internal abstract class AbstractImplementAbstractClassCodeFixProvider<TClassNode
         => WellKnownFixAllProviders.BatchFixer;
 
     protected AbstractImplementAbstractClassCodeFixProvider(string diagnosticId)
-        => FixableDiagnosticIds = [diagnosticId];
+        => FixableDiagnosticIds = ImmutableArray.Create(diagnosticId);
 
     protected abstract SyntaxToken GetClassIdentifier(TClassNode classNode);
 

@@ -61,7 +61,7 @@ internal abstract partial class AbstractRemoveUnusedParametersAndValuesDiagnosti
             {
                 _symbolStartAnalyzer = symbolStartAnalyzer;
                 _options = options;
-                _referencedParameters = [];
+                _referencedParameters = new();
             }
 
             public static void Analyze(OperationBlockStartAnalysisContext context, SymbolStartAnalyzer symbolStartAnalyzer)

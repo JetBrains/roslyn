@@ -49,7 +49,7 @@ internal abstract class AbstractCurlyBraceOrBracketCompletionService : AbstractC
             context.OpeningPoint,
             context.ClosingPoint,
             // We're not trying to format the indented block here, so no need to pass in additional rules.
-            braceFormattingIndentationRules: [],
+            braceFormattingIndentationRules: new(),
             options,
             cancellationToken);
 
@@ -177,10 +177,10 @@ internal abstract class AbstractCurlyBraceOrBracketCompletionService : AbstractC
             // Depending on options, we might not get any formatting change.
             // In this case, the newline edit is the only change.
             if (formattingChanges.IsEmpty)
-                return [newLineEdit.Value];
+                return ImmutableArray.Create(newLineEdit.Value);
 
             var newRanges = TextChangeRangeExtensions.Merge(
-                [newLineEdit.Value.ToTextChangeRange()],
+                ImmutableArray.Create(newLineEdit.Value.ToTextChangeRange()),
                 formattingChanges.SelectAsArray(f => f.ToTextChangeRange()));
 
             using var _ = ArrayBuilder<TextChange>.GetInstance(out var mergedChanges);

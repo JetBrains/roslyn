@@ -136,7 +136,7 @@ internal abstract class AbstractExtractClassRefactoringProvider(IExtractClassOpt
         }
 
         return new ExtractClassWithDialogCodeAction(
-            document, span, optionsService, selectedType, selectedClassNode, context.Options, selectedMembers: []);
+            document, span, optionsService, selectedType, selectedClassNode, context.Options, selectedMembers: new());
     }
 
     private static bool HasBaseType(INamedTypeSymbol containingType) => containingType.BaseType?.SpecialType != SpecialType.System_Object;

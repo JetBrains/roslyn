@@ -182,18 +182,18 @@ internal sealed class CSharpSyntaxFormattingService : CSharpSyntaxFormatting, IS
     {
         if (!IsEndToken(endToken))
         {
-            return [];
+            return new();
         }
 
         var tokenRange = FormattingRangeHelper.FindAppropriateRange(endToken);
         if (tokenRange == null || tokenRange.Value.Item1.Equals(tokenRange.Value.Item2))
         {
-            return [];
+            return new();
         }
 
         if (IsInvalidTokenKind(tokenRange.Value.Item1) || IsInvalidTokenKind(tokenRange.Value.Item2))
         {
-            return [];
+            return new();
         }
 
         var formatter = new CSharpSmartTokenFormatter(options, formattingRules, (CompilationUnitSyntax)document.Root, document.Text);

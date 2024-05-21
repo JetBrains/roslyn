@@ -415,7 +415,7 @@ internal partial class CSharpInlineTemporaryCodeRefactoringProvider
             else if (isVar && expression is ObjectCreationExpressionSyntax or ArrayCreationExpressionSyntax or CastExpressionSyntax)
             {
                 // if we have `var x = new Y();` there's no need to do any casting as the type is indicated
-                // directly in the existing code.  The same holds for `new Y[]` or `(Y)...`
+                // directly in the existing code.  The same holds for `new Ynew()` or `(Y)...`
                 return expression;
             }
             else

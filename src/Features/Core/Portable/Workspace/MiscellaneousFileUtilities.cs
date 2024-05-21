@@ -91,13 +91,13 @@ internal static class MiscellaneousFileUtilities
         // - Add default script globals available in 'csi goo.csx' environment: CommandLineScriptGlobals
 
         var referenceResolver = RuntimeMetadataReferenceResolver.CreateCurrentPlatformResolver(
-            searchPaths: [RuntimeEnvironment.GetRuntimeDirectory()],
+            searchPaths: ImmutableArray.Create(RuntimeEnvironment.GetRuntimeDirectory()),
             baseDirectory: baseDirectory,
             fileReferenceProvider: metadataService.GetReference);
 
         return compilationOptions
             .WithMetadataReferenceResolver(referenceResolver)
-            .WithSourceReferenceResolver(new SourceFileResolver(searchPaths: [], baseDirectory));
+            .WithSourceReferenceResolver(new SourceFileResolver(searchPaths: new(), baseDirectory));
     }
 }
 

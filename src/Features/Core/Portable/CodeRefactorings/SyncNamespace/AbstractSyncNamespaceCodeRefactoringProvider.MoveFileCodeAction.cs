@@ -45,7 +45,9 @@ internal abstract partial class AbstractSyncNamespaceCodeRefactoringProvider<TNa
             var text = await document.GetValueTextAsync(cancellationToken).ConfigureAwait(false);
             solution = solution.AddDocument(newDocumentId, document.Name, text, folders: _newfolders);
 
-            return [new ApplyChangesOperation(solution), new OpenDocumentOperation(newDocumentId, activateIfAlreadyOpen: true)];
+            return ImmutableArray.Create<CodeActionOperation>(
+                    new ApplyChangesOperation(solution),
+                    new OpenDocumentOperation(newDocumentId, activateIfAlreadyOpen: true));
         }
 
         public static ImmutableArray<MoveFileCodeAction> Create(State state)
@@ -57,7 +59,7 @@ internal abstract partial class AbstractSyncNamespaceCodeRefactoringProvider<TNa
             // In case the relative namespace is "", the file should be moved to project root,
             // set `parts` to empty to indicate that.
             var parts = state.RelativeDeclaredNamespace.Length == 0
-                ? []
+                ? new()
                 : state.RelativeDeclaredNamespace.Split(['.']).ToImmutableArray();
 
             // Invalid char can only appear in namespace name when there's error,
@@ -65,7 +67,7 @@ internal abstract partial class AbstractSyncNamespaceCodeRefactoringProvider<TNa
             Debug.Assert(parts.IsEmpty || parts.Any(static s => s.IndexOfAny(Path.GetInvalidPathChars()) < 0));
 
             var projectRootFolder = FolderInfo.CreateFolderHierarchyForProject(document.Project);
-            var candidateFolders = FindCandidateFolders(projectRootFolder, parts, []);
+            var candidateFolders = FindCandidateFolders(projectRootFolder, parts, new());
             return candidateFolders.SelectAsArray(folders => new MoveFileCodeAction(state, folders));
         }
 
@@ -81,7 +83,7 @@ internal abstract partial class AbstractSyncNamespaceCodeRefactoringProvider<TNa
         {
             if (parts.IsEmpty)
             {
-                return [currentFolder];
+                return ImmutableArray.Create(currentFolder);
             }
 
             // Try to figure out all possible folder names that can match the target namespace.
@@ -100,7 +102,7 @@ internal abstract partial class AbstractSyncNamespaceCodeRefactoringProvider<TNa
                 if (subFolders.TryGetValue(folderName, out var matchingFolderInfo))
                 {
                     var newParts = index >= parts.Length
-                        ? []
+                        ? new()
                         : ImmutableArray.Create(parts, index, parts.Length - index);
                     var newCurrentFolder = currentFolder.Add(matchingFolderInfo.Name);
                     builder.AddRange(FindCandidateFolders(matchingFolderInfo, newParts, newCurrentFolder));

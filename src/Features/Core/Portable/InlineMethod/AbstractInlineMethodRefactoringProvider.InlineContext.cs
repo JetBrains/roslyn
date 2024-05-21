@@ -379,7 +379,7 @@ internal abstract partial class AbstractInlineMethodRefactoringProvider<TMethodD
     private class LocalVariableDeclarationVisitor : OperationWalker
     {
         private readonly CancellationToken _cancellationToken;
-        private readonly HashSet<ISymbol> _allSymbols = [];
+        private readonly HashSet<ISymbol> _allSymbols = new();
 
         private LocalVariableDeclarationVisitor(CancellationToken cancellationToken)
         {

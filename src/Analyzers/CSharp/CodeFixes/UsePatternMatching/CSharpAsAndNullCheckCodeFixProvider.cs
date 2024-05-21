@@ -30,7 +30,7 @@ internal partial class CSharpAsAndNullCheckCodeFixProvider : SyntaxEditorBasedCo
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.InlineAsTypeCheckId];
+        => ImmutableArray.Create(IDEDiagnosticIds.InlineAsTypeCheckId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

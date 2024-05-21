@@ -61,7 +61,7 @@ internal static class PathMetadataUtilities
     {
         if (@namespace is null || @namespace == rootNamespace)
         {
-            return [];
+            return new();
         }
 
         if (rootNamespace is not null && @namespace.StartsWith(rootNamespace + ".", StringComparison.OrdinalIgnoreCase))

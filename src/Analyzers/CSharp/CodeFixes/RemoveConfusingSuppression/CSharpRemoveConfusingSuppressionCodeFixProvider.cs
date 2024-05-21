@@ -33,7 +33,7 @@ internal sealed partial class CSharpRemoveConfusingSuppressionCodeFixProvider : 
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.RemoveConfusingSuppressionForIsExpressionDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.RemoveConfusingSuppressionForIsExpressionDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

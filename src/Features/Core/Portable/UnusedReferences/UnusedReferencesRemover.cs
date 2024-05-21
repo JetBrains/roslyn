@@ -19,7 +19,10 @@ internal static class UnusedReferencesRemover
     // This is the order that we look for used references. We set this processing order because we
     // want to favor transitive references when possible. For instance we process Projects before
     // Packages, since a particular Package could be brought in transitively by a Project reference.
-    private static readonly ImmutableArray<ReferenceType> s_processingOrder = [ReferenceType.Project, ReferenceType.Package, ReferenceType.Assembly];
+    private static readonly ImmutableArray<ReferenceType> s_processingOrder = ImmutableArray.Create(
+            ReferenceType.Project,
+            ReferenceType.Package,
+            ReferenceType.Assembly);
 
     public static async Task<ImmutableArray<ReferenceInfo>> GetUnusedReferencesAsync(
         Solution solution,
@@ -30,8 +33,8 @@ internal static class UnusedReferencesRemover
         var projects = solution.Projects
             .Where(project => projectFilePath.Equals(project.FilePath, StringComparison.OrdinalIgnoreCase));
 
-        HashSet<string> usedAssemblyFilePaths = [];
-        HashSet<string> usedProjectFileNames = [];
+        HashSet<string> usedAssemblyFilePaths = new();
+        HashSet<string> usedProjectFileNames = new();
 
         foreach (var project in projects)
         {

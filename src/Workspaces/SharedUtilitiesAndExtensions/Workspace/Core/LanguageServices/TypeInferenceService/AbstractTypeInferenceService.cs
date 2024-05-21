@@ -38,15 +38,15 @@ internal abstract partial class AbstractTypeInferenceService : ITypeInferenceSer
     }
 
     private static readonly ImmutableArray<string> s_booleanPrefixes =
-        ["Is", "Has", "Contains", "Supports"];
+        ImmutableArray.Create("Is", "Has", "Contains", "Supports");
 
     private static ImmutableArray<ITypeSymbol> InferTypeBasedOnName(
         SemanticModel semanticModel, string name)
     {
         var matchesBoolean = MatchesBoolean(name);
         return matchesBoolean
-            ? [semanticModel.Compilation.GetSpecialType(SpecialType.System_Boolean)]
-            : [];
+            ? ImmutableArray.Create<ITypeSymbol>(semanticModel.Compilation.GetSpecialType(SpecialType.System_Boolean))
+            : new();
     }
 
     private static bool MatchesBoolean(string name)

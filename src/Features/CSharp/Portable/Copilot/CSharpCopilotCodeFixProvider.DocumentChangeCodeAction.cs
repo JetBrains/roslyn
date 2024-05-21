@@ -25,6 +25,6 @@ internal sealed partial class CSharpCopilotCodeFixProvider
         CopilotDismissChangesCodeAction dismissChangesCodeAction,
         CodeActionPriority priority) : CodeAction.DocumentChangeAction(title, createChangedDocument, equivalenceKey, priority)
     {
-        internal sealed override ImmutableArray<CodeAction> AdditionalPreviewFlavors { get; } = [dismissChangesCodeAction];
+        internal sealed override ImmutableArray<CodeAction> AdditionalPreviewFlavors { get; } = ImmutableArray.Create<CodeAction>(dismissChangesCodeAction);
     }
 }

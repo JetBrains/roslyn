@@ -84,7 +84,7 @@ internal record PositionalParameterInfo(
                 .AsImmutable();
         }
 
-        return [];
+        return new();
     }
 
     /// <summary>

@@ -21,7 +21,7 @@ internal abstract class AbstractAddRequiredParenthesesDiagnosticAnalyzer<
     where TBinaryLikeExpressionSyntax : TExpressionSyntax
     where TLanguageKindEnum : struct
 {
-    private static readonly Dictionary<(bool includeInFixAll, string equivalenceKey), ImmutableDictionary<string, string?>> s_cachedProperties = [];
+    private static readonly Dictionary<(bool includeInFixAll, string equivalenceKey), ImmutableDictionary<string, string?>> s_cachedProperties = new();
 
     private readonly IPrecedenceService _precedenceService;
 
@@ -56,7 +56,7 @@ internal abstract class AbstractAddRequiredParenthesesDiagnosticAnalyzer<
         };
 
     protected static ImmutableArray<string> GetAllEquivalenceKeys()
-        => ["ArithmeticBinary", "RelationalBinary", "OtherBinary", "Other"];
+        => ImmutableArray.Create("ArithmeticBinary", "RelationalBinary", "OtherBinary", "Other");
 
     private static ImmutableDictionary<string, string?> GetProperties(bool includeInFixAll, string equivalenceKey)
         => s_cachedProperties[(includeInFixAll, equivalenceKey)];

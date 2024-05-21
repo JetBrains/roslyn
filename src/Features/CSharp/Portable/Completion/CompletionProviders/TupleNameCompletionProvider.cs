@@ -120,5 +120,5 @@ internal class TupleNameCompletionProvider : LSPCompletionProvider
             selectedItem.DisplayText));
     }
 
-    public override ImmutableHashSet<char> TriggerCharacters => [];
+    public override ImmutableHashSet<char> TriggerCharacters => ImmutableHashSet<char>.Empty;
 }

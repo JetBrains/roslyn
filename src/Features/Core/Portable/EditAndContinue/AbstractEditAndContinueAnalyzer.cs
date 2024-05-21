@@ -571,7 +571,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
                 // Bail, since we can't do syntax diffing on broken trees (it would not produce useful results anyways).
                 // If we needed to do so for some reason, we'd need to harden the syntax tree comparers.
                 Log.Write("Syntax errors found in '{0}'", filePath);
-                return DocumentAnalysisResults.SyntaxErrors(newDocument.Id, filePath, [], syntaxError, analysisStopwatch.Elapsed, hasChanges);
+                return DocumentAnalysisResults.SyntaxErrors(newDocument.Id, filePath, ImmutableArray<RudeEditDiagnostic>.Empty, syntaxError, analysisStopwatch.Elapsed, hasChanges);
             }
 
             if (!hasChanges)
@@ -591,7 +591,8 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
             {
                 Log.Write("Experimental features enabled in '{0}'", filePath);
 
-                return DocumentAnalysisResults.SyntaxErrors(newDocument.Id, filePath, [new RudeEditDiagnostic(RudeEditKind.ExperimentalFeaturesEnabled, default)], syntaxError: null, analysisStopwatch.Elapsed, hasChanges);
+                return DocumentAnalysisResults.SyntaxErrors(newDocument.Id, filePath, ImmutableArray.Create(
+                    new RudeEditDiagnostic(RudeEditKind.ExperimentalFeaturesEnabled, default)), syntaxError: null, analysisStopwatch.Elapsed, hasChanges);
             }
 
             var capabilities = new EditAndContinueCapabilitiesGrantor(await lazyCapabilities.GetValueAsync(cancellationToken).ConfigureAwait(false));
@@ -600,7 +601,8 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
             // If the document has changed at all, lets make sure Edit and Continue is supported
             if (!capabilities.Grant(EditAndContinueCapabilities.Baseline))
             {
-                return DocumentAnalysisResults.SyntaxErrors(newDocument.Id, filePath, [new RudeEditDiagnostic(RudeEditKind.NotSupportedByRuntime, default)], syntaxError: null, analysisStopwatch.Elapsed, hasChanges);
+                return DocumentAnalysisResults.SyntaxErrors(newDocument.Id, filePath, ImmutableArray.Create(
+                    new RudeEditDiagnostic(RudeEditKind.NotSupportedByRuntime, default)), syntaxError: null, analysisStopwatch.Elapsed, hasChanges);
             }
 
             // We are in break state when there are no active statements.
@@ -636,7 +638,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            var oldActiveStatements = (oldTree == null) ? [] :
+            var oldActiveStatements = (oldTree == null) ? ImmutableArray<UnmappedActiveStatement>.Empty :
                 oldActiveStatementMap.GetOldActiveStatements(this, oldTree, oldText, oldRoot, cancellationToken);
 
             var newActiveStatements = ImmutableArray.CreateBuilder<ActiveStatement>(oldActiveStatements.Length);
@@ -702,7 +704,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
                 : new RudeEditDiagnostic(RudeEditKind.InternalError, span: default, arguments: [newDocument.FilePath, e.ToString()]);
 
             // Report as "syntax error" - we can't analyze the document
-            return DocumentAnalysisResults.SyntaxErrors(newDocument.Id, filePath, [diagnostic], syntaxError: null, analysisStopwatch.Elapsed, hasChanges);
+            return DocumentAnalysisResults.SyntaxErrors(newDocument.Id, filePath, ImmutableArray.Create(diagnostic), syntaxError: null, analysisStopwatch.Elapsed, hasChanges);
         }
 
         static void LogRudeEdits(ArrayBuilder<RudeEditDiagnostic> diagnostics, SourceText text, string filePath)
@@ -872,7 +874,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
                 if (newActiveStatements[i] == null)
                 {
                     newActiveStatements[i] = oldActiveStatements[i].Statement.WithSpan(default);
-                    newExceptionRegions[i] = [];
+                    newExceptionRegions[i] = ImmutableArray<SourceFileSpan>.Empty;
                 }
             }
         }
@@ -1000,7 +1002,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
 
                     var newSpan = GetDeletedDeclarationActiveSpan(topMatch.Matches, oldDeclaration);
                     newActiveStatements[activeStatementIndex] = GetActiveStatementWithSpan(oldActiveStatements[activeStatementIndex], topMatch.NewRoot.SyntaxTree, newSpan, diagnostics, cancellationToken);
-                    newExceptionRegions[activeStatementIndex] = [];
+                    newExceptionRegions[activeStatementIndex] = ImmutableArray<SourceFileSpan>.Empty;
                 }
             }
             else
@@ -1125,7 +1127,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
                 var oldStatementSyntax = activeNode.OldNode;
                 var oldEnclosingLambdaBody = activeNode.EnclosingLambdaBody;
 
-                newExceptionRegions[activeStatementIndex] = [];
+                newExceptionRegions[activeStatementIndex] = ImmutableArray<SourceFileSpan>.Empty;
 
                 DeclarationBodyMap enclosingBodyMap;
                 DeclarationBody oldBody;
@@ -1263,7 +1265,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
             foreach (var i in activeStatementIndices)
             {
                 newActiveStatements[i] = oldActiveStatements[i].Statement;
-                newExceptionRegions[i] = [];
+                newExceptionRegions[i] = ImmutableArray<SourceFileSpan>.Empty;
             }
 
             // We expect OOM to be thrown during the analysis if the number of statements is too large.
@@ -1568,7 +1570,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
     {
         if (exceptionHandlingAncestors.Count == 0)
         {
-            return new ActiveStatementExceptionRegions([], isActiveStatementCovered: false);
+            return new ActiveStatementExceptionRegions(ImmutableArray<SourceFileSpan>.Empty, isActiveStatementCovered: false);
         }
 
         var isCovered = false;
@@ -2449,7 +2451,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
 
         if (editScript.Edits.Length == 0 && triviaEdits.Count == 0)
         {
-            return [];
+            return ImmutableArray<SemanticEditInfo>.Empty;
         }
 
         // { new type -> constructor update }
@@ -3029,7 +3031,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
                             {
                                 newActiveStatementSpan ??= GetDeletedDeclarationActiveSpan(editScript.Match.Matches, oldDeclaration);
                                 newActiveStatements[index] = GetActiveStatementWithSpan(oldActiveStatements[index], newTree, newActiveStatementSpan.Value, diagnostics, cancellationToken);
-                                newExceptionRegions[index] = [];
+                                newExceptionRegions[index] = ImmutableArray<SourceFileSpan>.Empty;
                             }
                             else
                             {
@@ -5775,8 +5777,8 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
 
         if (memberBody == null)
         {
-            variablesCapturedInLambdas = [];
-            primaryParametersCapturedViaThis = [];
+            variablesCapturedInLambdas = ImmutableArray<VariableCapture>.Empty;
+            primaryParametersCapturedViaThis = ImmutableArray<IParameterSymbol>.Empty;
             return;
         }
 
@@ -5822,7 +5824,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
         }
 
         variablesCapturedInLambdas = inLambdaCaptures?.SelectAsArray(
-            static item => new VariableCapture(item.kind, item.symbol)) ?? [];
+            static item => new VariableCapture(item.kind, item.symbol)) ?? ImmutableArray<VariableCapture>.Empty;
 
         inLambdaCaptures?.Free();
 
@@ -5836,7 +5838,7 @@ internal abstract class AbstractEditAndContinueAnalyzer : IEditAndContinueAnalyz
         }
         else
         {
-            primaryParametersCapturedViaThis = [];
+            primaryParametersCapturedViaThis = ImmutableArray<IParameterSymbol>.Empty;
         }
 
         inLambdaCapturesIndex?.Free();

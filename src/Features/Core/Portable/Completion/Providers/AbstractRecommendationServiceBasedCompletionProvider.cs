@@ -35,7 +35,7 @@ internal abstract class AbstractRecommendationServiceBasedCompletionProvider<TSy
     {
         var shouldProvideSymbols = await ShouldProvideAvailableSymbolsInCurrentContextAsync(completionContext, context, position, options, cancellationToken).ConfigureAwait(false);
         if (!shouldProvideSymbols)
-            return [];
+            return new();
 
         var recommendationOptions = options.ToRecommendationServiceOptions();
         var recommender = context.GetRequiredLanguageService<IRecommendationService>();

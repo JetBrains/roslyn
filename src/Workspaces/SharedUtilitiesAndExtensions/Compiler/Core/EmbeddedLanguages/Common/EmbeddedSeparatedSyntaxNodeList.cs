@@ -19,7 +19,7 @@ internal readonly struct EmbeddedSeparatedSyntaxNodeList<TSyntaxKind, TSyntaxNod
     public int SeparatorLength { get; }
 
     public static readonly EmbeddedSeparatedSyntaxNodeList<TSyntaxKind, TSyntaxNode, TDerivedNode> Empty
-        = new([]);
+        = new(new());
 
     public EmbeddedSeparatedSyntaxNodeList(
         ImmutableArray<EmbeddedSyntaxNodeOrToken<TSyntaxKind, TSyntaxNode>> nodesAndTokens)

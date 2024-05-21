@@ -23,7 +23,7 @@ internal abstract class AbstractRemoveUnusedMembersCodeFixProvider<TFieldDeclara
     where TFieldDeclarationSyntax : SyntaxNode
 {
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.RemoveUnusedMembersDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.RemoveUnusedMembersDiagnosticId);
 
     /// <summary>
     /// This method adjusts the <paramref name="declarators"/> to remove based on whether or not all variable declarators

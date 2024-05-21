@@ -67,13 +67,12 @@ internal partial class AbstractBinaryExpressionWrapper<TBinaryExpressionSyntax>
         }
 
         protected override async Task<ImmutableArray<WrappingGroup>> ComputeWrappingGroupsAsync()
-            => [new WrappingGroup(
+            => ImmutableArray.Create(new WrappingGroup(
                 isInlinable: true,
-                [
+                ImmutableArray.Create(
                     await GetWrapCodeActionAsync(align: false).ConfigureAwait(false),
                     await GetWrapCodeActionAsync(align: true).ConfigureAwait(false),
-                    await GetUnwrapCodeActionAsync().ConfigureAwait(false),
-                ])];
+                    await GetUnwrapCodeActionAsync().ConfigureAwait(false))));
 
         private Task<WrapItemsAction> GetWrapCodeActionAsync(bool align)
             => TryCreateCodeActionAsync(GetWrapEdits(align), FeaturesResources.Wrapping,

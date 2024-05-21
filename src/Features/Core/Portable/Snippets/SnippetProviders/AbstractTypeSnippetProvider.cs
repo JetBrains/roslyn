@@ -27,10 +27,10 @@ internal abstract class AbstractTypeSnippetProvider : AbstractSnippetProvider
 
         if (accessibilityModifiersChange.HasValue)
         {
-            return [accessibilityModifiersChange.Value, mainChange];
+            return ImmutableArray.Create(accessibilityModifiersChange.Value, mainChange);
         }
 
-        return [mainChange];
+        return ImmutableArray.Create(mainChange);
     }
 
     protected override ImmutableArray<SnippetPlaceholder> GetPlaceHolderLocationsList(SyntaxNode node, ISyntaxFacts syntaxFacts, CancellationToken cancellationToken)

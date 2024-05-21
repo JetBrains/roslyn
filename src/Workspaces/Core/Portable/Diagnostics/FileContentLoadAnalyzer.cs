@@ -20,7 +20,7 @@ internal sealed class FileContentLoadAnalyzer : DiagnosticAnalyzer
     }
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => [WorkspaceDiagnosticDescriptors.ErrorReadingFileContent];
+        => ImmutableArray.Create(WorkspaceDiagnosticDescriptors.ErrorReadingFileContent);
 
 #pragma warning disable RS1026 // Enable concurrent execution
 #pragma warning disable RS1025 // Configure generated code analysis

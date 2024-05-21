@@ -24,7 +24,7 @@ internal class CSharpUpdateProjectToAllowUnsafeCodeFixProvider : CodeFixProvider
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [CS0227];
+        ImmutableArray.Create(CS0227);
 
     public override FixAllProvider? GetFixAllProvider()
     {

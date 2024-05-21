@@ -16,7 +16,7 @@ internal sealed class SignatureChange
     public readonly ParameterConfiguration OriginalConfiguration;
     public readonly ParameterConfiguration UpdatedConfiguration;
 
-    private readonly Dictionary<int, int?> _originalIndexToUpdatedIndexMap = [];
+    private readonly Dictionary<int, int?> _originalIndexToUpdatedIndexMap = new();
 
     public SignatureChange(ParameterConfiguration originalConfiguration, ParameterConfiguration updatedConfiguration)
     {

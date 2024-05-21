@@ -180,7 +180,7 @@ internal abstract partial class AbstractImplementInterfaceService
         {
             return GetUpdatedDocumentAsync(
                 document, unimplementedMembers, classOrStructType, classOrStructDecl,
-                [], cancellationToken);
+                new(), cancellationToken);
         }
 
         protected async Task<Document> GetUpdatedDocumentAsync(
@@ -433,7 +433,7 @@ internal abstract partial class AbstractImplementInterfaceService
                 @event,
                 accessibility: accessibility,
                 modifiers: modifiers,
-                explicitInterfaceImplementations: useExplicitInterfaceSymbol ? [@event] : default,
+                explicitInterfaceImplementations: useExplicitInterfaceSymbol ? ImmutableArray.Create(@event) : default,
                 name: memberName,
                 addMethod: GetAddOrRemoveMethod(@event, generateInvisibly, accessor, memberName, factory.AddEventHandler),
                 removeMethod: GetAddOrRemoveMethod(@event, generateInvisibly, accessor, memberName, factory.RemoveEventHandler));
@@ -453,7 +453,7 @@ internal abstract partial class AbstractImplementInterfaceService
                 return CodeGenerationSymbolFactory.CreateAccessorSymbol(
                        attributes: default,
                        accessibility: Accessibility.NotApplicable,
-                       statements: [statement]);
+                       statements: ImmutableArray.Create(statement));
             }
 
             return generateInvisibly ? accessor : null;

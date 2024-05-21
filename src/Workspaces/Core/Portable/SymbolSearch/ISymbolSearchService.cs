@@ -114,7 +114,7 @@ internal sealed class PackageWithAssemblyResult(
     }
 
     private static readonly ImmutableArray<Func<PackageWithAssemblyResult, IComparable>> s_comparers =
-        [p => p.Rank, p => p.PackageName];
+        ImmutableArray.Create<Func<PackageWithAssemblyResult, IComparable>>(p => p.Rank, p => p.PackageName);
 }
 
 [DataContract]

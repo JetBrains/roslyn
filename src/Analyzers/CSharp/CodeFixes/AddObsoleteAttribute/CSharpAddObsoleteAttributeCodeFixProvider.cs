@@ -17,14 +17,14 @@ internal class CSharpAddObsoleteAttributeCodeFixProvider
     : AbstractAddObsoleteAttributeCodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [
-            "CS0612",
-            "CS0618",
-            "CS0672",
-            "CS1062",
+        ImmutableArray.Create(
+            "CS0612",//  'C' is obsolete
+            "CS0618",//  'C' is obsolete (msg)
+            "CS0672",// Member 'D.F()' overrides obsolete member 'C.F()'
+            "CS1062",// The best overloaded Add method 'MyCollection.Add(int)' for the collection initializer element is obsolete. (msg)
             "CS1064"
-,  // The best overloaded Add method 'MyCollection.Add(int)' for the collection initializer element is obsolete"
-        ];
+  // The best overloaded Add method 'MyCollection.Add(int)' for the collection initializer element is obsolete"
+        );
 
     [ImportingConstructor]
     [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]

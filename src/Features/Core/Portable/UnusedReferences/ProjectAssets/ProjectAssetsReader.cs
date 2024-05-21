@@ -27,19 +27,19 @@ internal static partial class ProjectAssetsReader
         if (projectAssets is null ||
             projectAssets.Version != 3)
         {
-            return [];
+            return ImmutableArray<ReferenceInfo>.Empty;
         }
 
         if (projectAssets.Targets is null ||
             projectAssets.Targets.Count == 0)
         {
-            return [];
+            return ImmutableArray<ReferenceInfo>.Empty;
         }
 
         if (projectAssets.Libraries is null ||
             projectAssets.Libraries.Count == 0)
         {
-            return [];
+            return ImmutableArray<ReferenceInfo>.Empty;
         }
 
         // We keep a list of references that were automatically added by SDKs or other sources so that we can ignore them
@@ -49,7 +49,7 @@ internal static partial class ProjectAssetsReader
             .SelectMany(framework => framework.Dependencies!.Keys.Where(key => framework.Dependencies[key].AutoReferenced))
             .Distinct()
             .ToImmutableHashSet();
-        autoReferences ??= [];
+        autoReferences ??= ImmutableHashSet<string>.Empty;
 
         // Targets contain a hashmap of Libraries keyed by `{LibraryName}/{LibraryVersion}` we need to split these keys
         // and create a mapping of LibraryName to the complete library key.

@@ -74,7 +74,7 @@ internal abstract class PropertyOrIndexerAccessorDeclarationBody : MemberBody
         => StateMachineInfo.None;
 
     public sealed override ImmutableArray<ISymbol> GetCapturedVariables(SemanticModel model)
-        => (ExplicitBody != null) ? model.AnalyzeDataFlow(ExplicitBody).CapturedInside : [];
+        => (ExplicitBody != null) ? model.AnalyzeDataFlow(ExplicitBody).CapturedInside : new();
 
     public sealed override SyntaxNode FindStatementAndPartner(TextSpan span, MemberBody? partnerDeclarationBody, out SyntaxNode? partnerStatement, out int statementPart)
     {

@@ -22,7 +22,7 @@ internal sealed class ProjectAnalyzerReference(string fullPath, IProjectSystemDi
     // these 2 are mutable states that must be guarded under the _gate.
     private readonly object _gate = new();
     private AnalyzerReference? _analyzerReference;
-    private ImmutableArray<DiagnosticData> _analyzerLoadErrors = [];
+    private ImmutableArray<DiagnosticData> _analyzerLoadErrors = new();
 
     public string FullPath { get; } = fullPath;
 
@@ -79,7 +79,7 @@ internal sealed class ProjectAnalyzerReference(string fullPath, IProjectSystemDi
             loadErrors = _analyzerLoadErrors;
             reference = _analyzerReference;
 
-            _analyzerLoadErrors = [];
+            _analyzerLoadErrors = new();
             _analyzerReference = null;
         }
     }

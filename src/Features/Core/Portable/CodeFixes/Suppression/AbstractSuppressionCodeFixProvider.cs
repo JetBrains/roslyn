@@ -161,7 +161,7 @@ internal abstract partial class AbstractSuppressionCodeFixProvider : IConfigurat
         var suppressionTargetInfo = await GetSuppressionTargetInfoAsync(document, span, cancellationToken).ConfigureAwait(false);
         if (suppressionTargetInfo == null)
         {
-            return [];
+            return new();
         }
 
         return await GetSuppressionsAsync(
@@ -173,7 +173,7 @@ internal abstract partial class AbstractSuppressionCodeFixProvider : IConfigurat
     {
         if (!project.SupportsCompilation)
         {
-            return [];
+            return new();
         }
 
         var compilation = await project.GetCompilationAsync(cancellationToken).ConfigureAwait(false);
@@ -191,7 +191,7 @@ internal abstract partial class AbstractSuppressionCodeFixProvider : IConfigurat
         diagnostics = diagnostics.Where(IsFixableDiagnostic);
         if (diagnostics.IsEmpty())
         {
-            return [];
+            return new();
         }
 
         INamedTypeSymbol suppressMessageAttribute = null;

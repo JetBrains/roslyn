@@ -30,7 +30,7 @@ internal sealed class PassInCapturedVariablesAsArgumentsCodeFixProvider : Syntax
     {
     }
 
-    public override ImmutableArray<string> FixableDiagnosticIds { get; } = [CS8421];
+    public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(CS8421);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {
@@ -38,7 +38,7 @@ internal sealed class PassInCapturedVariablesAsArgumentsCodeFixProvider : Syntax
 
         return WrapFixAsync(
             context.Document,
-            [diagnostic],
+            ImmutableArray.Create(diagnostic),
             (document, localFunction, captures) =>
             {
                 context.RegisterCodeFix(

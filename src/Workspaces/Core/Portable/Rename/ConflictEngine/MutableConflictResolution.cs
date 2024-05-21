@@ -26,7 +26,7 @@ internal sealed class MutableConflictResolution(
 {
 
     // List of All the Locations that were renamed and conflict-complexified
-    public readonly List<RelatedLocation> RelatedLocations = [];
+    public readonly List<RelatedLocation> RelatedLocations = new();
 
     /// <summary>
     /// The base workspace snapshot

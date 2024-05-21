@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis.NewLines.MultipleBlankLines;
 internal class MultipleBlankLinesCodeFixProvider() : CodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.MultipleBlankLinesDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.MultipleBlankLinesDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {
@@ -39,7 +39,7 @@ internal class MultipleBlankLinesCodeFixProvider() : CodeFixProvider
     }
 
     private static Task<Document> UpdateDocumentAsync(Document document, Diagnostic diagnostic, CancellationToken cancellationToken)
-        => FixAllAsync(document, [diagnostic], cancellationToken);
+        => FixAllAsync(document, ImmutableArray.Create(diagnostic), cancellationToken);
 
     private static async Task<Document> FixAllAsync(
         Document document, ImmutableArray<Diagnostic> diagnostics, CancellationToken cancellationToken)

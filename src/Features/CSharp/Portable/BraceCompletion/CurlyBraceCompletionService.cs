@@ -84,7 +84,7 @@ internal class CurlyBraceCompletionService : AbstractCurlyBraceOrBracketCompleti
     protected override ImmutableArray<AbstractFormattingRule> GetBraceFormattingIndentationRulesAfterReturn(IndentationOptions options)
     {
         var indentStyle = options.IndentStyle;
-        return [BraceCompletionFormattingRule.ForIndentStyle(indentStyle)];
+        return ImmutableArray.Create(BraceCompletionFormattingRule.ForIndentStyle(indentStyle));
     }
 
     private sealed class BraceCompletionFormattingRule : BaseFormattingRule
@@ -92,11 +92,10 @@ internal class CurlyBraceCompletionService : AbstractCurlyBraceOrBracketCompleti
         private static readonly Predicate<SuppressOperation> s_predicate = o => o.Option.IsOn(SuppressOption.NoWrapping);
 
         private static readonly ImmutableArray<BraceCompletionFormattingRule> s_instances =
-        [
+        ImmutableArray.Create(
             new BraceCompletionFormattingRule(FormattingOptions2.IndentStyle.None),
             new BraceCompletionFormattingRule(FormattingOptions2.IndentStyle.Block),
-            new BraceCompletionFormattingRule(FormattingOptions2.IndentStyle.Smart),
-        ];
+            new BraceCompletionFormattingRule(FormattingOptions2.IndentStyle.Smart));
 
         private readonly FormattingOptions2.IndentStyle _indentStyle;
         private readonly CSharpSyntaxFormattingOptions _options;

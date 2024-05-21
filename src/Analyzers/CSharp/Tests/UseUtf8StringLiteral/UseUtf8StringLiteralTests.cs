@@ -295,7 +295,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UseUtf8StringLiteral
                 {
                     public void M()
                     {
-                        var x = [|new|] [] { (byte)65, (byte)66, (byte)67 };
+                        var x = [|new|] new() { (byte)65, (byte)66, (byte)67 };
                     }
                 }
                 """,

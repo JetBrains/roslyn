@@ -45,7 +45,7 @@ internal static class UseCollectionExpressionHelpers
         CancellationToken cancellationToken,
         out bool changesSemantics)
     {
-        // To keep things simple, all we do is replace the existing expression with the `[]` literal.This is an
+        // To keep things simple, all we do is replace the existing expression with the `new()` literal.This is an
         // 'untyped' collection expression literal, so it tells us if the new code will have any issues moving to
         // something untyped.  This will also tell us if we have any ambiguities (because there are multiple destination
         // types that could accept the collection expression).
@@ -76,7 +76,7 @@ internal static class UseCollectionExpressionHelpers
         if (!IsInTargetTypedLocation(semanticModel, topMostExpression, cancellationToken))
             return false;
 
-        // X[] = new Y[] { 1, 2, 3 }
+        // Xnew() = new Ynew() { 1, 2, 3 }
         //
         // First, we don't change things if X and Y are different.  That could lead to something observable at
         // runtime in the case of something like:  object[] x = new string[] ...
@@ -95,7 +95,7 @@ internal static class UseCollectionExpressionHelpers
             return false;
 
         // Conservatively, avoid making this change if the original expression was itself converted. Consider, for
-        // example, `IEnumerable<string> x = new List<string>()`.  If we change that to `[]` we will still compile,
+        // example, `IEnumerable<string> x = new List<string>()`.  If we change that to `new()` we will still compile,
         // but it's possible we'll end up with different types at runtime that may cause problems.
         //
         // Note: we can relax this on a case by case basis if we feel like it's acceptable.
@@ -172,8 +172,8 @@ internal static class UseCollectionExpressionHelpers
             if (isSpanToReadOnlySpan)
                 return true;
 
-            // ReadOnlySpan<X> x = new X[] ...  or
-            // Span<X> x = new X[] ...
+            // ReadOnlySpan<X> x = new Xnew() ...  or
+            // Span<X> x = new Xnew() ...
             //
             // This may or may not be safe.  If the original 'x' was a local, then it would previously have had global
             // scope (due to the array).  In that case, we have to make sure converting to a collection expression
@@ -591,7 +591,7 @@ internal static class UseCollectionExpressionHelpers
             => equalsValue.Parent is not VariableDeclaratorSyntax { Parent: VariableDeclarationSyntax { Type.IsVar: true } };
 
         static bool IsInTargetTypedCastExpression(CastExpressionSyntax castExpression)
-            // (X[])[1, 2, 3] is target typed.  `(X)[1, 2, 3]` is currently not (because it looks like indexing into an expr).
+            // (Xnew())[1, 2, 3] is target typed.  `(X)[1, 2, 3]` is currently not (because it looks like indexing into an expr).
             => castExpression.Type is not IdentifierNameSyntax;
 
         bool IsInTargetTypedConditionalExpression(ConditionalExpressionSyntax conditionalExpression, ExpressionSyntax expression)
@@ -635,7 +635,7 @@ internal static class UseCollectionExpressionHelpers
 
         bool IsInTargetTypedInitializerExpression(InitializerExpressionSyntax initializerExpression, ExpressionSyntax expression)
         {
-            // new X[] { [1, 2, 3] }.  Elements are target typed by array type.
+            // new Xnew() { [1, 2, 3] }.  Elements are target typed by array type.
             if (initializerExpression.Parent is ArrayCreationExpressionSyntax)
                 return true;
 
@@ -789,7 +789,7 @@ internal static class UseCollectionExpressionHelpers
 
         changesSemantics = false;
 
-        // has to either be `stackalloc X[]` or `stackalloc X[const]`.
+        // has to either be `stackalloc Xnew()` or `stackalloc X[const]`.
         if (getType(expression) is not ArrayTypeSyntax { RankSpecifiers: [{ Sizes: [var size] }, ..] })
             return default;
 
@@ -940,7 +940,7 @@ internal static class UseCollectionExpressionHelpers
         // Ok, this is type that has a collection-builder option available.  We can switch over if the current method
         // we're calling has one of the following signatures:
         //
-        //  `Create()`.  Trivial case, can be replaced with `[]`.
+        //  `Create()`.  Trivial case, can be replaced with `new()`.
         //  `Create(T), Create(T, T), Create(T, T, T)` etc.
         //  `Create(params T[])` (passing as individual elements, or an array with an initializer)
         //  `Create(ReadOnlySpan<T>)` (passing as a stack-alloc with an initializer)
@@ -1001,7 +1001,7 @@ internal static class UseCollectionExpressionHelpers
             }
             else if (originalCreateMethod.Name is CreateName)
             {
-                // `XXX.Create()` can be converted to `[]`
+                // `XXX.Create()` can be converted to `new()`
                 if (originalCreateMethod.Parameters.Length == 0)
                     return arguments.Count == 0;
 

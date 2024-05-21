@@ -40,13 +40,13 @@ internal abstract class AbstractInlineTypeHintsService : IInlineTypeHintsService
     {
         var enabledForTypes = options.EnabledForTypes;
         if (!enabledForTypes && !displayAllOverride)
-            return [];
+            return new();
 
         var forImplicitVariableTypes = enabledForTypes && options.ForImplicitVariableTypes;
         var forLambdaParameterTypes = enabledForTypes && options.ForLambdaParameterTypes;
         var forImplicitObjectCreation = enabledForTypes && options.ForImplicitObjectCreation;
         if (!forImplicitVariableTypes && !forLambdaParameterTypes && !forImplicitObjectCreation && !displayAllOverride)
-            return [];
+            return new();
 
         var anonymousTypeService = document.GetRequiredLanguageService<IStructuralTypeDisplayService>();
         var root = await document.GetRequiredSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
@@ -97,7 +97,7 @@ internal abstract class AbstractInlineTypeHintsService : IInlineTypeHintsService
         int position,
         HashSet<INamedTypeSymbol>? seenSymbols = null)
     {
-        seenSymbols ??= [];
+        seenSymbols ??= new();
 
         foreach (var part in parts)
         {

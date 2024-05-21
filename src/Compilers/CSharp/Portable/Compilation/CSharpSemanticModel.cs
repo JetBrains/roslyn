@@ -107,7 +107,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 default:
                     // If we are being asked for binding info on a "missing" syntax node
                     // then there's no point in doing any work at all. For example, the user might
-                    // have something like "class C { [] void M() {} }". The caller might obtain 
+                    // have something like "class C { new() void M() {} }". The caller might obtain 
                     // the attribute declaration syntax and then attempt to ask for type information
                     // about the contents of the attribute. But the parser has recovered from the 
                     // missing attribute type and filled in a "missing" node in its place. There's
@@ -2197,7 +2197,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
                     else
                     {
-                        // Explicit cast or error scenario like `object x = [];`
+                        // Explicit cast or error scenario like `object x = new();`
                         convertedNullability = nullability;
                         convertedType = null;
                         conversion = Conversion.Identity;

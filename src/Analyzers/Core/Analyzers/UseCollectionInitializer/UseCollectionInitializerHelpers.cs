@@ -51,7 +51,7 @@ internal static class UseCollectionInitializerHelpers
             return additionalUnnecessaryLocations;
         }
 
-        return [];
+        return new();
     }
 
     public static IEnumerable<TStatementSyntax> GetSubsequentStatements<TStatementSyntax>(

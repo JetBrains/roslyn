@@ -30,7 +30,7 @@ internal sealed class WrapItemsAction(string title, string parentTitle, Func<IPr
     // we have 9 different code actions offered (3 major groups, with 3 actions per group).  
     // It's likely the user will just pick from a few of these. So we'd like the ones they
     // choose to be prioritized accordingly.
-    private static ImmutableArray<string> s_mruTitles = [];
+    private static ImmutableArray<string> s_mruTitles = new();
 
     public string ParentTitle { get; } = parentTitle;
 

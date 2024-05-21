@@ -117,7 +117,7 @@ internal abstract partial class AbstractGenerateVariableService<TService, TSimpl
                 syntaxFactory, _semanticDocument, "System.NotImplementedException");
 
             return _state.TypeToGenerateIn.TypeKind != TypeKind.Interface && _refKind != RefKind.None
-                ? [throwStatement]
+                ? ImmutableArray.Create(throwStatement)
                 : default;
         }
 

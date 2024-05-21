@@ -31,7 +31,7 @@ internal class UseImplicitTypeCodeFixProvider : SyntaxEditorBasedCodeFixProvider
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseImplicitTypeDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseImplicitTypeDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

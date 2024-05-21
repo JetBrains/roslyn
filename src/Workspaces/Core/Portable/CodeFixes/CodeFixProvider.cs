@@ -16,7 +16,7 @@ namespace Microsoft.CodeAnalysis.CodeFixes;
 /// </summary>
 public abstract class CodeFixProvider
 {
-    private protected ImmutableArray<string> CustomTags = [];
+    private protected ImmutableArray<string> CustomTags = ImmutableArray<string>.Empty;
 
     /// <summary>
     /// A list of diagnostic IDs that this provider can provide fixes for.

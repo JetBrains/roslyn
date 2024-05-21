@@ -33,7 +33,7 @@ internal class CSharpUseIsNullCheckForCastAndEqualityOperatorCodeFixProvider : S
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseIsNullCheckDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseIsNullCheckDiagnosticId);
 
     private static bool IsSupportedDiagnostic(Diagnostic diagnostic)
         => diagnostic.Properties[UseIsNullConstants.Kind] == UseIsNullConstants.CastAndEqualityKey;

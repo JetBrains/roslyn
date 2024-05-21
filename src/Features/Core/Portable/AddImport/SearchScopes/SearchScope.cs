@@ -43,7 +43,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
             cancellationToken.ThrowIfCancellationRequested();
             if (name != null && string.IsNullOrWhiteSpace(name))
             {
-                return [];
+                return new();
             }
 
             using var query = Exact ? SearchQuery.Create(name, ignoreCase: true) : SearchQuery.CreateFuzzy(name);

@@ -48,7 +48,7 @@ internal readonly struct EmbeddedSyntaxToken<TSyntaxKind> where TSyntaxKind : st
     public bool IsMissing => VirtualChars.IsEmpty;
 
     public EmbeddedSyntaxToken<TSyntaxKind> AddDiagnosticIfNone(EmbeddedDiagnostic diagnostic)
-        => Diagnostics.Length > 0 ? this : WithDiagnostics([diagnostic]);
+        => Diagnostics.Length > 0 ? this : WithDiagnostics(ImmutableArray.Create(diagnostic));
 
     public EmbeddedSyntaxToken<TSyntaxKind> WithDiagnostics(ImmutableArray<EmbeddedDiagnostic> diagnostics)
         => With(diagnostics: diagnostics);

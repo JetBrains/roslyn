@@ -51,7 +51,7 @@ internal partial class SuppressMessageAttributeState(Compilation compilation, IN
         var operation = (model.GetOperation(attributeSyntax, cancellationToken) as IAttributeOperation)?.Operation;
         if (operation is not IObjectCreationOperation { Initializer: { } initializerOperation })
         {
-            namedAttributeArguments = [];
+            namedAttributeArguments = new();
             return false;
         }
 
@@ -98,7 +98,7 @@ internal partial class SuppressMessageAttributeState(Compilation compilation, IN
         targetHasDocCommentIdFormat = false;
         targetSymbolString = null;
         targetValueOperation = null;
-        resolvedSymbols = [];
+        resolvedSymbols = new();
 
         if (targetScope == TargetScope.Resource)
         {

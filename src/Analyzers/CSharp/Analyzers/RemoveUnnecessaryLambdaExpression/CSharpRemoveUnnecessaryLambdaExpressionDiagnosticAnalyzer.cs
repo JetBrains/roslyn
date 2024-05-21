@@ -233,8 +233,10 @@ internal sealed class CSharpRemoveUnnecessaryLambdaExpressionDiagnosticAnalyzer 
             syntaxTree.GetLocation(startReportSpan),
             preference.Notification,
             context.Options,
-            additionalLocations: [anonymousFunction.GetLocation()],
-            additionalUnnecessaryLocations: [syntaxTree.GetLocation(startReportSpan), syntaxTree.GetLocation(endReportSpan)]));
+            additionalLocations: ImmutableArray.Create(anonymousFunction.GetLocation()),
+            additionalUnnecessaryLocations: ImmutableArray.Create(
+                    syntaxTree.GetLocation(startReportSpan),
+                    syntaxTree.GetLocation(endReportSpan))));
     }
 
     private static bool OverloadsChanged(

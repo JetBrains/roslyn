@@ -125,7 +125,7 @@ internal class CSharpRemoveUnreachableCodeDiagnosticAnalyzer : AbstractBuiltInUn
             firstStatementLocation,
             NotificationOption2.ForSeverity(Descriptor.DefaultSeverity),
             context.Options,
-            additionalLocations: [],
+            additionalLocations: new(),
             additionalUnnecessaryLocations: additionalLocations));
 
         var sections = RemoveUnreachableCodeHelpers.GetSubsequentUnreachableSections(firstUnreachableStatement);

@@ -27,7 +27,7 @@ internal partial class UnitTestingSolutionCrawlerRegistrationService
             private readonly UnitTestingSolutionCrawlerProgressReporter _progressReporter = progressReporter;
 
             // map containing cancellation source for the item given out.
-            private readonly Dictionary<object, CancellationTokenSource> _cancellationMap = [];
+            private readonly Dictionary<object, CancellationTokenSource> _cancellationMap = new();
 
             protected abstract int WorkItemCount_NoLock { get; }
 

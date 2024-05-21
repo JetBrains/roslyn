@@ -36,7 +36,7 @@ internal partial class ExplicitInterfaceMemberCompletionProvider : LSPCompletion
     public override bool IsInsertionTrigger(SourceText text, int characterPosition, CompletionOptions options)
         => text[characterPosition] == '.';
 
-    public override ImmutableHashSet<char> TriggerCharacters { get; } = ['.'];
+    public override ImmutableHashSet<char> TriggerCharacters { get; } = ImmutableHashSet.Create('.');
 
     public override async Task ProvideCompletionsAsync(CompletionContext context)
     {

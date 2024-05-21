@@ -42,7 +42,7 @@ internal sealed class ProjectSystemProjectFactory
     /// A set of documents that were added by <see cref="ProjectSystemProject.AddSourceTextContainer"/>, and aren't otherwise
     /// tracked for opening/closing.
     /// </summary>
-    public ImmutableHashSet<DocumentId> DocumentsNotFromFiles { get; private set; } = [];
+    public ImmutableHashSet<DocumentId> DocumentsNotFromFiles { get; private set; } = ImmutableHashSet<DocumentId>.Empty;
 
     /// <remarks>Should be updated with <see cref="ImmutableInterlocked"/>.</remarks>
     private ImmutableDictionary<ProjectId, string?> _projectToMaxSupportedLangVersionMap = ImmutableDictionary<ProjectId, string?>.Empty;
@@ -300,7 +300,7 @@ internal sealed class ProjectSystemProjectFactory
             });
     }
 
-    private readonly Dictionary<ProjectId, ProjectReferenceInformation> _projectReferenceInfoMap = [];
+    private readonly Dictionary<ProjectId, ProjectReferenceInformation> _projectReferenceInfoMap = new();
 
     private ProjectReferenceInformation GetReferenceInfo_NoLock(ProjectId projectId)
     {
@@ -388,8 +388,8 @@ internal sealed class ProjectSystemProjectFactory
 
     private sealed class ProjectReferenceInformation
     {
-        public readonly List<string> OutputPaths = [];
-        public readonly List<(string path, ProjectReference projectReference)> ConvertedProjectReferences = [];
+        public readonly List<string> OutputPaths = new();
+        public readonly List<(string path, ProjectReference projectReference)> ConvertedProjectReferences = new();
     }
 
     /// <summary>

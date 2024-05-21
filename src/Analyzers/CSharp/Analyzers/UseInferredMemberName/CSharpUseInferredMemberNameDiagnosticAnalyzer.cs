@@ -59,8 +59,8 @@ internal sealed class CSharpUseInferredMemberNameDiagnosticAnalyzer : AbstractUs
                 nameColon.GetLocation(),
                 preference.Notification,
                 context.Options,
-                additionalLocations: [],
-                additionalUnnecessaryLocations: [syntaxTree.GetLocation(fadeSpan)]));
+                additionalLocations: new(),
+                additionalUnnecessaryLocations: ImmutableArray.Create(syntaxTree.GetLocation(fadeSpan))));
     }
 
     private void ReportDiagnosticsIfNeeded(NameEqualsSyntax nameEquals, SyntaxNodeAnalysisContext context)
@@ -85,7 +85,7 @@ internal sealed class CSharpUseInferredMemberNameDiagnosticAnalyzer : AbstractUs
                 nameEquals.GetLocation(),
                 preference.Notification,
                 context.Options,
-                additionalLocations: [],
-                additionalUnnecessaryLocations: [context.Node.SyntaxTree.GetLocation(fadeSpan)]));
+                additionalLocations: new(),
+                additionalUnnecessaryLocations: ImmutableArray.Create(context.Node.SyntaxTree.GetLocation(fadeSpan))));
     }
 }

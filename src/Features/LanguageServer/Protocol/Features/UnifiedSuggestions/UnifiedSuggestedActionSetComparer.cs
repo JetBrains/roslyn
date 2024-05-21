@@ -41,8 +41,8 @@ namespace Microsoft.CodeAnalysis.UnifiedSuggestions
             // $ $ [  ] has distance 2+3
             // $ [   ]$ has distance 1+0
             // $[    ]$ has distance 0+0
-            // $ []   $ has distance 1+3
-            // $[]    $ has distance 0+4
+            // $ new()   $ has distance 1+3
+            // $new()    $ has distance 0+4
             var startsDistance = Math.Abs(a.Start - b.Start);
             var endsDistance = Math.Abs(a.End - b.End);
 

@@ -18,7 +18,7 @@ internal partial class AbstractMetadataAsSourceService
             get
             {
                 return CanImplementImplicitly
-                    ? []
+                    ? ImmutableArray.Create<IEventSymbol>()
                     : _symbol.ExplicitInterfaceImplementations;
             }
         }

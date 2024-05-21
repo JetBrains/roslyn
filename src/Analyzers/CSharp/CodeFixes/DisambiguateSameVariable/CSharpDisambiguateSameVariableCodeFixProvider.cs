@@ -38,7 +38,7 @@ internal class CSharpDisambiguateSameVariableCodeFixProvider : SyntaxEditorBased
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; }
-        = [CS1717, CS1718];
+        = ImmutableArray.Create(CS1717, CS1718);
 
     public override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

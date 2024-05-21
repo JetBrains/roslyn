@@ -61,7 +61,7 @@ internal abstract class AbstractMemberScopedReferenceFinder<TSymbol> : AbstractR
             return await FindReferencesInTokensAsync(symbol, state, tokens, cancellationToken).ConfigureAwait(false);
         }
 
-        return [];
+        return new();
     }
 
     private static ISymbol? GetContainer(ISymbol symbol)

@@ -23,7 +23,7 @@ internal partial class CSharpProximityExpressionsService
 
         private StatementSyntax _parentStatement;
         private SyntaxToken _token;
-        private readonly List<string> _expressions = [];
+        private readonly List<string> _expressions = new();
 
         internal IList<string> Do(CancellationToken cancellationToken)
         {

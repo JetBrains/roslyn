@@ -152,14 +152,14 @@ internal sealed partial class SymbolicRenameLocations
             var shouldIncludeSymbol = await ShouldIncludeSymbolAsync(referencedSymbol, originalSymbol, solution, false, cancellationToken).ConfigureAwait(false);
             if (!shouldIncludeSymbol)
             {
-                return [];
+                return new();
             }
 
             // Namespaces are definitions and references all in one. Since every definition
             // location is also a reference, we'll ignore it's definitions.
             if (referencedSymbol.Kind == SymbolKind.Namespace)
             {
-                return [];
+                return new();
             }
 
             var results = ArrayBuilder<RenameLocation>.GetInstance();

@@ -168,7 +168,7 @@ internal partial class GenerateEqualsAndGetHashCodeFromMembersCodeRefactoringPro
                 compilation.GetSpecialType(SpecialType.System_Boolean),
                 CodeGenerationOperatorKind.Equality,
                 parameters,
-                [generator.ReturnStatement(expression)]);
+                ImmutableArray.Create(generator.ReturnStatement(expression)));
         }
 
         private static IMethodSymbol CreateInequalityOperator(Compilation compilation, SyntaxGenerator generator, ImmutableArray<IParameterSymbol> parameters)
@@ -185,7 +185,7 @@ internal partial class GenerateEqualsAndGetHashCodeFromMembersCodeRefactoringPro
                 compilation.GetSpecialType(SpecialType.System_Boolean),
                 CodeGenerationOperatorKind.Inequality,
                 parameters,
-                [generator.ReturnStatement(expression)]);
+                ImmutableArray.Create(generator.ReturnStatement(expression)));
         }
 
         private Task<IMethodSymbol> CreateGetHashCodeMethodAsync(CancellationToken cancellationToken)

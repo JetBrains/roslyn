@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
@@ -46,7 +47,7 @@ internal sealed partial class MisplacedUsingDirectivesCodeFixProvider : CodeFixP
     {
     }
 
-    public override ImmutableArray<string> FixableDiagnosticIds => [IDEDiagnosticIds.MoveMisplacedUsingDirectivesDiagnosticId];
+    public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(IDEDiagnosticIds.MoveMisplacedUsingDirectivesDiagnosticId);
 
     public override FixAllProvider GetFixAllProvider()
     {
@@ -298,7 +299,7 @@ internal sealed partial class MisplacedUsingDirectivesCodeFixProvider : CodeFixP
 
                 // Add any orphaned trivia to this node.
                 deduplicatedUsingsBuilder.Add(usingDirective.WithPrependedLeadingTrivia(orphanedTrivia));
-                orphanedTrivia = [];
+                orphanedTrivia = Array.Empty<SyntaxTrivia>();
             }
         }
 

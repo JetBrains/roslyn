@@ -28,7 +28,7 @@ internal static class RemoveUnreachableCodeHelpers
             case GlobalStatementSyntax globalStatement:
                 if (globalStatement.Parent is not CompilationUnitSyntax compilationUnit)
                 {
-                    return [];
+                    return new();
                 }
 
                 {
@@ -52,7 +52,7 @@ internal static class RemoveUnreachableCodeHelpers
 
             default:
                 // We're an embedded statement.  So the unreachable section is just us.
-                return [];
+                return new();
         }
 
         var sections = ArrayBuilder<ImmutableArray<StatementSyntax>>.GetInstance();

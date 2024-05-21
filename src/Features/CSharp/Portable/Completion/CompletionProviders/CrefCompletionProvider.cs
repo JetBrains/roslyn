@@ -174,7 +174,7 @@ internal sealed class CrefCompletionProvider() : AbstractCrefCompletionProvider
         if (IsCrefQualifiedNameContext(token))
             return GetQualifiedSymbols((QualifiedCrefSyntax)token.Parent!, token, semanticModel, cancellationToken);
 
-        return [];
+        return new();
     }
 
     private static ImmutableArray<ISymbol> GetUnqualifiedSymbols(

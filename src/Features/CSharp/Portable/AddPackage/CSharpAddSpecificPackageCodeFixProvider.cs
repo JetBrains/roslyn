@@ -25,7 +25,7 @@ internal class CSharpAddSpecificPackageCodeFixProvider : AbstractAddSpecificPack
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [CS8179];
+        => ImmutableArray.Create(CS8179);
 
     protected override string GetAssemblyName(string id)
     {

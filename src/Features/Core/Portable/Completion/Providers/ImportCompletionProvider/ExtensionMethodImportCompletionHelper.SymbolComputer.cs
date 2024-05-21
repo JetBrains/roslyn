@@ -36,7 +36,7 @@ internal static partial class ExtensionMethodImportCompletionHelper
         // This dictionary is used as cache among all projects and PE references. 
         // The key is the receiver type as in the extension method declaration (symbol retrived from originating compilation).
         // The value indicates if we can reduce an extension method with this receiver type given receiver type.
-        private readonly ConcurrentDictionary<ITypeSymbol, bool> _checkedReceiverTypes = [];
+        private readonly ConcurrentDictionary<ITypeSymbol, bool> _checkedReceiverTypes = new();
 
         public SymbolComputer(
             Document document,
@@ -509,17 +509,17 @@ internal static partial class ExtensionMethodImportCompletionHelper
         }
 
         /// <summary>
-        /// Add strings represent complex types (i.e. "" for non-array types and "[]" for array types) to the receiver type, 
+        /// Add strings represent complex types (i.e. "" for non-array types and "new()" for array types) to the receiver type, 
         /// so we would include in the filter info about extension methods with complex receiver type.
         /// </summary>
         private static ImmutableArray<string> AddComplexTypes(ImmutableArray<string> receiverTypeNames)
         {
-            return
-            [
-                .. receiverTypeNames,
-                FindSymbols.Extensions.ComplexReceiverTypeName,
-                FindSymbols.Extensions.ComplexArrayReceiverTypeName,
-            ];
+            using var _ = ArrayBuilder<string>.GetInstance(receiverTypeNames.Length + 2, out var receiverTypeNamesBuilder);
+            receiverTypeNamesBuilder.AddRange(receiverTypeNames);
+            receiverTypeNamesBuilder.Add(FindSymbols.Extensions.ComplexReceiverTypeName);
+            receiverTypeNamesBuilder.Add(FindSymbols.Extensions.ComplexArrayReceiverTypeName);
+
+            return receiverTypeNamesBuilder.ToImmutableAndClear();
         }
 
         private static string GetReceiverTypeName(ITypeSymbol typeSymbol)
@@ -539,7 +539,7 @@ internal static partial class ExtensionMethodImportCompletionHelper
                     var elementTypeName = GetReceiverTypeName(elementType);
 
                     // We do not differentiate array of different kinds sicne they are all represented in the indices as "NonArrayElementTypeName[]"
-                    // e.g. int[], int[][], int[,], etc. are all represented as "int[]", whereas array of complex type such as T[] is "[]".
+                    // e.g. int[], int[][], int[,], etc. are all represented as "int[]", whereas array of complex type such as T[] is "new()".
                     return elementTypeName + FindSymbols.Extensions.ArrayReceiverTypeNameSuffix;
 
                 default:

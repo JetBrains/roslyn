@@ -41,7 +41,7 @@ internal readonly struct PatternMatch : IComparable<PatternMatch>
         bool isCaseSensitive,
         TextSpan? matchedSpan)
         : this(resultType, punctuationStripped, isCaseSensitive,
-               matchedSpan == null ? [] : [matchedSpan.Value])
+               matchedSpan == null ? new() : ImmutableArray.Create(matchedSpan.Value))
     {
     }
 

@@ -69,7 +69,7 @@ internal abstract class AbstractSelectedMembers<
                                .Where(m => m.Parent is TTypeDeclarationSyntax)
                                .FirstOrDefault();
         if (firstMember == null)
-            return [];
+            return new();
 
         return GetMembersInSpan(root, text, textSpan, firstMember, allowPartialSelection, membersToKeep);
     }
@@ -83,7 +83,7 @@ internal abstract class AbstractSelectedMembers<
         var members = GetMembers(containingType);
         var fieldIndex = members.IndexOf(firstMember);
         if (fieldIndex < 0)
-            return [];
+            return new();
 
         using var _ = ArrayBuilder<SyntaxNode>.GetInstance(out var selectedMembers);
         for (var i = fieldIndex; i < members.Count; i++)

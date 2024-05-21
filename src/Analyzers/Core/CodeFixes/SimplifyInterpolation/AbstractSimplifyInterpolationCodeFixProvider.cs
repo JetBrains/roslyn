@@ -31,7 +31,7 @@ internal abstract class AbstractSimplifyInterpolationCodeFixProvider<
     where TInterpolatedStringExpressionSyntax : TExpressionSyntax
 {
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.SimplifyInterpolationId];
+        ImmutableArray.Create(IDEDiagnosticIds.SimplifyInterpolationId);
 
     protected abstract AbstractSimplifyInterpolationHelpers GetHelpers();
 

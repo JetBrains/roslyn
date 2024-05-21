@@ -41,7 +41,7 @@ internal abstract class AbstractUseConditionalExpressionForAssignmentCodeFixProv
     protected abstract TLocalDeclarationStatementSyntax AddSimplificationToType(TLocalDeclarationStatementSyntax updatedLocalDeclaration);
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseConditionalExpressionForAssignmentDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseConditionalExpressionForAssignmentDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

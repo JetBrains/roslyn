@@ -134,9 +134,9 @@ internal partial class ProjectState
     private static ProjectInfo ClearAllDocumentsFromProjectInfo(ProjectInfo projectInfo)
     {
         return projectInfo
-            .WithDocuments([])
-            .WithAdditionalDocuments([])
-            .WithAnalyzerConfigDocuments([]);
+            .WithDocuments(Array.Empty<DocumentInfo>())
+            .WithAdditionalDocuments(Array.Empty<DocumentInfo>())
+            .WithAnalyzerConfigDocuments(Array.Empty<DocumentInfo>());
     }
 
     private ProjectInfo FixProjectInfo(ProjectInfo projectInfo)
@@ -487,7 +487,7 @@ internal partial class ProjectState
 
     private readonly struct AnalyzerConfigOptionsCache(AnalyzerConfigSet configSet)
     {
-        private readonly ConcurrentDictionary<string, AnalyzerConfigData> _sourcePathToResult = [];
+        private readonly ConcurrentDictionary<string, AnalyzerConfigData> _sourcePathToResult = new();
         private readonly Func<string, AnalyzerConfigData> _computeFunction = path => new AnalyzerConfigData(configSet.GetOptionsForSourcePath(path));
         private readonly Lazy<AnalyzerConfigData> _global = new Lazy<AnalyzerConfigData>(() => new AnalyzerConfigData(configSet.GlobalConfigOptions));
 

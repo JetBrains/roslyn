@@ -84,7 +84,7 @@ public abstract class XmlDocumentationProvider : DocumentationProvider
                 }
                 catch (Exception)
                 {
-                    _docComments = [];
+                    _docComments = new();
                 }
             }
         }

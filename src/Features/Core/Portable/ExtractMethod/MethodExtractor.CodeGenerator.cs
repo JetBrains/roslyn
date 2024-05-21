@@ -327,7 +327,7 @@ internal abstract partial class MethodExtractor<TSelectionResult, TStatementSynt
         {
             if (AnalyzerResult.MethodTypeParametersInDeclaration.Count == 0)
             {
-                return [];
+                return new();
             }
 
             var set = new HashSet<ITypeParameterSymbol>(AnalyzerResult.MethodTypeParametersInConstraintList);
@@ -342,7 +342,7 @@ internal abstract partial class MethodExtractor<TSelectionResult, TStatementSynt
                 }
 
                 typeParameters.Add(CodeGenerationSymbolFactory.CreateTypeParameter(
-                    parameter.GetAttributes(), parameter.Variance, parameter.Name, [], parameter.NullableAnnotation,
+                    parameter.GetAttributes(), parameter.Variance, parameter.Name, ImmutableArray.Create<ITypeSymbol>(), parameter.NullableAnnotation,
                     parameter.HasConstructorConstraint, parameter.HasReferenceTypeConstraint, parameter.HasUnmanagedTypeConstraint,
                     parameter.HasValueTypeConstraint, parameter.HasNotNullConstraint, parameter.Ordinal));
             }
@@ -363,7 +363,7 @@ internal abstract partial class MethodExtractor<TSelectionResult, TStatementSynt
 
                     parameters.Add(
                         CodeGenerationSymbolFactory.CreateParameterSymbol(
-                            attributes: [],
+                            attributes: new(),
                             refKind: refKind,
                             isParams: false,
                             type: type,

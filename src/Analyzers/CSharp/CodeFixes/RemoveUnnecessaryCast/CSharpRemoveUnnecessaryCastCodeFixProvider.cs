@@ -34,7 +34,7 @@ internal partial class CSharpRemoveUnnecessaryCastCodeFixProvider : SyntaxEditor
     }
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.RemoveUnnecessaryCastDiagnosticId];
+        ImmutableArray.Create(IDEDiagnosticIds.RemoveUnnecessaryCastDiagnosticId);
 
     public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

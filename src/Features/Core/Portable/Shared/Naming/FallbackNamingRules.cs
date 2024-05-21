@@ -18,43 +18,45 @@ internal static class FallbackNamingRules
     /// Standard symbol names if the user doesn't have any existing naming rules.
     /// </summary>
     public static readonly ImmutableArray<NamingRule> Default =
-    [
-        new NamingRule(
-            new SymbolSpecification(
-                Guid.NewGuid(),
-                nameof(Capitalization.CamelCase),
-                [
-                    new SymbolKindOrTypeKind(SymbolKind.Field),
-                    new SymbolKindOrTypeKind(SymbolKind.Local),
-                    new SymbolKindOrTypeKind(SymbolKind.Parameter),
-                    new SymbolKindOrTypeKind(SymbolKind.RangeVariable),
-                ]),
-            new NamingStyle(Guid.NewGuid(), capitalizationScheme: Capitalization.CamelCase),
-            enforcementLevel: ReportDiagnostic.Hidden),
-        new NamingRule(
-            new SymbolSpecification(
-                Guid.NewGuid(),
-                "CamelCaseWithUnderscore",
-                [new SymbolKindOrTypeKind(SymbolKind.Field)]),
-            new NamingStyle(Guid.NewGuid(), prefix: "_", capitalizationScheme: Capitalization.CamelCase),
-            enforcementLevel: ReportDiagnostic.Hidden),
-        new NamingRule(
-            CreateDefaultSymbolSpecification(),
-            new NamingStyle(Guid.NewGuid(), capitalizationScheme: Capitalization.PascalCase),
-            enforcementLevel: ReportDiagnostic.Hidden),
-    ];
+        ImmutableArray.Create<NamingRule>(
+            new NamingRule(
+                new SymbolSpecification(
+                    Guid.NewGuid(),
+                    nameof(Capitalization.CamelCase),
+                    ImmutableArray.Create(
+                        new SymbolKindOrTypeKind(SymbolKind.Field),
+                        new SymbolKindOrTypeKind(SymbolKind.Local),
+                        new SymbolKindOrTypeKind(SymbolKind.Parameter),
+                        new SymbolKindOrTypeKind(SymbolKind.RangeVariable)
+                    )),
+                new NamingStyle(Guid.NewGuid(), capitalizationScheme: Capitalization.CamelCase),
+                enforcementLevel: ReportDiagnostic.Hidden),
+            new NamingRule(
+                new SymbolSpecification(
+                    Guid.NewGuid(),
+                    "CamelCaseWithUnderscore",
+                    ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Field))),
+                new NamingStyle(Guid.NewGuid(), prefix: "_", capitalizationScheme: Capitalization.CamelCase),
+                enforcementLevel: ReportDiagnostic.Hidden),
+            new NamingRule(
+                CreateDefaultSymbolSpecification(),
+                new NamingStyle(Guid.NewGuid(), capitalizationScheme: Capitalization.PascalCase),
+                enforcementLevel: ReportDiagnostic.Hidden)
+        );
 
     /// <summary>
     /// Standard name rules for name suggestion/completion utilities. These are fallback rules that run if a user
     /// hasn't provided any other naming rule matching the scenario.
     /// </summary>
-    internal static readonly ImmutableArray<NamingRule> CompletionFallbackRules = [CreateCamelCaseFieldsAndParametersRule()];
+    internal static readonly ImmutableArray<NamingRule> CompletionFallbackRules =
+        ImmutableArray.Create(CreateCamelCaseFieldsAndParametersRule());
 
     /// <summary>
     /// Standard name rules for name suggestion/completion utilities. These are supplementary rules that run in
     /// addition to any other rules defined by the user in order to provide additional valid suggestions.
     /// </summary>
-    internal static readonly ImmutableArray<NamingRule> CompletionSupplementaryRules = [CreateEndWithAsyncRule(), CreateGetAsyncRule(), CreateMethodStartsWithGetRule()];
+    internal static readonly ImmutableArray<NamingRule> CompletionSupplementaryRules =
+        ImmutableArray.Create(CreateEndWithAsyncRule(), CreateGetAsyncRule(), CreateMethodStartsWithGetRule());
 
     private static NamingRule CreateGetAsyncRule()
     {
@@ -68,9 +70,11 @@ internal static class FallbackNamingRules
 
     private static NamingRule CreateCamelCaseFieldsAndParametersRule()
     {
-        var kinds = ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Field), new SymbolKindOrTypeKind(SymbolKind.Parameter), new SymbolKindOrTypeKind(SymbolKind.Local));
+        var kinds = ImmutableArray.Create(new SymbolKindOrTypeKind(SymbolKind.Field),
+            new SymbolKindOrTypeKind(SymbolKind.Parameter), new SymbolKindOrTypeKind(SymbolKind.Local));
         return new NamingRule(
-            new SymbolSpecification(Guid.NewGuid(), "camelcasefields", kinds, accessibilityList: default, modifiers: default),
+            new SymbolSpecification(Guid.NewGuid(), "camelcasefields", kinds, accessibilityList: default,
+                modifiers: default),
             new NamingStyle(Guid.NewGuid(), capitalizationScheme: Capitalization.CamelCase),
             ReportDiagnostic.Info);
     }
@@ -89,7 +93,8 @@ internal static class FallbackNamingRules
     {
         var kinds = ImmutableArray.Create(new SymbolKindOrTypeKind(MethodKind.Ordinary));
         return new NamingRule(
-            new SymbolSpecification(Guid.NewGuid(), "startswithget", kinds, accessibilityList: default, modifiers: default),
+            new SymbolSpecification(Guid.NewGuid(), "startswithget", kinds, accessibilityList: default,
+                modifiers: default),
             new NamingStyle(Guid.NewGuid(), prefix: "Get"),
             ReportDiagnostic.Info);
     }

@@ -51,7 +51,7 @@ internal abstract partial class AbstractUpgradeProjectCodeFixProvider : CodeFixP
 
         if (upgradeableProjects.Length == 0)
         {
-            return [];
+            return new();
         }
 
         var fixOneProjectTitle = string.Format(UpgradeThisProjectResource, newVersion);

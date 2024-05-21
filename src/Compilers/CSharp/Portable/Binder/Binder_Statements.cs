@@ -840,10 +840,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             {
                 // In the native compiler when given a situation like
                 //
-                // D[] x;
+                // Dnew() x;
                 //
                 // where D is a static type we report both that D cannot be an element type
-                // of an array, and that D[] is not a valid type for a local variable.
+                // of an array, and that Dnew() is not a valid type for a local variable.
                 // This seems silly; the first error is entirely sufficient. We no longer
                 // produce additional errors for local variables of arrays of static types.
 

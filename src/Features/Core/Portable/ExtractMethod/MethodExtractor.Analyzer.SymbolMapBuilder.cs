@@ -22,7 +22,7 @@ internal abstract partial class MethodExtractor<TSelectionResult, TStatementSynt
             private readonly SemanticModel _semanticModel;
             private readonly ISyntaxFactsService _service;
             private readonly TextSpan _span;
-            private readonly Dictionary<ISymbol, List<SyntaxToken>> _symbolMap = [];
+            private readonly Dictionary<ISymbol, List<SyntaxToken>> _symbolMap = new();
             private readonly CancellationToken _cancellationToken;
 
             public static Dictionary<ISymbol, List<SyntaxToken>> Build(
@@ -71,7 +71,7 @@ internal abstract partial class MethodExtractor<TSelectionResult, TStatementSynt
                     foreach (var sym in symbolInfo.GetAllSymbols())
                     {
                         // add binding result to map
-                        var list = _symbolMap.GetOrAdd(sym, _ => []);
+                        var list = _symbolMap.GetOrAdd(sym, _ => new());
                         list.Add(token);
                     }
                 }

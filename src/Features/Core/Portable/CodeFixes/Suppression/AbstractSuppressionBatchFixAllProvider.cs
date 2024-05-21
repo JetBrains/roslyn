@@ -366,7 +366,7 @@ internal abstract class AbstractSuppressionBatchFixAllProvider : FixAllProvider
     }
 
     private static readonly Func<DocumentId, ConcurrentBag<(CodeAction, Document)>> s_getValue =
-        _ => [];
+        _ => new();
 
     private static async Task GetChangedDocumentsAsync(
         Solution oldSolution,

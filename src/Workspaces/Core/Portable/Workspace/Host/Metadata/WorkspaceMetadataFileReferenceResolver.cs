@@ -30,10 +30,10 @@ internal sealed class WorkspaceMetadataFileReferenceResolver : MetadataReference
         var path = PathResolver.ResolvePath(reference, baseFilePath);
         if (path == null)
         {
-            return [];
+            return new();
         }
 
-        return [_metadataService.GetReference(path, properties)];
+        return ImmutableArray.Create(_metadataService.GetReference(path, properties));
     }
 
     public bool Equals(WorkspaceMetadataFileReferenceResolver other)

@@ -57,7 +57,7 @@ internal sealed class CSharpConvertLinqQueryToForEachProvider : AbstractConvertL
         private readonly ISemanticFactsService _semanticFacts = semanticFacts;
         private readonly CancellationToken _cancellationToken = cancellationToken;
         private readonly QueryExpressionSyntax _source = source;
-        private readonly List<string> _introducedLocalNames = [];
+        private readonly List<string> _introducedLocalNames = new();
 
         public bool TryConvert(out DocumentUpdateInfo documentUpdateInfo)
         {
@@ -436,7 +436,7 @@ internal sealed class CSharpConvertLinqQueryToForEachProvider : AbstractConvertL
                     // foreach(...)
                     variableLocal = variableExpression;
                     nodesBeforeLocal = [parentStatement.ReplaceNode(invocationExpression, initializer.WithAdditionalAnnotations(Simplifier.Annotation))];
-                    nodesAfterLocal = [];
+                    nodesAfterLocal = new StatementSyntax[0];
                 }
                 else
                 {
@@ -585,7 +585,7 @@ internal sealed class CSharpConvertLinqQueryToForEachProvider : AbstractConvertL
                 constraintClauses: default,
                 body: SyntaxFactory.Block(
                     SyntaxFactory.Token(
-                        [],
+                        new(),
                         SyntaxKind.OpenBraceToken,
                         [SyntaxFactory.EndOfLine(Environment.NewLine)]),
                     [.. statements],
@@ -629,7 +629,7 @@ internal sealed class CSharpConvertLinqQueryToForEachProvider : AbstractConvertL
                             location: forEachStatement.Statement,
                             container: forEachStatement.Statement,
                             baseName: identifierName,
-                            usedNames: [],
+                            usedNames: Enumerable.Empty<string>(),
                             _cancellationToken).ValueText != identifierName)
                     {
                         documentUpdateInfo = null;

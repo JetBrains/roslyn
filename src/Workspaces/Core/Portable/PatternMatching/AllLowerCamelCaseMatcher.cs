@@ -50,13 +50,13 @@ internal partial class PatternMatcher
 
             if (result == null)
             {
-                matchedSpans = [];
+                matchedSpans = new();
                 return null;
             }
 
             matchedSpans = includeMatchedSpans && result.Value.MatchedSpansInReverse != null
                 ? new NormalizedTextSpanCollection(result.Value.MatchedSpansInReverse).ToImmutableArray()
-                : [];
+                : new();
 
             result?.Free();
             return GetKind(result.Value, candidateHumps);

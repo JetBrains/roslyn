@@ -324,7 +324,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UseObjectInitializer
                     int i;
                     int j;
 
-                    void M(C[] array)
+                    void M(Cnew() array)
                     {
                         array[0] = [|new|] C();
                         [|array[0].|]i = 1;
@@ -338,7 +338,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UseObjectInitializer
                     int i;
                     int j;
 
-                    void M(C[] array)
+                    void M(Cnew() array)
                     {
                         array[0] = new C
                         {
@@ -620,7 +620,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UseObjectInitializer
                     int i;
                     int j;
 
-                    void M(C[] array)
+                    void M(Cnew() array)
                     {
                         array[0] = [|new|] C();
                         [|array[0].|]i = 1;
@@ -637,7 +637,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UseObjectInitializer
                     int i;
                     int j;
 
-                    void M(C[] array)
+                    void M(Cnew() array)
                     {
                         array[0] = new C
                         {

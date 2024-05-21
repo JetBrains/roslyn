@@ -27,7 +27,7 @@ internal abstract class AbstractFormattingCodeFixProvider : SyntaxEditorBasedCod
     }
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.FormattingDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.FormattingDiagnosticId);
 
     protected abstract ISyntaxFormatting SyntaxFormatting { get; }
 

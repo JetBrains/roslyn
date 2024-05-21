@@ -44,7 +44,7 @@ internal partial class CSharpReplacePropertyWithMethodsService :
         CancellationToken cancellationToken)
     {
         if (propertyDeclarationNode is not PropertyDeclarationSyntax propertyDeclaration)
-            return [];
+            return new();
 
         var options = (CSharpCodeGenerationOptions)await document.GetCodeGenerationOptionsAsync(fallbackOptions, cancellationToken).ConfigureAwait(false);
         var syntaxTree = await document.GetRequiredSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);

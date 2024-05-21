@@ -25,7 +25,7 @@ internal sealed class ActiveStatementSpanProviderCallback(ActiveStatementSpanPro
         }
         catch (Exception e) when (FatalError.ReportAndCatchUnlessCanceled(e, cancellationToken))
         {
-            return [];
+            return new();
         }
     }
 }

@@ -136,13 +136,27 @@ internal static partial class EditorConfigNamingStyleParser
     private static readonly SymbolKindOrTypeKind _typeParameter = new(SymbolKind.TypeParameter);
     private static readonly SymbolKindOrTypeKind _local = new(SymbolKind.Local);
     private static readonly ImmutableArray<SymbolKindOrTypeKind> _all =
-        [_namespace, _class, _struct, _interface, _enum, _property, _method, _localFunction, _field, _event, _delegate, _parameter, _typeParameter, _local];
+        ImmutableArray.Create(
+                _namespace,
+                _class,
+                _struct,
+                _interface,
+                _enum,
+                _property,
+                _method,
+                _localFunction,
+                _field,
+                _event,
+                _delegate,
+                _parameter,
+                _typeParameter,
+                _local);
 
     private static ImmutableArray<SymbolKindOrTypeKind> ParseSymbolKindList(string symbolSpecApplicableKinds)
     {
         if (symbolSpecApplicableKinds == null)
         {
-            return [];
+            return new();
         }
 
         if (symbolSpecApplicableKinds.Trim() == "*")
@@ -221,21 +235,20 @@ internal static partial class EditorConfigNamingStyleParser
     }
 
     private static readonly ImmutableArray<Accessibility> s_allAccessibility =
-    [
+    ImmutableArray.Create(
         Accessibility.NotApplicable,
         Accessibility.Public,
         Accessibility.Internal,
         Accessibility.Private,
         Accessibility.Protected,
         Accessibility.ProtectedAndInternal,
-        Accessibility.ProtectedOrInternal,
-    ];
+        Accessibility.ProtectedOrInternal);
 
     private static ImmutableArray<Accessibility> ParseAccessibilityKindList(string symbolSpecApplicableAccessibilities)
     {
         if (symbolSpecApplicableAccessibilities == null)
         {
-            return [];
+            return new();
         }
 
         if (symbolSpecApplicableAccessibilities.Trim() == "*")
@@ -299,13 +312,13 @@ internal static partial class EditorConfigNamingStyleParser
     private static readonly ModifierKind s_constModifierKind = new(ModifierKindEnum.IsConst);
     private static readonly ModifierKind s_readonlyModifierKind = new(ModifierKindEnum.IsReadOnly);
     private static readonly ModifierKind s_staticModifierKind = new(ModifierKindEnum.IsStatic);
-    private static readonly ImmutableArray<ModifierKind> _allModifierKind = [s_abstractModifierKind, s_asyncModifierKind, s_constModifierKind, s_readonlyModifierKind, s_staticModifierKind];
+    private static readonly ImmutableArray<ModifierKind> _allModifierKind = ImmutableArray.Create(s_abstractModifierKind, s_asyncModifierKind, s_constModifierKind, s_readonlyModifierKind, s_staticModifierKind);
 
     private static ImmutableArray<ModifierKind> ParseModifiers(string symbolSpecRequiredModifiers)
     {
         if (symbolSpecRequiredModifiers == null)
         {
-            return [];
+            return new();
         }
 
         if (symbolSpecRequiredModifiers.Trim() == "*")

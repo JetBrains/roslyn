@@ -35,11 +35,11 @@ internal abstract partial class AbstractImplementInterfaceService
                 updatedMethod,
                 accessibility: accessibility,
                 modifiers: modifiers,
-                explicitInterfaceImplementations: useExplicitInterfaceSymbol ? [updatedMethod] : default,
+                explicitInterfaceImplementations: useExplicitInterfaceSymbol ? ImmutableArray.Create(updatedMethod) : default,
                 name: memberName,
                 statements: generateAbstractly
                     ? default
-                    : [CreateStatement(compilation, updatedMethod)]);
+                    : ImmutableArray.Create(CreateStatement(compilation, updatedMethod)));
         }
 
         private SyntaxNode CreateStatement(Compilation compilation, IMethodSymbol method)

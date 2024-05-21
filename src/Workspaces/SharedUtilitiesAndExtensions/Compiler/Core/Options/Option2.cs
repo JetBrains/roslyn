@@ -84,7 +84,7 @@ internal partial class Option2<T> : ISingleValuedOption<T>
     object? IOption.DefaultValue => Definition.DefaultValue;
     bool IOption.IsPerLanguage => false;
     Type IOption.Type => Definition.Type;
-    ImmutableArray<OptionStorageLocation> IOption.StorageLocations => [];
+    ImmutableArray<OptionStorageLocation> IOption.StorageLocations => new();
 #endif
 
     public override string ToString() => Definition.ToString();

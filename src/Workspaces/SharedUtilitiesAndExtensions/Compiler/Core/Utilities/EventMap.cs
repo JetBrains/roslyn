@@ -14,7 +14,7 @@ internal class EventMap
 {
     private readonly NonReentrantLock _guard = new();
 
-    private readonly Dictionary<string, object> _eventNameToRegistries = [];
+    private readonly Dictionary<string, object> _eventNameToRegistries = new();
 
     public EventMap()
     {
@@ -82,7 +82,7 @@ internal class EventMap
             return (ImmutableArray<Registry<TEventHandler>>)registries;
         }
 
-        return [];
+        return ImmutableArray.Create<Registry<TEventHandler>>();
     }
 
     private void SetRegistries_NoLock<TEventHandler>(string eventName, ImmutableArray<Registry<TEventHandler>> registries)

@@ -15,7 +15,7 @@ internal partial class ITypeSymbolExtensions
          IList<ITypeParameterSymbol> typeParameters,
         bool onlyMethodTypeParameters) : SymbolVisitor
     {
-        private readonly HashSet<ISymbol> _visited = [];
+        private readonly HashSet<ISymbol> _visited = new();
 
         public override void DefaultVisit(ISymbol node)
             => throw new NotImplementedException();

@@ -212,7 +212,7 @@ namespace Microsoft.CodeAnalysis.CodeCleanup
             // ensure more than just known diagnostics were returned
             if (!diagnostics.Any())
             {
-                return [];
+                return new();
             }
 
             return diagnostics.SelectAsArray(static d => (d.Id, d.Title)).Distinct();

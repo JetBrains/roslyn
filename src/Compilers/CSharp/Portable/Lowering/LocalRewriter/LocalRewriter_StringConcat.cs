@@ -546,9 +546,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                         var wrappedChar = new BoundObjectCreationExpression(
                             arg.Syntax,
                             readOnlySpanCtorRefParamChar,
-                            [temp],
+                            ImmutableArray.Create<BoundExpression>(temp),
                             argumentNamesOpt: default,
-                            argumentRefKindsOpt: [readOnlySpanCtorRefParamChar.Parameters[0].RefKind == RefKind.Ref ? RefKind.Ref : RefKindExtensions.StrictIn],
+                            argumentRefKindsOpt: ImmutableArray.Create(readOnlySpanCtorRefParamChar.Parameters[0].RefKind == RefKind.Ref ? RefKind.Ref : RefKindExtensions.StrictIn),
                             expanded: false,
                             argsToParamsOpt: default,
                             defaultArguments: default,
@@ -558,8 +558,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                         preparedArgsBuilder.Add(new BoundSequence(
                             arg.Syntax,
-                            [],
-                            [tempAssignment],
+                            ImmutableArray<LocalSymbol>.Empty,
+                            ImmutableArray.Create<BoundExpression>(tempAssignment),
                             wrappedChar,
                             wrappedChar.Type));
                     }
@@ -578,7 +578,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 var sequence = factory.Sequence(
                     localsBuilder.ToImmutableAndFree(),
-                    [],
+                    ImmutableArray<BoundExpression>.Empty,
                     concatCall);
 
                 factory.Syntax = oldSyntax;

@@ -93,7 +93,7 @@ internal sealed class NamedTypeSymbolReferenceFinder : AbstractReferenceFinder<I
 
         var documentsWithAttribute = TryGetNameWithoutAttributeSuffix(throughName, syntaxFacts, out var simpleName)
             ? await FindDocumentsAsync(project, documents, cancellationToken, simpleName).ConfigureAwait(false)
-            : [];
+            : new();
 
         result.AddRange(documentsWithName);
         result.AddRange(documentsWithAttribute);
@@ -200,7 +200,7 @@ internal sealed class NamedTypeSymbolReferenceFinder : AbstractReferenceFinder<I
     {
         var predefinedType = symbol.SpecialType.ToPredefinedType();
         if (predefinedType == PredefinedType.None)
-            return new([]);
+            return new(ImmutableArray<FinderLocation>.Empty);
 
         var tokens = state.Root
             .DescendantTokens(descendIntoTrivia: true)
@@ -219,6 +219,6 @@ internal sealed class NamedTypeSymbolReferenceFinder : AbstractReferenceFinder<I
     {
         return TryGetNameWithoutAttributeSuffix(name, state.SyntaxFacts, out var nameWithoutSuffix)
             ? FindReferencesInDocumentUsingIdentifierAsync(namedType, nameWithoutSuffix, state, cancellationToken)
-            : new([]);
+            : new(ImmutableArray<FinderLocation>.Empty);
     }
 }

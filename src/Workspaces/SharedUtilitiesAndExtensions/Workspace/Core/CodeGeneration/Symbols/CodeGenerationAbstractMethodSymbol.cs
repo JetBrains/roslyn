@@ -93,10 +93,10 @@ internal abstract class CodeGenerationAbstractMethodSymbol : CodeGenerationSymbo
     public virtual bool HidesBaseMethodsByName => false;
 
     public ImmutableArray<CustomModifier> RefCustomModifiers
-        => [];
+        => ImmutableArray.Create<CustomModifier>();
 
     public virtual ImmutableArray<CustomModifier> ReturnTypeCustomModifiers
-        => [];
+        => ImmutableArray.Create<CustomModifier>();
 
     public virtual ISymbol AssociatedSymbol => null;
 
@@ -106,7 +106,7 @@ internal abstract class CodeGenerationAbstractMethodSymbol : CodeGenerationSymbo
 
     public SignatureCallingConvention CallingConvention => SignatureCallingConvention.Default;
 
-    public ImmutableArray<INamedTypeSymbol> UnmanagedCallingConventionTypes => [];
+    public ImmutableArray<INamedTypeSymbol> UnmanagedCallingConventionTypes => new();
 
     public IMethodSymbol Construct(params ITypeSymbol[] typeArguments)
         => new CodeGenerationConstructedMethodSymbol(this, typeArguments.ToImmutableArray());

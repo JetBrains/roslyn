@@ -150,7 +150,7 @@ internal static class ExtractTypeHelpers
                 foreach (var originalTypeParameter in potentialTypeParameters)
                 {
                     if (!allReferencedTypeParameters.Contains(originalTypeParameter) &&
-                        DoesTypeReferenceTypeParameter(constraint, originalTypeParameter, []))
+                        DoesTypeReferenceTypeParameter(constraint, originalTypeParameter, new()))
                     {
                         allReferencedTypeParameters.Add(originalTypeParameter);
                         unanalyzedTypeParameters.Enqueue(originalTypeParameter);
@@ -188,7 +188,7 @@ internal static class ExtractTypeHelpers
         using var _ = ArrayBuilder<ITypeParameterSymbol>.GetInstance(out var directlyReferencedTypeParameters);
         foreach (var typeParameter in potentialTypeParameters)
         {
-            if (includedMembers.Any(m => DoesMemberReferenceTypeParameter(m, typeParameter, [])))
+            if (includedMembers.Any(m => DoesMemberReferenceTypeParameter(m, typeParameter, new())))
             {
                 directlyReferencedTypeParameters.Add(typeParameter);
             }

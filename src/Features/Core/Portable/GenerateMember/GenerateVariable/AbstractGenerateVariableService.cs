@@ -50,7 +50,7 @@ internal abstract partial class AbstractGenerateVariableService<TService, TSimpl
             var state = await State.GenerateAsync((TService)this, semanticDocument, node, cancellationToken).ConfigureAwait(false);
             if (state == null)
             {
-                return [];
+                return new();
             }
 
             using var _ = ArrayBuilder<CodeAction>.GetInstance(out var actions);
@@ -81,10 +81,10 @@ internal abstract partial class AbstractGenerateVariableService<TService, TSimpl
             {
                 // Wrap the generate variable actions into a single top level suggestion
                 // so as to not clutter the list.
-                return [CodeAction.Create(
+                return ImmutableArray.Create(CodeAction.Create(
                     string.Format(FeaturesResources.Generate_variable_0, state.IdentifierToken.ValueText),
                     actions.ToImmutable(),
-                    isInlinable: true)];
+                    isInlinable: true));
             }
 
             return actions.ToImmutable();

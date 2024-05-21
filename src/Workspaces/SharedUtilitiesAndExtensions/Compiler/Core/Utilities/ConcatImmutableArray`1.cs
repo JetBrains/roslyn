@@ -46,7 +46,7 @@ internal readonly struct ConcatImmutableArray<T>(ImmutableArray<T> first, Immuta
             }
 
             _current = _next.GetEnumerator();
-            _next = [];
+            _next = new();
             return _current.MoveNext();
         }
 

@@ -18,7 +18,7 @@ namespace Microsoft.DiaSymReader
         int __SetPath(/*[in] const WCHAR* szFullPathName, [in] IStream* pIStream, [in] BOOL fFullBuild*/);
         int __OpenMod(/*[in] const WCHAR* szModuleName, [in] const WCHAR* szFileName*/);
         int __CloseMod();
-        int __GetPath(/*[in] DWORD ccData,[out] DWORD* pccData,[out, size_is(ccData),length_is(*pccData)] WCHAR szPath[]*/);
+        int __GetPath(/*[in] DWORD ccData,[out] DWORD* pccData,[out, size_is(ccData),length_is(*pccData)] WCHAR szPathnew()*/);
 
         void GetSignatureAge(out uint sig, out int age);
     }

@@ -39,7 +39,7 @@ internal static class NavigateToSearchResultHelpers
             punctuationStripped: false,
             result.IsCaseSensitive,
             result.NameMatchSpans);
-        return [patternMatch];
+        return ImmutableArray.Create(patternMatch);
     }
 
     private static PatternMatchKind GetPatternMatchKind(NavigateToMatchKind matchKind)

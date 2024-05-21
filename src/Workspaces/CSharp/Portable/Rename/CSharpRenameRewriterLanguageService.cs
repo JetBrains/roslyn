@@ -67,8 +67,8 @@ internal class CSharpRenameConflictLanguageService : AbstractRenameRewriterLangu
         private readonly bool _replacementTextValid;
         private readonly ISimplificationService _simplificationService;
         private readonly ISemanticFactsService _semanticFactsService;
-        private readonly HashSet<SyntaxToken> _annotatedIdentifierTokens = [];
-        private readonly HashSet<InvocationExpressionSyntax> _invocationExpressionsNeedingConflictChecks = [];
+        private readonly HashSet<SyntaxToken> _annotatedIdentifierTokens = new();
+        private readonly HashSet<InvocationExpressionSyntax> _invocationExpressionsNeedingConflictChecks = new();
 
         private readonly AnnotationTable<RenameAnnotation> _renameAnnotations;
 
@@ -287,7 +287,7 @@ internal class CSharpRenameConflictLanguageService : AbstractRenameRewriterLangu
         private SyntaxNode Complexify(SyntaxNode originalNode, SyntaxNode newNode)
         {
             _isProcessingComplexifiedSpans = true;
-            _modifiedSubSpans = [];
+            _modifiedSubSpans = new();
 
             var annotation = new SyntaxAnnotation();
             newNode = newNode.WithAdditionalAnnotations(annotation);
@@ -1012,20 +1012,20 @@ internal class CSharpRenameConflictLanguageService : AbstractRenameRewriterLangu
                     switch (token.Kind())
                     {
                         case SyntaxKind.ForEachKeyword:
-                            return [((CommonForEachStatementSyntax)token.Parent!).Expression.GetLocation()];
+                            return ImmutableArray.Create(((CommonForEachStatementSyntax)token.Parent!).Expression.GetLocation());
                         case SyntaxKind.AwaitKeyword:
-                            return [token.GetLocation()];
+                            return ImmutableArray.Create(token.GetLocation());
                     }
 
                     if (token.Parent.IsInDeconstructionLeft(out var deconstructionLeft))
                     {
-                        return [deconstructionLeft.GetLocation()];
+                        return ImmutableArray.Create(deconstructionLeft.GetLocation());
                     }
                 }
             }
         }
 
-        return [];
+        return new();
     }
 
     public override ImmutableArray<Location> ComputePossibleImplicitUsageConflicts(
@@ -1065,7 +1065,7 @@ internal class CSharpRenameConflictLanguageService : AbstractRenameRewriterLangu
                         {
                             if (!method.ReturnsVoid && !method.Parameters.Any() && method.ReturnType.SpecialType == SpecialType.System_Boolean)
                             {
-                                return [originalDeclarationLocation];
+                                return ImmutableArray.Create(originalDeclarationLocation);
                             }
                         }
                         else if (symbol.Name == "GetEnumerator")
@@ -1075,7 +1075,7 @@ internal class CSharpRenameConflictLanguageService : AbstractRenameRewriterLangu
                             if (!method.ReturnsVoid &&
                                 !method.Parameters.Any())
                             {
-                                return [originalDeclarationLocation];
+                                return ImmutableArray.Create(originalDeclarationLocation);
                             }
                         }
                     }
@@ -1085,14 +1085,14 @@ internal class CSharpRenameConflictLanguageService : AbstractRenameRewriterLangu
 
                         if (!property.Parameters.Any() && !property.IsWriteOnly)
                         {
-                            return [originalDeclarationLocation];
+                            return ImmutableArray.Create(originalDeclarationLocation);
                         }
                     }
                 }
             }
         }
 
-        return [];
+        return new();
     }
 
     #endregion

@@ -33,7 +33,7 @@ internal partial class CSharpUseTupleSwapCodeFixProvider : SyntaxEditorBasedCode
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; }
-        = [IDEDiagnosticIds.UseTupleSwapDiagnosticId];
+        = ImmutableArray.Create(IDEDiagnosticIds.UseTupleSwapDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

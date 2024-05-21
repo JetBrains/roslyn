@@ -16,7 +16,7 @@ internal static class StackFrameExtensions
     /// if the <paramref name="trivia"/> has no value
     /// </summary>
     public static ImmutableArray<StackFrameTrivia> ToImmutableArray(this StackFrameTrivia? trivia)
-        => trivia.HasValue ? [trivia.Value] : [];
+        => trivia.HasValue ? ImmutableArray.Create(trivia.Value) : new();
 
     /// <summary>
     /// Creates an <see cref="ImmutableArray{StackFrameTrivia}"/> with a single trivia item in it
@@ -26,5 +26,5 @@ internal static class StackFrameExtensions
     /// non nullable calues
     /// </remarks>
     public static ImmutableArray<StackFrameTrivia> ToImmutableArray(this StackFrameTrivia trivia)
-        => [trivia];
+        => ImmutableArray.Create(trivia);
 }

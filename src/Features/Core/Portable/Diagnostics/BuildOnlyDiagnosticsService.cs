@@ -26,8 +26,8 @@ internal sealed class BuildOnlyDiagnosticsServiceFactory : IWorkspaceServiceFact
     private sealed class BuildOnlyDiagnosticsService : IBuildOnlyDiagnosticsService
     {
         private readonly object _gate = new();
-        private readonly Dictionary<DocumentId, ImmutableArray<DiagnosticData>> _documentDiagnostics = [];
-        private readonly Dictionary<ProjectId, ImmutableArray<DiagnosticData>> _projectDiagnostics = [];
+        private readonly Dictionary<DocumentId, ImmutableArray<DiagnosticData>> _documentDiagnostics = new();
+        private readonly Dictionary<ProjectId, ImmutableArray<DiagnosticData>> _projectDiagnostics = new();
 
         public BuildOnlyDiagnosticsService(Workspace workspace)
         {
@@ -126,7 +126,7 @@ internal sealed class BuildOnlyDiagnosticsServiceFactory : IWorkspaceServiceFact
                     return diagnostics;
                 }
 
-                return [];
+                return new();
             }
         }
 
@@ -139,7 +139,7 @@ internal sealed class BuildOnlyDiagnosticsServiceFactory : IWorkspaceServiceFact
                     return diagnostics;
                 }
 
-                return [];
+                return new();
             }
         }
     }

@@ -60,9 +60,9 @@ internal class CodeGenerationParameterSymbol(
 
     public bool IsThis => false;
 
-    public ImmutableArray<CustomModifier> RefCustomModifiers => [];
+    public ImmutableArray<CustomModifier> RefCustomModifiers => ImmutableArray.Create<CustomModifier>();
 
-    public ImmutableArray<CustomModifier> CustomModifiers => [];
+    public ImmutableArray<CustomModifier> CustomModifiers => ImmutableArray.Create<CustomModifier>();
 
     public ScopedKind ScopedKind => ScopedKind.None;
 

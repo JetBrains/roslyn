@@ -133,7 +133,7 @@ internal partial class CSharpSymbolDisplayService
                 return await GetInitializerSourcePartsAsync(initializer).ConfigureAwait(false);
             }
 
-            return [];
+            return new();
         }
 
         private async Task<ImmutableArray<SymbolDisplayPart>> GetInitializerSourcePartsAsync(
@@ -145,7 +145,7 @@ internal partial class CSharpSymbolDisplayService
                 return await GetInitializerSourcePartsAsync(syntax.Initializer).ConfigureAwait(false);
             }
 
-            return [];
+            return new();
         }
 
         private async Task<ImmutableArray<SymbolDisplayPart>> GetInitializerSourcePartsAsync(
@@ -157,7 +157,7 @@ internal partial class CSharpSymbolDisplayService
                 return await GetInitializerSourcePartsAsync(syntax.Default).ConfigureAwait(false);
             }
 
-            return [];
+            return new();
         }
 
         private async Task<T?> GetFirstDeclarationAsync<T>(ISymbol symbol) where T : SyntaxNode
@@ -188,7 +188,7 @@ internal partial class CSharpSymbolDisplayService
                 }
             }
 
-            return [];
+            return new();
         }
 
         protected override void AddCaptures(ISymbol symbol)

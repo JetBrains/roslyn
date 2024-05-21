@@ -24,5 +24,5 @@ internal class CSharpSymbolDeclarationService : ISymbolDeclarationService
     public ImmutableArray<SyntaxReference> GetDeclarations(ISymbol symbol)
         => symbol != null
             ? symbol.DeclaringSyntaxReferences
-            : [];
+            : new();
 }

@@ -31,7 +31,7 @@ internal partial class InvokeDelegateWithConditionalAccessCodeFixProvider : Synt
     {
     }
 
-    public override ImmutableArray<string> FixableDiagnosticIds { get; } = [IDEDiagnosticIds.InvokeDelegateWithConditionalAccessId];
+    public override ImmutableArray<string> FixableDiagnosticIds { get; } = ImmutableArray.Create(IDEDiagnosticIds.InvokeDelegateWithConditionalAccessId);
 
     // Filter out the diagnostics we created for the faded out code.  We don't want
     // to try to fix those as well as the normal diagnostics we created.

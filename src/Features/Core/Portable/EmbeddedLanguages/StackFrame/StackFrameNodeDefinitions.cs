@@ -315,7 +315,7 @@ internal sealed class StackFrameArrayTypeNode : StackFrameTypeNode
     /// <code>
     /// string[,][]
     ///        ^---  First array rank specifier  = "[,]"
-    ///           ^- Second array rank specifier = "[]" 
+    ///           ^- Second array rank specifier = "new()" 
     /// </code>
     /// </summary>
     public ImmutableArray<StackFrameArrayRankSpecifier> ArrayRankSpecifiers;

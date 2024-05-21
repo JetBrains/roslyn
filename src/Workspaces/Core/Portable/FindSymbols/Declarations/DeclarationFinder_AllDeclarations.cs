@@ -32,7 +32,7 @@ internal static partial class DeclarationFinder
 
         Contract.ThrowIfNull(query.Name);
         if (string.IsNullOrWhiteSpace(query.Name))
-            return [];
+            return new();
 
         var client = await RemoteHostClient.TryGetClientAsync(project, cancellationToken).ConfigureAwait(false);
         if (client != null)
@@ -46,7 +46,7 @@ internal static partial class DeclarationFinder
 
             if (!result.HasValue)
             {
-                return [];
+                return new();
             }
 
             return await RehydrateAsync(solution, result.Value, cancellationToken).ConfigureAwait(false);

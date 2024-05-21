@@ -21,11 +21,11 @@ internal abstract class AbstractDocCommentCompletionProvider<TSyntax> : LSPCompl
     where TSyntax : SyntaxNode
 {
     // Tag names
-    private static readonly ImmutableArray<string> s_listTagNames = [ListHeaderElementName, TermElementName, ItemElementName, DescriptionElementName];
-    private static readonly ImmutableArray<string> s_listHeaderTagNames = [TermElementName, DescriptionElementName];
-    private static readonly ImmutableArray<string> s_nestedTagNames = [CElementName, CodeElementName, ParaElementName, ListElementName];
-    private static readonly ImmutableArray<string> s_topLevelRepeatableTagNames = [ExceptionElementName, IncludeElementName, PermissionElementName];
-    private static readonly ImmutableArray<string> s_topLevelSingleUseTagNames = [SummaryElementName, RemarksElementName, ExampleElementName, CompletionListElementName];
+    private static readonly ImmutableArray<string> s_listTagNames = ImmutableArray.Create(ListHeaderElementName, TermElementName, ItemElementName, DescriptionElementName);
+    private static readonly ImmutableArray<string> s_listHeaderTagNames = ImmutableArray.Create(TermElementName, DescriptionElementName);
+    private static readonly ImmutableArray<string> s_nestedTagNames = ImmutableArray.Create(CElementName, CodeElementName, ParaElementName, ListElementName);
+    private static readonly ImmutableArray<string> s_topLevelRepeatableTagNames = ImmutableArray.Create(ExceptionElementName, IncludeElementName, PermissionElementName);
+    private static readonly ImmutableArray<string> s_topLevelSingleUseTagNames = ImmutableArray.Create(SummaryElementName, RemarksElementName, ExampleElementName, CompletionListElementName);
 
     private static readonly Dictionary<string, (string tagOpen, string textBeforeCaret, string textAfterCaret, string? tagClose)> s_tagMap =
         new Dictionary<string, (string tagOpen, string textBeforeCaret, string textAfterCaret, string? tagClose)>()
@@ -44,7 +44,7 @@ internal abstract class AbstractDocCommentCompletionProvider<TSyntax> : LSPCompl
         };
 
     private static readonly ImmutableArray<(string elementName, string attributeName, string text)> s_attributeMap =
-        [
+        ImmutableArray.Create(
             (ExceptionElementName, CrefAttributeName, $"{CrefAttributeName}=\""),
             (PermissionElementName, CrefAttributeName, $"{CrefAttributeName}=\""),
             (SeeElementName, CrefAttributeName, $"{CrefAttributeName}=\""),
@@ -60,10 +60,9 @@ internal abstract class AbstractDocCommentCompletionProvider<TSyntax> : LSPCompl
             (IncludeElementName, FileAttributeName, $"{FileAttributeName}=\""),
             (IncludeElementName, PathAttributeName, $"{PathAttributeName}=\""),
             (InheritdocElementName, CrefAttributeName, $"{CrefAttributeName}=\""),
-            (InheritdocElementName, PathAttributeName, $"{PathAttributeName}=\""),
-        ];
+            (InheritdocElementName, PathAttributeName, $"{PathAttributeName}=\""));
 
-    private static readonly ImmutableArray<string> s_listTypeValues = ["bullet", "number", "table"];
+    private static readonly ImmutableArray<string> s_listTypeValues = ImmutableArray.Create("bullet", "number", "table");
 
     private readonly CompletionItemRules defaultRules;
 
@@ -328,7 +327,8 @@ internal abstract class AbstractDocCommentCompletionProvider<TSyntax> : LSPCompl
     private static readonly CharacterSetModificationRule WithoutQuoteRule = CharacterSetModificationRule.Create(CharacterSetModificationKind.Remove, '"');
     private static readonly CharacterSetModificationRule WithoutSpaceRule = CharacterSetModificationRule.Create(CharacterSetModificationKind.Remove, ' ');
 
-    protected static readonly ImmutableArray<CharacterSetModificationRule> FilterRules = [CharacterSetModificationRule.Create(CharacterSetModificationKind.Add, '!', '-', '[')];
+    protected static readonly ImmutableArray<CharacterSetModificationRule> FilterRules = ImmutableArray.Create(
+            CharacterSetModificationRule.Create(CharacterSetModificationKind.Add, '!', '-', '['));
 
     private CompletionItemRules GetCompletionItemRules(string displayText)
     {

@@ -24,7 +24,7 @@ internal abstract class AbstractConsoleSnippetProvider : AbstractStatementSnippe
 
     public override string Description => FeaturesResources.console_writeline;
 
-    public override ImmutableArray<string> AdditionalFilterTexts { get; } = ["WriteLine"];
+    public override ImmutableArray<string> AdditionalFilterTexts { get; } = ImmutableArray.Create("WriteLine");
 
     protected override bool IsValidSnippetLocation(in SnippetContext context, CancellationToken cancellationToken)
     {
@@ -91,7 +91,7 @@ internal abstract class AbstractConsoleSnippetProvider : AbstractStatementSnippe
 
     protected override ImmutableArray<SnippetPlaceholder> GetPlaceHolderLocationsList(SyntaxNode node, ISyntaxFacts syntaxFacts, CancellationToken cancellationToken)
     {
-        return [];
+        return new();
     }
 
     private static SyntaxToken? GetOpenParenToken(SyntaxNode node, ISyntaxFacts syntaxFacts)

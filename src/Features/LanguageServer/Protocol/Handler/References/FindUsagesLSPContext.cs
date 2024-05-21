@@ -43,13 +43,13 @@ namespace Microsoft.CodeAnalysis.LanguageServer.Handler
         /// </summary>
         private readonly SemaphoreSlim _semaphore = new(1);
 
-        private readonly Dictionary<DefinitionItem, int> _definitionToId = [];
+        private readonly Dictionary<DefinitionItem, int> _definitionToId = new();
 
         /// <summary>
         /// Keeps track of definitions that cannot be reported without references and which we have
         /// not yet found a reference for.
         /// </summary>
-        private readonly Dictionary<int, SumType<VSInternalReferenceItem, LSP.Location>> _definitionsWithoutReference = [];
+        private readonly Dictionary<int, SumType<VSInternalReferenceItem, LSP.Location>> _definitionsWithoutReference = new();
 
         /// <summary>
         /// Set of the locations we've found references at.  We may end up with multiple references
@@ -61,7 +61,7 @@ namespace Microsoft.CodeAnalysis.LanguageServer.Handler
         /// to override an already reported VSReferenceItem, we could also reissue the item with the
         /// additional information about all the projects it is found in.
         /// </summary>
-        private readonly HashSet<(string? filePath, TextSpan span)> _referenceLocations = [];
+        private readonly HashSet<(string? filePath, TextSpan span)> _referenceLocations = new();
 
         /// <summary>
         /// We report the results in chunks. A batch, if it contains results, is reported every 0.5s.

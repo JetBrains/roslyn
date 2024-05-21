@@ -96,7 +96,7 @@ internal sealed class LinkedFileDiffMergingSession(Solution oldSolution, Solutio
         // Add comments in source explaining diffs that could not be merged
 
         IEnumerable<TextChange> allChanges;
-        IList<TextSpan> mergeConflictResolutionSpan = [];
+        IList<TextSpan> mergeConflictResolutionSpan = new List<TextSpan>();
 
         if (unmergedChanges.Any())
         {
@@ -305,7 +305,7 @@ internal sealed class LinkedFileDiffMergingSession(Solution oldSolution, Solutio
 
     internal class LinkedFileDiffMergingSessionInfo
     {
-        public readonly List<LinkedFileGroupSessionInfo> LinkedFileGroups = [];
+        public readonly List<LinkedFileGroupSessionInfo> LinkedFileGroups = new();
 
         public void LogLinkedFileResult(LinkedFileGroupSessionInfo info)
             => LinkedFileGroups.Add(info);

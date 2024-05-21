@@ -124,7 +124,7 @@ internal sealed class CSharpConvertLocalFunctionToMethodCodeRefactoringProvider(
             refKind: declaredSymbol.RefKind,
             explicitInterfaceImplementations: default,
             name: methodName,
-            typeParameters: [.. typeParameters],
+            typeParameters: typeParameters.ToImmutableArray(),
             parameters: parameters.AddRange(capturesAsParameters));
 
         var info = (CSharpCodeGenerationContextInfo)await document.GetCodeGenerationInfoAsync(CodeGenerationContext.Default, fallbackOptions, cancellationToken).ConfigureAwait(false);

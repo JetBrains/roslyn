@@ -39,10 +39,10 @@ internal abstract partial class AbstractMoveTypeService<TService, TTypeDeclarati
 
             if (solution == null)
             {
-                return [];
+                return new();
             }
 
-            return [new ApplyChangesOperation(solution)];
+            return ImmutableArray.Create<CodeActionOperation>(new ApplyChangesOperation(solution));
         }
 
         /// <summary>

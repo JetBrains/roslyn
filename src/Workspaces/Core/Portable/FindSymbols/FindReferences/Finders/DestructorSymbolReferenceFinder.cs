@@ -32,6 +32,6 @@ internal sealed class DestructorSymbolReferenceFinder : AbstractReferenceFinder<
         FindReferencesSearchOptions options,
         CancellationToken cancellationToken)
     {
-        return new ValueTask<ImmutableArray<FinderLocation>>([]);
+        return new ValueTask<ImmutableArray<FinderLocation>>(ImmutableArray<FinderLocation>.Empty);
     }
 }

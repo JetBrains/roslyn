@@ -732,7 +732,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UpgradeProject
                     </Project>
                 </Workspace>
                 """,
-                expectedActionSet: []);
+                expectedActionSet: new());
         }
 
         [Fact]
@@ -766,7 +766,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UpgradeProject
                     </Project>
                 </Workspace>
                 """,
-                expectedActionSet: []);
+                expectedActionSet: new());
         }
 
         [Fact]
@@ -792,7 +792,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UpgradeProject
                     </Project>
                 </Workspace>
                 """,
-                expectedActionSet: []);
+                expectedActionSet: new());
         }
 
         [Fact]
@@ -832,7 +832,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UpgradeProject
                     </Project>
                 </Workspace>
                 """,
-                expectedActionSet: []);
+                expectedActionSet: new());
         }
 
         [Fact]
@@ -948,7 +948,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UpgradeProject
                     </Project>
                 </Workspace>
                 """,
-                expectedActionSet: []);
+                expectedActionSet: new());
         }
 
         [Fact]
@@ -982,7 +982,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UpgradeProject
                     </Project>
                 </Workspace>
                 """,
-                expectedActionSet: []);
+                expectedActionSet: new());
         }
 
         [Fact]
@@ -1008,7 +1008,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UpgradeProject
                     </Project>
                 </Workspace>
                 """,
-                expectedActionSet: []);
+                expectedActionSet: new());
         }
 
         [Fact]
@@ -1048,7 +1048,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UpgradeProject
                     </Project>
                 </Workspace>
                 """,
-                expectedActionSet: []);
+                expectedActionSet: new());
         }
 
         [Fact]

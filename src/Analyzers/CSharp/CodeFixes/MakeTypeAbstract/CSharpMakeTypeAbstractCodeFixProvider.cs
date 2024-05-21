@@ -22,7 +22,9 @@ internal sealed class CSharpMakeTypeAbstractCodeFixProvider : AbstractMakeTypeAb
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-           ["CS0513"];
+           ImmutableArray.Create(
+                   "CS0513" // 'C.M()' is abstract but it is contained in non-abstract type 'C'
+               );
 
     protected override bool IsValidRefactoringContext(SyntaxNode? node, [NotNullWhen(true)] out TypeDeclarationSyntax? typeDeclaration)
     {

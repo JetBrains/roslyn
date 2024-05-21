@@ -70,7 +70,7 @@ namespace Microsoft.CodeAnalysis
         bool HasNotNullConstraint { get; }
 
         /// <summary>
-        /// True if the parameterless constructor constraint (<c>new()</c>) was specified for the type parameter.
+        /// True if the parameterless constructor constraint (<c>[]</c>) was specified for the type parameter.
         /// </summary>
         bool HasConstructorConstraint { get; }
 

@@ -25,7 +25,7 @@ internal class UseExpressionBodyForMethodsHelper :
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_expression_body_for_method), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_block_body_for_method), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                CSharpCodeStyleOptions.PreferExpressionBodiedMethods,
-               [SyntaxKind.MethodDeclaration])
+               ImmutableArray.Create(SyntaxKind.MethodDeclaration))
     {
     }
 

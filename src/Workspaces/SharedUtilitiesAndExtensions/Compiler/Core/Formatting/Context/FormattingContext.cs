@@ -41,18 +41,18 @@ internal partial class FormattingContext
     // anchor token to anchor data map.
     // unlike anchorTree that would return anchor data for given span in the tree, it will return
     // anchorData based on key which is anchor token.
-    private readonly SegmentedDictionary<SyntaxToken, AnchorData> _anchorBaseTokenMap = [];
+    private readonly SegmentedDictionary<SyntaxToken, AnchorData> _anchorBaseTokenMap = new();
 
     // hashset to prevent duplicate entries in the trees.
-    private readonly HashSet<TextSpan> _indentationMap = [];
-    private readonly HashSet<TextSpan> _suppressWrappingMap = [];
-    private readonly HashSet<TextSpan> _suppressSpacingMap = [];
-    private readonly HashSet<TextSpan> _suppressFormattingMap = [];
-    private readonly HashSet<TextSpan> _anchorMap = [];
+    private readonly HashSet<TextSpan> _indentationMap = new();
+    private readonly HashSet<TextSpan> _suppressWrappingMap = new();
+    private readonly HashSet<TextSpan> _suppressSpacingMap = new();
+    private readonly HashSet<TextSpan> _suppressFormattingMap = new();
+    private readonly HashSet<TextSpan> _anchorMap = new();
 
     // used for selection based formatting case. it contains operations that will define
     // what indentation to use as a starting indentation. (we always use 0 for formatting whole tree case)
-    private List<IndentBlockOperation> _initialIndentBlockOperations = [];
+    private List<IndentBlockOperation> _initialIndentBlockOperations = new();
 
     public FormattingContext(AbstractFormatEngine engine, TokenStream tokenStream)
     {

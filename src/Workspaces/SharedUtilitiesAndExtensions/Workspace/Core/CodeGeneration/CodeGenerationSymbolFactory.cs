@@ -320,7 +320,7 @@ internal static class CodeGenerationSymbolFactory
     {
         return CreateTypeParameter(
             attributes: default, varianceKind: VarianceKind.None,
-            name: name, constraintTypes: [],
+            name: name, constraintTypes: ImmutableArray.Create<ITypeSymbol>(),
             hasConstructorConstraint: false, hasReferenceConstraint: false, hasValueConstraint: false,
             hasUnmanagedConstraint: false, hasNotNullConstraint: false, ordinal: ordinal);
     }
@@ -493,8 +493,8 @@ internal static class CodeGenerationSymbolFactory
             baseType: null,
             interfaces: default,
             specialType: SpecialType.None,
-            members: [invokeMethod],
-            typeMembers: [],
+            members: ImmutableArray.Create<ISymbol>(invokeMethod),
+            typeMembers: new(),
             nullableAnnotation: nullableAnnotation,
             enumUnderlyingType: null);
     }

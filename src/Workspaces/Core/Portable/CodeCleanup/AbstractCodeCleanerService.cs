@@ -46,7 +46,7 @@ internal abstract class AbstractCodeCleanerService : ICodeCleanerService
             if (CleanupWholeNode(root.FullSpan, normalizedSpan))
             {
                 // We are cleaning up the whole document, so there is no need to do expansive span tracking between cleaners.
-                return await IterateAllCodeCleanupProvidersAsync(document, document, options, r => [r.FullSpan], codeCleaners, cancellationToken).ConfigureAwait(false);
+                return await IterateAllCodeCleanupProvidersAsync(document, document, options, r => ImmutableArray.Create(r.FullSpan), codeCleaners, cancellationToken).ConfigureAwait(false);
             }
 
             // We need to track spans between cleaners. Annotate the tree with the provided spans.
@@ -56,7 +56,7 @@ internal abstract class AbstractCodeCleanerService : ICodeCleanerService
             if (newNode == null)
             {
                 // ... then we are cleaning up the whole document, so there is no need to do expansive span tracking between cleaners.
-                return await IterateAllCodeCleanupProvidersAsync(document, document, options, n => [n.FullSpan], codeCleaners, cancellationToken).ConfigureAwait(false);
+                return await IterateAllCodeCleanupProvidersAsync(document, document, options, n => ImmutableArray.Create(n.FullSpan), codeCleaners, cancellationToken).ConfigureAwait(false);
             }
 
             // Replace the initial node and document with the annotated node.
@@ -88,7 +88,7 @@ internal abstract class AbstractCodeCleanerService : ICodeCleanerService
             if (CleanupWholeNode(root.FullSpan, normalizedSpan))
             {
                 // We are cleaning up the whole document, so there is no need to do expansive span tracking between cleaners.
-                return await IterateAllCodeCleanupProvidersAsync(root, root, options, r => [r.FullSpan], services, codeCleaners, cancellationToken).ConfigureAwait(false);
+                return await IterateAllCodeCleanupProvidersAsync(root, root, options, r => ImmutableArray.Create(r.FullSpan), services, codeCleaners, cancellationToken).ConfigureAwait(false);
             }
 
             // We need to track spans between cleaners. Annotate the tree with the provided spans.
@@ -98,7 +98,7 @@ internal abstract class AbstractCodeCleanerService : ICodeCleanerService
             if (newNode == null)
             {
                 // ... then we are cleaning up the whole document, so there is no need to do expansive span tracking between cleaners.
-                return await IterateAllCodeCleanupProvidersAsync(root, root, options, n => [n.FullSpan], services, codeCleaners, cancellationToken).ConfigureAwait(false);
+                return await IterateAllCodeCleanupProvidersAsync(root, root, options, n => ImmutableArray.Create(n.FullSpan), services, codeCleaners, cancellationToken).ConfigureAwait(false);
             }
 
             // Replace the initial node and document with the annotated node.
@@ -295,8 +295,8 @@ internal abstract class AbstractCodeCleanerService : ICodeCleanerService
             nextToken = (nextToken.RawKind == 0) ? root.GetLastToken(includeZeroWidth: true) : nextToken;
 
             // Build token to marker map
-            tokenAnnotationMap.GetOrAdd(previousToken, _ => []).Add(startMarker.Annotation);
-            tokenAnnotationMap.GetOrAdd(nextToken, _ => []).Add(endMarker.Annotation);
+            tokenAnnotationMap.GetOrAdd(previousToken, _ => new()).Add(startMarker.Annotation);
+            tokenAnnotationMap.GetOrAdd(nextToken, _ => new()).Add(endMarker.Annotation);
 
             // Remember markers
             annotations.Add((startMarker.Annotation, endMarker.Annotation));

@@ -38,7 +38,7 @@ public partial class Solution
     /// Mapping of DocumentId to the frozen solution we produced for it the last time we were queried.  This
     /// instance should be used as its own lock when reading or writing to it.
     /// </summary>
-    private readonly Dictionary<DocumentId, AsyncLazy<Solution>> _documentIdToFrozenSolution = [];
+    private readonly Dictionary<DocumentId, AsyncLazy<Solution>> _documentIdToFrozenSolution = new();
 
     private Solution(
         SolutionCompilationState compilationState,
@@ -978,7 +978,7 @@ public partial class Solution
     /// document instanced defined by the document info.
     /// </summary>
     public Solution AddDocument(DocumentInfo documentInfo)
-        => AddDocuments([documentInfo]);
+        => AddDocuments(ImmutableArray.Create(documentInfo));
 
     /// <summary>
     /// Create a new <see cref="Solution"/> instance with the corresponding <see cref="Project"/>s updated to include
@@ -1024,7 +1024,7 @@ public partial class Solution
     }
 
     public Solution AddAdditionalDocument(DocumentInfo documentInfo)
-        => AddAdditionalDocuments([documentInfo]);
+        => AddAdditionalDocuments(ImmutableArray.Create(documentInfo));
 
     public Solution AddAdditionalDocuments(ImmutableArray<DocumentInfo> documentInfos)
     {
@@ -1057,7 +1057,7 @@ public partial class Solution
         // https://github.com/dotnet/roslyn/issues/41940
 
         var info = CreateDocumentInfo(documentId, name, text, folders, filePath);
-        return this.AddAnalyzerConfigDocuments([info]);
+        return this.AddAnalyzerConfigDocuments(ImmutableArray.Create(info));
     }
 
     private DocumentInfo CreateDocumentInfo(DocumentId documentId, string name, SourceText text, IEnumerable<string>? folders, string? filePath)
@@ -1093,7 +1093,7 @@ public partial class Solution
     public Solution RemoveDocument(DocumentId documentId)
     {
         CheckContainsDocument(documentId);
-        return RemoveDocumentsImpl([documentId]);
+        return RemoveDocumentsImpl(ImmutableArray.Create(documentId));
     }
 
     /// <summary>
@@ -1117,7 +1117,7 @@ public partial class Solution
     public Solution RemoveAdditionalDocument(DocumentId documentId)
     {
         CheckContainsAdditionalDocument(documentId);
-        return RemoveAdditionalDocumentsImpl([documentId]);
+        return RemoveAdditionalDocumentsImpl(ImmutableArray.Create(documentId));
     }
 
     /// <summary>
@@ -1141,7 +1141,7 @@ public partial class Solution
     public Solution RemoveAnalyzerConfigDocument(DocumentId documentId)
     {
         CheckContainsAnalyzerConfigDocument(documentId);
-        return RemoveAnalyzerConfigDocumentsImpl([documentId]);
+        return RemoveAnalyzerConfigDocumentsImpl(ImmutableArray.Create(documentId));
     }
 
     /// <summary>
@@ -1588,7 +1588,7 @@ public partial class Solution
     /// </summary>
     internal Document WithFrozenSourceGeneratedDocument(SourceGeneratedDocumentIdentity documentIdentity, SourceText text)
     {
-        var newCompilationState = _compilationState.WithFrozenSourceGeneratedDocuments([(documentIdentity, text)]);
+        var newCompilationState = _compilationState.WithFrozenSourceGeneratedDocuments(ImmutableArray.Create((documentIdentity, text)));
         var newSolution = newCompilationState != _compilationState
             ? new Solution(newCompilationState)
             : this;

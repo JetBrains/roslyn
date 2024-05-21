@@ -158,7 +158,7 @@ internal abstract partial class AbstractRecommendationService<
             {
                 var enclosingType = _context.SemanticModel.GetEnclosingNamedType(_context.LeftToken.SpanStart, _cancellationToken);
                 _lazyEnclosingTypeBases = enclosingType == null
-                    ? []
+                    ? new()
                     : enclosingType.GetBaseTypes().SelectAsArray(b => b.OriginalDefinition);
             }
 

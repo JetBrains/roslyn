@@ -22,7 +22,7 @@ internal sealed class SymbolSearchUpdateEngineProxy(RemoteHostClient client) : I
             (service, cancellationToken) => service.FindPackagesWithTypeAsync(source, name, arity, cancellationToken),
             cancellationToken).ConfigureAwait(false);
 
-        return result.HasValue ? result.Value : [];
+        return result.HasValue ? result.Value : new();
     }
 
     public async ValueTask<ImmutableArray<PackageWithAssemblyResult>> FindPackagesWithAssemblyAsync(
@@ -32,7 +32,7 @@ internal sealed class SymbolSearchUpdateEngineProxy(RemoteHostClient client) : I
             (service, cancellationToken) => service.FindPackagesWithAssemblyAsync(source, assemblyName, cancellationToken),
             cancellationToken).ConfigureAwait(false);
 
-        return result.HasValue ? result.Value : [];
+        return result.HasValue ? result.Value : new();
     }
 
     public async ValueTask<ImmutableArray<ReferenceAssemblyWithTypeResult>> FindReferenceAssembliesWithTypeAsync(
@@ -42,7 +42,7 @@ internal sealed class SymbolSearchUpdateEngineProxy(RemoteHostClient client) : I
             (service, cancellationToken) => service.FindReferenceAssembliesWithTypeAsync(name, arity, cancellationToken),
             cancellationToken).ConfigureAwait(false);
 
-        return result.HasValue ? result.Value : [];
+        return result.HasValue ? result.Value : new();
     }
 
     public async ValueTask UpdateContinuouslyAsync(string sourceName, string localSettingsDirectory, CancellationToken cancellationToken)

@@ -311,7 +311,7 @@ internal abstract class AsyncLazy<T>
 
         private Request CreateNewRequest_NoLock()
         {
-            _requests ??= [];
+            _requests ??= new();
 
             var request = new Request();
             _requests.Add(request);

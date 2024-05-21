@@ -103,15 +103,15 @@ internal sealed class PropertySymbolReferenceFinder : AbstractMethodOrPropertyOr
 
         var forEachDocuments = IsForEachProperty(symbol)
             ? await FindDocumentsWithForEachStatementsAsync(project, documents, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         var elementAccessDocument = symbol.IsIndexer
             ? await FindDocumentWithExplicitOrImplicitElementAccessExpressionsAsync(project, documents, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         var indexerMemberCrefDocument = symbol.IsIndexer
             ? await FindDocumentWithIndexerMemberCrefAsync(project, documents, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         var documentsWithGlobalAttributes = await FindDocumentsWithGlobalSuppressMessageAttributeAsync(project, documents, cancellationToken).ConfigureAwait(false);
         return ordinaryDocuments.Concat(forEachDocuments, elementAccessDocument, indexerMemberCrefDocument, documentsWithGlobalAttributes);
@@ -144,11 +144,11 @@ internal sealed class PropertySymbolReferenceFinder : AbstractMethodOrPropertyOr
 
         var forEachReferences = IsForEachProperty(symbol)
             ? await FindReferencesInForEachStatementsAsync(symbol, state, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         var indexerReferences = symbol.IsIndexer
             ? await FindIndexerReferencesAsync(symbol, state, options, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         var suppressionReferences = await FindReferencesInDocumentInsideGlobalSuppressionsAsync(
             symbol, state, cancellationToken).ConfigureAwait(false);
@@ -179,7 +179,7 @@ internal sealed class PropertySymbolReferenceFinder : AbstractMethodOrPropertyOr
         {
             // Looking for individual get/set references.  Don't find anything here. 
             // these results will be provided by the PropertyAccessorSymbolReferenceFinder
-            return [];
+            return new();
         }
 
         var syntaxFacts = state.SyntaxFacts;

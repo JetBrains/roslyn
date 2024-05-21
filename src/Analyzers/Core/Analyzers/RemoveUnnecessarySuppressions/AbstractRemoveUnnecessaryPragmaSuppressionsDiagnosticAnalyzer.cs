@@ -36,7 +36,7 @@ internal abstract class AbstractRemoveUnnecessaryInlineSuppressionsDiagnosticAna
     private readonly Lazy<ImmutableHashSet<int>> _lazySupportedCompilerErrorCodes;
 
     protected AbstractRemoveUnnecessaryInlineSuppressionsDiagnosticAnalyzer()
-        : base([s_removeUnnecessarySuppressionDescriptor], GeneratedCodeAnalysisFlags.None)
+        : base(ImmutableArray.Create(s_removeUnnecessarySuppressionDescriptor), GeneratedCodeAnalysisFlags.None)
     {
         _lazySupportedCompilerErrorCodes = new Lazy<ImmutableHashSet<int>>(GetSupportedCompilerErrorCodes);
     }
@@ -61,13 +61,13 @@ internal abstract class AbstractRemoveUnnecessaryInlineSuppressionsDiagnosticAna
             var compilerAnalyzerType = assembly.GetType(compilerAnalyzerTypeName)!;
             var methodInfo = compilerAnalyzerType.GetMethod("GetSupportedErrorCodes", BindingFlags.Instance | BindingFlags.NonPublic)!;
             var compilerAnalyzerInstance = Activator.CreateInstance(compilerAnalyzerType);
-            var supportedCodes = methodInfo.Invoke(compilerAnalyzerInstance, []) as IEnumerable<int>;
-            return supportedCodes?.ToImmutableHashSet() ?? [];
+            var supportedCodes = methodInfo.Invoke(compilerAnalyzerInstance, Array.Empty<object>()) as IEnumerable<int>;
+            return supportedCodes?.ToImmutableHashSet() ?? ImmutableHashSet<int>.Empty;
         }
         catch (Exception ex)
         {
             Debug.Fail(ex.Message);
-            return [];
+            return ImmutableHashSet<int>.Empty;
         }
     }
 
@@ -267,7 +267,7 @@ internal abstract class AbstractRemoveUnnecessaryInlineSuppressionsDiagnosticAna
                     // Insert the pragmas in reverse order for easier processing later.
                     if (!idToPragmasMap.TryGetValue(id, out var pragmasForIdInReverseOrder))
                     {
-                        pragmasForIdInReverseOrder = [];
+                        pragmasForIdInReverseOrder = new();
                         idToPragmasMap.Add(id, pragmasForIdInReverseOrder);
                     }
 
@@ -645,11 +645,11 @@ internal abstract class AbstractRemoveUnnecessaryInlineSuppressionsDiagnosticAna
                         pragmasToIsUsedMap.TryGetValue(togglePragma, out var isToggleUsed) &&
                         !isToggleUsed)
                     {
-                        additionalLocations = [togglePragma.GetLocation()];
+                        additionalLocations = ImmutableArray.Create(togglePragma.GetLocation());
                     }
                     else
                     {
-                        additionalLocations = [];
+                        additionalLocations = new();
                     }
 
                     var diagnostic = Diagnostic.Create(s_removeUnnecessarySuppressionDescriptor, pragma.GetLocation(), severity, additionalLocations, properties: null);
@@ -795,7 +795,7 @@ internal abstract class AbstractRemoveUnnecessaryInlineSuppressionsDiagnosticAna
 
                             if (!idToSuppressMessageAttributesMap.TryGetValue(id, out var nodesForId))
                             {
-                                nodesForId = [];
+                                nodesForId = new();
                                 idToSuppressMessageAttributesMap.Add(id, nodesForId);
                             }
 

@@ -35,7 +35,8 @@ internal abstract partial class AbstractMoveTypeService<TService, TTypeDeclarati
             var oldSolution = SemanticDocument.Document.Project.Solution;
             var newSolution = oldSolution.WithDocumentName(documentId, FileName);
 
-            return [new ApplyChangesOperation(newSolution)];
+            return ImmutableArray.Create<CodeActionOperation>(
+                    new ApplyChangesOperation(newSolution));
         }
     }
 }

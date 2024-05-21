@@ -96,7 +96,7 @@ internal abstract class CodeGenerationAbstractNamedTypeSymbol : CodeGenerationTy
             throw new IndexOutOfRangeException();
         }
 
-        return [];
+        return ImmutableArray.Create<CustomModifier>();
     }
 
     public abstract ImmutableArray<ITypeParameterSymbol> TypeParameters { get; }

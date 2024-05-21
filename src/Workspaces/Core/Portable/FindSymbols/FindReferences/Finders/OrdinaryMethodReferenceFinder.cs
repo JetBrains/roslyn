@@ -34,12 +34,12 @@ internal sealed class OrdinaryMethodReferenceFinder : AbstractMethodOrPropertyOr
     private static ImmutableArray<ISymbol> GetOtherPartsOfPartial(IMethodSymbol symbol)
     {
         if (symbol.PartialDefinitionPart != null)
-            return [symbol.PartialDefinitionPart];
+            return ImmutableArray.Create<ISymbol>(symbol.PartialDefinitionPart);
 
         if (symbol.PartialImplementationPart != null)
-            return [symbol.PartialImplementationPart];
+            return ImmutableArray.Create<ISymbol>(symbol.PartialImplementationPart);
 
-        return [];
+        return new();
     }
 
     protected override async Task<ImmutableArray<Document>> DetermineDocumentsToSearchAsync(
@@ -68,22 +68,22 @@ internal sealed class OrdinaryMethodReferenceFinder : AbstractMethodOrPropertyOr
         var ordinaryDocuments = await FindDocumentsAsync(project, documents, cancellationToken, methodSymbol.Name).ConfigureAwait(false);
         var forEachDocuments = IsForEachMethod(methodSymbol)
             ? await FindDocumentsWithForEachStatementsAsync(project, documents, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         var deconstructDocuments = IsDeconstructMethod(methodSymbol)
             ? await FindDocumentsWithDeconstructionAsync(project, documents, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         var awaitExpressionDocuments = IsGetAwaiterMethod(methodSymbol)
             ? await FindDocumentsWithAwaitExpressionAsync(project, documents, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         var documentsWithGlobalAttributes = await FindDocumentsWithGlobalSuppressMessageAttributeAsync(
             project, documents, cancellationToken).ConfigureAwait(false);
 
         var documentsWithCollectionInitializers = IsAddMethod(methodSymbol)
             ? await FindDocumentsWithCollectionInitializersAsync(project, documents, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         return ordinaryDocuments.Concat(
             forEachDocuments, deconstructDocuments, awaitExpressionDocuments, documentsWithGlobalAttributes, documentsWithCollectionInitializers);
@@ -122,22 +122,22 @@ internal sealed class OrdinaryMethodReferenceFinder : AbstractMethodOrPropertyOr
 
         var forEachMatches = IsForEachMethod(symbol)
             ? await FindReferencesInForEachStatementsAsync(symbol, state, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         var deconstructMatches = IsDeconstructMethod(symbol)
             ? await FindReferencesInDeconstructionAsync(symbol, state, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         var getAwaiterMatches = IsGetAwaiterMethod(symbol)
             ? await FindReferencesInAwaitExpressionAsync(symbol, state, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         var suppressionReferences = await FindReferencesInDocumentInsideGlobalSuppressionsAsync(
             symbol, state, cancellationToken).ConfigureAwait(false);
 
         var addMatches = IsAddMethod(symbol)
             ? await FindReferencesInCollectionInitializerAsync(symbol, state, cancellationToken).ConfigureAwait(false)
-            : [];
+            : new();
 
         return nameMatches.Concat(forEachMatches, deconstructMatches, getAwaiterMatches, suppressionReferences, addMatches);
     }

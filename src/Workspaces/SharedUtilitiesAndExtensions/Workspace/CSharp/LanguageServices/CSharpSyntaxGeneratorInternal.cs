@@ -95,10 +95,10 @@ internal sealed class CSharpSyntaxGeneratorInternal : SyntaxGeneratorInternal
 
     public override SyntaxToken InterpolatedStringTextToken(string content, string value)
         => SyntaxFactory.Token(
-            [],
+            new(),
             SyntaxKind.InterpolatedStringTextToken,
             content, value,
-            []);
+            new());
 
     public override SyntaxNode Interpolation(SyntaxNode syntaxNode)
         => SyntaxFactory.Interpolation((ExpressionSyntax)syntaxNode);
@@ -117,7 +117,7 @@ internal sealed class CSharpSyntaxGeneratorInternal : SyntaxGeneratorInternal
     internal static SyntaxTokenList GetParameterModifiers(RefKind refKind, bool forFunctionPointerReturnParameter = false)
         => refKind switch
         {
-            RefKind.None => [],
+            RefKind.None => new(),
             RefKind.Out => [SyntaxFactory.Token(SyntaxKind.OutKeyword)],
             RefKind.Ref => [SyntaxFactory.Token(SyntaxKind.RefKeyword)],
             // Note: RefKind.RefReadonly == RefKind.In. Function Pointers must use the correct

@@ -30,7 +30,7 @@ internal class MakeRefStructCodeFixProvider : CodeFixProvider
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [CS8345];
+        => ImmutableArray.Create(CS8345);
 
     public override FixAllProvider? GetFixAllProvider()
     {

@@ -20,7 +20,7 @@ internal readonly struct TokenSemanticInfo(
     TextSpan span)
 {
     public static readonly TokenSemanticInfo Empty = new(
-        null, null, [], null, null, default);
+        null, null, new(), null, null, default);
 
     public readonly ISymbol DeclaredSymbol = declaredSymbol;
     public readonly IAliasSymbol AliasSymbol = aliasSymbol;

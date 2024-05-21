@@ -48,6 +48,6 @@ internal abstract class AbstractInlineTemporaryCodeRefactoringProvider<
             }
         }
 
-        return [];
+        return new();
     }
 }

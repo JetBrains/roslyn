@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis.ExpressionEvaluator
 {
     internal abstract class CompileResult
     {
-        internal readonly byte[] Assembly; // [] rather than ReadOnlyCollection<> to allow caller to create Stream easily
+        internal readonly byte[] Assembly; // new() rather than ReadOnlyCollection<> to allow caller to create Stream easily
         internal readonly string TypeName;
         internal readonly string MethodName;
         internal readonly ReadOnlyCollection<string>? FormatSpecifiers;

@@ -18,6 +18,7 @@ using Microsoft.CodeAnalysis.Internal.Log;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Shared.Collections;
 using Roslyn.Utilities;
+using ImmutableCollectionsMarshal = System.Runtime.InteropServices.ImmutableCollectionsMarshal4Hack;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -166,7 +167,7 @@ namespace Microsoft.CodeAnalysis
                     var pendingTranslationActions = state switch
                     {
                         InProgressState inProgressState => inProgressState.PendingTranslationActions,
-                        FinalCompilationTrackerState => [],
+                        FinalCompilationTrackerState => ImmutableList<TranslationAction>.Empty,
                         _ => throw ExceptionUtilities.UnexpectedValue(state.GetType()),
                     };
 
@@ -738,7 +739,7 @@ namespace Microsoft.CodeAnalysis
                             lazyCompilationWithoutGeneratedDocuments,
                             CompilationTrackerGeneratorInfo.Empty,
                             lazyCompilationWithGeneratedDocuments,
-                            pendingTranslationActions: []),
+                            pendingTranslationActions: ImmutableList<TranslationAction>.Empty),
                         skeletonReferenceCacheToClone: _skeletonReferenceCache);
                 }
                 else if (state is InProgressState inProgressState)
@@ -764,7 +765,7 @@ namespace Microsoft.CodeAnalysis
                             compilationWithoutGeneratedDocuments,
                             generatorInfo,
                             compilationWithGeneratedDocuments,
-                            pendingTranslationActions: []),
+                            pendingTranslationActions: ImmutableList<TranslationAction>.Empty),
                         skeletonReferenceCacheToClone: _skeletonReferenceCache);
                 }
                 else
@@ -792,7 +793,7 @@ namespace Microsoft.CodeAnalysis
             {
                 if (!this.ProjectState.SourceGenerators.Any())
                 {
-                    return [];
+                    return new();
                 }
 
                 var finalState = await GetOrBuildFinalStateAsync(
@@ -801,7 +802,7 @@ namespace Microsoft.CodeAnalysis
                 var driverRunResult = finalState.GeneratorInfo.Driver?.GetRunResult();
                 if (driverRunResult is null)
                 {
-                    return [];
+                    return new();
                 }
 
                 using var _ = ArrayBuilder<Diagnostic>.GetInstance(capacity: driverRunResult.Diagnostics.Length, out var builder);

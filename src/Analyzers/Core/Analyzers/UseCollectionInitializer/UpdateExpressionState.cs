@@ -23,12 +23,10 @@ internal readonly struct UpdateExpressionState<
     where TExpressionSyntax : SyntaxNode
     where TStatementSyntax : SyntaxNode
 {
-    private static readonly ImmutableArray<(string name, bool isLinq)> s_multiAddNames =
-    [
+    private static readonly ImmutableArray<(string name, bool isLinq)> s_multiAddNames = ImmutableArray.Create(
         (nameof(List<int>.AddRange), isLinq: false),
         (nameof(Enumerable.Concat), isLinq: true),
-        (nameof(Enumerable.Append), isLinq: true),
-    ];
+        (nameof(Enumerable.Append), isLinq: true));
 
     public readonly SemanticModel SemanticModel;
     public readonly ISyntaxFacts SyntaxFacts;
@@ -428,7 +426,7 @@ internal readonly struct UpdateExpressionState<
             {
                 if (whenFalse is null)
                 {
-                    // add the form `.. x ? [y] : []` to the result
+                    // add the form `.. x ? [y] : new()` to the result
                     return @this.SyntaxFacts.SupportsCollectionExpressionNaturalType(ifStatement.SyntaxTree.Options)
                         ? new Match<TStatementSyntax>(ifStatement, UseSpread: true)
                         : null;

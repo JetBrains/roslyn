@@ -31,5 +31,5 @@ internal sealed class CSharpOrderModifiersCodeFixProvider : AbstractOrderModifie
     protected override CodeStyleOption2<string> GetCodeStyleOption(AnalyzerOptionsProvider options)
         => ((CSharpAnalyzerOptionsProvider)options).PreferredModifierOrder;
 
-    protected override ImmutableArray<string> FixableCompilerErrorIds { get; } = [CS0267];
+    protected override ImmutableArray<string> FixableCompilerErrorIds { get; } = ImmutableArray.Create(CS0267);
 }

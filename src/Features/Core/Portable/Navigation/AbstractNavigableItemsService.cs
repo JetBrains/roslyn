@@ -27,7 +27,7 @@ internal abstract class AbstractNavigableItemsService : INavigableItemsService
             await GetSymbolAsync(document).ConfigureAwait(false);
 
         if (symbolAndSolution is null)
-            return [];
+            return new();
 
         var (symbol, solution) = symbolAndSolution.Value;
 

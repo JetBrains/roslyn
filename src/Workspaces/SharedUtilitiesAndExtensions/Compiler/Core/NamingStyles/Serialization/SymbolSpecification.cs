@@ -62,7 +62,7 @@ internal sealed class SymbolSpecification(
             id: Guid.NewGuid(),
             name: null,
             symbolKindList:
-            [
+            ImmutableArray.Create(
                 new SymbolKindOrTypeKind(SymbolKind.Namespace),
                 new SymbolKindOrTypeKind(TypeKind.Class),
                 new SymbolKindOrTypeKind(TypeKind.Struct),
@@ -78,19 +78,17 @@ internal sealed class SymbolSpecification(
                 new SymbolKindOrTypeKind(SymbolKind.Event),
                 new SymbolKindOrTypeKind(SymbolKind.Parameter),
                 new SymbolKindOrTypeKind(TypeKind.TypeParameter),
-                new SymbolKindOrTypeKind(SymbolKind.Local),
-            ],
+                new SymbolKindOrTypeKind(SymbolKind.Local)),
             accessibilityList:
-            [
+            ImmutableArray.Create(
                 Accessibility.NotApplicable,
                 Accessibility.Public,
                 Accessibility.Internal,
                 Accessibility.Private,
                 Accessibility.Protected,
                 Accessibility.ProtectedAndInternal,
-                Accessibility.ProtectedOrInternal,
-            ],
-            modifiers: []);
+                Accessibility.ProtectedOrInternal),
+            modifiers: new());
     }
 
     public bool AppliesTo(ISymbol symbol)

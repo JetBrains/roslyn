@@ -31,7 +31,7 @@ internal class CSharpUseCompoundCoalesceAssignmentCodeFixProvider : SyntaxEditor
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.UseCoalesceCompoundAssignmentDiagnosticId];
+        ImmutableArray.Create(IDEDiagnosticIds.UseCoalesceCompoundAssignmentDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

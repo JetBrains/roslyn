@@ -101,7 +101,7 @@ internal static class EditorBrowsableHelpers
 
         if (typeLibAttributeType == null || typeLibFlagsType == null || shortType == null)
         {
-            return [];
+            return new();
         }
 
         var candidateConstructors = typeLibAttributeType.Constructors

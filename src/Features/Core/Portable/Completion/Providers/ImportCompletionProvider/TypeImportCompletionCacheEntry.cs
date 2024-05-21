@@ -62,10 +62,10 @@ internal readonly struct TypeImportCompletionCacheEntry
         bool hideAdvancedMembers)
     {
         if (AssemblySymbolKey.Resolve(originCompilation).Symbol is not IAssemblySymbol assemblySymbol)
-            return [];
+            return new();
 
         if (isEnumBaseListContext && !HasEnumBaseTypes)
-            return [];
+            return new();
 
         var isSameLanguage = Language == language;
         var isInternalsVisible = originCompilation.Assembly.IsSameAssemblyOrHasFriendAccessTo(assemblySymbol);

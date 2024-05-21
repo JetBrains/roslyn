@@ -390,9 +390,9 @@ internal static partial class SyntaxNodeExtensions
         where TRoot : SyntaxNode
     {
         // index all nodes, tokens and trivia by the full spans they cover
-        var nodesToReplace = nodes != null ? nodes.ToDictionary(n => n.FullSpan) : [];
-        var tokensToReplace = tokens != null ? tokens.ToDictionary(t => t.FullSpan) : [];
-        var triviaToReplace = trivia != null ? trivia.ToDictionary(t => t.FullSpan) : [];
+        var nodesToReplace = nodes != null ? nodes.ToDictionary(n => n.FullSpan) : new();
+        var tokensToReplace = tokens != null ? tokens.ToDictionary(t => t.FullSpan) : new();
+        var triviaToReplace = trivia != null ? trivia.ToDictionary(t => t.FullSpan) : new();
 
         var nodeReplacements = new Dictionary<SyntaxNode, SyntaxNode>();
         var tokenReplacements = new Dictionary<SyntaxToken, SyntaxToken>();

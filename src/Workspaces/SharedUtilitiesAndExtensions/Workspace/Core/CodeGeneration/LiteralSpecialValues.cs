@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Collections.Generic;
 
 namespace Microsoft.CodeAnalysis.CodeGeneration;
@@ -34,7 +35,7 @@ internal static class LiteralSpecialValues
     }
 
     // Let's not have special values for byte. byte.MaxValue seems overkill versus 255.
-    public static readonly IEnumerable<KeyValuePair<byte, string>> ByteSpecialValues = [];
+    public static readonly IEnumerable<KeyValuePair<byte, string>> ByteSpecialValues = Array.Empty<KeyValuePair<byte, string>>();
 
     public static readonly IEnumerable<KeyValuePair<sbyte, string>> SByteSpecialValues = new Dictionary<sbyte, string>()
     {

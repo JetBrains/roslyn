@@ -24,7 +24,7 @@ internal sealed class DefaultUnitTestingDocumentTrackingService : IUnitTestingDo
     public event EventHandler<EventArgs> NonRoslynBufferTextChanged { add { } remove { } }
 
     public ImmutableArray<DocumentId> GetVisibleDocuments()
-        => [];
+        => new();
 
     public DocumentId? TryGetActiveDocument()
         => null;

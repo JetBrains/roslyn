@@ -20,7 +20,7 @@ internal abstract class AbstractRemoveUnnecessaryParenthesesCodeFixProvider<TPar
     where TParenthesizedExpressionSyntax : SyntaxNode
 {
     public override ImmutableArray<string> FixableDiagnosticIds
-       => [IDEDiagnosticIds.RemoveUnnecessaryParenthesesDiagnosticId];
+       => ImmutableArray.Create(IDEDiagnosticIds.RemoveUnnecessaryParenthesesDiagnosticId);
 
     protected abstract bool CanRemoveParentheses(
         TParenthesizedExpressionSyntax current, SemanticModel semanticModel, CancellationToken cancellationToken);

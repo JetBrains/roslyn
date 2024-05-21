@@ -25,7 +25,7 @@ internal partial class HideBaseCodeFixProvider : CodeFixProvider
     {
     }
 
-    public override ImmutableArray<string> FixableDiagnosticIds => [CS0108];
+    public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CS0108);
 
     public override FixAllProvider GetFixAllProvider()
         => WellKnownFixAllProviders.BatchFixer;

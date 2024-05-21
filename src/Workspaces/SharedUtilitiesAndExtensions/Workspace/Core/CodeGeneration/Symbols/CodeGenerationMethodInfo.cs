@@ -74,10 +74,10 @@ internal class CodeGenerationMethodInfo
         => GetIsAsyncMethod(GetInfo(method));
 
     private static ImmutableArray<SyntaxNode> GetStatements(CodeGenerationMethodInfo info)
-        => info?._statements ?? [];
+        => info?._statements ?? new();
 
     private static ImmutableArray<SyntaxNode> GetHandlesExpressions(CodeGenerationMethodInfo info)
-        => info?._handlesExpressions ?? [];
+        => info?._handlesExpressions ?? new();
 
     private static bool GetIsNew(CodeGenerationMethodInfo info)
         => info != null && info._isNew;

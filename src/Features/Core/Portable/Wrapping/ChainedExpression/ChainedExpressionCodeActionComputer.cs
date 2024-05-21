@@ -101,7 +101,7 @@ internal abstract partial class AbstractChainedExpressionWrapper<
             await AddUnwrapCodeActionAsync(actions).ConfigureAwait(false);
             await AddWrapLongCodeActionAsync(actions).ConfigureAwait(false);
 
-            return [new WrappingGroup(isInlinable: true, actions.ToImmutable())];
+            return ImmutableArray.Create(new WrappingGroup(isInlinable: true, actions.ToImmutable()));
         }
 
         // Pass 0 as the wrapping column as we effectively always want to wrap each chunk

@@ -32,7 +32,7 @@ internal class CSharpUseIndexOperatorCodeFixProvider : SyntaxEditorBasedCodeFixP
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.UseIndexOperatorDiagnosticId];
+        ImmutableArray.Create(IDEDiagnosticIds.UseIndexOperatorDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

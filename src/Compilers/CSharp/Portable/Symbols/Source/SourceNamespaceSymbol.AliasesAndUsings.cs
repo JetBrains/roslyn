@@ -752,7 +752,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                             {
                                 // Prior to C#12, allow the using static type to be an unsafe region.  This allows us to
                                 // maintain compat with prior versions of the compiler that allowed `using static
-                                // List<int*[]>;` to be written.  In 12.0 and onwards though, we require the code to
+                                // List<int*new()>;` to be written.  In 12.0 and onwards though, we require the code to
                                 // explicitly contain the `unsafe` keyword.
                                 if (!compilation.IsFeatureEnabled(MessageID.IDS_FeatureUsingTypeAlias))
                                     flags |= BinderFlags.UnsafeRegion;

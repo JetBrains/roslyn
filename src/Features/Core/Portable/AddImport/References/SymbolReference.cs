@@ -53,7 +53,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
             // Defer to the language to add the actual import/using.
             if (hasExistingImport)
             {
-                return [];
+                return new();
             }
 
             (var newContextNode, var newDocument) = await ReplaceNameNodeAsync(

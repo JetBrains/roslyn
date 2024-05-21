@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -55,7 +56,7 @@ internal abstract class AbstractConverter(ForEachInfo<ForEachStatementSyntax, St
         IEnumerable<SyntaxToken> leadingTokensForSelect,
         IEnumerable<SyntaxToken> trailingTokensForSelect)
         => SyntaxFactory.QueryExpression(
-            CreateFromClause(ForEachInfo.ForEachStatement, ForEachInfo.LeadingTokens.GetTrivia(), []),
+            CreateFromClause(ForEachInfo.ForEachStatement, ForEachInfo.LeadingTokens.GetTrivia(), Array.Empty<SyntaxTrivia>()),
             SyntaxFactory.QueryBody(
                 [.. ForEachInfo.ConvertingExtendedNodes.Select(node => CreateQueryClause(node))],
                 SyntaxFactory.SelectClause(selectExpression)
@@ -133,7 +134,7 @@ internal abstract class AbstractConverter(ForEachInfo<ForEachStatementSyntax, St
             receiverForInvocation: foreachStatement.Expression,
             selectExpression: selectExpression,
             leadingCommentsTrivia: ForEachInfo.LeadingTokens.GetTrivia(),
-            trailingCommentsTrivia: [],
+            trailingCommentsTrivia: Enumerable.Empty<SyntaxTrivia>(),
             currentExtendedNodeIndex: ref currentExtendedNodeIndex)
             .WithAdditionalAnnotations(Formatter.Annotation);
     }

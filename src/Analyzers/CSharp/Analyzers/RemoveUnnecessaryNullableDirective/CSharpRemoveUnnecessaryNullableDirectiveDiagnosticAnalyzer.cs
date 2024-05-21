@@ -264,7 +264,7 @@ internal sealed class CSharpRemoveUnnecessaryNullableDirectiveDiagnosticAnalyzer
         /// <summary>
         /// Tracks the analysis state of syntax trees in a compilation.
         /// </summary>
-        private readonly ConcurrentDictionary<SyntaxTree, SyntaxTreeState> _codeBlockIntervals = [];
+        private readonly ConcurrentDictionary<SyntaxTree, SyntaxTreeState> _codeBlockIntervals = new();
 
         public void AnalyzeCodeBlock(CodeBlockAnalysisContext context)
         {

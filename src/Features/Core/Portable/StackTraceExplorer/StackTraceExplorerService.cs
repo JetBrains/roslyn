@@ -79,7 +79,7 @@ internal class StackTraceExplorerService : IStackTraceExplorerService
         lineNumber = 0;
         if (root.FileInformationExpression is null)
         {
-            return [];
+            return new();
         }
 
         var fileName = root.FileInformationExpression.Path.ToString();
@@ -96,7 +96,7 @@ internal class StackTraceExplorerService : IStackTraceExplorerService
             {
                 if (document.FilePath == fileName)
                 {
-                    return [document];
+                    return ImmutableArray.Create(document);
                 }
 
                 else if (document.Name == documentName)

@@ -46,7 +46,7 @@ internal static partial class SemanticModelExtensions
             return semanticModel.LookupName(expression, cancellationToken);
         }
 
-        return [];
+        return ImmutableArray.Create<ISymbol>();
     }
 
     /// <summary>
@@ -171,7 +171,7 @@ internal static partial class SemanticModelExtensions
                 var symbolInfo = semanticModel.GetSymbolInfo(@using.NamespaceOrType);
                 if (symbolInfo.Symbol != null && symbolInfo.Symbol.Kind == SymbolKind.Namespace)
                 {
-                    result ??= [];
+                    result ??= new();
                     result.Add((INamespaceSymbol)symbolInfo.Symbol);
                 }
             }

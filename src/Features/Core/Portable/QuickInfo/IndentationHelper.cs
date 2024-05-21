@@ -77,7 +77,7 @@ internal static class IndentationHelper
         }
         else
         {
-            return [];
+            return new();
         }
     }
 

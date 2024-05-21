@@ -158,7 +158,7 @@ internal static partial class DocumentExtensions
     {
         if (!document.SupportsSemanticModel)
         {
-            return [];
+            return new();
         }
 
         ignoreErrorCode ??= SpecializedCollections.EmptyList<string>();

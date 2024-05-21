@@ -53,7 +53,7 @@ internal static class SegmentedListPool
         if (pooledObject.Object.Count == 0)
         {
             pooledObject.Dispose();
-            return [];
+            return new List<T>();
         }
 
         // Otherwise, do not dispose.  Caller needs this value to stay alive.

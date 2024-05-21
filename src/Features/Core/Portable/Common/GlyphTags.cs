@@ -86,6 +86,6 @@ internal static class GlyphTags
             Glyph.Snippet => WellKnownTagArrays.Snippet,
             Glyph.CompletionWarning => WellKnownTagArrays.Warning,
             Glyph.StatusInformation => WellKnownTagArrays.StatusInformation,
-            _ => [],
+            _ => new(),
         };
 }

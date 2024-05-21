@@ -38,7 +38,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
             var service = _assemblyProject.Solution.Services.GetRequiredService<ISymbolTreeInfoCacheService>();
             var info = await service.TryGetPotentiallyStaleMetadataSymbolTreeInfoAsync(_assemblyProject, _metadataReference, cancellationToken).ConfigureAwait(false);
             if (info == null)
-                return [];
+                return new();
 
             var declarations = await info.FindAsync(
                 searchQuery, _assembly, filter, cancellationToken).ConfigureAwait(false);

@@ -30,7 +30,7 @@ internal readonly struct MoveStaticMembersOptions
     public static MoveStaticMembersOptions Cancelled = new(
         string.Empty,
         string.Empty,
-        [],
+        new(),
         isCancelled: true);
 
     public MoveStaticMembersOptions(

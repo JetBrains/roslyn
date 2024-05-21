@@ -301,9 +301,9 @@ internal static partial class ValueTracker
 
             var declarators = operation switch
             {
-                IVariableDeclaratorOperation variableDeclarator => [variableDeclarator],
+                IVariableDeclaratorOperation variableDeclarator => ImmutableArray.Create(variableDeclarator),
                 IVariableDeclarationOperation variableDeclaration => variableDeclaration.Declarators,
-                _ => []
+                _ => new()
             };
 
             foreach (var declarator in declarators)

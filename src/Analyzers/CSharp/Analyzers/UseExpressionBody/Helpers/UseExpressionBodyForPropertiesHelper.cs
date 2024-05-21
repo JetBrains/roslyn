@@ -26,7 +26,7 @@ internal class UseExpressionBodyForPropertiesHelper :
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_expression_body_for_property), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_block_body_for_property), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                CSharpCodeStyleOptions.PreferExpressionBodiedProperties,
-               [SyntaxKind.PropertyDeclaration])
+               ImmutableArray.Create(SyntaxKind.PropertyDeclaration))
     {
     }
 

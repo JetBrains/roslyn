@@ -30,7 +30,8 @@ internal class CSharpBlockStructureService(SolutionServices services) : BlockStr
 {
     protected override ImmutableArray<BlockStructureProvider> GetBuiltInProviders()
     {
-        return [new CSharpBlockStructureProvider()];
+        return ImmutableArray.Create<BlockStructureProvider>(
+                new CSharpBlockStructureProvider());
     }
 
     public override string Language => LanguageNames.CSharp;

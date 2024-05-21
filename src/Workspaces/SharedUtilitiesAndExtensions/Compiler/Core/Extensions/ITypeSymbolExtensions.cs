@@ -446,7 +446,7 @@ internal static partial class ITypeSymbolExtensions
     {
         if (containingType == null)
         {
-            return [];
+            return new();
         }
 
         return containingType.GetBaseTypesAndThis().SelectAccessibleMembers<T>(within).ToImmutableArray();
@@ -501,7 +501,7 @@ internal static partial class ITypeSymbolExtensions
     {
         if (types == null)
         {
-            return [];
+            return Array.Empty<T>();
         }
 
         return types.SelectMany(x => x.GetMembers().OfType<T>().Where(m => m.IsAccessibleWithin(within)));
@@ -511,7 +511,7 @@ internal static partial class ITypeSymbolExtensions
     {
         if (types == null)
         {
-            return [];
+            return Array.Empty<T>();
         }
 
         return types.SelectMany(x => x.GetMembers(memberName).OfType<T>().Where(m => m.IsAccessibleWithin(within)));

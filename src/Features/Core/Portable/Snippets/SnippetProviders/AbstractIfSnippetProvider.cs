@@ -17,10 +17,10 @@ internal abstract class AbstractIfSnippetProvider : AbstractConditionalBlockSnip
 
     public override string Description => FeaturesResources.if_statement;
 
-    public override ImmutableArray<string> AdditionalFilterTexts { get; } = ["statement"];
+    public override ImmutableArray<string> AdditionalFilterTexts { get; } = ImmutableArray.Create("statement");
 
     protected override Func<SyntaxNode?, bool> GetSnippetContainerFunction(ISyntaxFacts syntaxFacts) => syntaxFacts.IsIfStatement;
 
     protected override SyntaxNode GenerateStatement(SyntaxGenerator generator, SyntaxContext syntaxContext, InlineExpressionInfo? inlineExpressionInfo)
-        => generator.IfStatement(inlineExpressionInfo?.Node.WithoutLeadingTrivia() ?? generator.TrueLiteralExpression(), []);
+        => generator.IfStatement(inlineExpressionInfo?.Node.WithoutLeadingTrivia() ?? generator.TrueLiteralExpression(), Array.Empty<SyntaxNode>());
 }

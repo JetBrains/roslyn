@@ -265,7 +265,7 @@ internal partial class EnableNullableCodeRefactoringProvider : CodeRefactoringPr
         {
             var changedSolution = await _createChangedSolution(CodeActionPurpose.Preview, CodeAnalysisProgress.None, cancellationToken).ConfigureAwait(false);
             if (changedSolution is null)
-                return [];
+                return Array.Empty<CodeActionOperation>();
 
             return new CodeActionOperation[] { new ApplyChangesOperation(changedSolution) };
         }

@@ -15,7 +15,7 @@ internal partial struct UnitTestingInvocationReasons(ImmutableHashSet<string> re
     public static readonly UnitTestingInvocationReasons Empty = new(ImmutableHashSet<string>.Empty);
 
     [DataMember(Order = 0)]
-    private readonly ImmutableHashSet<string> _reasons = reasons ?? [];
+    private readonly ImmutableHashSet<string> _reasons = reasons ?? ImmutableHashSet<string>.Empty;
 
     public UnitTestingInvocationReasons(string reason)
         : this(ImmutableHashSet.Create(reason))
@@ -43,5 +43,5 @@ internal partial struct UnitTestingInvocationReasons(ImmutableHashSet<string> re
         => _reasons.GetEnumerator();
 
     public override string ToString()
-        => string.Join("|", _reasons ?? []);
+        => string.Join("|", _reasons ?? ImmutableHashSet<string>.Empty);
 }

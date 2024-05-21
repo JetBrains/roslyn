@@ -21,7 +21,7 @@ internal sealed class CSharpForEachCastDiagnosticAnalyzer : AbstractForEachCastD
         => CSharpSyntaxFacts.Instance;
 
     protected override ImmutableArray<SyntaxKind> GetSyntaxKinds()
-        => [SyntaxKind.ForEachStatement, SyntaxKind.ForEachVariableStatement];
+        => ImmutableArray.Create(SyntaxKind.ForEachStatement, SyntaxKind.ForEachVariableStatement);
 
     protected override (CommonConversion conversion, ITypeSymbol? collectionElementType) GetForEachInfo(
         SemanticModel semanticModel, CommonForEachStatementSyntax node)

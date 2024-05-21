@@ -22,7 +22,7 @@ internal sealed class CSharpMakeStructFieldsWritableDiagnosticAnalyzer : Abstrac
         hasAnyCodeStyleOption: false, isUnnecessary: false);
 
     public CSharpMakeStructFieldsWritableDiagnosticAnalyzer()
-        : base([s_diagnosticDescriptor], GeneratedCodeAnalysisFlags.ReportDiagnostics)
+        : base(ImmutableArray.Create(s_diagnosticDescriptor), GeneratedCodeAnalysisFlags.ReportDiagnostics)
     {
     }
 

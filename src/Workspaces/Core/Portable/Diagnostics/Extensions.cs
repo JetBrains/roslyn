@@ -130,7 +130,7 @@ internal static partial class Extensions
             var result = new DiagnosticAnalysisResultBuilder(project, version);
             var diagnosticIdsToFilter = skippedAnalyzersInfo.FilteredDiagnosticIdsForAnalyzers.GetValueOrDefault(
                 analyzer,
-                []);
+                new());
 
             if (documentAnalysisScope != null)
             {
@@ -219,7 +219,7 @@ internal static partial class Extensions
                     }
                 }
 
-                additionalPragmaSuppressionDiagnostics = [];
+                additionalPragmaSuppressionDiagnostics = new();
             }
 
             builder.Add(analyzer, result);
@@ -373,14 +373,14 @@ internal static partial class Extensions
         var suppressionAnalyzer = analyzers.OfType<IPragmaSuppressionsAnalyzer>().FirstOrDefault();
         if (suppressionAnalyzer == null)
         {
-            return [];
+            return new();
         }
 
         if (documentAnalysisScope != null)
         {
             if (documentAnalysisScope.TextDocument is not Document document)
             {
-                return [];
+                return new();
             }
 
             using var _ = ArrayBuilder<Diagnostic>.GetInstance(out var diagnosticsBuilder);

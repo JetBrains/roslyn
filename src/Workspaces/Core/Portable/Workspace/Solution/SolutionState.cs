@@ -1183,10 +1183,10 @@ internal sealed partial class SolutionState
     public ImmutableArray<DocumentId> GetDocumentIdsWithFilePath(string? filePath)
     {
         if (string.IsNullOrEmpty(filePath))
-            return [];
+            return new();
 
         if (!_filePathToDocumentIdsMap.TryGetValue(filePath, out var documentIds))
-            return [];
+            return new();
 
         // If this wasn't the result of a freeze, then we can return the document ids as is.  They should be accurate.
         if (!_filePathToDocumentIdsMap.IsFrozen)
@@ -1275,21 +1275,21 @@ internal sealed partial class SolutionState
         if (projectState == null)
         {
             // this document no longer exist
-            return [];
+            return new();
         }
 
         var documentState = projectState.DocumentStates.GetState(documentId);
         if (documentState == null)
         {
             // this document no longer exist
-            return [];
+            return new();
         }
 
         var filePath = documentState.FilePath;
         if (string.IsNullOrEmpty(filePath))
         {
             // this document can't have any related document. only related document is itself.
-            return [documentId];
+            return ImmutableArray.Create(documentId);
         }
 
         var documentIds = GetDocumentIdsWithFilePath(filePath);

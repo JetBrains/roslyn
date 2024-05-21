@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 {
                     var segment = ParseNextNameSegment();
 
-                    // Special case: Roslyn names indexers "this[]" in CSharp, FxCop names them "Item" with parameters in [] brackets
+                    // Special case: Roslyn names indexers "this[]" in CSharp, FxCop names them "Item" with parameters in new() brackets
                     bool isIndexerProperty = false;
                     if (segment == "Item" && PeekNextChar() == '[')
                     {

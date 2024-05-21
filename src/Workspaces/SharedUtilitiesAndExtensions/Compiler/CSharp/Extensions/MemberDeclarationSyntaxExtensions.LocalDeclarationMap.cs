@@ -24,7 +24,7 @@ internal partial class MemberDeclarationSyntaxExtensions
             {
                 return _dictionary.TryGetValue(identifier, out var result)
                     ? result
-                    : [];
+                    : ImmutableArray.Create<SyntaxToken>();
             }
         }
     }

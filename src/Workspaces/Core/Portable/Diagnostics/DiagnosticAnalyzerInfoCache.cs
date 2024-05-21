@@ -84,7 +84,7 @@ internal sealed partial class DiagnosticAnalyzerInfoCache
     {
         _descriptorsInfo = new();
         _suppressionsInfo = new();
-        _idToDescriptorsMap = [];
+        _idToDescriptorsMap = new();
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ internal sealed partial class DiagnosticAnalyzerInfoCache
         var descriptorInfo = GetOrCreateDescriptorsInfo(analyzer);
         return descriptorInfo.HasCompilationEndDescriptor
             ? descriptorInfo.SupportedDescriptors.WhereAsArray(d => d.IsCompilationEnd())
-            : [];
+            : new();
     }
 
     /// <summary>
@@ -154,7 +154,7 @@ internal sealed partial class DiagnosticAnalyzerInfoCache
         {
             // No need to report the exception to the user.
             // Eventually, when the analyzer runs the compiler analyzer driver will report a diagnostic.
-            descriptors = [];
+            descriptors = new();
         }
 
         PopulateIdToDescriptorMap(descriptors);
@@ -177,7 +177,7 @@ internal sealed partial class DiagnosticAnalyzerInfoCache
         {
             // No need to report the exception to the user.
             // Eventually, when the suppressor runs the compiler analyzer driver will report a diagnostic.
-            suppressions = [];
+            suppressions = new();
         }
 
         return new SuppressionDescriptorsInfo(suppressions);

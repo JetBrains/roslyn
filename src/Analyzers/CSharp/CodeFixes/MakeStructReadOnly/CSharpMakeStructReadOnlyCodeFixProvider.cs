@@ -27,7 +27,7 @@ internal sealed class CSharpMakeStructReadOnlyCodeFixProvider : SyntaxEditorBase
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.MakeStructReadOnlyDiagnosticId];
+        ImmutableArray.Create(IDEDiagnosticIds.MakeStructReadOnlyDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

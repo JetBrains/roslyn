@@ -53,8 +53,8 @@ internal abstract class AbstractExtractInterfaceService : ILanguageService
         var typeAnalysisResult = await AnalyzeTypeAtPositionAsync(document, span.Start, TypeDiscoveryRule.TypeNameOnly, fallbackOptions, cancellationToken).ConfigureAwait(false);
 
         return typeAnalysisResult.CanExtractInterface
-            ? [new ExtractInterfaceCodeAction(this, typeAnalysisResult)]
-            : [];
+            ? ImmutableArray.Create(new ExtractInterfaceCodeAction(this, typeAnalysisResult))
+            : new();
     }
 
     public async Task<ExtractInterfaceResult> ExtractInterfaceAsync(
@@ -388,7 +388,7 @@ internal abstract class AbstractExtractInterfaceService : ILanguageService
                 case SymbolKind.Event:
                     var @event = member as IEventSymbol;
                     interfaceMembers.Add(CodeGenerationSymbolFactory.CreateEventSymbol(
-                        attributes: [],
+                        attributes: new(),
                         accessibility: Accessibility.Public,
                         modifiers: new DeclarationModifiers(isAbstract: true),
                         type: @event.Type,
@@ -398,7 +398,7 @@ internal abstract class AbstractExtractInterfaceService : ILanguageService
                 case SymbolKind.Method:
                     var method = member as IMethodSymbol;
                     interfaceMembers.Add(CodeGenerationSymbolFactory.CreateMethodSymbol(
-                        attributes: [],
+                        attributes: new(),
                         accessibility: Accessibility.Public,
                         modifiers: new DeclarationModifiers(isAbstract: true, isUnsafe: method.RequiresUnsafeModifier()),
                         returnType: method.ReturnType,
@@ -421,7 +421,7 @@ internal abstract class AbstractExtractInterfaceService : ILanguageService
                     }
 
                     interfaceMembers.Add(CodeGenerationSymbolFactory.CreatePropertySymbol(
-                        attributes: [],
+                        attributes: new(),
                         accessibility: Accessibility.Public,
                         modifiers: new DeclarationModifiers(isAbstract: true, isUnsafe: property.RequiresUnsafeModifier()),
                         type: property.Type,

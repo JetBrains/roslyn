@@ -100,7 +100,7 @@ internal static partial class SemanticModelExtensions
             var overriddingSymbol = semanticFacts.GetDeclaredSymbol(semanticModel, overriddingIdentifier.Value, cancellationToken);
             var overriddenSymbol = overriddingSymbol.GetOverriddenMember();
 
-            allSymbols = overriddenSymbol is null ? [] : [overriddenSymbol];
+            allSymbols = overriddenSymbol is null ? new() : ImmutableArray.Create<ISymbol?>(overriddenSymbol);
         }
         else
         {
@@ -113,7 +113,7 @@ internal static partial class SemanticModelExtensions
 
             var skipSymbolInfoLookup = declaredSymbol.IsKind(SymbolKind.RangeVariable);
             allSymbols = skipSymbolInfoLookup
-                ? []
+                ? new()
                 : semanticFacts
                     .GetBestOrAllSymbols(semanticModel, bindableParent, token, cancellationToken)
                     .WhereAsArray(s => s != null && !s.Equals(declaredSymbol))
@@ -138,7 +138,7 @@ internal static partial class SemanticModelExtensions
                 if (namedType.TypeKind == TypeKind.Delegate ||
                     namedType.AssociatedSymbol != null)
                 {
-                    allSymbols = [type];
+                    allSymbols = ImmutableArray.Create<ISymbol?>(type);
                     type = null;
                 }
             }

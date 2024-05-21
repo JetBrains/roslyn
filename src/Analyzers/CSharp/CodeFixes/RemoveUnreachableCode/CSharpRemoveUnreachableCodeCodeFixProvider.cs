@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.CSharp.RemoveUnreachableCode;
 internal sealed class CSharpRemoveUnreachableCodeCodeFixProvider() : SyntaxEditorBasedCodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.RemoveUnreachableCodeDiagnosticId];
+        ImmutableArray.Create(IDEDiagnosticIds.RemoveUnreachableCodeDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

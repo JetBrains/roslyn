@@ -65,7 +65,7 @@ internal class ConstructorSymbolReferenceFinder : AbstractReferenceFinder<IMetho
 
         result.AddRange(symbol.MethodKind == MethodKind.Constructor
             ? await FindDocumentsWithImplicitObjectCreationExpressionAsync(project, documents, cancellationToken).ConfigureAwait(false)
-            : []);
+            : new());
 
         return result.ToImmutable();
     }
@@ -84,7 +84,7 @@ internal class ConstructorSymbolReferenceFinder : AbstractReferenceFinder<IMetho
 
         var documentsWithAttribute = TryGetNameWithoutAttributeSuffix(typeName, project.Services.GetRequiredService<ISyntaxFactsService>(), out var simpleName)
             ? await FindDocumentsAsync(project, documents, cancellationToken, simpleName).ConfigureAwait(false)
-            : [];
+            : new();
 
         result.AddRange(documentsWithName);
         result.AddRange(documentsWithAttribute);
@@ -177,7 +177,7 @@ internal class ConstructorSymbolReferenceFinder : AbstractReferenceFinder<IMetho
     {
         var predefinedType = symbol.ContainingType.SpecialType.ToPredefinedType();
         if (predefinedType == PredefinedType.None)
-            return new([]);
+            return new(ImmutableArray<FinderLocation>.Empty);
 
         var tokens = state.Root
             .DescendantTokens(descendIntoTrivia: true)
@@ -196,7 +196,7 @@ internal class ConstructorSymbolReferenceFinder : AbstractReferenceFinder<IMetho
     {
         return TryGetNameWithoutAttributeSuffix(name, state.SyntaxFacts, out var simpleName)
             ? FindReferencesInDocumentUsingIdentifierAsync(symbol, simpleName, state, cancellationToken)
-            : new([]);
+            : new(ImmutableArray<FinderLocation>.Empty);
     }
 
     private Task<ImmutableArray<FinderLocation>> FindReferencesInImplicitObjectCreationExpressionAsync(

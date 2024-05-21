@@ -178,7 +178,7 @@ public static partial class SymbolFinder
                 }
             }
 
-            return [];
+            return new();
         }
         catch (Exception ex) when (FatalError.ReportAndPropagateUnlessCanceled(ex, cancellationToken, ErrorSeverity.Diagnostic))
         {
@@ -347,7 +347,7 @@ public static partial class SymbolFinder
         ISymbol symbol, Solution solution, IImmutableSet<Project>? projects = null, CancellationToken cancellationToken = default)
     {
         if (!symbol.IsImplementableMember())
-            return [];
+            return new();
 
         var containingType = symbol.ContainingType.OriginalDefinition;
 

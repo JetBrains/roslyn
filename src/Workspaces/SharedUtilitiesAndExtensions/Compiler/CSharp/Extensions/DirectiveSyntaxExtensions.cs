@@ -54,6 +54,6 @@ internal static partial class DirectiveSyntaxExtensions
         var directiveConditionalMap = GetDirectiveInfo(directive, cancellationToken).ConditionalMap;
         return directiveConditionalMap.TryGetValue(directive, out var result)
             ? result
-            : [];
+            : new();
     }
 }

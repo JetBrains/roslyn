@@ -41,7 +41,7 @@ internal sealed partial class CSharpAddExplicitCastCodeFixProvider
         _attributeArgumentFixer = new AttributeArgumentFixer();
     }
 
-    public override ImmutableArray<string> FixableDiagnosticIds => [CS0266, CS1503];
+    public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CS0266, CS1503);
 
     protected override void GetPartsOfCastOrConversionExpression(ExpressionSyntax expression, out SyntaxNode type, out SyntaxNode castedExpression)
     {
@@ -62,7 +62,7 @@ internal sealed partial class CSharpAddExplicitCastCodeFixProvider
         CancellationToken cancellationToken,
         out ImmutableArray<(ExpressionSyntax, ITypeSymbol)> potentialConversionTypes)
     {
-        potentialConversionTypes = [];
+        potentialConversionTypes = new();
         using var _ = ArrayBuilder<(ExpressionSyntax, ITypeSymbol)>.GetInstance(out var mutablePotentialConversionTypes);
 
         if (diagnosticId == CS0266)

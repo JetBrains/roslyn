@@ -53,7 +53,7 @@ internal class CSharpUseDefaultLiteralDiagnosticAnalyzer : AbstractBuiltInUnnece
                 defaultExpression.GetLocation(),
                 preference.Notification,
                 context.Options,
-                additionalLocations: [],
-                additionalUnnecessaryLocations: [defaultExpression.SyntaxTree.GetLocation(fadeSpan)]));
+                additionalLocations: new(),
+                additionalUnnecessaryLocations: ImmutableArray.Create(defaultExpression.SyntaxTree.GetLocation(fadeSpan))));
     }
 }

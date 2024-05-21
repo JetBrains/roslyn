@@ -29,7 +29,7 @@ internal class CSharpConvertToAsyncMethodCodeFixProvider : AbstractConvertToAsyn
     {
     }
 
-    public override ImmutableArray<string> FixableDiagnosticIds => [CS4008];
+    public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CS4008);
 
     protected override async Task<string> GetDescriptionAsync(
         Diagnostic diagnostic,

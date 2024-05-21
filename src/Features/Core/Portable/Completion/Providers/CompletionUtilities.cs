@@ -28,7 +28,7 @@ internal static class CompletionUtilities
     public static ImmutableArray<Project> GetDistinctProjectsFromLatestSolutionSnapshot(ImmutableSegmentedList<Project> projects)
     {
         if (projects.IsEmpty)
-            return [];
+            return new();
 
         Solution? solution = null;
         using var _ = PooledHashSet<ProjectId>.GetInstance(out var projectIds);

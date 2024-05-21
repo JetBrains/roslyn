@@ -26,7 +26,7 @@ internal abstract class AbstractFileHeaderCodeFixProvider : CodeFixProvider
     protected abstract AbstractFileHeaderHelper FileHeaderHelper { get; }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; }
-        = [IDEDiagnosticIds.FileHeaderMismatch];
+        = ImmutableArray.Create(IDEDiagnosticIds.FileHeaderMismatch);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

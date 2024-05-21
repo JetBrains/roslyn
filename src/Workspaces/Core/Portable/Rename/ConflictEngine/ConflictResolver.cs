@@ -136,7 +136,7 @@ internal static partial class ConflictResolver
         var symbolInfo = semanticModel.GetSymbolInfo(invocationExpression, cancellationToken);
         return symbolInfo.Symbol == null
             ? default
-            : [symbolInfo.Symbol];
+            : ImmutableArray.Create(symbolInfo.Symbol);
     }
 
     private static SyntaxNode? GetExpansionTargetForLocationPerLanguage(SyntaxToken tokenOrNode, Document document)

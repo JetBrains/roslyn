@@ -31,7 +31,7 @@ internal sealed class CSharpUseDeconstructionCodeFixProvider : SyntaxEditorBased
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseDeconstructionDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseDeconstructionDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

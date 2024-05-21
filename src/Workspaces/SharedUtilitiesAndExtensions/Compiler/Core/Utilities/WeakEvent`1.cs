@@ -25,7 +25,7 @@ internal sealed class WeakEvent<TEventArgs>
     /// </remarks>
     private readonly ConditionalWeakTable<object, EventHandler<TEventArgs>> _keepAliveTable = new();
 
-    private ImmutableList<WeakReference<EventHandler<TEventArgs>>> _weakHandlers = [];
+    private ImmutableList<WeakReference<EventHandler<TEventArgs>>> _weakHandlers = ImmutableList<WeakReference<EventHandler<TEventArgs>>>.Empty;
 
     public void AddHandler(object target, EventHandler<TEventArgs> handler)
     {

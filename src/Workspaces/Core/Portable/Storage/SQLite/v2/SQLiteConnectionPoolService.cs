@@ -31,7 +31,7 @@ internal sealed class SQLiteConnectionPoolService : IDisposable
     /// <remarks>
     /// Access to this field is synchronized through <see cref="_gate"/>.
     /// </remarks>
-    private readonly Dictionary<string, ReferenceCountedDisposable<SQLiteConnectionPool>> _connectionPools = [];
+    private readonly Dictionary<string, ReferenceCountedDisposable<SQLiteConnectionPool>> _connectionPools = new();
 
     [ImportingConstructor]
     [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]

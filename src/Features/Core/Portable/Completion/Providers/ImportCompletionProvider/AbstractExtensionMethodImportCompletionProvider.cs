@@ -47,7 +47,7 @@ internal abstract class AbstractExtensionMethodImportCompletionProvider : Abstra
 
                 var inferredTypes = completionContext.CompletionOptions.TargetTypedCompletionFilter
                     ? syntaxContext.InferredTypes
-                    : [];
+                    : new();
 
                 var result = await ExtensionMethodImportCompletionHelper.GetUnimportedExtensionMethodsAsync(
                     syntaxContext,

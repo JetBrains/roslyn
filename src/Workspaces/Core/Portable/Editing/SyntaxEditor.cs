@@ -56,7 +56,7 @@ namespace Microsoft.CodeAnalysis.Editing;
 public class SyntaxEditor
 {
     private readonly SyntaxGenerator _generator;
-    private readonly List<Change> _changes = [];
+    private readonly List<Change> _changes = new();
 
     /// <summary>
     /// Creates a new <see cref="SyntaxEditor"/> instance.

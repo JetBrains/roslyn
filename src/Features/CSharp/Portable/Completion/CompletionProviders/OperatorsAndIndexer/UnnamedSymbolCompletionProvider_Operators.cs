@@ -33,13 +33,13 @@ internal partial class UnnamedSymbolCompletionProvider
 
     private readonly string OperatorName = nameof(OperatorName);
     private readonly ImmutableArray<KeyValuePair<string, string>> OperatorProperties =
-        [new KeyValuePair<string, string>(KindName, OperatorKindName)];
+        ImmutableArray.Create(new KeyValuePair<string, string>(KindName, OperatorKindName));
 
     /// <summary>
     /// Ordered in the order we want to display operators in the completion list.
     /// </summary>
     private static readonly ImmutableArray<(string name, OperatorPosition position)> s_operatorInfo =
-        [
+        ImmutableArray.Create(
             (WellKnownMemberNames.EqualityOperatorName, OperatorPosition.Infix),
             (WellKnownMemberNames.InequalityOperatorName, OperatorPosition.Infix),
             (WellKnownMemberNames.GreaterThanOperatorName, OperatorPosition.Infix),
@@ -62,13 +62,12 @@ internal partial class UnnamedSymbolCompletionProvider
             (WellKnownMemberNames.LeftShiftOperatorName, OperatorPosition.Infix),
             (WellKnownMemberNames.RightShiftOperatorName, OperatorPosition.Infix),
             (WellKnownMemberNames.UnsignedRightShiftOperatorName, OperatorPosition.Infix),
-            (WellKnownMemberNames.OnesComplementOperatorName, OperatorPosition.Prefix),
-        ];
+            (WellKnownMemberNames.OnesComplementOperatorName, OperatorPosition.Prefix));
 
     /// <summary>
     /// Mapping from operator name to info about it.
     /// </summary>
-    private static readonly Dictionary<string, (int sortOrder, OperatorPosition position)> s_operatorNameToInfo = [];
+    private static readonly Dictionary<string, (int sortOrder, OperatorPosition position)> s_operatorNameToInfo = new();
 
     private static readonly CompletionItemRules s_operatorRules;
 
@@ -104,6 +103,12 @@ internal partial class UnnamedSymbolCompletionProvider
             return;
 
         var displayText = GetOperatorText(opName);
+
+        using var _ = ArrayBuilder<KeyValuePair<string, string>>.GetInstance(OperatorProperties.Length + 1, out var builder);
+
+        builder.AddRange(OperatorProperties);
+        builder.Add(new KeyValuePair<string, string>(OperatorName, opName));
+
         context.AddItem(SymbolCompletionItem.CreateWithSymbolId(
             displayText: displayText,
             displayTextSuffix: null,
@@ -113,7 +118,7 @@ internal partial class UnnamedSymbolCompletionProvider
             symbols: operators.ToImmutableArray(),
             rules: s_operatorRules,
             contextPosition: context.Position,
-            properties: [.. OperatorProperties, new KeyValuePair<string, string>(OperatorName, opName)],
+            properties: builder.ToImmutable(),
             isComplexTextEdit: true));
     }
 

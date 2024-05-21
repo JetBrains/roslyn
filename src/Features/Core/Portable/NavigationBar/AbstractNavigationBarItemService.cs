@@ -33,7 +33,7 @@ internal abstract class AbstractNavigationBarItemService : INavigationBarItemSer
 
             return result.HasValue
                 ? result.Value.SelectAsArray(v => v.Rehydrate())
-                : [];
+                : new();
         }
 
         var items = await GetItemsInCurrentProcessAsync(document, supportsCodeGeneration, cancellationToken).ConfigureAwait(false);

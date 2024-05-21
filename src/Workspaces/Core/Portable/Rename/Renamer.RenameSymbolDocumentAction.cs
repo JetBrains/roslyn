@@ -27,7 +27,7 @@ public static partial class Renamer
 
         private RenameSymbolDocumentAction(
             AnalysisResult analysis)
-            : base([])
+            : base(new())
         {
             _analysis = analysis;
         }

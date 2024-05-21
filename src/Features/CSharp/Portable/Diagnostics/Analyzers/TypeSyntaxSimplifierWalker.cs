@@ -61,7 +61,7 @@ internal class TypeSyntaxSimplifierWalker : CSharpSyntaxWalker, IDisposable
 
     public bool HasDiagnostics => _diagnostics?.Count > 0;
 
-    public ImmutableArray<Diagnostic> Diagnostics => _diagnostics?.ToImmutable() ?? [];
+    public ImmutableArray<Diagnostic> Diagnostics => _diagnostics?.ToImmutable() ?? new();
 
     public ImmutableArray<Diagnostic>.Builder DiagnosticsBuilder
     {

@@ -25,14 +25,13 @@ internal sealed class CSharpSimplifyTypeNamesDiagnosticAnalyzer
     : SimplifyTypeNamesDiagnosticAnalyzerBase<SyntaxKind, CSharpSimplifierOptions>
 {
     private static readonly ImmutableArray<SyntaxKind> s_kindsOfInterest =
-        [
+        ImmutableArray.Create(
             SyntaxKind.QualifiedName,
             SyntaxKind.AliasQualifiedName,
             SyntaxKind.GenericName,
             SyntaxKind.IdentifierName,
             SyntaxKind.SimpleMemberAccessExpression,
-            SyntaxKind.QualifiedCref,
-        ];
+            SyntaxKind.QualifiedCref);
 
     protected override bool IsIgnoredCodeBlock(SyntaxNode codeBlock)
     {
@@ -59,7 +58,7 @@ internal sealed class CSharpSimplifyTypeNamesDiagnosticAnalyzer
 
         var options = context.GetCSharpAnalyzerOptions().GetSimplifierOptions();
         if (ShouldSkipAnalysis(context.FilterTree, context.Options, context.SemanticModel.Compilation.Options, GetAllNotifications(options), cancellationToken))
-            return [];
+            return new();
 
         using var simplifier = new TypeSyntaxSimplifierWalker(this, semanticModel, options, context.Options, ignoredSpans: null, cancellationToken);
         simplifier.Visit(root);
@@ -70,7 +69,7 @@ internal sealed class CSharpSimplifyTypeNamesDiagnosticAnalyzer
     {
         var options = context.GetCSharpAnalyzerOptions().GetSimplifierOptions();
         if (ShouldSkipAnalysis(context.FilterTree, context.Options, context.SemanticModel.Compilation.Options, GetAllNotifications(options), context.CancellationToken))
-            return [];
+            return new();
 
         var simplifier = new TypeSyntaxSimplifierWalker(this, context.SemanticModel, options, context.Options, ignoredSpans: codeBlockIntervalTree, context.CancellationToken);
         simplifier.Visit(root);

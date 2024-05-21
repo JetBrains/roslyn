@@ -24,5 +24,7 @@ internal class GenerationOptions
         group: CodeStyleOptionGroups.Usings,
         isEditorConfigOption: true);
 
-    public static readonly ImmutableArray<IOption2> AllOptions = [PlaceSystemNamespaceFirst, SeparateImportDirectiveGroups];
+    public static readonly ImmutableArray<IOption2> AllOptions = ImmutableArray.Create<IOption2>(
+            PlaceSystemNamespaceFirst,
+            SeparateImportDirectiveGroups);
 }

@@ -177,7 +177,7 @@ internal partial class SolutionCompilationState
                     // an edit which would cause this file to no longer exist, but they're still operating on an open representation
                     // of that file. To ensure that this snapshot is still usable, we'll just add this document back in. This is not a
                     // semantically correct operation, but working on stale snapshots never has that guarantee.
-                    newStates = newStates.AddRange([replacementState]);
+                    newStates = newStates.AddRange(ImmutableArray.Create(replacementState));
                 }
             }
 

@@ -13,7 +13,7 @@ internal partial class MemberDeclarationSyntaxExtensions
 {
     private sealed class DeclarationFinder : CSharpSyntaxWalker
     {
-        private readonly Dictionary<string, List<SyntaxToken>> _map = [];
+        private readonly Dictionary<string, List<SyntaxToken>> _map = new();
 
         private DeclarationFinder()
             : base(SyntaxWalkerDepth.Node)
@@ -34,7 +34,7 @@ internal partial class MemberDeclarationSyntaxExtensions
                 var identifier = syntaxToken.ValueText;
                 if (!_map.TryGetValue(identifier, out var list))
                 {
-                    list = [];
+                    list = new();
                     _map.Add(identifier, list);
                 }
 

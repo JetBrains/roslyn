@@ -23,5 +23,5 @@ internal sealed class CSharpMakeTypePartialCodeFixProvider : AbstractMakeTypePar
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [CS0260];
+        ImmutableArray.Create(CS0260);
 }

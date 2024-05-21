@@ -34,7 +34,7 @@ internal partial class SolutionState
     /// Mapping from project-id to the checksums needed to synchronize it (and the projects it depends on) over 
     /// to an OOP host.  Lock this specific field before reading/writing to it.
     /// </summary>
-    private readonly Dictionary<ProjectId, AsyncLazy<SolutionStateChecksums>> _lazyProjectChecksums = [];
+    private readonly Dictionary<ProjectId, AsyncLazy<SolutionStateChecksums>> _lazyProjectChecksums = new();
 
     public static IReadOnlyList<ProjectId> GetOrCreateSortedProjectIds(IReadOnlyList<ProjectId> unorderedList)
         => s_projectIdToSortedProjectsMap.GetValue(unorderedList, projectIds => projectIds.OrderBy(id => id.Id).ToImmutableArray());
@@ -143,7 +143,7 @@ internal partial class SolutionState
                     analyzerReferenceChecksums);
 
 #if DEBUG
-                var projectConeTemp = projectConeId is null ? null : new ProjectCone(projectConeId, projectCone.Object.ToFrozenSet());
+                var projectConeTemp = projectConeId is null ? null : new ProjectCone(projectConeId, projectCone.Object.ToFrozenSet4Hack());
                 RoslynDebug.Assert(Equals(projectConeTemp, stateChecksums.ProjectCone));
 #endif
 

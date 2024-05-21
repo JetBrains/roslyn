@@ -461,8 +461,8 @@ internal abstract partial class MethodExtractor<TSelectionResult, TStatementSynt
             Contract.ThrowIfNull(model);
             Contract.ThrowIfNull(dataFlowAnalysisData);
 
-            variableInfoMap = [];
-            failedVariables = [];
+            variableInfoMap = new();
+            failedVariables = new();
 
             // create map of each data
             var capturedMap = new HashSet<ISymbol>(dataFlowAnalysisData.Captured);

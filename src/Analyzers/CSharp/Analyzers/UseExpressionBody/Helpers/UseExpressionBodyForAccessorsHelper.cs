@@ -22,14 +22,14 @@ internal class UseExpressionBodyForAccessorsHelper :
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_expression_body_for_accessor), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                new LocalizableResourceString(nameof(CSharpAnalyzersResources.Use_block_body_for_accessor), CSharpAnalyzersResources.ResourceManager, typeof(CSharpAnalyzersResources)),
                CSharpCodeStyleOptions.PreferExpressionBodiedAccessors,
-               [
+               ImmutableArray.Create(
                    SyntaxKind.GetAccessorDeclaration,
                    SyntaxKind.SetAccessorDeclaration,
                    SyntaxKind.InitAccessorDeclaration,
                    SyntaxKind.AddAccessorDeclaration,
-                   SyntaxKind.RemoveAccessorDeclaration,
-               ])
-    {
+                   SyntaxKind.RemoveAccessorDeclaration))
+               {
+    
     }
 
     public override CodeStyleOption2<ExpressionBodyPreference> GetExpressionBodyPreference(CSharpCodeGenerationOptions options)

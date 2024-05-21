@@ -56,7 +56,7 @@ internal abstract partial class AbstractSemanticFactsService : ISemanticFacts
         string baseName, CancellationToken cancellationToken)
     {
         return GenerateUniqueName(
-            semanticModel, location, containerOpt, baseName, s_LocalNameFilter, usedNames: [], cancellationToken);
+            semanticModel, location, containerOpt, baseName, s_LocalNameFilter, usedNames: Array.Empty<string>(), cancellationToken);
     }
 
     public SyntaxToken GenerateUniqueLocalName(

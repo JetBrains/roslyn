@@ -55,7 +55,7 @@ internal abstract class AbstractUseObjectInitializerCodeFixProvider<
         ImmutableArray<Match<TExpressionSyntax, TStatementSyntax, TMemberAccessExpressionSyntax, TAssignmentStatementSyntax>> matches);
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseObjectInitializerDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseObjectInitializerDiagnosticId);
 
     protected override async Task FixAsync(
         Document document,

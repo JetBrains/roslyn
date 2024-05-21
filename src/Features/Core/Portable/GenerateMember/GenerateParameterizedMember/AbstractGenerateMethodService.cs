@@ -39,7 +39,7 @@ internal abstract partial class AbstractGenerateMethodService<TService, TSimpleN
             var state = await State.GenerateMethodStateAsync((TService)this, semanticDocument, node, cancellationToken).ConfigureAwait(false);
             if (state == null)
             {
-                return [];
+                return new();
             }
 
             return await GetActionsAsync(document, state, fallbackOptions, cancellationToken).ConfigureAwait(false);

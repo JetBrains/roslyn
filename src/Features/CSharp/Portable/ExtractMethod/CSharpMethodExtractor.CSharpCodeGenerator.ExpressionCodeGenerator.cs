@@ -109,13 +109,15 @@ internal partial class CSharpMethodExtractor
 
                 if (AnalyzerResult.HasReturnType)
                 {
-                    return [SyntaxFactory.ReturnStatement(
-                            WrapInCheckedExpressionIfNeeded(expression))];
+                    return ImmutableArray.Create<StatementSyntax>(
+                            SyntaxFactory.ReturnStatement(
+                            WrapInCheckedExpressionIfNeeded(expression)));
                 }
                 else
                 {
-                    return [SyntaxFactory.ExpressionStatement(
-                            WrapInCheckedExpressionIfNeeded(expression))];
+                    return ImmutableArray.Create<StatementSyntax>(
+                            SyntaxFactory.ExpressionStatement(
+                            WrapInCheckedExpressionIfNeeded(expression)));
                 }
             }
 

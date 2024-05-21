@@ -172,13 +172,13 @@ internal partial class AddConstructorParametersFromMembersCodeRefactoringProvide
         var addConstructorParametersResult = await AddConstructorParametersFromMembersAsync(priorDocument, priorSelection, intentDataProvider.FallbackOptions, cancellationToken).ConfigureAwait(false);
         if (addConstructorParametersResult == null)
         {
-            return [];
+            return new();
         }
 
         var actions = addConstructorParametersResult.Value.RequiredParameterActions.Concat(addConstructorParametersResult.Value.OptionalParameterActions);
         if (actions.IsEmpty)
         {
-            return [];
+            return new();
         }
 
         using var _ = ArrayBuilder<IntentProcessorResult>.GetInstance(out var results);
@@ -188,7 +188,7 @@ internal partial class AddConstructorParametersFromMembersCodeRefactoringProvide
             var changedSolution = await action.GetChangedSolutionInternalAsync(
                 priorDocument.Project.Solution, CodeAnalysisProgress.None, postProcessChanges: true, cancellationToken).ConfigureAwait(false);
             Contract.ThrowIfNull(changedSolution);
-            var intent = new IntentProcessorResult(changedSolution, [priorDocument.Id], action.Title, action.ActionName);
+            var intent = new IntentProcessorResult(changedSolution, ImmutableArray.Create(priorDocument.Id), action.Title, action.ActionName);
             results.Add(intent);
         }
 

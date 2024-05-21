@@ -44,7 +44,7 @@ internal sealed class CodeFix
     {
         Project = project;
         Action = action;
-        Diagnostics = [diagnostic];
+        Diagnostics = ImmutableArray.Create(diagnostic);
     }
 
     internal CodeFix(Project project, CodeAction action, ImmutableArray<Diagnostic> diagnostics)

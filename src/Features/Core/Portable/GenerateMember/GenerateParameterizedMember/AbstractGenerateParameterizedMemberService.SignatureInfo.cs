@@ -194,7 +194,7 @@ internal abstract partial class AbstractGenerateParameterizedMemberService<TServ
 
             return isAbstract || State.TypeToGenerateIn.TypeKind == TypeKind.Interface || throwStatement == null
                 ? default
-                : [throwStatement];
+                : ImmutableArray.Create(throwStatement);
         }
 
         private async ValueTask<ImmutableArray<IParameterSymbol>> DetermineParametersAsync(CancellationToken cancellationToken)

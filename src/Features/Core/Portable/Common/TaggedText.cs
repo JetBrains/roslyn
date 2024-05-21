@@ -89,7 +89,7 @@ internal static class TaggedTextExtensions
         this IEnumerable<SymbolDisplayPart>? displayParts, TaggedTextStyle style = TaggedTextStyle.None, Func<ISymbol?, string?>? getNavigationHint = null, bool includeNavigationHints = true)
     {
         if (displayParts == null)
-            return [];
+            return new();
 
         // To support CodeGeneration symbols, which do not support ToDisplayString we need to be able to override it.
         getNavigationHint ??= static symbol => symbol?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);

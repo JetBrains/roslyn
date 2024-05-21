@@ -31,7 +31,7 @@ internal partial class ObjectCreationExpressionSignatureHelpProvider
             suffixParts: GetDelegateTypePostambleParts(),
             parameters: GetDelegateTypeParameters(invokeMethod, semanticModel, position));
 
-        return [item];
+        return ImmutableArray.Create<SignatureHelpItem>(item);
     }
 
     private static IList<SymbolDisplayPart> GetDelegateTypePreambleParts(IMethodSymbol invokeMethod, SemanticModel semanticModel, int position)

@@ -26,7 +26,7 @@ internal sealed class InstallPackageDirectlyCodeActionOperation : CodeActionOper
     private readonly string? _versionOpt;
     private readonly bool _includePrerelease;
     private readonly bool _isLocal;
-    private readonly List<string> _projectsWithMatchingVersion = [];
+    private readonly List<string> _projectsWithMatchingVersion = new();
 
     public InstallPackageDirectlyCodeActionOperation(
         IPackageInstallerService installerService,

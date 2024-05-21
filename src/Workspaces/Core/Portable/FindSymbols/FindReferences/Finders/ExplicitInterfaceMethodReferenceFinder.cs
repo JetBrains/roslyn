@@ -34,6 +34,6 @@ internal sealed class ExplicitInterfaceMethodReferenceFinder : AbstractReference
         CancellationToken cancellationToken)
     {
         // An explicit method can't be referenced anywhere.
-        return new([]);
+        return new(ImmutableArray<FinderLocation>.Empty);
     }
 }

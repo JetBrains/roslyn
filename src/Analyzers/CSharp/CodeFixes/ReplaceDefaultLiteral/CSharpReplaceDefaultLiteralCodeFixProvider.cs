@@ -32,7 +32,7 @@ internal sealed class CSharpReplaceDefaultLiteralCodeFixProvider : CodeFixProvid
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [CS8313, CS8505];
+        ImmutableArray.Create(CS8313, CS8505);
 
     public override FixAllProvider? GetFixAllProvider()
     {

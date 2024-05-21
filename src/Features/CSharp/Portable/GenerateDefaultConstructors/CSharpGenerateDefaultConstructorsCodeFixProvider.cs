@@ -26,7 +26,7 @@ internal class CSharpGenerateDefaultConstructorsCodeFixProvider : AbstractGenera
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [CS1729, CS7036, CS8983];
+        ImmutableArray.Create(CS1729, CS7036, CS8983);
 
     protected override SyntaxToken? TryGetTypeName(SyntaxNode typeDeclaration)
         => (typeDeclaration as BaseTypeDeclarationSyntax)?.Identifier;

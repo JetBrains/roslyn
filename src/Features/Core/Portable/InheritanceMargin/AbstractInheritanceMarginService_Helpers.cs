@@ -168,7 +168,7 @@ internal abstract partial class AbstractInheritanceMarginService
 
         // if that location doesn't intersect with the lines of interest, immediately bail out.
         if (!spanToSearch.IntersectsWith(spanStart))
-            return [];
+            return new();
 
         var semanticModel = await document.GetRequiredSemanticModelAsync(cancellationToken).ConfigureAwait(false);
         var scopes = semanticModel.GetImportScopes(root.FullSpan.End, cancellationToken);
@@ -177,7 +177,7 @@ internal abstract partial class AbstractInheritanceMarginService
         // correspond to inner scopes for either the compilation unit or namespace.
         var lastScope = scopes.LastOrDefault();
         if (lastScope == null)
-            return [];
+            return new();
 
         // Pull in any project level imports, or imports from other files (e.g. global usings).
         var syntaxTree = semanticModel.SyntaxTree;
@@ -201,7 +201,7 @@ internal abstract partial class AbstractInheritanceMarginService
             });
 
         if (nonLocalImports.Length == 0)
-            return [];
+            return new();
 
         var text = await document.GetValueTextAsync(cancellationToken).ConfigureAwait(false);
         var lineNumber = text.Lines.GetLineFromPosition(spanStart).LineNumber;
@@ -226,14 +226,14 @@ internal abstract partial class AbstractInheritanceMarginService
 
                 foreach (var import in group)
                 {
-                    var item = DefinitionItem.CreateNonNavigableItem(tags: [], displayParts: []);
+                    var item = DefinitionItem.CreateNonNavigableItem(tags: new(), displayParts: new());
                     targetItems.Add(new InheritanceTargetItem(
                         InheritanceRelationship.InheritedImport, item.Detach(), Glyph.None, languageGlyph,
                         import.NamespaceOrType.ToDisplayString(), projectName));
                 }
 
                 items.Add(new InheritanceMarginItem(
-                    lineNumber, this.GlobalImportsTitle, [new TaggedText(TextTags.Text, this.GlobalImportsTitle)],
+                    lineNumber, this.GlobalImportsTitle, ImmutableArray.Create(new TaggedText(TextTags.Text, this.GlobalImportsTitle)),
                     Glyph.Namespace, targetItems.ToImmutable()));
             }
             else
@@ -247,11 +247,11 @@ internal abstract partial class AbstractInheritanceMarginService
                 foreach (var import in group)
                 {
                     var item = DefinitionItem.Create(
-                        tags: [],
-                        displayParts: [],
-                        sourceSpans: [new DocumentSpan(destinationDocument, import.DeclaringSyntaxReference!.Span)],
-                        classifiedSpans: [],
-                        metadataLocations: [],
+                        tags: new(),
+                        displayParts: new(),
+                        sourceSpans: ImmutableArray.Create(new DocumentSpan(destinationDocument, import.DeclaringSyntaxReference!.Span)),
+                        classifiedSpans: new(),
+                        metadataLocations: new(),
                         nameDisplayParts: default,
                         displayIfNoReferences: true);
 
@@ -265,7 +265,7 @@ internal abstract partial class AbstractInheritanceMarginService
                 var taggedText = new TaggedText(TextTags.Text, string.Format(FeaturesResources.Directives_from_0, fileName));
 
                 items.Add(new InheritanceMarginItem(
-                    lineNumber, this.GlobalImportsTitle, [taggedText], Glyph.Namespace, targetItems.ToImmutable()));
+                    lineNumber, this.GlobalImportsTitle, ImmutableArray.Create(taggedText), Glyph.Namespace, targetItems.ToImmutable()));
             }
         }
 
@@ -603,7 +603,7 @@ internal abstract partial class AbstractInheritanceMarginService
             return builder.ToImmutableArray();
         }
 
-        return [];
+        return new();
     }
 
     /// <summary>
@@ -638,7 +638,7 @@ internal abstract partial class AbstractInheritanceMarginService
             return builder.ToImmutableArray();
         }
 
-        return [];
+        return new();
     }
 
     /// <summary>
@@ -648,7 +648,7 @@ internal abstract partial class AbstractInheritanceMarginService
     {
         if (memberSymbol is INamedTypeSymbol)
         {
-            return [];
+            return new();
         }
         else
         {
@@ -723,22 +723,22 @@ internal abstract partial class AbstractInheritanceMarginService
                 var metadataLocation = DefinitionItemFactory.GetMetadataLocation(symbol.ContainingAssembly, solution, out var originatingProjectId);
 
                 return DefinitionItem.Create(
-                    tags: [],
-                    displayParts: [],
-                    sourceSpans: [],
-                    classifiedSpans: [],
-                    metadataLocations: [metadataLocation],
+                    tags: new(),
+                    displayParts: new(),
+                    sourceSpans: new(),
+                    classifiedSpans: new(),
+                    metadataLocations: ImmutableArray.Create(metadataLocation),
                     properties: ImmutableDictionary<string, string>.Empty.WithMetadataSymbolProperties(symbol, originatingProjectId));
             }
 
             if (location.IsInSource && location.IsVisibleSourceLocation() && solution.GetDocument(location.SourceTree) is { } document)
             {
                 return DefinitionItem.Create(
-                    tags: [],
-                    displayParts: [],
-                    sourceSpans: [new DocumentSpan(document, location.SourceSpan)],
-                    classifiedSpans: [],
-                    metadataLocations: []);
+                    tags: new(),
+                    displayParts: new(),
+                    sourceSpans: ImmutableArray.Create(new DocumentSpan(document, location.SourceSpan)),
+                    classifiedSpans: new(),
+                    metadataLocations: new());
             }
         }
 

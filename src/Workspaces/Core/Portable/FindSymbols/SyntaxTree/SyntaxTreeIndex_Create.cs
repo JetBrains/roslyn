@@ -245,7 +245,7 @@ internal sealed partial class SyntaxTreeIndex
         if (syntaxFacts.IsSimpleName(usingTarget))
         {
             syntaxFacts.GetNameAndArityOfSimpleName(usingTarget, out var name, out var arity);
-            globalAliasInfo ??= [];
+            globalAliasInfo ??= new();
             globalAliasInfo.Add((alias.ValueText, name, arity));
         }
     }

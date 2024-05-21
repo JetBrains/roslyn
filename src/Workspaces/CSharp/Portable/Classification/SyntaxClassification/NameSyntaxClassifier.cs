@@ -35,7 +35,7 @@ internal sealed class NameSyntaxClassifier : AbstractNameSyntaxClassifier
         }
     }
 
-    public override ImmutableArray<Type> SyntaxNodeTypes { get; } = [typeof(NameSyntax)];
+    public override ImmutableArray<Type> SyntaxNodeTypes { get; } = ImmutableArray.Create(typeof(NameSyntax));
 
     protected override int? GetRightmostNameArity(SyntaxNode node)
     {

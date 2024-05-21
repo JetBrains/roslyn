@@ -193,7 +193,7 @@ internal abstract partial class CommonSemanticQuickInfoProvider : CommonQuickInf
         var bindableParent = syntaxFacts.TryGetBindableParent(token);
         var overloads = bindableParent != null
             ? semanticModel.GetMemberGroup(bindableParent, cancellationToken)
-            : [];
+            : new();
 
         symbols = symbols.Where(IsOk)
                          .Where(s => IsAccessible(s, enclosingType))
@@ -221,11 +221,11 @@ internal abstract partial class CommonSemanticQuickInfoProvider : CommonQuickInf
             var typeInfo = semanticModel.GetTypeInfo(token.Parent!, cancellationToken);
             if (IsOk(typeInfo.Type))
             {
-                return new TokenInformation([typeInfo.Type]);
+                return new TokenInformation(ImmutableArray.Create<ISymbol>(typeInfo.Type));
             }
         }
 
-        return new TokenInformation([]);
+        return new TokenInformation(new());
     }
 
     private ImmutableArray<ISymbol> GetSymbolsFromToken(SyntaxToken token, SolutionServices services, SemanticModel semanticModel, CancellationToken cancellationToken)
@@ -233,7 +233,7 @@ internal abstract partial class CommonSemanticQuickInfoProvider : CommonQuickInf
         if (GetBindableNodeForTokenIndicatingLambda(token, out var lambdaSyntax))
         {
             var symbol = semanticModel.GetSymbolInfo(lambdaSyntax, cancellationToken).Symbol;
-            return symbol != null ? [symbol] : [];
+            return symbol != null ? ImmutableArray.Create(symbol) : new();
         }
 
         if (GetBindableNodeForTokenIndicatingPossibleIndexerAccess(token, out var elementAccessExpression))
@@ -241,7 +241,7 @@ internal abstract partial class CommonSemanticQuickInfoProvider : CommonQuickInf
             var symbol = semanticModel.GetSymbolInfo(elementAccessExpression, cancellationToken).Symbol;
             if (symbol?.IsIndexer() == true)
             {
-                return [symbol];
+                return ImmutableArray.Create(symbol);
             }
         }
 

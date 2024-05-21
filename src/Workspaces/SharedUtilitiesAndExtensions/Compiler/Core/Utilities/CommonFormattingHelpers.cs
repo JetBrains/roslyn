@@ -254,7 +254,7 @@ internal static class CommonFormattingHelpers
 
     /// <summary>
     /// this will create a span that includes its trailing trivia of its previous token and leading trivia of its next token
-    /// for example, for code such as "class A { int ...", if given tokens are "A" and "{", this will return span [] of "class[ A { ]int ..."
+    /// for example, for code such as "class A { int ...", if given tokens are "A" and "{", this will return span new() of "class[ A { ]int ..."
     /// which included trailing trivia of "class" which is previous token of "A", and leading trivia of "int" which is next token of "{"
     /// </summary>
     public static TextSpan GetSpanIncludingTrailingAndLeadingTriviaOfAdjacentTokens(SyntaxToken startToken, SyntaxToken endToken)

@@ -13,7 +13,7 @@ internal sealed class LinkedFileMergeSessionResult
 {
     public Solution MergedSolution { get; }
 
-    private readonly Dictionary<DocumentId, IEnumerable<TextSpan>> _mergeConflictCommentSpans = [];
+    private readonly Dictionary<DocumentId, IEnumerable<TextSpan>> _mergeConflictCommentSpans = new();
     public Dictionary<DocumentId, IEnumerable<TextSpan>> MergeConflictCommentSpans => _mergeConflictCommentSpans;
 
     public LinkedFileMergeSessionResult(Solution mergedSolution, IEnumerable<LinkedFileMergeResult> fileMergeResults)

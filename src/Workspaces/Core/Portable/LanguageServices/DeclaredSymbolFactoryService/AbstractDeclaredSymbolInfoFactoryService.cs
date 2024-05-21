@@ -314,7 +314,7 @@ internal abstract class AbstractDeclaredSymbolInfoFactoryService<
                     DeclaredSymbolInfoKind.Namespace,
                     Accessibility.Public,
                     nameSyntax.Span,
-                    inheritanceNames: []));
+                    inheritanceNames: new()));
 
                 return string.IsNullOrEmpty(fullyQualifiedContainerName)
                     ? namespaceName

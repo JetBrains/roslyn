@@ -183,7 +183,7 @@ public sealed class CompletionList
     /// The default <see cref="CompletionList"/> returned when no items are found to populate the list.
     /// </summary>
     public static readonly CompletionList Empty = new(
-        default, [], CompletionRules.Default,
+        default, Array.Empty<CompletionItem>(), CompletionRules.Default,
         suggestionModeItem: null, isExclusive: false);
 
     internal bool IsEmpty => ItemsList.Count == 0 && SuggestionModeItem is null;

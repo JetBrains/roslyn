@@ -33,7 +33,7 @@ internal sealed class CSharpLockSnippetProvider : AbstractLockSnippetProvider
     {
         var lockStatement = (LockStatementSyntax)node;
         var expression = lockStatement.Expression;
-        return [new SnippetPlaceholder(expression.ToString(), expression.SpanStart)];
+        return ImmutableArray.Create(new SnippetPlaceholder(expression.ToString(), expression.SpanStart));
     }
 
     protected override int GetTargetCaretPosition(ISyntaxFactsService syntaxFacts, SyntaxNode caretTarget, SourceText sourceText)

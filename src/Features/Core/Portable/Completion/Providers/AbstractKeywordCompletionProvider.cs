@@ -57,7 +57,7 @@ internal abstract partial class AbstractKeywordCompletionProvider<TContext> : LS
         var syntaxTree = await document.GetSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);
         var syntaxFacts = document.GetRequiredLanguageService<ISyntaxFactsService>();
         if (syntaxFacts.IsInNonUserCode(syntaxTree, position, cancellationToken))
-            return [];
+            return new();
 
         using var _ = ArrayBuilder<RecommendedKeyword>.GetInstance(out var result);
         foreach (var recommender in _keywordRecommenders)

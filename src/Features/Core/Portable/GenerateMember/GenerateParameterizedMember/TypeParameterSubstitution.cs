@@ -35,7 +35,7 @@ internal partial class AbstractGenerateParameterizedMemberService<TService, TSim
     private sealed class DetermineSubstitutionsVisitor(
         Compilation compilation, ISet<string> availableTypeParameterNames, Project project, CancellationToken cancellationToken) : AsyncSymbolVisitor
     {
-        public readonly Dictionary<ITypeSymbol, ITypeSymbol> Substitutions = [];
+        public readonly Dictionary<ITypeSymbol, ITypeSymbol> Substitutions = new();
         private readonly CancellationToken _cancellationToken = cancellationToken;
         private readonly Compilation _compilation = compilation;
         private readonly ISet<string> _availableTypeParameterNames = availableTypeParameterNames;

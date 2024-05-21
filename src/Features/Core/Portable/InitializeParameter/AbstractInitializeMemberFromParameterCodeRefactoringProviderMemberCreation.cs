@@ -70,17 +70,17 @@ internal abstract partial class AbstractInitializeMemberFromParameterCodeRefacto
     {
         // Only supported for constructor parameters.
         if (method.MethodKind != MethodKind.Constructor)
-            return [];
+            return new();
 
         var typeDeclaration = constructorDeclaration.GetAncestor<TTypeDeclarationSyntax>();
         if (typeDeclaration == null)
-            return [];
+            return new();
 
         // See if we're already assigning this parameter to a field/property in this type. If so, there's nothing
         // more for us to do.
         var assignmentStatement = TryFindFieldOrPropertyAssignmentStatement(parameter, blockStatement);
         if (assignmentStatement != null)
-            return [];
+            return new();
 
         // Haven't initialized any fields/properties with this parameter.  Offer to assign
         // to an existing matching field/prop if we can find one, or add a new field/prop
@@ -89,7 +89,7 @@ internal abstract partial class AbstractInitializeMemberFromParameterCodeRefacto
         var rules = await document.GetNamingRulesAsync(fallbackOptions, cancellationToken).ConfigureAwait(false);
         var parameterNameParts = IdentifierNameParts.CreateIdentifierNameParts(parameter, rules);
         if (parameterNameParts.BaseName == "")
-            return [];
+            return new();
 
         var (fieldOrProperty, isThrowNotImplementedProperty) = await TryFindMatchingUninitializedFieldOrPropertySymbolAsync(
             document, parameter, blockStatement, rules, parameterNameParts.BaseNameParts, cancellationToken).ConfigureAwait(false);
@@ -260,11 +260,11 @@ internal abstract partial class AbstractInitializeMemberFromParameterCodeRefacto
 
         var title = string.Format(resource, fieldOrProperty.Name);
 
-        return [CodeAction.Create(
+        return ImmutableArray.Create(CodeAction.Create(
             title,
             c => AddSingleSymbolInitializationAsync(
                 document, functionDeclaration, blockStatement, parameter, fieldOrProperty, isThrowNotImplementedProperty, fallbackOptions, c),
-            title)];
+            title));
     }
 
     private static ISymbol? TryFindSiblingFieldOrProperty(

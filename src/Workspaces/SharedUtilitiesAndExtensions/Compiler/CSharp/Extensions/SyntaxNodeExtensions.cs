@@ -618,7 +618,7 @@ internal static partial class SyntaxNodeExtensions
                 // add whatever group we've built up to now. And reset the 
                 // next group to empty.
                 result.Add(currentGroup);
-                currentGroup = [];
+                currentGroup = new();
 
                 result.Add([node]);
             }

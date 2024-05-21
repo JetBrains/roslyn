@@ -31,7 +31,7 @@ internal class ConvertToTopLevelStatementsCodeFixProvider : SyntaxEditorBasedCod
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseTopLevelStatementsId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseTopLevelStatementsId);
 
     public override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

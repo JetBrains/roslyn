@@ -49,6 +49,6 @@ internal class CSharpBlockFacts : AbstractBlockFacts
         else if (node.GetEmbeddedStatement() is { } embeddedStatement)
             return ImmutableArray.Create<SyntaxNode>(embeddedStatement);
         else
-            return [];
+            return ImmutableArray<SyntaxNode>.Empty;
     }
 }

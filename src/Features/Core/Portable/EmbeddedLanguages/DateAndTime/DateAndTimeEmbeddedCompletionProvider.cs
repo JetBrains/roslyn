@@ -31,7 +31,7 @@ internal sealed partial class DateAndTimeEmbeddedCompletionProvider(DateAndTimeE
 
     private readonly DateAndTimeEmbeddedLanguage _language = language;
 
-    public override ImmutableHashSet<char> TriggerCharacters { get; } = ['"', ':'];
+    public override ImmutableHashSet<char> TriggerCharacters { get; } = ImmutableHashSet.Create('"', ':');
 
     public override bool ShouldTriggerCompletion(SourceText text, int caretPosition, CompletionTrigger trigger)
     {
@@ -233,6 +233,6 @@ internal sealed partial class DateAndTimeEmbeddedCompletionProvider(DateAndTimeE
             return SpecializedTasks.Null<CompletionDescription>();
 
         return Task.FromResult((CompletionDescription?)CompletionDescription.Create(
-            [new TaggedText(TextTags.Text, description)]));
+            ImmutableArray.Create(new TaggedText(TextTags.Text, description))));
     }
 }

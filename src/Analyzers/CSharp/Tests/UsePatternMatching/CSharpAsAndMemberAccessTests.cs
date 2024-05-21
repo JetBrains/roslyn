@@ -120,7 +120,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.UsePatternMatching
             var test = """
                 class C
                 {
-                    C[] X;
+                    Cnew() X;
                     int Length;
 
                     void M(object o, int length)

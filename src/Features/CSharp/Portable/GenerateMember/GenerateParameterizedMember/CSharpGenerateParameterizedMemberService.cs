@@ -80,7 +80,7 @@ internal abstract class CSharpGenerateParameterizedMemberService<TService> : Abs
                     s => !State.TypeToGenerateIn.GetAllTypeParameters().Any(static (t, s) => t.Name == s, s),
                     cancellationToken);
 
-                return [typeParameter];
+                return ImmutableArray.Create(typeParameter);
             }
             else
             {

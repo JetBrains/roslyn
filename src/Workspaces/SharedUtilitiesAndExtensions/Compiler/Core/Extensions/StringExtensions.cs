@@ -186,7 +186,7 @@ internal static class StringExtensions
     }
 
     public static ImmutableArray<SymbolDisplayPart> ToSymbolDisplayParts(this string text)
-        => [new SymbolDisplayPart(SymbolDisplayPartKind.Text, null, text)];
+        => ImmutableArray.Create(new SymbolDisplayPart(SymbolDisplayPartKind.Text, null, text));
 
     public static int GetColumnOfFirstNonWhitespaceCharacterOrEndOfLine(this string line, int tabSize)
     {

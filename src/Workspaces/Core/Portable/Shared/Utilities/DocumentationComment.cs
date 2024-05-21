@@ -84,9 +84,9 @@ internal sealed class DocumentationComment
     {
         FullXmlFragment = fullXmlFragment;
 
-        ParameterNames = [];
-        TypeParameterNames = [];
-        ExceptionTypes = [];
+        ParameterNames = new();
+        TypeParameterNames = new();
+        ExceptionTypes = new();
     }
 
     /// <summary>
@@ -158,9 +158,9 @@ internal sealed class DocumentationComment
                 }
             }
 
-            _comment.ParameterNames = _parameterNamesBuilder == null ? [] : _parameterNamesBuilder.ToImmutable();
-            _comment.TypeParameterNames = _typeParameterNamesBuilder == null ? [] : _typeParameterNamesBuilder.ToImmutable();
-            _comment.ExceptionTypes = _exceptionTypesBuilder == null ? [] : _exceptionTypesBuilder.ToImmutable();
+            _comment.ParameterNames = _parameterNamesBuilder == null ? new() : _parameterNamesBuilder.ToImmutable();
+            _comment.TypeParameterNames = _typeParameterNamesBuilder == null ? new() : _typeParameterNamesBuilder.ToImmutable();
+            _comment.ExceptionTypes = _exceptionTypesBuilder == null ? new() : _exceptionTypesBuilder.ToImmutable();
 
             return _comment;
         }
@@ -284,7 +284,7 @@ internal sealed class DocumentationComment
                         if (_exceptionTextBuilders == null || !_exceptionTextBuilders.ContainsKey(type))
                         {
                             (_exceptionTypesBuilder ??= ImmutableArray.CreateBuilder<string>()).Add(type);
-                            (_exceptionTextBuilders ??= []).Add(type, ImmutableArray.CreateBuilder<string>());
+                            (_exceptionTextBuilders ??= new()).Add(type, ImmutableArray.CreateBuilder<string>());
                         }
 
                         _exceptionTextBuilders[type].Add(exceptionText);
@@ -315,9 +315,9 @@ internal sealed class DocumentationComment
         }
     }
 
-    private readonly Dictionary<string, string> _parameterTexts = [];
-    private readonly Dictionary<string, string> _typeParameterTexts = [];
-    private readonly Dictionary<string, ImmutableArray<string>> _exceptionTexts = [];
+    private readonly Dictionary<string, string> _parameterTexts = new();
+    private readonly Dictionary<string, string> _typeParameterTexts = new();
+    private readonly Dictionary<string, ImmutableArray<string>> _exceptionTexts = new();
 
     /// <summary>
     /// Returns the text for a given parameter, or null if no documentation was given for the parameter.
@@ -364,7 +364,7 @@ internal sealed class DocumentationComment
         {
             // If the exception wasn't found, TryGetValue will set "texts" to a default value.
             // To be friendly, we want to return an empty array rather than a null array.
-            texts = [];
+            texts = ImmutableArray.Create<string>();
         }
 
         return texts;

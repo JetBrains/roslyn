@@ -1074,7 +1074,7 @@ public abstract class SyntaxGenerator : ILanguageService
     internal SyntaxNode RemovePrimaryConstructor(SyntaxNode declaration)
     {
         var node = GetPrimaryConstructorParameterList(declaration);
-        return RemoveNodes(declaration, node is not null ? [node] : []);
+        return RemoveNodes(declaration, node is not null ? [node] : Array.Empty<SyntaxNode>());
     }
 
     internal abstract SyntaxNode? GetPrimaryConstructorParameterList(SyntaxNode declaration);

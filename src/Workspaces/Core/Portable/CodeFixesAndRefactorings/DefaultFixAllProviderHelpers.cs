@@ -46,13 +46,13 @@ internal static class DefaultFixAllProviderHelpers
         TFixAllContext fixAllContext,
         Func<TFixAllContext, ImmutableArray<TFixAllContext>, Task<Solution?>> fixAllContextsAsync)
         where TFixAllContext : IFixAllContext
-        => fixAllContextsAsync(fixAllContext, [fixAllContext]);
+        => fixAllContextsAsync(fixAllContext, ImmutableArray.Create(fixAllContext));
 
     private static Task<Solution?> GetProjectFixesAsync<TFixAllContext>(
         TFixAllContext fixAllContext,
         Func<TFixAllContext, ImmutableArray<TFixAllContext>, Task<Solution?>> fixAllContextsAsync)
         where TFixAllContext : IFixAllContext
-        => fixAllContextsAsync(fixAllContext, [(TFixAllContext)fixAllContext.With((document: null, fixAllContext.Project))]);
+        => fixAllContextsAsync(fixAllContext, ImmutableArray.Create((TFixAllContext)fixAllContext.With((document: null, fixAllContext.Project))));
 
     private static Task<Solution?> GetSolutionFixesAsync<TFixAllContext>(
         TFixAllContext fixAllContext,

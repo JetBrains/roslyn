@@ -953,7 +953,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             if (namedType is not null && HasParamsCollectionTypeInProgress(namedType))
             {
                 // We are in a cycle. Optimistically assume we have the right Add to break the cycle
-                addMethods = [];
+                addMethods = ImmutableArray<MethodSymbol>.Empty;
                 return true;
             }
 
@@ -1016,14 +1016,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                 if (boundExpression.Kind == BoundKind.FieldAccess || boundExpression.Kind == BoundKind.PropertyAccess)
                 {
                     ReportMakeInvocationExpressionBadMemberKind(node, WellKnownMemberNames.CollectionInitializerAddMethodName, boundExpression, diagnostics);
-                    addMethods = [];
+                    addMethods = ImmutableArray<MethodSymbol>.Empty;
                     return false;
                 }
 
                 if (boundExpression.Kind != BoundKind.MethodGroup)
                 {
                     Debug.Assert(boundExpression.HasErrors);
-                    addMethods = [];
+                    addMethods = ImmutableArray<MethodSymbol>.Empty;
                     return false;
                 }
 
@@ -1078,7 +1078,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                 if (resolution.HasAnyErrors)
                 {
-                    addMethods = [];
+                    addMethods = ImmutableArray<MethodSymbol>.Empty;
                     result = false;
                 }
                 else if (!resolution.IsEmpty)
@@ -1090,7 +1090,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // CONSIDER: could check for error types amongst method group type arguments.
                     if (resolution.ResultKind != LookupResultKind.Viable)
                     {
-                        addMethods = [];
+                        addMethods = ImmutableArray<MethodSymbol>.Empty;
                         result = false;
                     }
                     else
@@ -1115,13 +1115,13 @@ namespace Microsoft.CodeAnalysis.CSharp
 
                             if (finalApplicableCandidates.Length == 0)
                             {
-                                addMethods = [];
+                                addMethods = ImmutableArray<MethodSymbol>.Empty;
                                 result = false;
                             }
                             else if (finalApplicableCandidates.Length == 1 &&
                                      tryEarlyBindSingleCandidateInvocationWithDynamicArgument(addMethodBinder, syntax, expression, methodGroup, diagnostics, resolution, finalApplicableCandidates[0], out var addMethod) is bool earlyBoundResult)
                             {
-                                addMethods = addMethod is null ? [] : [addMethod];
+                                addMethods = addMethod is null ? ImmutableArray<MethodSymbol>.Empty : ImmutableArray.Create(addMethod);
                                 result = earlyBoundResult;
                             }
                             else
@@ -1142,13 +1142,13 @@ namespace Microsoft.CodeAnalysis.CSharp
                             result = bindInvocationExpressionContinued(
                                 addMethodBinder, syntax, expression, resolution.OverloadResolutionResult, resolution.AnalyzedArguments,
                                 resolution.MethodGroup, diagnostics: diagnostics, out var addMethod);
-                            addMethods = addMethod is null ? [] : [addMethod];
+                            addMethods = addMethod is null ? ImmutableArray<MethodSymbol>.Empty : ImmutableArray.Create(addMethod);
                         }
                     }
                 }
                 else
                 {
-                    addMethods = [];
+                    addMethods = ImmutableArray<MethodSymbol>.Empty;
                     result = false;
                 }
 

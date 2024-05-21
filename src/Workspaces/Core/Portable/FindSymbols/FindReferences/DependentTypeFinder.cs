@@ -410,7 +410,7 @@ internal static partial class DependentTypeFinder
             // Need to find all the possible projects that contain this metadata.
             var projectsThatReferenceMetadataAssembly =
                 await DependentProjectsFinder.GetDependentProjectsAsync(
-                    solution, [type], solution.Projects.ToImmutableHashSet(), cancellationToken).ConfigureAwait(false);
+                    solution, ImmutableArray.Create<ISymbol>(type), solution.Projects.ToImmutableHashSet(), cancellationToken).ConfigureAwait(false);
 
             // Now collect all the dependent projects as well.
             var projectsThatCouldReferenceType =

@@ -40,7 +40,7 @@ public class Option<T> : IPublicOption
                name ?? throw new ArgumentNullException(nameof(name)),
                OptionGroup.Default,
                defaultValue,
-               storageLocations: [],
+               storageLocations: new(),
                storageMapping: null,
                isEditorConfigOption: false)
     {

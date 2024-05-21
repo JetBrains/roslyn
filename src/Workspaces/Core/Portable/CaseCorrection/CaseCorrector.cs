@@ -55,7 +55,7 @@ internal static class CaseCorrector
     /// </summary>
     public static async Task<Document> CaseCorrectAsync(Document document, TextSpan span, CancellationToken cancellationToken = default)
     {
-        return await CaseCorrectAsync(document, [span], cancellationToken).ConfigureAwait(false);
+        return await CaseCorrectAsync(document, ImmutableArray.Create(span), cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>

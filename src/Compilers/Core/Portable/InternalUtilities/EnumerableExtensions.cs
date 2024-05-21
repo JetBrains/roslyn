@@ -884,7 +884,7 @@ namespace System.Linq
                 // much more efficient (and simpler) implementation for chunking up the array.
                 return array.Length != 0 ?
                     ArrayChunkIterator(array, size) :
-                    [];
+                    Array.Empty<TSource[]>();
             }
 
             return EnumerableChunkIterator(source, size);

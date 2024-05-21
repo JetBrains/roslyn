@@ -816,7 +816,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>
         /// Lower a foreach loop that will enumerate a single-dimensional array.
         /// 
-        /// A[] a = x;
+        /// Anew() a = x;
         /// for (int p = 0; p &lt; a.Length; p = p + 1) {
         ///     V v = (V)a[p];   /* OR */   (D1 d1, ...) = (V)a[p];
         ///     // body
@@ -871,10 +871,10 @@ namespace Microsoft.CodeAnalysis.CSharp
             TypeSymbol intType = _compilation.GetSpecialType(SpecialType.System_Int32);
             TypeSymbol boolType = _compilation.GetSpecialType(SpecialType.System_Boolean);
 
-            // A[] a
+            // Anew() a
             LocalSymbol arrayVar = _factory.SynthesizedLocal(arrayType, syntax: forEachSyntax, kind: SynthesizedLocalKind.ForEachArray);
 
-            // A[] a = /*node.Expression*/;
+            // Anew() a = /*node.Expression*/;
             BoundStatement arrayVarDecl = MakeLocalDeclaration(forEachSyntax, arrayVar, rewrittenExpression);
 
             InstrumentForEachStatementCollectionVarDeclaration(node, ref arrayVarDecl);
@@ -938,7 +938,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             BoundStatement loopBody = CreateBlockDeclaringIterationVariables(iterationVariables, iterationVariableDecl, rewrittenBody, forEachSyntax);
 
-            // for (A[] a = /*node.Expression*/, int p = 0; p < a.Length; p = p + 1) {
+            // for (Anew() a = /*node.Expression*/, int p = 0; p < a.Length; p = p + 1) {
             //     V v = (V)a[p];   /* OR */   (D1 d1, ...) = (V)a[p];
             //     /*node.Body*/
             // }

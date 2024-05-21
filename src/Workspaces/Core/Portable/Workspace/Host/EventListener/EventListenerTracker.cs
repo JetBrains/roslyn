@@ -22,7 +22,7 @@ namespace Microsoft.CodeAnalysis.Host
         /// <summary>
         /// Workspace kind this event listener is initialized for
         /// </summary>
-        private readonly HashSet<string> _eventListenerInitialized = [];
+        private readonly HashSet<string> _eventListenerInitialized = new();
         private readonly ImmutableArray<Lazy<IEventListener, EventListenerMetadata>> _eventListeners = eventListeners.Where(el => el.Metadata.Service == kind).ToImmutableArray();
 
         public void EnsureEventListener(Workspace workspace, TService serviceOpt)
@@ -47,7 +47,7 @@ namespace Microsoft.CodeAnalysis.Host
         public static IEnumerable<IEventListener<TService>> GetListeners(
             string? workspaceKind, IEnumerable<Lazy<IEventListener, EventListenerMetadata>> eventListeners)
         {
-            return (workspaceKind == null) ? [] : eventListeners
+            return (workspaceKind == null) ? Array.Empty<IEventListener<TService>>() : eventListeners
                 .Where(l => l.Metadata.WorkspaceKinds.Contains(workspaceKind))
                 .Select(l => l.Value)
                 .OfType<IEventListener<TService>>();

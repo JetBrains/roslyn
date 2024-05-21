@@ -49,7 +49,7 @@ internal sealed partial class CSharpCopilotCodeFixProvider() : CodeFixProvider
     /// <returns></returns>
     public sealed override FixAllProvider? GetFixAllProvider() => null;
 
-    public sealed override ImmutableArray<string> FixableDiagnosticIds => [CopilotDiagnosticId];
+    public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CopilotDiagnosticId);
 
     public override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

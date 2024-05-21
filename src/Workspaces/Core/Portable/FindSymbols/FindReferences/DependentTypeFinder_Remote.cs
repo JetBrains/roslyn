@@ -38,7 +38,7 @@ internal static partial class DependentTypeFinder
 
                 if (!result.HasValue)
                 {
-                    return [];
+                    return new();
                 }
 
                 return await RehydrateAsync(solution, result.Value, cancellationToken).ConfigureAwait(false);

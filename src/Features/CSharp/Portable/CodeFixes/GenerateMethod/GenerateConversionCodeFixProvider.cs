@@ -33,7 +33,7 @@ internal class GenerateConversionCodeFixProvider : AbstractGenerateMemberCodeFix
 
     public override ImmutableArray<string> FixableDiagnosticIds
     {
-        get { return [CS0029, CS0030]; }
+        get { return ImmutableArray.Create(CS0029, CS0030); }
     }
 
     protected override bool IsCandidate(SyntaxNode node, SyntaxToken token, Diagnostic diagnostic)

@@ -23,8 +23,8 @@ internal abstract class AbstractKeywordHighlighter<TNode> : AbstractKeywordHighl
 
 internal abstract class AbstractKeywordHighlighter : IHighlighter
 {
-    private static readonly ObjectPool<List<TextSpan>> s_textSpanListPool = new(() => []);
-    private static readonly ObjectPool<List<SyntaxToken>> s_tokenListPool = new(() => []);
+    private static readonly ObjectPool<List<TextSpan>> s_textSpanListPool = new(() => new());
+    private static readonly ObjectPool<List<SyntaxToken>> s_tokenListPool = new(() => new());
 
     protected abstract bool IsHighlightableNode(SyntaxNode node);
 

@@ -22,8 +22,8 @@ namespace Microsoft.CodeAnalysis.Rename.ConflictEngine;
 /// </summary>
 internal sealed class RenamedSpansTracker
 {
-    private readonly Dictionary<DocumentId, List<(TextSpan oldSpan, TextSpan newSpan)>> _documentToModifiedSpansMap = [];
-    private readonly Dictionary<DocumentId, List<MutableComplexifiedSpan>> _documentToComplexifiedSpansMap = [];
+    private readonly Dictionary<DocumentId, List<(TextSpan oldSpan, TextSpan newSpan)>> _documentToModifiedSpansMap = new();
+    private readonly Dictionary<DocumentId, List<MutableComplexifiedSpan>> _documentToComplexifiedSpansMap = new();
 
     internal bool IsDocumentChanged(DocumentId documentId)
         => _documentToModifiedSpansMap.ContainsKey(documentId) || _documentToComplexifiedSpansMap.ContainsKey(documentId);
@@ -32,7 +32,7 @@ internal sealed class RenamedSpansTracker
     {
         if (!_documentToModifiedSpansMap.TryGetValue(documentId, out var spans))
         {
-            spans = [];
+            spans = new();
             _documentToModifiedSpansMap[documentId] = spans;
         }
 
@@ -43,7 +43,7 @@ internal sealed class RenamedSpansTracker
     {
         if (!_documentToComplexifiedSpansMap.TryGetValue(documentId, out var spans))
         {
-            spans = [];
+            spans = new();
             _documentToComplexifiedSpansMap[documentId] = spans;
         }
 

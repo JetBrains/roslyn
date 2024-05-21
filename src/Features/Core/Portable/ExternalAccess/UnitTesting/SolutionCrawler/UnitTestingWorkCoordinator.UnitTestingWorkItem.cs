@@ -80,13 +80,13 @@ internal partial class UnitTestingSolutionCrawlerRegistrationService
             }
 
             public UnitTestingWorkItem(DocumentId documentId, string language, UnitTestingInvocationReasons invocationReasons, bool isLowPriority, SyntaxPath? activeMember, IAsyncToken asyncToken)
-                : this(documentId, documentId.ProjectId, language, invocationReasons, isLowPriority, activeMember, [], retry: false, asyncToken)
+                : this(documentId, documentId.ProjectId, language, invocationReasons, isLowPriority, activeMember, ImmutableHashSet.Create<IUnitTestingIncrementalAnalyzer>(), retry: false, asyncToken)
             {
             }
 
             public UnitTestingWorkItem(DocumentId documentId, string language, UnitTestingInvocationReasons invocationReasons, bool isLowPriority, IUnitTestingIncrementalAnalyzer? analyzer, IAsyncToken asyncToken)
                 : this(documentId, documentId.ProjectId, language, invocationReasons, isLowPriority, activeMember: null,
-                       analyzer == null ? [] : [analyzer],
+                       analyzer == null ? ImmutableHashSet.Create<IUnitTestingIncrementalAnalyzer>() : ImmutableHashSet.Create(analyzer),
                        retry: false, asyncToken)
             {
             }

@@ -28,7 +28,7 @@ internal class CSharpMakeStructFieldsWritableCodeFixProvider : SyntaxEditorBased
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.MakeStructFieldsWritable];
+        => ImmutableArray.Create(IDEDiagnosticIds.MakeStructFieldsWritable);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

@@ -257,7 +257,7 @@ internal partial class SymbolTreeInfo
         private readonly MetadataNode _rootNode = MetadataNode.Allocate(name: "");
 
         // The set of type definitions we've read out of the current metadata reader.
-        private readonly List<MetadataDefinition> _allTypeDefinitions = [];
+        private readonly List<MetadataDefinition> _allTypeDefinitions = new();
 
         // Map from node represents extension method to list of possible parameter type info.
         // We can have more than one if there's multiple methods with same name but different receiver type.
@@ -266,7 +266,7 @@ internal partial class SymbolTreeInfo
         //      public static bool AnotherExtensionMethod1(this int x);
         //      public static bool AnotherExtensionMethod1(this bool x);
         //
-        private readonly MultiDictionary<MetadataNode, ParameterTypeInfo> _extensionMethodToParameterTypeInfo = [];
+        private readonly MultiDictionary<MetadataNode, ParameterTypeInfo> _extensionMethodToParameterTypeInfo = new();
         private bool _containsExtensionsMethod = false;
 
         private static ImmutableArray<ModuleMetadata> GetModuleMetadata(Metadata? metadata)
@@ -279,7 +279,7 @@ internal partial class SymbolTreeInfo
                 }
                 else if (metadata is ModuleMetadata module)
                 {
-                    return [module];
+                    return ImmutableArray.Create(module);
                 }
             }
             catch (BadImageFormatException)
@@ -289,7 +289,7 @@ internal partial class SymbolTreeInfo
                 // https://devdiv.visualstudio.com/DevDiv/_workitems?id=234447
             }
 
-            return [];
+            return new();
         }
 
         internal SymbolTreeInfo Create()
@@ -751,7 +751,7 @@ internal partial class SymbolTreeInfo
                     {
                         // We do not differentiate array of different kinds for simplicity.
                         // e.g. int[], int[][], int[,], etc. are all represented as int[] in the index.
-                        // similar for complex receiver types, "[]" means it's an array type, "" otherwise.
+                        // similar for complex receiver types, "new()" means it's an array type, "" otherwise.
                         var parameterTypeName = (parameterTypeInfo.IsComplexType, parameterTypeInfo.IsArray) switch
                         {
                             (true, true) => Extensions.ComplexArrayReceiverTypeName,                          // complex array type, e.g. "T[,]"

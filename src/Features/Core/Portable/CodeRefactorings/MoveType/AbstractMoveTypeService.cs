@@ -49,7 +49,7 @@ internal abstract partial class AbstractMoveTypeService<TService, TTypeDeclarati
 
         if (state == null)
         {
-            return [];
+            return new();
         }
 
         var actions = CreateActions(state, cancellationToken);
@@ -104,7 +104,7 @@ internal abstract partial class AbstractMoveTypeService<TService, TTypeDeclarati
         if (typeMatchesDocumentName)
         {
             // if type name matches document name, per style conventions, we have nothing to do.
-            return [];
+            return new();
         }
 
         using var _ = ArrayBuilder<CodeAction>.GetInstance(out var actions);
@@ -247,11 +247,11 @@ internal abstract partial class AbstractMoveTypeService<TService, TTypeDeclarati
             var typeNameParts = GetTypeNamePartsForNestedTypeNode(typeNode, semanticModel, cancellationToken);
             var dottedName = typeNameParts.Join(".") + fileExtension;
 
-            return [standaloneName, dottedName];
+            return ImmutableArray.Create(standaloneName, dottedName);
         }
         else
         {
-            return [standaloneName];
+            return ImmutableArray.Create(standaloneName);
         }
     }
 

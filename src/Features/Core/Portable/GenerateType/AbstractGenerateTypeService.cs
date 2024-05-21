@@ -87,10 +87,10 @@ internal abstract partial class AbstractGenerateTypeService<TService, TSimpleNam
                 {
                     // Wrap the generate type actions into a single top level suggestion
                     // so as to not clutter the list.
-                    return [CodeAction.Create(
+                    return ImmutableArray.Create(CodeAction.Create(
                         string.Format(FeaturesResources.Generate_type_0, state.Name),
                         actions.AsImmutable(),
-                        isInlinable: true)];
+                        isInlinable: true));
                 }
                 else
                 {
@@ -98,7 +98,7 @@ internal abstract partial class AbstractGenerateTypeService<TService, TSimpleNam
                 }
             }
 
-            return [];
+            return new();
         }
     }
 

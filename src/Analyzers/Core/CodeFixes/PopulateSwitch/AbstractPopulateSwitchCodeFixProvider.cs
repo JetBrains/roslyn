@@ -34,7 +34,7 @@ internal abstract class AbstractPopulateSwitchCodeFixProvider<
     public sealed override ImmutableArray<string> FixableDiagnosticIds { get; }
 
     protected AbstractPopulateSwitchCodeFixProvider(string diagnosticId)
-        => FixableDiagnosticIds = [diagnosticId];
+        => FixableDiagnosticIds = ImmutableArray.Create(diagnosticId);
 
     protected abstract ITypeSymbol GetSwitchType(TSwitchOperation switchStatement);
     protected abstract ICollection<ISymbol> GetMissingEnumMembers(TSwitchOperation switchOperation);
@@ -106,7 +106,7 @@ internal abstract class AbstractPopulateSwitchCodeFixProvider<
         bool addCases, bool addDefaultCase,
         CancellationToken cancellationToken)
     {
-        return FixAllAsync(document, [diagnostic],
+        return FixAllAsync(document, ImmutableArray.Create(diagnostic),
             addCases, addDefaultCase, cancellationToken);
     }
 

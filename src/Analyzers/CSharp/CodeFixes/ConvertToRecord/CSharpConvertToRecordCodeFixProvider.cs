@@ -29,7 +29,7 @@ internal class CSharpConvertToRecordCodeFixProvider : CodeFixProvider
         => null;
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [CS8865];
+        => ImmutableArray.Create(CS8865);
 
     public override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

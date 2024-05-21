@@ -51,7 +51,7 @@ internal abstract partial class AbstractEncapsulateFieldService : ILanguageServi
     {
         var fields = await GetFieldsAsync(document, span, cancellationToken).ConfigureAwait(false);
         if (fields.IsDefaultOrEmpty)
-            return [];
+            return new();
 
         if (fields.Length == 1)
         {
@@ -76,7 +76,7 @@ internal abstract partial class AbstractEncapsulateFieldService : ILanguageServi
     private ImmutableArray<CodeAction> EncapsulateAllFields(Document document, ImmutableArray<IFieldSymbol> fields, CleanCodeGenerationOptionsProvider fallbackOptions)
     {
         return
-        [
+        ImmutableArray.Create(
             CodeAction.Create(
                     FeaturesResources.Encapsulate_fields_and_use_property,
                     c => EncapsulateFieldsAsync(document, fields, fallbackOptions, updateReferences: true, c),
@@ -84,15 +84,15 @@ internal abstract partial class AbstractEncapsulateFieldService : ILanguageServi
             CodeAction.Create(
                 FeaturesResources.Encapsulate_fields_but_still_use_field,
                 c => EncapsulateFieldsAsync(document, fields, fallbackOptions, updateReferences: false, c),
-                nameof(FeaturesResources.Encapsulate_fields_but_still_use_field)),
-        ];
+                nameof(FeaturesResources.Encapsulate_fields_but_still_use_field)));
+        
     }
 
     private ImmutableArray<CodeAction> EncapsulateOneField(Document document, IFieldSymbol field, CleanCodeGenerationOptionsProvider fallbackOptions)
     {
         var fields = ImmutableArray.Create(field);
         return
-        [
+        ImmutableArray.Create(
             CodeAction.Create(
                     string.Format(FeaturesResources.Encapsulate_field_colon_0_and_use_property, field.Name),
                     c => EncapsulateFieldsAsync(document, fields, fallbackOptions, updateReferences: true, c),
@@ -100,8 +100,8 @@ internal abstract partial class AbstractEncapsulateFieldService : ILanguageServi
             CodeAction.Create(
                 string.Format(FeaturesResources.Encapsulate_field_colon_0_but_still_use_field, field.Name),
                 c => EncapsulateFieldsAsync(document, fields, fallbackOptions, updateReferences: false, c),
-                nameof(FeaturesResources.Encapsulate_field_colon_0_but_still_use_field) + "_" + field.Name),
-        ];
+                nameof(FeaturesResources.Encapsulate_field_colon_0_but_still_use_field) + "_" + field.Name));
+        
     }
 
     public async Task<Solution> EncapsulateFieldsAsync(
@@ -379,14 +379,14 @@ internal abstract partial class AbstractEncapsulateFieldService : ILanguageServi
         var factory = document.GetLanguageService<SyntaxGenerator>();
 
         var propertySymbol = annotation.AddAnnotationToSymbol(CodeGenerationSymbolFactory.CreatePropertySymbol(containingType: containingSymbol,
-            attributes: [],
+            attributes: new(),
             accessibility: ComputeAccessibility(accessibility, field.Type),
             modifiers: new DeclarationModifiers(isStatic: field.IsStatic, isReadOnly: field.IsReadOnly, isUnsafe: field.RequiresUnsafeModifier()),
             type: field.GetSymbolType(),
             refKind: RefKind.None,
             explicitInterfaceImplementations: default,
             name: propertyName,
-            parameters: [],
+            parameters: new(),
             getMethod: CreateGet(fieldName, field, factory),
             setMethod: field.IsReadOnly || field.IsConst ? null : CreateSet(fieldName, field, factory)));
 
@@ -423,9 +423,9 @@ internal abstract partial class AbstractEncapsulateFieldService : ILanguageServi
             factory.IdentifierName("value")));
 
         return CodeGenerationSymbolFactory.CreateAccessorSymbol(
-            [],
+            new(),
             Accessibility.NotApplicable,
-            [body]);
+            ImmutableArray.Create(body));
     }
 
     protected static IMethodSymbol CreateGet(string originalFieldName, IFieldSymbol field, SyntaxGenerator factory)
@@ -440,9 +440,9 @@ internal abstract partial class AbstractEncapsulateFieldService : ILanguageServi
             value.WithAdditionalAnnotations(Simplifier.Annotation));
 
         return CodeGenerationSymbolFactory.CreateAccessorSymbol(
-            [],
+            new(),
             Accessibility.NotApplicable,
-            [body]);
+            ImmutableArray.Create(body));
     }
 
     private static readonly char[] s_underscoreCharArray = ['_'];

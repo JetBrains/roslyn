@@ -24,7 +24,7 @@ internal abstract class AbstractAssignOutParametersCodeFixProvider : SyntaxEdito
     private const string CS0177 = nameof(CS0177); // The out parameter 'x' must be assigned to before control leaves the current method
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [CS0177];
+        ImmutableArray.Create(CS0177);
 
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

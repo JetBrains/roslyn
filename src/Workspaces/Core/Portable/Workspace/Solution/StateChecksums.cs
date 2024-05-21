@@ -170,7 +170,7 @@ internal sealed class SolutionStateChecksums(
     public ProjectCone? ProjectCone => _projectCone ??= ComputeProjectCone();
 
     private ProjectCone? ComputeProjectCone()
-        => ProjectConeId == null ? null : new ProjectCone(ProjectConeId, Projects.Ids.ToFrozenSet());
+        => ProjectConeId == null ? null : new ProjectCone(ProjectConeId, Projects.Ids.ToFrozenSet4Hack());
 
     public void AddAllTo(HashSet<Checksum> checksums)
     {

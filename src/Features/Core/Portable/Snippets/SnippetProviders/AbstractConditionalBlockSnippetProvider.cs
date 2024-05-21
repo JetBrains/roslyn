@@ -21,11 +21,11 @@ internal abstract class AbstractConditionalBlockSnippetProvider : AbstractInline
     protected override ImmutableArray<SnippetPlaceholder> GetPlaceHolderLocationsList(SyntaxNode node, ISyntaxFacts syntaxFacts, CancellationToken cancellationToken)
     {
         if (ConstructedFromInlineExpression)
-            return [];
+            return new();
 
         var condition = GetCondition(node);
         var placeholder = new SnippetPlaceholder(condition.ToString(), condition.SpanStart);
 
-        return [placeholder];
+        return ImmutableArray.Create(placeholder);
     }
 }

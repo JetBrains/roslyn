@@ -70,7 +70,7 @@ internal static partial class SyntaxGeneratorExtensions
             parameters: parameters,
             statements: statements,
             thisConstructorArguments: ShouldGenerateThisConstructorCall(containingType, parameterToExistingMemberMap)
-                ? []
+                ? new()
                 : default);
 
         return newMembers.Concat(constructor);
@@ -136,9 +136,9 @@ internal static partial class SyntaxGeneratorExtensions
                     modifiers: new DeclarationModifiers(isUnsafe: !isContainedInUnsafeType && parameter.RequiresUnsafeModifier()),
                     type: parameter.Type,
                     refKind: RefKind.None,
-                    explicitInterfaceImplementations: [],
+                    explicitInterfaceImplementations: new(),
                     name: propertyName,
-                    parameters: [],
+                    parameters: new(),
                     getMethod: CodeGenerationSymbolFactory.CreateAccessorSymbol(
                         attributes: default,
                         accessibility: default,
@@ -416,7 +416,7 @@ internal static partial class SyntaxGeneratorExtensions
             accessorGet = CodeGenerationSymbolFactory.CreateMethodSymbol(
                 overriddenProperty.GetMethod,
                 accessibility: getAccessibility,
-                statements: getBody != null ? [getBody] : [],
+                statements: getBody != null ? ImmutableArray.Create(getBody) : new(),
                 modifiers: modifiers);
         }
 
@@ -428,7 +428,7 @@ internal static partial class SyntaxGeneratorExtensions
             accessorSet = CodeGenerationSymbolFactory.CreateMethodSymbol(
                 overriddenProperty.SetMethod,
                 accessibility: setAccessibility,
-                statements: setBody != null ? [setBody] : [],
+                statements: setBody != null ? ImmutableArray.Create(setBody) : new(),
                 modifiers: modifiers);
         }
 
@@ -519,7 +519,7 @@ internal static partial class SyntaxGeneratorExtensions
                 overriddenMethod,
                 accessibility: overriddenMethod.ComputeResultantAccessibility(newContainingType),
                 modifiers: modifiers,
-                statements: [statement]);
+                statements: ImmutableArray.Create(statement));
         }
         else
         {
@@ -542,8 +542,8 @@ internal static partial class SyntaxGeneratorExtensions
                 accessibility: overriddenMethod.ComputeResultantAccessibility(newContainingType),
                 modifiers: modifiers,
                 statements: overriddenMethod.ReturnsVoid
-                    ? [codeFactory.ExpressionStatement(body)]
-                    : [codeFactory.ReturnStatement(body)]);
+                    ? ImmutableArray.Create(codeFactory.ExpressionStatement(body))
+                    : ImmutableArray.Create(codeFactory.ReturnStatement(body)));
         }
     }
 
@@ -658,7 +658,7 @@ internal static partial class SyntaxGeneratorExtensions
                 expression = generator.ElementAccessExpression(expression, arguments);
             }
 
-            return [generator.ReturnStatement(expression)];
+            return ImmutableArray.Create(generator.ReturnStatement(expression));
         }
 
         return preferAutoProperties ? default : generator.CreateThrowNotImplementedStatementBlock(compilation);
@@ -684,7 +684,7 @@ internal static partial class SyntaxGeneratorExtensions
 
             expression = generator.AssignmentStatement(expression, generator.IdentifierName("value"));
 
-            return [generator.ExpressionStatement(expression)];
+            return ImmutableArray.Create(generator.ExpressionStatement(expression));
         }
 
         return preferAutoProperties

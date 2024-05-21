@@ -50,7 +50,7 @@ internal abstract class AbstractInternalsVisibleToCompletionProvider : LSPComple
 
     protected abstract bool ShouldTriggerAfterQuotes(SourceText text, int insertedCharacterPosition);
 
-    public override ImmutableHashSet<char> TriggerCharacters { get; } = ['\"'];
+    public override ImmutableHashSet<char> TriggerCharacters { get; } = ImmutableHashSet.Create('\"');
 
     public override async Task ProvideCompletionsAsync(CompletionContext context)
     {
@@ -157,7 +157,7 @@ internal abstract class AbstractInternalsVisibleToCompletionProvider : LSPComple
                 displayTextSuffix: "",
                 rules: CompletionItemRules.Default,
                 glyph: project.GetGlyph(),
-                properties: [new KeyValuePair<string, string>(ProjectGuidKey, projectGuid)]);
+                properties: ImmutableArray.Create(new KeyValuePair<string, string>(ProjectGuidKey, projectGuid)));
             context.AddItem(completionItem);
         }
 
@@ -220,7 +220,7 @@ internal abstract class AbstractInternalsVisibleToCompletionProvider : LSPComple
         }
 
         return resultBuilder == null
-            ? []
+            ? ImmutableHashSet<string>.Empty
             : resultBuilder.ToImmutable();
     }
 

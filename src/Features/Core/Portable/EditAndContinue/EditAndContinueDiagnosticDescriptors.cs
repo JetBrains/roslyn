@@ -183,7 +183,7 @@ internal static class EditAndContinueDiagnosticDescriptors
     {
         lock (s_moduleDiagnosticDescriptorsGuard)
         {
-            s_lazyModuleDiagnosticDescriptors ??= [];
+            s_lazyModuleDiagnosticDescriptors ??= new();
 
             if (!s_lazyModuleDiagnosticDescriptors.TryGetValue(status, out var descriptor))
             {

@@ -32,7 +32,7 @@ internal partial class CSharpRemoveUnnecessaryLambdaExpressionCodeFixProvider : 
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.RemoveUnnecessaryLambdaExpressionDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.RemoveUnnecessaryLambdaExpressionDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

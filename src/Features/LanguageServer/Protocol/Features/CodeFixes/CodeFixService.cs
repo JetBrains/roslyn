@@ -257,7 +257,7 @@ namespace Microsoft.CodeAnalysis.CodeFixes
             if (priority is null or CodeActionRequestPriority.Low)
                 return await document.GetCachedCopilotDiagnosticsAsync(range, cancellationToken).ConfigureAwait(false);
 
-            return [];
+            return new();
         }
 
         private static SortedDictionary<TextSpan, List<DiagnosticData>> ConvertToMap(
@@ -553,7 +553,7 @@ namespace Microsoft.CodeAnalysis.CodeFixes
                                     {
                                         var primaryDiagnostic = dxs.First();
                                         return GetCodeFixesAsync(document, primaryDiagnostic.Location.SourceSpan, fixer, fixerMetadata, fallbackOptions,
-                                            [primaryDiagnostic], uniqueDiagosticToEquivalenceKeysMap,
+                                            ImmutableArray.Create(primaryDiagnostic), uniqueDiagosticToEquivalenceKeysMap,
                                             diagnosticAndEquivalenceKeyToFixersMap, cancellationToken);
                                     }
                                     else
@@ -766,7 +766,7 @@ namespace Microsoft.CodeAnalysis.CodeFixes
             var extensionManager = textDocument.Project.Solution.Services.GetRequiredService<IExtensionManager>();
             var fixes = await extensionManager.PerformFunctionAsync(fixer,
                 _ => getFixes(diagnostics),
-                defaultValue: [], cancellationToken).ConfigureAwait(false);
+                defaultValue: new(), cancellationToken).ConfigureAwait(false);
 
             if (fixes.IsDefaultOrEmpty)
                 return null;
@@ -844,7 +844,7 @@ namespace Microsoft.CodeAnalysis.CodeFixes
                 return extensionManager.PerformFunction(
                     fixer,
                     () => ImmutableInterlocked.GetOrAdd(ref _fixerToFixableIdsMap, fixer, f => GetAndTestFixableDiagnosticIds(f)),
-                    defaultValue: []);
+                    defaultValue: new());
             }
 
             try
@@ -858,7 +858,7 @@ namespace Microsoft.CodeAnalysis.CodeFixes
                     logger.Value.LogException(fixer, e);
                 }
 
-                return [];
+                return new();
             }
         }
 

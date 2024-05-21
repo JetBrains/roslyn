@@ -403,16 +403,16 @@ internal struct StackFrameLexer
         => ch.Value is (>= 'a' and <= 'z') or (>= 'A' and <= 'Z');
 
     public static StackFrameToken CreateToken(StackFrameKind kind, VirtualCharSequence virtualChars)
-        => CreateToken(kind, [], virtualChars);
+        => CreateToken(kind, new(), virtualChars);
 
     public static StackFrameToken CreateToken(StackFrameKind kind, ImmutableArray<StackFrameTrivia> leadingTrivia, VirtualCharSequence virtualChars)
-        => new(kind, leadingTrivia, virtualChars, [], [], value: null!);
+        => new(kind, leadingTrivia, virtualChars, new(), new(), value: null!);
 
     public static StackFrameToken CreateToken(StackFrameKind kind, ImmutableArray<StackFrameTrivia> leadingTrivia, VirtualCharSequence virtualChars, ImmutableArray<StackFrameTrivia> trailingTrivia)
-        => new(kind, leadingTrivia, virtualChars, trailingTrivia, [], value: null!);
+        => new(kind, leadingTrivia, virtualChars, trailingTrivia, new(), value: null!);
 
     private static StackFrameTrivia CreateTrivia(StackFrameKind kind, VirtualCharSequence virtualChars)
-        => CreateTrivia(kind, virtualChars, []);
+        => CreateTrivia(kind, virtualChars, new());
 
     private static StackFrameTrivia CreateTrivia(StackFrameKind kind, VirtualCharSequence virtualChars, ImmutableArray<EmbeddedDiagnostic> diagnostics)
     {
@@ -540,20 +540,20 @@ internal struct StackFrameLexer
 
     private readonly record struct Language(string At, string In, string Line);
     private static readonly ImmutableArray<Language> s_languages =
-    [
-        new Language("at ", " in ", "line "),
-        new Language("v ", " v ", "řádek "),
-        new Language("bei ", " in ", "Zeile "),
-        new Language("en ", " en ", "línea "),
-        new Language("à ", " dans ", "ligne "),
-        new Language("in ", " in ", "riga "),
-        new Language("場所 ", " 場所 ", "行 "),
-        new Language("위치: ", " 파일 ", "줄 "),
-        new Language("w ", " w ", "wiersz "),
-        new Language("em ", " na ", "linha "),
-        new Language("в ", " в ", "строка "),
-        new Language("在 ", " 位置 ", "行号 "),
+    ImmutableArray.Create(
+        new Language("at ", " in ", "line "),// en
+        new Language("v ", " v ", "řádek "),// cs
+        new Language("bei ", " in ", "Zeile "),// de
+        new Language("en ", " en ", "línea "),// es
+        new Language("à ", " dans ", "ligne "),// fr
+        new Language("in ", " in ", "riga "),// it
+        new Language("場所 ", " 場所 ", "行 "),// ja
+        new Language("위치: ", " 파일 ", "줄 "),// ko
+        new Language("w ", " w ", "wiersz "),// pl
+        new Language("em ", " na ", "linha "),// pt-BR
+        new Language("в ", " в ", "строка "),// ru
+        new Language("在 ", " 位置 ", "行号 "),// zh-Hans
         new Language("於 ", " 於 ", " 行 ")
-, // zh-Hant
-    ];
+ // zh-Hant
+    );
 }

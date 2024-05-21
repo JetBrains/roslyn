@@ -95,7 +95,7 @@ internal abstract partial class AbstractReferenceFinder : IReferenceFinder
             if (document.Project == project)
                 return scope.ToImmutableArray();
 
-            return [];
+            return new();
         }
 
         using var _ = ArrayBuilder<Document>.GetInstance(out var documents);
@@ -180,7 +180,7 @@ internal abstract partial class AbstractReferenceFinder : IReferenceFinder
         CancellationToken cancellationToken)
     {
         if (tokens.IsEmpty)
-            return [];
+            return new();
 
         using var _ = ArrayBuilder<FinderLocation>.GetInstance(out var locations);
         foreach (var token in tokens)
@@ -247,7 +247,7 @@ internal abstract partial class AbstractReferenceFinder : IReferenceFinder
     {
         var aliasSymbols = GetLocalAliasSymbols(state, initialReferences, cancellationToken);
         return aliasSymbols.IsDefaultOrEmpty
-            ? []
+            ? new()
             : await FindReferencesThroughLocalAliasSymbolsAsync(symbol, state, aliasSymbols, cancellationToken).ConfigureAwait(false);
     }
 
@@ -258,7 +258,7 @@ internal abstract partial class AbstractReferenceFinder : IReferenceFinder
     {
         var aliasSymbols = GetLocalAliasSymbols(state, initialReferences, cancellationToken);
         return aliasSymbols.IsDefaultOrEmpty
-            ? []
+            ? new()
             : await FindReferencesThroughLocalAliasSymbolsAsync(state, aliasSymbols, cancellationToken).ConfigureAwait(false);
     }
 
@@ -384,7 +384,7 @@ internal abstract partial class AbstractReferenceFinder : IReferenceFinder
             return locations.ToImmutable();
         }
 
-        return [];
+        return new();
     }
 
     protected Task<ImmutableArray<FinderLocation>> FindReferencesInForEachStatementsAsync(
@@ -859,7 +859,7 @@ internal abstract partial class AbstractReferenceFinder<TSymbol> : AbstractRefer
     {
         return symbol is TSymbol typedSymbol && CanFind(typedSymbol)
             ? FindReferencesInDocumentAsync(typedSymbol, state, options, cancellationToken)
-            : new ValueTask<ImmutableArray<FinderLocation>>([]);
+            : new ValueTask<ImmutableArray<FinderLocation>>(ImmutableArray<FinderLocation>.Empty);
     }
 
     public sealed override ValueTask<ImmutableArray<ISymbol>> DetermineCascadedSymbolsAsync(
@@ -872,13 +872,13 @@ internal abstract partial class AbstractReferenceFinder<TSymbol> : AbstractRefer
             return DetermineCascadedSymbolsAsync(typedSymbol, solution, options, cancellationToken);
         }
 
-        return new([]);
+        return new(ImmutableArray<ISymbol>.Empty);
     }
 
     protected virtual ValueTask<ImmutableArray<ISymbol>> DetermineCascadedSymbolsAsync(
         TSymbol symbol, Solution solution, FindReferencesSearchOptions options, CancellationToken cancellationToken)
     {
-        return new([]);
+        return new(ImmutableArray<ISymbol>.Empty);
     }
 
     protected static ValueTask<ImmutableArray<FinderLocation>> FindReferencesInDocumentUsingSymbolNameAsync(

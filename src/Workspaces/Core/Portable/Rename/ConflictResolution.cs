@@ -60,8 +60,8 @@ internal readonly partial struct ConflictResolution
         OldSolution = null;
         NewSolution = null;
         ReplacementTextValid = false;
-        DocumentIds = [];
-        RelatedLocations = [];
+        DocumentIds = new();
+        RelatedLocations = new();
         _documentToModifiedSpansMap = ImmutableDictionary<DocumentId, ImmutableArray<(TextSpan oldSpan, TextSpan newSpan)>>.Empty;
         _documentToComplexifiedSpansMap = ImmutableDictionary<DocumentId, ImmutableArray<ComplexifiedSpan>>.Empty;
         _documentToRelatedLocationsMap = ImmutableDictionary<DocumentId, ImmutableArray<RelatedLocation>>.Empty;
@@ -124,7 +124,7 @@ internal readonly partial struct ConflictResolution
     public ImmutableArray<RelatedLocation> GetRelatedLocationsForDocument(DocumentId documentId)
         => _documentToRelatedLocationsMap.TryGetValue(documentId, out var result)
             ? result
-            : [];
+            : new();
 
     internal TextSpan GetResolutionTextSpan(TextSpan originalSpan, DocumentId documentId)
     {

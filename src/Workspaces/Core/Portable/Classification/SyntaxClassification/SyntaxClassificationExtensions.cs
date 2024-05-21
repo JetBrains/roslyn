@@ -21,7 +21,7 @@ internal static class SyntaxClassificationServiceExtensions
         SegmentedList<ClassifiedSpan> result,
         CancellationToken cancellationToken)
     {
-        classificationService.AddSyntacticClassifications(root, [textSpan], result, cancellationToken);
+        classificationService.AddSyntacticClassifications(root, ImmutableArray.Create(textSpan), result, cancellationToken);
     }
 
     public static Task AddSemanticClassificationsAsync(
@@ -36,7 +36,7 @@ internal static class SyntaxClassificationServiceExtensions
     {
         return classificationService.AddSemanticClassificationsAsync(
             document,
-            [textSpan],
+            ImmutableArray.Create(textSpan),
             options,
             getNodeClassifiers,
             getTokenClassifiers,
@@ -56,7 +56,7 @@ internal static class SyntaxClassificationServiceExtensions
     {
         classificationService.AddSemanticClassifications(
             semanticModel,
-            [textSpan],
+            ImmutableArray.Create(textSpan),
             getNodeClassifiers,
             getTokenClassifiers,
             result,

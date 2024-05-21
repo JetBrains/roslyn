@@ -37,8 +37,8 @@ internal sealed class DebuggingSession : IDisposable
     /// MVIDs read from the assembly built for given project id.
     /// Only contains ids for projects that support EnC.
     /// </summary>
-    private readonly Dictionary<ProjectId, (Guid Mvid, Diagnostic Error)> _projectModuleIds = [];
-    private readonly Dictionary<Guid, ProjectId> _moduleIds = [];
+    private readonly Dictionary<ProjectId, (Guid Mvid, Diagnostic Error)> _projectModuleIds = new();
+    private readonly Dictionary<Guid, ProjectId> _moduleIds = new();
     private readonly object _projectModuleIdsGuard = new();
 
     /// <summary>
@@ -52,8 +52,8 @@ internal sealed class DebuggingSession : IDisposable
     /// Therefore once an initial baseline is created it needs to be kept alive till the end of the debugging session,
     /// even when it's replaced in <see cref="_projectBaselines"/> by a newer baseline.
     /// </remarks>
-    private readonly Dictionary<ProjectId, ProjectBaseline> _projectBaselines = [];
-    private readonly List<IDisposable> _initialBaselineModuleReaders = [];
+    private readonly Dictionary<ProjectId, ProjectBaseline> _projectBaselines = new();
+    private readonly List<IDisposable> _initialBaselineModuleReaders = new();
     private readonly object _projectEmitBaselinesGuard = new();
 
     /// <summary>
@@ -66,7 +66,7 @@ internal sealed class DebuggingSession : IDisposable
 
     internal EditSession EditSession { get; private set; }
 
-    private readonly HashSet<Guid> _modulesPreparedForUpdate = [];
+    private readonly HashSet<Guid> _modulesPreparedForUpdate = new();
     private readonly object _modulesPreparedForUpdateGuard = new();
 
     internal readonly DebuggingSessionId Id;
@@ -323,7 +323,7 @@ internal sealed class DebuggingSession : IDisposable
         {
             if (_projectBaselines.TryGetValue(baselineProject.Id, out baseline))
             {
-                diagnostics = [];
+                diagnostics = new();
                 return true;
             }
         }
@@ -414,7 +414,7 @@ internal sealed class DebuggingSession : IDisposable
             EditAndContinueService.Log.Write("Failed to create baseline for '{0}': {1}", projectId, e.Message);
 
             var descriptor = EditAndContinueDiagnosticDescriptors.GetDescriptor(EditAndContinueErrorCode.ErrorReadingFile);
-            diagnostics = [Diagnostic.Create(descriptor, Location.None, new[] { fileBeingRead, e.Message })];
+            diagnostics = ImmutableArray.Create(Diagnostic.Create(descriptor, Location.None, new[] { fileBeingRead, e.Message }));
         }
         finally
         {
@@ -447,20 +447,20 @@ internal sealed class DebuggingSession : IDisposable
         {
             if (_isDisposed)
             {
-                return [];
+                return new();
             }
 
             // Not a C# or VB project.
             var project = document.Project;
             if (!project.SupportsEditAndContinue())
             {
-                return [];
+                return new();
             }
 
             // Document does not compile to the assembly (e.g. cshtml files, .g.cs files generated for completion only)
             if (!document.DocumentState.SupportsEditAndContinue())
             {
-                return [];
+                return new();
             }
 
             // Do not analyze documents (and report diagnostics) of projects that have not been built.
@@ -470,7 +470,7 @@ internal sealed class DebuggingSession : IDisposable
             var (mvid, _) = await GetProjectModuleIdAsync(project, cancellationToken).ConfigureAwait(false);
             if (mvid == Guid.Empty)
             {
-                return [];
+                return new();
             }
 
             var (oldDocument, oldDocumentState) = await LastCommittedSolution.GetDocumentAndStateAsync(document.Id, document, cancellationToken).ConfigureAwait(false);
@@ -479,7 +479,7 @@ internal sealed class DebuggingSession : IDisposable
                 CommittedSolution.DocumentState.DesignTimeOnly)
             {
                 // Do not report diagnostics for existing out-of-sync documents or design-time-only documents.
-                return [];
+                return new();
             }
 
             var analysis = await EditSession.Analyses.GetDocumentAnalysisAsync(LastCommittedSolution, oldDocument, document, activeStatementSpanProvider, cancellationToken).ConfigureAwait(false);
@@ -497,7 +497,7 @@ internal sealed class DebuggingSession : IDisposable
 
             if (analysis.RudeEditErrors.IsEmpty)
             {
-                return [];
+                return new();
             }
 
             EditSession.Telemetry.LogRudeEditDiagnostics(analysis.RudeEditErrors, project.State.Attributes.TelemetryId);
@@ -510,7 +510,7 @@ internal sealed class DebuggingSession : IDisposable
         }
         catch (Exception e) when (FatalError.ReportAndCatchUnlessCanceled(e, cancellationToken))
         {
-            return [];
+            return new();
         }
     }
 
@@ -672,7 +672,7 @@ internal sealed class DebuggingSession : IDisposable
                         oldProject,
                         EditSession.BaseActiveStatements,
                         newDocument,
-                        newActiveStatementSpans: [],
+                        newActiveStatementSpans: new(),
                         EditSession.Capabilities,
                         cancellationToken).ConfigureAwait(false);
 
@@ -700,7 +700,7 @@ internal sealed class DebuggingSession : IDisposable
             }
 
             using var _4 = ArrayBuilder<ImmutableArray<ActiveStatementSpan>>.GetInstance(out var spans);
-            spans.AddMany([], documentIds.Length);
+            spans.AddMany(new(), documentIds.Length);
 
             foreach (var (mappedPath, documentBaseActiveStatements) in baseActiveStatements.DocumentPathMap)
             {
@@ -748,7 +748,7 @@ internal sealed class DebuggingSession : IDisposable
         {
             if (_isDisposed || !EditSession.InBreakState || !mappedDocument.State.SupportsEditAndContinue() || !mappedDocument.Project.SupportsEditAndContinue())
             {
-                return [];
+                return new();
             }
 
             Contract.ThrowIfNull(mappedDocument.FilePath);
@@ -760,20 +760,20 @@ internal sealed class DebuggingSession : IDisposable
             {
                 // TODO: https://github.com/dotnet/roslyn/issues/1204
                 // Enumerate all documents of the new project.
-                return [];
+                return new();
             }
 
             var baseActiveStatements = await EditSession.BaseActiveStatements.GetValueAsync(cancellationToken).ConfigureAwait(false);
             if (!baseActiveStatements.DocumentPathMap.TryGetValue(mappedDocument.FilePath, out var oldMappedDocumentActiveStatements))
             {
                 // no active statements in this document
-                return [];
+                return new();
             }
 
             var newDocumentActiveStatementSpans = await activeStatementSpanProvider(mappedDocument.Id, mappedDocument.FilePath, cancellationToken).ConfigureAwait(false);
             if (newDocumentActiveStatementSpans.IsEmpty)
             {
-                return [];
+                return new();
             }
 
             var analyzer = newProject.Services.GetRequiredService<IEditAndContinueAnalyzer>();

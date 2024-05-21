@@ -167,7 +167,8 @@ internal abstract partial class AbstractUseObjectInitializerDiagnosticAnalyzer<
                     NotificationOption2.ForSeverity(s_unnecessaryCodeDescriptor.DefaultSeverity),
                     context.Options,
                     additionalLocations: locations,
-                    additionalUnnecessaryLocations: [syntaxTree.GetLocation(TextSpan.FromBounds(match.Initializer.FullSpan.End, match.Statement.Span.End))]));
+                    additionalUnnecessaryLocations: ImmutableArray.Create(
+                            syntaxTree.GetLocation(TextSpan.FromBounds(match.Initializer.FullSpan.End, match.Statement.Span.End)))));
             }
             else
             {

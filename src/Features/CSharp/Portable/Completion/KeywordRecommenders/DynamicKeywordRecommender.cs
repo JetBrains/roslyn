@@ -27,8 +27,8 @@ internal class DynamicKeywordRecommender : IKeywordRecommender<CSharpSyntaxConte
     public ImmutableArray<RecommendedKeyword> RecommendKeywords(int position, CSharpSyntaxContext context, CancellationToken cancellationToken)
     {
         return IsValidContext(position, context, cancellationToken)
-            ? [new RecommendedKeyword("dynamic")]
-            : [];
+            ? ImmutableArray.Create(new RecommendedKeyword("dynamic"))
+            : new();
     }
 
     protected static bool IsDynamicTypeContext(

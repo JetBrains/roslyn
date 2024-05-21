@@ -68,13 +68,12 @@ internal partial class CSharpMetadataAsSourceService : AbstractMetadataAsSourceS
     }
 
     protected override ImmutableArray<AbstractReducer> GetReducers()
-        => [
+        => ImmutableArray.Create<AbstractReducer>(
             new CSharpNameReducer(),
             new CSharpEscapingReducer(),
             new CSharpParenthesizedExpressionReducer(),
             new CSharpParenthesizedPatternReducer(),
-            new CSharpDefaultExpressionReducer(),
-        ];
+            new CSharpDefaultExpressionReducer());
 
     /// <summary>
     /// Adds <c>#nullable enable</c> and <c>#nullable disable</c> annotations to the file as necessary.  Note that

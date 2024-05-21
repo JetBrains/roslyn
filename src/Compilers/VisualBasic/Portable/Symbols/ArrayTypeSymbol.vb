@@ -347,7 +347,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
 
         Public NotOverridable Overrides Function GetHashCode() As Integer
             ' Following the C# implementation to avoid recursion
-            ' We don't want to blow the stack if we have a type like T[][][][][][][][]....[][],
+            ' We don't want to blow the stack if we have a type like T[][][][][][][][]....new()[],
             ' so we do not recurse until we have a non-array. Rather, hash all the ranks together
             ' And then hash that with the "T" type.
 

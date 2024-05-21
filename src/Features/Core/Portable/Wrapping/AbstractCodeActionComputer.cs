@@ -59,7 +59,7 @@ internal abstract partial class AbstractSyntaxWrapper
         /// The contents of the documents we've created code-actions for.  This is used so that
         /// we can prevent creating multiple code actions that produce the same results.
         /// </summary>
-        private readonly List<SyntaxNode> _seenDocumentRoots = [];
+        private readonly List<SyntaxNode> _seenDocumentRoots = new();
 
         public AbstractCodeActionComputer(
             TWrapper service,

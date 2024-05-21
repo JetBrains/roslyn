@@ -29,7 +29,7 @@ internal sealed class NullableImpactingSpanWalker(
 
     public bool HasSpans => _spans?.Count > 0;
 
-    public ImmutableArray<TextSpan> Spans => _spans?.ToImmutable() ?? [];
+    public ImmutableArray<TextSpan> Spans => _spans?.ToImmutable() ?? new();
 
     public ImmutableArray<TextSpan>.Builder SpansBuilder
     {

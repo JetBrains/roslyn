@@ -79,7 +79,7 @@ internal class CSharpUseImplicitObjectCreationDiagnosticAnalyzer : AbstractBuilt
         //    the type.  However, the type is always in a very easy to ascertain location in C#, so it is treated as
         //    apparent. 
         // 3. Collection-like constructs where the type of the collection is itself explicit.  For example: `new
-        //    List<C> { new() }` or `new C[] { new() }`.
+        //    List<C> { new() }` or `new Cnew() { new() }`.
 
         TypeSyntax? typeNode;
 

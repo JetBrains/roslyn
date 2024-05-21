@@ -114,7 +114,7 @@ namespace Microsoft.CodeAnalysis
             var sourceTable = builder.GetLatestStateTableForNode(_sourceNode);
 
             // Semantics of a batch transform:
-            // Batches will always exist (a batch of the empty table is still [])
+            // Batches will always exist (a batch of the empty table is still new())
             // There is only ever one input, the batch of the upstream table
             // - Output is cached when upstream is all cached
             // - Added when the previous table was empty

@@ -29,7 +29,7 @@ internal class ConvertNamespaceCodeFixProvider : SyntaxEditorBasedCodeFixProvide
     {
     }
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseBlockScopedNamespaceDiagnosticId, IDEDiagnosticIds.UseFileScopedNamespaceDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseBlockScopedNamespaceDiagnosticId, IDEDiagnosticIds.UseFileScopedNamespaceDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

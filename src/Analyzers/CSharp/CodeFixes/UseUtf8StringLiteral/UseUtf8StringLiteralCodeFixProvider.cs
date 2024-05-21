@@ -34,7 +34,7 @@ internal sealed class UseUtf8StringLiteralCodeFixProvider : SyntaxEditorBasedCod
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.UseUtf8StringLiteralDiagnosticId];
+        ImmutableArray.Create(IDEDiagnosticIds.UseUtf8StringLiteralDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

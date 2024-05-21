@@ -126,7 +126,7 @@ public static class CommandLineProject
                 .WithAssemblyIdentityComparer(assemblyIdentityComparer)
                 .WithStrongNameProvider(strongNameProvider)
                 // TODO (https://github.com/dotnet/roslyn/issues/4967): 
-                .WithMetadataReferenceResolver(new WorkspaceMetadataFileReferenceResolver(metadataService, new RelativePathResolver([], projectDirectory))),
+                .WithMetadataReferenceResolver(new WorkspaceMetadataFileReferenceResolver(metadataService, new RelativePathResolver(new(), projectDirectory))),
             parseOptions: commandLineArguments.ParseOptions,
             documents: CreateDocuments(commandLineArguments.SourceFiles),
             projectReferences: null,

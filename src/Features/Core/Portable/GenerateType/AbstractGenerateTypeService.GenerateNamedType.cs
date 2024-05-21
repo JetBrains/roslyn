@@ -258,7 +258,7 @@ internal abstract partial class AbstractGenerateTypeService<TService, TSimpleNam
                 if (serializableType != null)
                 {
                     var attribute = CodeGenerationSymbolFactory.CreateAttributeData(serializableType);
-                    return [attribute];
+                    return ImmutableArray.Create(attribute);
                 }
             }
 
@@ -288,11 +288,11 @@ internal abstract partial class AbstractGenerateTypeService<TService, TSimpleNam
                 var type = RemoveUnavailableTypeParameters(_state.BaseTypeOrInterfaceOpt);
                 if (type != null)
                 {
-                    return [type];
+                    return ImmutableArray.Create(type);
                 }
             }
 
-            return [];
+            return new();
         }
 
         private INamedTypeSymbol RemoveUnavailableTypeParameters(INamedTypeSymbol type)

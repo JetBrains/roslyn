@@ -66,7 +66,7 @@ namespace Microsoft.CodeAnalysis.LanguageServer.Handler.Diagnostics
         /// and works well for us in the normal case.  The latter still allows us to reuse diagnostics when changes happen that
         /// update the version stamp but not the content (for example, forking LSP text).
         /// </summary>
-        private readonly ConcurrentDictionary<string, VersionedPullCache<(int globalStateVersion, VersionStamp? dependentVersion), (int globalStateVersion, Checksum dependentChecksum)>> _categoryToVersionedCache = [];
+        private readonly ConcurrentDictionary<string, VersionedPullCache<(int globalStateVersion, VersionStamp? dependentVersion), (int globalStateVersion, Checksum dependentChecksum)>> _categoryToVersionedCache = new();
 
         public bool MutatesSolutionState => false;
         public bool RequiresLSPSolution => true;
@@ -154,7 +154,7 @@ namespace Microsoft.CodeAnalysis.LanguageServer.Handler.Diagnostics
 
                 // Get the set of results the request said were previously reported.  We can use this to determine both
                 // what to skip, and what files we have to tell the client have been removed.
-                var previousResults = GetPreviousResults(diagnosticsParams) ?? [];
+                var previousResults = GetPreviousResults(diagnosticsParams) ?? new();
                 context.TraceInformation($"previousResults.Length={previousResults.Length}");
 
                 // Create a mapping from documents to the previous results the client says it has for them.  That way as we
@@ -324,7 +324,7 @@ namespace Microsoft.CodeAnalysis.LanguageServer.Handler.Diagnostics
         {
             if (!ShouldIncludeHiddenDiagnostic(diagnosticData, capabilities))
             {
-                return [];
+                return new();
             }
 
             var project = diagnosticSource.GetProject();
@@ -333,13 +333,13 @@ namespace Microsoft.CodeAnalysis.LanguageServer.Handler.Diagnostics
             // Check if we need to handle the unnecessary tag (fading).
             if (!diagnosticData.CustomTags.Contains(WellKnownDiagnosticTags.Unnecessary))
             {
-                return [diagnostic];
+                return ImmutableArray.Create<LSP.Diagnostic>(diagnostic);
             }
 
             // DiagnosticId supports fading, check if the corresponding VS option is turned on.
             if (!SupportsFadingOption(diagnosticData))
             {
-                return [diagnostic];
+                return ImmutableArray.Create<LSP.Diagnostic>(diagnostic);
             }
 
             // Check to see if there are specific locations marked to fade.
@@ -349,7 +349,7 @@ namespace Microsoft.CodeAnalysis.LanguageServer.Handler.Diagnostics
                 // We should always have at least one tag (build or intellisense error).
                 Contract.ThrowIfNull(diagnostic.Tags, $"diagnostic {diagnostic.Identifier} was missing tags");
                 diagnostic.Tags = diagnostic.Tags.Append(DiagnosticTag.Unnecessary);
-                return [diagnostic];
+                return ImmutableArray.Create<LSP.Diagnostic>(diagnostic);
             }
 
             if (capabilities.HasVisualStudioLspCapability())
@@ -382,7 +382,7 @@ namespace Microsoft.CodeAnalysis.LanguageServer.Handler.Diagnostics
                     Message = diagnostic.Message
                 }).ToArray();
                 diagnostic.RelatedInformation = diagnosticRelatedInformation;
-                return [diagnostic];
+                return ImmutableArray.Create<LSP.Diagnostic>(diagnostic);
             }
 
             LSP.VSDiagnostic CreateLspDiagnostic(

@@ -1252,7 +1252,7 @@ public abstract partial class Workspace : IDisposable
             CheckProjectIsInSolution(oldSolution, documentId.ProjectId);
             CheckAnalyzerConfigDocumentIsNotInSolution(oldSolution, documentId);
 
-            return oldSolution.AddAnalyzerConfigDocuments([documentInfo]);
+            return oldSolution.AddAnalyzerConfigDocuments(ImmutableArray.Create(documentInfo));
         },
         WorkspaceChangeKind.AnalyzerConfigDocumentAdded, documentId: documentId);
     }

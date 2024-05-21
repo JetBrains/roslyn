@@ -62,7 +62,7 @@ internal abstract partial class AbstractFindUsagesService
         /// This dictionary allows us to make that mapping once and then keep it around for
         /// all future callbacks.
         /// </summary>
-        private readonly Dictionary<SymbolGroup, DefinitionItem> _definitionToItem = [];
+        private readonly Dictionary<SymbolGroup, DefinitionItem> _definitionToItem = new();
 
         private readonly SemaphoreSlim _gate = new(initialCount: 1);
 

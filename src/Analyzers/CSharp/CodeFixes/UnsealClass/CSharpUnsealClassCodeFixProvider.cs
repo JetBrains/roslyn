@@ -23,7 +23,7 @@ internal sealed class CSharpUnsealClassCodeFixProvider : AbstractUnsealClassCode
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [CS0509];
+        ImmutableArray.Create(CS0509);
 
     protected override string TitleFormat => CSharpCodeFixesResources.Unseal_class_0;
 }

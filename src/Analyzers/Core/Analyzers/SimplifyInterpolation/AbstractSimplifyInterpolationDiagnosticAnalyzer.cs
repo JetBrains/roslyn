@@ -68,7 +68,7 @@ internal abstract class AbstractSimplifyInterpolationDiagnosticAnalyzer<
             firstUnnecessaryLocation,
             option.Notification,
             context.Options,
-            additionalLocations: [interpolation.Syntax.GetLocation()],
+            additionalLocations: ImmutableArray.Create(interpolation.Syntax.GetLocation()),
             additionalUnnecessaryLocations: remainingUnnecessaryLocations));
     }
 }

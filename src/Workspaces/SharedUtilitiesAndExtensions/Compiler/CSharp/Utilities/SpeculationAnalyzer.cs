@@ -198,7 +198,7 @@ internal class SpeculationAnalyzer : AbstractSpeculationAnalyzer<
                     var replacedParams = replacedParenthesizedLambda.ParameterList.Parameters;
                     Debug.Assert(originalParams.Count == replacedParams.Count);
 
-                    paramNames = [];
+                    paramNames = new();
                     for (var i = 0; i < originalParams.Count; i++)
                     {
                         var originalParam = originalParams[i];

@@ -26,7 +26,7 @@ internal static class EmbeddedLanguageClassificationServiceExtensions
             solutionServices,
             project,
             semanticModel,
-            [textSpan],
+            ImmutableArray.Create(textSpan),
             options,
             result,
             cancellationToken);

@@ -39,7 +39,7 @@ internal abstract class AbstractTaskListService : ITaskListService
                 cancellationToken).ConfigureAwait(false);
 
             if (!result.HasValue)
-                return [];
+                return new();
 
             return result.Value;
         }
@@ -53,7 +53,7 @@ internal abstract class AbstractTaskListService : ITaskListService
         CancellationToken cancellationToken)
     {
         if (descriptors.IsEmpty)
-            return [];
+            return new();
 
         cancellationToken.ThrowIfCancellationRequested();
 

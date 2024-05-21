@@ -39,7 +39,7 @@ internal class UseSimpleUsingStatementCodeFixProvider : SyntaxEditorBasedCodeFix
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.UseSimpleUsingStatementDiagnosticId];
+        ImmutableArray.Create(IDEDiagnosticIds.UseSimpleUsingStatementDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

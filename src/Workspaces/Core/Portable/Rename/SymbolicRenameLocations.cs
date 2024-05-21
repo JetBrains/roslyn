@@ -72,7 +72,7 @@ internal sealed partial class SymbolicRenameLocations
 
             // Next, find references to overloads, if the user has asked to rename those as well.
             var overloadsResult = options.RenameOverloads ? await GetOverloadsAsync(symbol, solution, cancellationToken).ConfigureAwait(false) :
-                [];
+                new();
 
             // Finally, include strings/comments if that's what the user wants.
             var (strings, comments) = await ReferenceProcessing.GetRenamableLocationsInStringsAndCommentsAsync(
@@ -133,7 +133,7 @@ internal sealed partial class SymbolicRenameLocations
     {
         var locations = ImmutableHashSet.CreateBuilder<RenameLocation>();
         var referenceSymbols = await SymbolFinder.FindRenamableReferencesAsync(
-            [symbol], solution, cancellationToken).ConfigureAwait(false);
+            ImmutableArray.Create(symbol), solution, cancellationToken).ConfigureAwait(false);
 
         foreach (var referencedSymbol in referenceSymbols)
         {

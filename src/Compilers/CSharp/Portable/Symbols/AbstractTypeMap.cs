@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Roslyn.Utilities;
+using ImmutableCollectionsMarshal = System.Runtime.InteropServices.ImmutableCollectionsMarshal4Hack;
 
 namespace Microsoft.CodeAnalysis.CSharp.Symbols
 {

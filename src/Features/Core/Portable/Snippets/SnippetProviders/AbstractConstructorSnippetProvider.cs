@@ -15,10 +15,10 @@ internal abstract class AbstractConstructorSnippetProvider : AbstractSingleChang
 
     public override string Description => FeaturesResources.constructor;
 
-    public override ImmutableArray<string> AdditionalFilterTexts { get; } = ["constructor"];
+    public override ImmutableArray<string> AdditionalFilterTexts { get; } = ImmutableArray.Create("constructor");
 
     protected override Func<SyntaxNode?, bool> GetSnippetContainerFunction(ISyntaxFacts syntaxFacts) => syntaxFacts.IsConstructorDeclaration;
 
     protected override ImmutableArray<SnippetPlaceholder> GetPlaceHolderLocationsList(SyntaxNode node, ISyntaxFacts syntaxFacts, CancellationToken cancellationToken)
-        => [];
+        => new();
 }

@@ -33,7 +33,7 @@ internal sealed class CSharpMakeMemberRequiredCodeFixProvider : SyntaxEditorBase
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [CS8618];
+        ImmutableArray.Create(CS8618);
 
     public override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {

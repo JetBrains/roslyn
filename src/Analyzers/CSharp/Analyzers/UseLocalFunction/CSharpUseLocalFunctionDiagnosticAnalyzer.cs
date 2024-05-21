@@ -240,7 +240,7 @@ internal class CSharpUseLocalFunctionDiagnosticAnalyzer : AbstractBuiltInCodeSty
         // Check all the references to the anonymous function and disallow the conversion if
         // they're used in certain ways.
         using var _ = ArrayBuilder<Location>.GetInstance(out var references);
-        referenceLocations = [];
+        referenceLocations = new();
         var anonymousFunctionStart = anonymousFunction.SpanStart;
         foreach (var descendentNode in block.DescendantNodes())
         {

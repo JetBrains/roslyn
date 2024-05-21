@@ -23,7 +23,7 @@ internal abstract class AbstractUseCompoundAssignmentCodeFixProvider<
     where TExpressionSyntax : SyntaxNode
 {
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.UseCompoundAssignmentDiagnosticId];
+        ImmutableArray.Create(IDEDiagnosticIds.UseCompoundAssignmentDiagnosticId);
 
     // See comments in the analyzer for what these maps are for.
 

@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.CodeFixes.NamingStyles;
 internal sealed class NamingStyleCodeFixProvider() : CodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds { get; }
-        = [IDEDiagnosticIds.NamingRuleId];
+        = ImmutableArray.Create(IDEDiagnosticIds.NamingRuleId);
 
     public override FixAllProvider? GetFixAllProvider()
     {
@@ -125,7 +125,7 @@ internal sealed class NamingStyleCodeFixProvider() : CodeFixProvider
         /// it doesn't require this.  As such, we can allow it to run in hosts that only allow document edits. Those
         /// hosts will simply ignore the operations they don't understand.
         /// </summary>
-        public override ImmutableArray<string> Tags => [];
+        public override ImmutableArray<string> Tags => new();
 
         public FixNameCodeAction(
 #if !CODE_STYLE
@@ -159,7 +159,7 @@ internal sealed class NamingStyleCodeFixProvider() : CodeFixProvider
             var codeAction = new ApplyChangesOperation(newSolution);
 
 #if CODE_STYLE  // https://github.com/dotnet/roslyn/issues/42218 tracks removing this conditional code.
-            return [codeAction];
+            return ImmutableArray.Create<CodeActionOperation>(codeAction);
 #else
 
             using var operations = TemporaryArray<CodeActionOperation>.Empty;

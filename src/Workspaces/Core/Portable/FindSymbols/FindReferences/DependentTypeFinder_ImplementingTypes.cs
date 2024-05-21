@@ -57,6 +57,6 @@ internal static partial class DependentTypeFinder
                      TypeKind.Enum);
         }
 
-        return [];
+        return new();
     }
 }

@@ -57,7 +57,7 @@ public sealed class CompletionChange
         IncludesCommitCharacter = includesCommitCharacter;
         TextChanges = textChanges.NullToEmpty();
         if (TextChanges.IsEmpty)
-            TextChanges = [textChange];
+            TextChanges = ImmutableArray.Create(textChange);
         Properties = properties;
     }
 

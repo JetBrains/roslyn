@@ -36,7 +36,7 @@ internal sealed partial class ConvertSwitchStatementToExpressionCodeFixProvider 
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.ConvertSwitchStatementToExpressionDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.ConvertSwitchStatementToExpressionDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

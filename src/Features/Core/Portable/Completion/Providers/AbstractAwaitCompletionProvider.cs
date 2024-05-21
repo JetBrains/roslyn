@@ -149,7 +149,7 @@ internal abstract class AbstractAwaitCompletionProvider : LSPCompletionProvider
             ImmutableArray<KeyValuePair<string, string>> completionProperties, string displayText, string filterText, string tooltip, bool isComplexTextEdit, bool appendConfigureAwait)
         {
             var description = appendConfigureAwait
-                ? [new SymbolDisplayPart(SymbolDisplayPartKind.Text, null, tooltip)]
+                ? ImmutableArray.Create(new SymbolDisplayPart(SymbolDisplayPartKind.Text, null, tooltip))
                 : RecommendedKeyword.CreateDisplayParts(displayText, tooltip);
 
             return CommonCompletionItem.Create(

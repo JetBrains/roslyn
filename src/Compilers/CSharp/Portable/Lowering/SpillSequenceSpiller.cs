@@ -471,7 +471,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         else if (call.Method == _F.Compilation.GetSpecialTypeMember(SpecialMember.System_String__op_Implicit_ToReadOnlySpanOfChar))
                         {
                             Debug.Assert(call.Arguments.Length == 1);
-                            return call.Update([Spill(builder, call.Arguments[0])]);
+                            return call.Update(ImmutableArray.Create(Spill(builder, call.Arguments[0])));
                         }
 
                         goto default;
@@ -486,7 +486,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                             Debug.Assert(objectCreationExpression.Arguments.Length == 1);
                             var argRefKinds = objectCreationExpression.ArgumentRefKindsOpt;
                             return objectCreationExpression.Update(objectCreationExpression.Constructor,
-                                                                   [Spill(builder, objectCreationExpression.Arguments[0], argRefKinds.IsDefault ? RefKind.None : argRefKinds[0])],
+                                                                   ImmutableArray.Create(Spill(builder, objectCreationExpression.Arguments[0], argRefKinds.IsDefault ? RefKind.None : argRefKinds[0])),
                                                                    objectCreationExpression.ArgumentRefKindsOpt,
                                                                    newInitializerExpression: null);
                         }

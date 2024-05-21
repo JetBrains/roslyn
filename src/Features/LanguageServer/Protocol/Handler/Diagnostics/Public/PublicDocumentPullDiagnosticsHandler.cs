@@ -63,7 +63,7 @@ internal sealed partial class PublicDocumentPullDiagnosticsHandler : AbstractDoc
         => new(new RelatedFullDocumentDiagnosticReport
         {
             ResultId = null,
-            Items = [],
+            Items = Array.Empty<Roslyn.LanguageServer.Protocol.Diagnostic>(),
         });
 
     protected override bool TryCreateUnchangedReport(TextDocumentIdentifier identifier, string resultId, out DocumentDiagnosticPartialReport report)

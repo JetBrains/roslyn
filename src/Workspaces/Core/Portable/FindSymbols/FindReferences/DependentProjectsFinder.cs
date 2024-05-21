@@ -176,7 +176,7 @@ internal static partial class DependentProjectsFinder
                     {
                         if (!projectIdsToReferencingSubmissionIds.TryGetValue(referencedProject.Id, out var referencingSubmissions))
                         {
-                            referencingSubmissions = [];
+                            referencingSubmissions = new();
                             projectIdsToReferencingSubmissionIds.Add(referencedProject.Id, referencingSubmissions);
                         }
 

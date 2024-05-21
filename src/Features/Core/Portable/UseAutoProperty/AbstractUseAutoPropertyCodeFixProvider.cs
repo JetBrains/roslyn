@@ -34,7 +34,7 @@ internal abstract class AbstractUseAutoPropertyCodeFixProvider<TTypeDeclarationS
     protected static SyntaxAnnotation SpecializedFormattingAnnotation = new();
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseAutoPropertyDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseAutoPropertyDiagnosticId);
 
     public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -138,7 +138,7 @@ internal abstract class AbstractUseAutoPropertyCodeFixProvider<TTypeDeclarationS
 
         var resolution = await filteredLocations.ResolveConflictsAsync(
             fieldSymbol, propertySymbol.Name,
-            nonConflictSymbolKeys: [propertySymbol.GetSymbolKey(cancellationToken)],
+            nonConflictSymbolKeys: ImmutableArray.Create(propertySymbol.GetSymbolKey(cancellationToken)),
             context.Options, cancellationToken).ConfigureAwait(false);
 
         Contract.ThrowIfFalse(resolution.IsSuccessful);

@@ -36,9 +36,9 @@ internal readonly struct EmitSolutionUpdateResults
 
     public static readonly EmitSolutionUpdateResults Empty = new()
     {
-        ModuleUpdates = new ModuleUpdates(ModuleUpdateStatus.None, []),
-        Diagnostics = [],
-        RudeEdits = [],
+        ModuleUpdates = new ModuleUpdates(ModuleUpdateStatus.None, new()),
+        Diagnostics = new(),
+        RudeEdits = new(),
         SyntaxError = null
     };
 

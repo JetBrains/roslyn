@@ -334,7 +334,7 @@ internal sealed partial class ConfigurationUpdater
             name: ".editorconfig",
             filePath: analyzerConfigPath);
 
-        var newSolution = project.Solution.AddAnalyzerConfigDocuments([documentInfo]);
+        var newSolution = project.Solution.AddAnalyzerConfigDocuments(ImmutableArray.Create(documentInfo));
         return newSolution.GetProject(project.Id)?.GetAnalyzerConfigDocument(id);
     }
 
@@ -368,7 +368,7 @@ internal sealed partial class ConfigurationUpdater
             }
         }
 
-        return [];
+        return new();
     }
 
     internal static bool TryGetEditorConfigStringParts(string editorConfigString, out (string optionName, string optionValue) parts)
@@ -398,7 +398,7 @@ internal sealed partial class ConfigurationUpdater
                     select option).ToImmutableArray();
         }
 
-        return [];
+        return new();
     }
 
     private SourceText? GetNewAnalyzerConfigDocumentText(SourceText originalText, AnalyzerConfigDocument editorConfigDocument)

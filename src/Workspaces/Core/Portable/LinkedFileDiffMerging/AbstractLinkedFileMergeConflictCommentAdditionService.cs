@@ -47,7 +47,7 @@ internal abstract class AbstractLinkedFileMergeConflictCommentAdditionService : 
             if (changeStartLine.LineNumber >= currentPartitionEndLine.LineNumber + 2)
             {
                 partitionedChanges.Add(currentPartition);
-                currentPartition = [];
+                currentPartition = new();
             }
 
             currentPartition.Add(change);

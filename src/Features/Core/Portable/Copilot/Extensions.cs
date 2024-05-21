@@ -16,11 +16,11 @@ internal static class Extensions
     public static async Task<ImmutableArray<DiagnosticData>> GetCachedCopilotDiagnosticsAsync(this TextDocument document, TextSpan? span, CancellationToken cancellationToken)
     {
         if (document is not Document sourceDocument)
-            return [];
+            return new();
 
         var copilotCodeAnalysisService = sourceDocument.GetLanguageService<ICopilotCodeAnalysisService>();
         if (copilotCodeAnalysisService is null)
-            return [];
+            return new();
 
         var promptTitles = await copilotCodeAnalysisService.GetAvailablePromptTitlesAsync(sourceDocument, cancellationToken).ConfigureAwait(false);
         var copilotDiagnostics = await copilotCodeAnalysisService.GetCachedDocumentDiagnosticsAsync(sourceDocument, span, promptTitles, cancellationToken).ConfigureAwait(false);

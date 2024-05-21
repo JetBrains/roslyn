@@ -49,7 +49,7 @@ internal static partial class SyntaxGeneratorExtensions
             explicitInterfaceImplementations: default,
             name: EqualsName,
             typeParameters: default,
-            parameters: [CodeGenerationSymbolFactory.CreateParameterSymbol(compilation.GetSpecialType(SpecialType.System_Object).WithNullableAnnotation(NullableAnnotation.Annotated), ObjName)],
+            parameters: ImmutableArray.Create(CodeGenerationSymbolFactory.CreateParameterSymbol(compilation.GetSpecialType(SpecialType.System_Object).WithNullableAnnotation(NullableAnnotation.Annotated), ObjName)),
             statements: statements);
     }
 
@@ -84,7 +84,7 @@ internal static partial class SyntaxGeneratorExtensions
             return CodeGenerationSymbolFactory.CreateMethodSymbol(
                 methodSymbol,
                 modifiers: new DeclarationModifiers(),
-                explicitInterfaceImplementations: [methodSymbol],
+                explicitInterfaceImplementations: ImmutableArray.Create(methodSymbol),
                 parameters: parameters,
                 statements: statements);
         }

@@ -110,7 +110,7 @@ internal abstract partial class AbstractBuiltInCodeStyleDiagnosticAnalyzer
     {
         if (option != null)
         {
-            AddDiagnosticIdToOptionMapping(diagnosticId, [option]);
+            AddDiagnosticIdToOptionMapping(diagnosticId, ImmutableHashSet.Create(option));
         }
     }
 

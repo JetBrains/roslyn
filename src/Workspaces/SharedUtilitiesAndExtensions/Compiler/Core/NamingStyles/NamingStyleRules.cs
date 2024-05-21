@@ -15,7 +15,10 @@ internal class NamingStyleRules(ImmutableArray<NamingRule> namingRules)
     public ImmutableArray<NamingRule> NamingRules { get; } = namingRules;
 
     private readonly ImmutableArray<SymbolKind> _symbolKindsThatCanBeOverridden =
-        [SymbolKind.Method, SymbolKind.Property, SymbolKind.Event];
+        ImmutableArray.Create(
+                SymbolKind.Method,
+                SymbolKind.Property,
+                SymbolKind.Event);
 
     internal bool TryGetApplicableRule(ISymbol symbol, out NamingRule applicableRule)
     {

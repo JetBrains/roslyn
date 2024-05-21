@@ -42,7 +42,7 @@ internal abstract class AbstractFixAllGetFixesService : IFixAllGetFixesService
         var codeAction = await GetFixAllCodeActionAsync(fixAllContext).ConfigureAwait(false);
         if (codeAction == null)
         {
-            return [];
+            return new();
         }
 
         return await GetFixAllOperationsAsync(
@@ -66,7 +66,7 @@ internal abstract class AbstractFixAllGetFixesService : IFixAllGetFixesService
             fixAllState.Solution, progressTracker, cancellationToken).ConfigureAwait(false);
         if (operations == null)
         {
-            return [];
+            return new();
         }
 
         cancellationToken.ThrowIfCancellationRequested();
@@ -76,7 +76,7 @@ internal abstract class AbstractFixAllGetFixesService : IFixAllGetFixesService
         if (newSolution is null)
         {
             // No changed documents
-            return [];
+            return new();
         }
 
         if (showPreviewChangesDialog)
@@ -93,7 +93,7 @@ internal abstract class AbstractFixAllGetFixesService : IFixAllGetFixesService
                 cancellationToken);
             if (newSolution == null)
             {
-                return [];
+                return new();
             }
         }
 

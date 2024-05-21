@@ -44,7 +44,7 @@ internal struct JsonLexer
         {
             return CreateToken(
                 JsonKind.EndOfFile, leadingTrivia,
-                VirtualCharSequence.Empty, []);
+                VirtualCharSequence.Empty, new());
         }
 
         var (chars, kind, diagnostic) = ScanNextTokenWorker();

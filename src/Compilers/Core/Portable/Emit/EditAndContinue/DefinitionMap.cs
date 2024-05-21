@@ -673,7 +673,7 @@ namespace Microsoft.CodeAnalysis.Emit
                         lambdasToInclude: addedOrChangedMethod.LambdaDebugInfo);
                 }
 
-                return [];
+                return Array.Empty<(DebugId id, IMethodSymbolInternal symbol)>();
             }
 
             Debug.Assert(peMethod != null);
@@ -685,12 +685,12 @@ namespace Microsoft.CodeAnalysis.Emit
             }
             catch (Exception e) when (e is InvalidDataException or IOException)
             {
-                return [];
+                return Array.Empty<(DebugId id, IMethodSymbolInternal symbol)>();
             }
 
             if (provider.Lambdas.IsDefaultOrEmpty)
             {
-                return [];
+                return Array.Empty<(DebugId id, IMethodSymbolInternal symbol)>();
             }
 
             return getDeletedLambdas(

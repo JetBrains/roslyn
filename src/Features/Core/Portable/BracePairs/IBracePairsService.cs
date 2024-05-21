@@ -23,7 +23,7 @@ internal interface IBracePairsService : ILanguageService
 
 internal abstract class AbstractBracePairsService : IBracePairsService
 {
-    private readonly Dictionary<int, int> _bracePairKinds = [];
+    private readonly Dictionary<int, int> _bracePairKinds = new();
 
     protected AbstractBracePairsService(
         ISyntaxKinds syntaxKinds)

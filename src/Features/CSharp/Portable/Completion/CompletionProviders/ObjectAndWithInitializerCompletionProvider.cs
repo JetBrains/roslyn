@@ -194,7 +194,7 @@ internal class ObjectAndWithInitializerCompletionProvider : AbstractObjectInitia
             }
         }
 
-        return [];
+        return new();
     }
 
     protected override bool IsInitializable(ISymbol member, INamedTypeSymbol containingType)

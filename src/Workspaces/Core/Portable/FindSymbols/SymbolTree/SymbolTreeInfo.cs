@@ -55,9 +55,9 @@ internal partial class SymbolTreeInfo
     /// Maps the name of receiver type name to its <see cref="ExtensionMethodInfo" />.
     /// <see cref="ParameterTypeInfo"/> for the definition of simple/complex methods.
     /// For non-array simple types, the receiver type name would be its metadata name, e.g. "Int32".
-    /// For any array types with simple type as element, the receiver type name would be just "ElementTypeName[]", e.g. "Int32[]" for int[][,]
+    /// For any array types with simple type as element, the receiver type name would be just "ElementTypeName[]", e.g. "Int32new()" for int[][,]
     /// For non-array complex types, the receiver type name is "".
-    /// For any array types with complex type as element, the receiver type name is "[]"
+    /// For any array types with complex type as element, the receiver type name is "new()"
     /// </summary>
     private readonly MultiDictionary<string, ExtensionMethodInfo>? _receiverTypeNameToExtensionMethodMap;
 
@@ -102,8 +102,8 @@ internal partial class SymbolTreeInfo
         var sortedNodes = SortNodes(unsortedNodes);
 
         return new SymbolTreeInfo(checksum, sortedNodes,
-            [],
-            []);
+            new(),
+            new());
     }
 
     public SymbolTreeInfo WithChecksum(Checksum checksum)
@@ -232,7 +232,7 @@ internal partial class SymbolTreeInfo
             {
                 assemblySymbol ??= await lazyAssembly.GetValueAsync(cancellationToken).ConfigureAwait(false);
                 if (assemblySymbol is null)
-                    return [];
+                    return new();
 
                 Bind(index, assemblySymbol.GlobalNamespace, ref results.AsRef(), cancellationToken);
             }

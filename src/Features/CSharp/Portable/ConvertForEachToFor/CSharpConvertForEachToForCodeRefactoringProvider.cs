@@ -76,7 +76,7 @@ internal sealed class CSharpConvertForEachToForCodeRefactoringProvider :
 
         var indexVariable = CreateUniqueName(foreachInfo.SemanticFacts, model, foreachStatement.Statement, "i", cancellationToken);
 
-        // do not cast when the element is identity - fixes 'var x in T![]' under nullable context
+        // do not cast when the element is identity - fixes 'var x in T!new()' under nullable context
         var foreachStatementInfo = model.GetForEachStatementInfo(foreachStatement);
         var donotCastElement = foreachStatementInfo.ElementConversion.IsIdentity;
 
@@ -91,7 +91,7 @@ internal sealed class CSharpConvertForEachToForCodeRefactoringProvider :
                     indexVariable.WithAdditionalAnnotations(RenameAnnotation.Create()),
                     argumentList: null,
                     SyntaxFactory.EqualsValueClause((ExpressionSyntax)generator.LiteralExpression(0)))]),
-            initializers: [],
+            initializers: new(),
             (ExpressionSyntax)generator.LessThanExpression(
                 generator.IdentifierName(indexVariable),
                 generator.MemberAccessExpression(collectionVariable, foreachInfo.CountName)),

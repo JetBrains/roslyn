@@ -514,7 +514,7 @@ internal abstract partial class PatternMatcher : IDisposable
                 var matchCount = matchSpans.Count;
                 matchedSpans = _includeMatchedSpans
                     ? new NormalizedTextSpanCollection(matchSpans.ToImmutableAndClear()).ToImmutableArray()
-                    : [];
+                    : new();
 
                 var camelCaseResult = new CamelCaseResult(firstMatch == 0, contiguous.Value, matchCount, null);
                 return GetCamelCaseKind(camelCaseResult, candidateHumps);
@@ -522,7 +522,7 @@ internal abstract partial class PatternMatcher : IDisposable
             else if (currentCandidateHump == candidateHumpCount)
             {
                 // No match, since we still have more of the pattern to hit
-                matchedSpans = [];
+                matchedSpans = new();
                 return null;
             }
 

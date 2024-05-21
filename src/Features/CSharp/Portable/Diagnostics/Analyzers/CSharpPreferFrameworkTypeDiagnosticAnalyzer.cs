@@ -20,7 +20,7 @@ internal class CSharpPreferFrameworkTypeDiagnosticAnalyzer :
         PredefinedTypeSyntax>
 {
     protected override ImmutableArray<SyntaxKind> SyntaxKindsOfInterest { get; } =
-        [SyntaxKind.PredefinedType, SyntaxKind.IdentifierName];
+        ImmutableArray.Create(SyntaxKind.PredefinedType, SyntaxKind.IdentifierName);
 
     ///<remarks>
     /// every predefined type keyword except <c>void</c> can be replaced by its framework type in code.

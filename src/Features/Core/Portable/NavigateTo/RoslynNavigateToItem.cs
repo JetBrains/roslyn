@@ -333,8 +333,8 @@ internal readonly struct RoslynNavigateToItem(
         }
 
         ImmutableArray<TaggedText> INavigableItem.DisplayTaggedParts
-            => [new TaggedText(
-                TextTags.Text, _item.DeclaredSymbolInfo.Name + _item.DeclaredSymbolInfo.NameSuffix)];
+            => ImmutableArray.Create(new TaggedText(
+                TextTags.Text, _item.DeclaredSymbolInfo.Name + _item.DeclaredSymbolInfo.NameSuffix));
 
         bool INavigableItem.DisplayFileLocation => false;
 
@@ -350,7 +350,7 @@ internal readonly struct RoslynNavigateToItem(
 
         bool INavigableItem.IsStale => _item.IsStale;
 
-        ImmutableArray<INavigableItem> INavigableItem.ChildItems => [];
+        ImmutableArray<INavigableItem> INavigableItem.ChildItems => new();
 
         #endregion
     }

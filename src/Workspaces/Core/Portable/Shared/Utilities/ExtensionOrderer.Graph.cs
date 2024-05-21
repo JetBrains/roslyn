@@ -14,7 +14,7 @@ internal partial class ExtensionOrderer
     private class Graph<TExtension, TMetadata>
         where TMetadata : OrderableMetadata
     {
-        public readonly Dictionary<Lazy<TExtension, TMetadata>, Node<TExtension, TMetadata>> Nodes = [];
+        public readonly Dictionary<Lazy<TExtension, TMetadata>, Node<TExtension, TMetadata>> Nodes = new();
 
         public IEnumerable<Lazy<TExtension, TMetadata>> FindExtensions(string name)
         {

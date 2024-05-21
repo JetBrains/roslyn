@@ -17,13 +17,12 @@ namespace Microsoft.CodeAnalysis.CSharp.ChangeSignature;
 internal sealed class ChangeSignatureFormattingRule : BaseFormattingRule
 {
     private static readonly ImmutableArray<SyntaxKind> s_allowableKinds =
-    [
+    ImmutableArray.Create(
         SyntaxKind.ParameterList,
         SyntaxKind.ArgumentList,
         SyntaxKind.BracketedParameterList,
         SyntaxKind.BracketedArgumentList,
-        SyntaxKind.AttributeArgumentList,
-    ];
+        SyntaxKind.AttributeArgumentList);
 
     public override void AddIndentBlockOperations(List<IndentBlockOperation> list, SyntaxNode node, in NextIndentBlockOperationAction nextOperation)
     {

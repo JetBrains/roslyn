@@ -48,7 +48,7 @@ internal partial class SymbolSearchUpdateEngine
     /// </summary>
     private static readonly LinkedList<string> s_logs = new();
 
-    private readonly ConcurrentDictionary<string, object> _sourceToUpdateSentinel = [];
+    private readonly ConcurrentDictionary<string, object> _sourceToUpdateSentinel = new();
 
     // Interfaces that abstract out the external functionality we need.  Used so we can easily
     // mock behavior during tests.

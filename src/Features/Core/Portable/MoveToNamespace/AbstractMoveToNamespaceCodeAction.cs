@@ -30,7 +30,7 @@ internal abstract partial class AbstractMoveToNamespaceCodeAction(
     /// this work, that happens after the move has happened.  As such, this does not require non document changes
     /// and can run in all our hosts.
     /// </summary>
-    public sealed override ImmutableArray<string> Tags => [];
+    public sealed override ImmutableArray<string> Tags => new();
 
     public sealed override object GetOptions(CancellationToken cancellationToken)
     {

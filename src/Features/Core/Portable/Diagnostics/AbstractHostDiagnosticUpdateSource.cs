@@ -112,7 +112,7 @@ internal abstract class AbstractHostDiagnosticUpdateSource
         {
             if (!_abstractHostDiagnosticUpdateSource._analyzerHostDiagnosticsMap.TryGetValue(analyzer, out var diagnostics))
             {
-                diagnostics = [];
+                diagnostics = ImmutableHashSet<DiagnosticData>.Empty;
             }
 
             return diagnostics;

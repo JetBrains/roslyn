@@ -113,7 +113,7 @@ internal abstract partial class AbstractGenerateEqualsAndGetHashCodeService : IG
             expressions.Aggregate(generator.LogicalAndExpression));
 
         return compilation.CreateEqualsMethod(
-            [statement]);
+            ImmutableArray.Create(statement));
     }
 
     public async Task<IMethodSymbol> GenerateGetHashCodeMethodAsync(
@@ -185,11 +185,11 @@ internal abstract partial class AbstractGenerateEqualsAndGetHashCodeService : IG
         var valueTupleType = compilation.GetTypeByMetadataName(typeof(ValueTuple).FullName!);
         if (components.Length >= 2 && valueTupleType != null)
         {
-            return [factory.ReturnStatement(
+            return ImmutableArray.Create(factory.ReturnStatement(
                 factory.InvocationExpression(
                     factory.MemberAccessExpression(
                         factory.TupleExpression(components),
-                        GetHashCodeName)))];
+                        GetHashCodeName))));
         }
 
         // Otherwise, use 64bit math to compute the hash.  Importantly, if we always clamp

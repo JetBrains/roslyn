@@ -39,7 +39,7 @@ internal sealed record class SyntaxPath
         }
     }
 
-    private readonly List<PathSegment> _segments = [];
+    private readonly List<PathSegment> _segments = new();
     private readonly int _kind;
     private readonly bool _trackKinds;
 

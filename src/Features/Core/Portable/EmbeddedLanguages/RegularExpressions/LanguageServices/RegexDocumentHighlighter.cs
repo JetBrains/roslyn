@@ -44,7 +44,7 @@ internal sealed class RegexDocumentHighlighter : IEmbeddedLanguageDocumentHighli
 
         return tree == null
             ? default
-            : [new DocumentHighlights(document, GetHighlights(tree, position))];
+            : ImmutableArray.Create(new DocumentHighlights(document, GetHighlights(tree, position)));
     }
 
     private static ImmutableArray<HighlightSpan> GetHighlights(RegexTree tree, int positionInDocument)
@@ -70,7 +70,7 @@ internal sealed class RegexDocumentHighlighter : IEmbeddedLanguageDocumentHighli
     {
         var virtualChar = tree.Text.Find(position);
         if (virtualChar == null)
-            return [];
+            return new();
 
         var ch = virtualChar.Value;
         return FindReferenceHighlights(tree, ch);
@@ -81,7 +81,7 @@ internal sealed class RegexDocumentHighlighter : IEmbeddedLanguageDocumentHighli
         var node = FindReferenceNode(tree.Root, ch);
         if (node == null)
         {
-            return [];
+            return new();
         }
 
         var captureToken = GetCaptureToken(node);
@@ -102,13 +102,13 @@ internal sealed class RegexDocumentHighlighter : IEmbeddedLanguageDocumentHighli
             }
         }
 
-        return [];
+        return new();
     }
 
     private static ImmutableArray<HighlightSpan> CreateHighlights(
         RegexEscapeNode node, TextSpan captureSpan)
     {
-        return [CreateHighlightSpan(node.GetSpan()), CreateHighlightSpan(captureSpan)];
+        return ImmutableArray.Create(CreateHighlightSpan(node.GetSpan()), CreateHighlightSpan(captureSpan));
     }
 
     private static HighlightSpan CreateHighlightSpan(TextSpan textSpan)

@@ -16,12 +16,11 @@ namespace Microsoft.CodeAnalysis.CSharp.Classification;
 internal class OperatorOverloadSyntaxClassifier : AbstractSyntaxClassifier
 {
     public override ImmutableArray<Type> SyntaxNodeTypes { get; } =
-    [
+    ImmutableArray.Create(
         typeof(AssignmentExpressionSyntax),
         typeof(BinaryExpressionSyntax),
         typeof(PrefixUnaryExpressionSyntax),
-        typeof(PostfixUnaryExpressionSyntax),
-    ];
+        typeof(PostfixUnaryExpressionSyntax));
 
     public override void AddClassifications(
         SyntaxNode syntax,

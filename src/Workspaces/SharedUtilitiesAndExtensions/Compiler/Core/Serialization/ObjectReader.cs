@@ -276,7 +276,7 @@ internal sealed partial class ObjectReader : IDisposable
         Func<int, T[]>? getArray = null)
     {
         // Defer to caller provided getArray if provided.  Otherwise, we'll just allocate the array ourselves.
-        getArray ??= static length => length == 0 ? [] : new T[length];
+        getArray ??= static length => length == 0 ? Array.Empty<T>() : new T[length];
 
         var length = ReadArrayLength();
         var array = getArray(length);

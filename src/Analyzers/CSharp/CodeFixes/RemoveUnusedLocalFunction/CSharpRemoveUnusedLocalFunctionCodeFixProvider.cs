@@ -30,7 +30,7 @@ internal class CSharpRemoveUnusedLocalFunctionCodeFixProvider : SyntaxEditorBase
     }
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds
-        => [CS8321];
+        => ImmutableArray.Create(CS8321);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

@@ -45,7 +45,7 @@ internal readonly struct SnippetPlaceholder
     /// Initialize a placeholder with a single position
     /// </summary>
     public SnippetPlaceholder(string identifier, int placeholderPosition)
-        : this(identifier, [placeholderPosition])
+        : this(identifier, ImmutableArray.Create(placeholderPosition))
     {
     }
 }

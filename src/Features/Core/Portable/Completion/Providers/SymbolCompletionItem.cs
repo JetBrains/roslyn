@@ -153,7 +153,7 @@ internal static class SymbolCompletionItem
             return symbols.ToImmutable();
         }
 
-        return [];
+        return new();
     }
 
     private static void DecodeSymbols(List<string> ids, Compilation compilation, ArrayBuilder<ISymbol> symbols)

@@ -27,7 +27,7 @@ internal class StreamingProgressCollector(
     IStreamingFindReferencesProgress underlyingProgress) : IStreamingFindReferencesProgress
 {
     private readonly object _gate = new();
-    private readonly Dictionary<ISymbol, List<ReferenceLocation>> _symbolToLocations = [];
+    private readonly Dictionary<ISymbol, List<ReferenceLocation>> _symbolToLocations = new();
 
     public IStreamingProgressTracker ProgressTracker => underlyingProgress.ProgressTracker;
 
@@ -61,7 +61,7 @@ internal class StreamingProgressCollector(
             lock (_gate)
             {
                 foreach (var definition in group.Symbols)
-                    _symbolToLocations[definition] = [];
+                    _symbolToLocations[definition] = new();
             }
 
             return underlyingProgress.OnDefinitionFoundAsync(group, cancellationToken);

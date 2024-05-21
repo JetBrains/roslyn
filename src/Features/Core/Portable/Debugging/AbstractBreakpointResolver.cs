@@ -116,7 +116,7 @@ internal abstract partial class AbstractBreakpointResolver
         }
         catch (Exception e) when (FatalError.ReportAndCatchUnlessCanceled(e, cancellationToken))
         {
-            return [];
+            return Array.Empty<BreakpointResolutionResult>();
         }
     }
 
@@ -152,7 +152,7 @@ internal abstract partial class AbstractBreakpointResolver
         }
         catch (Exception e) when (FatalError.ReportAndCatchUnlessCanceled(e, cancellationToken))
         {
-            return [];
+            return Array.Empty<ISymbol>();
         }
     }
 

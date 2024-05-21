@@ -208,15 +208,15 @@ internal partial class CSharpGenerateConversionService :
         }
 
         return CodeGenerationSymbolFactory.CreateMethodSymbol(
-            attributes: [],
+            attributes: new(),
             accessibility: default,
             modifiers: default,
             returnType: typeToGenerateIn,
             refKind: RefKind.None,
             explicitInterfaceImplementations: default,
             name: null,
-            typeParameters: [],
-            parameters: [CodeGenerationSymbolFactory.CreateParameterSymbol(parameterSymbol, "v")],
+            typeParameters: new(),
+            parameters: ImmutableArray.Create(CodeGenerationSymbolFactory.CreateParameterSymbol(parameterSymbol, "v")),
             methodKind: MethodKind.Conversion);
     }
 

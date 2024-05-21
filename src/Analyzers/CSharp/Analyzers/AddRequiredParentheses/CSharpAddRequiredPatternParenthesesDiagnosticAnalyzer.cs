@@ -22,7 +22,9 @@ internal class CSharpAddRequiredPatternParenthesesDiagnosticAnalyzer :
     {
     }
 
-    private static readonly ImmutableArray<SyntaxKind> s_kinds = [SyntaxKind.AndPattern, SyntaxKind.OrPattern];
+    private static readonly ImmutableArray<SyntaxKind> s_kinds = ImmutableArray.Create(
+            SyntaxKind.AndPattern,
+            SyntaxKind.OrPattern);
 
     protected override ImmutableArray<SyntaxKind> GetSyntaxNodeKinds()
         => s_kinds;

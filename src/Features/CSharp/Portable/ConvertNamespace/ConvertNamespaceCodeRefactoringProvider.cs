@@ -33,7 +33,7 @@ internal class ConvertNamespaceCodeRefactoringProvider : SyntaxEditorBasedCodeRe
     }
 
     protected override ImmutableArray<FixAllScope> SupportedFixAllScopes
-        => [FixAllScope.Project, FixAllScope.Solution];
+        => ImmutableArray.Create(FixAllScope.Project, FixAllScope.Solution);
 
     public override async Task ComputeRefactoringsAsync(CodeRefactoringContext context)
     {

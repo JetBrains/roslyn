@@ -69,7 +69,7 @@ internal partial struct SymbolKey
 
             Contract.ThrowIfTrue(typeArguments.IsDefault);
 
-            var typeArgumentsArray = typeArguments.Count == 0 ? [] : typeArguments.Builder.ToArray();
+            var typeArgumentsArray = typeArguments.Count == 0 ? Array.Empty<ITypeSymbol>() : typeArguments.Builder.ToArray();
 
             var normalResolution = ResolveNormalNamedType(
                 containingSymbolResolution, containingSymbolFailureReason,

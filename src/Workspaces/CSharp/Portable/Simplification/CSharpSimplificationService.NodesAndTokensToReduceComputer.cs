@@ -18,7 +18,7 @@ internal partial class CSharpSimplificationService
 {
     private class NodesAndTokensToReduceComputer : CSharpSyntaxRewriter
     {
-        private readonly List<NodeOrTokenToReduce> _nodesAndTokensToReduce = [];
+        private readonly List<NodeOrTokenToReduce> _nodesAndTokensToReduce = new();
         private readonly Func<SyntaxNodeOrToken, bool> _isNodeOrTokenOutsideSimplifySpans;
 
         private bool _simplifyAllDescendants;

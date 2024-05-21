@@ -233,7 +233,7 @@ public partial class FixAllContext : IFixAllContext
 
         if (this.Project.Language != document.Project.Language)
         {
-            return [];
+            return new();
         }
 
         var getDiagnosticsTask = State.DiagnosticProvider.GetDocumentDiagnosticsAsync(document, this.CancellationToken);
@@ -255,7 +255,7 @@ public partial class FixAllContext : IFixAllContext
             }
         }
 
-        return [];
+        return new();
     }
 
     /// <summary>
@@ -270,7 +270,7 @@ public partial class FixAllContext : IFixAllContext
 
         if (this.Project.Language != document.Project.Language)
         {
-            return [];
+            return new();
         }
 
         var getDiagnosticsTask = State.DiagnosticProvider is FixAllContext.SpanBasedDiagnosticProvider spanBasedDiagnosticProvider
@@ -317,7 +317,7 @@ public partial class FixAllContext : IFixAllContext
 
         if (this.Project.Language != project.Language)
         {
-            return [];
+            return new();
         }
 
         var getDiagnosticsTask = includeAllDocumentDiagnostics

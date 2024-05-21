@@ -45,6 +45,6 @@ internal partial class AbstractGenerateParameterizedMemberService<TService, TSim
                 : _parameterNames.SelectAsArray(p => new ParameterName(p, isFixed: true));
 
         protected override ImmutableArray<ITypeSymbol> DetermineTypeArguments(CancellationToken cancellationToken)
-            => [];
+            => new();
     }
 }

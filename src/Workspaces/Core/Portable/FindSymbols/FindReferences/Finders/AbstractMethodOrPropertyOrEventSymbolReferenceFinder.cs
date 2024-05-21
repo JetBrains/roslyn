@@ -27,8 +27,8 @@ internal abstract class AbstractMethodOrPropertyOrEventSymbolReferenceFinder<TSy
             // the only accessor method referenced in a foreach-statement is the .Current's
             // get-accessor
             return symbols.CurrentProperty.GetMethod == null
-                ? []
-                : [symbols.CurrentProperty.GetMethod];
+                ? new()
+                : ImmutableArray.Create(symbols.CurrentProperty.GetMethod);
         }
 
         if (semanticFacts.IsWrittenTo(semanticModel, node, cancellationToken))
@@ -57,8 +57,8 @@ internal abstract class AbstractMethodOrPropertyOrEventSymbolReferenceFinder<TSy
             var inStructuredTrivia = node.IsPartOfStructuredTrivia();
 
             return inNameOf || inStructuredTrivia || property.GetMethod == null
-                ? []
-                : [property.GetMethod];
+                ? new()
+                : ImmutableArray.Create(property.GetMethod);
         }
     }
 }

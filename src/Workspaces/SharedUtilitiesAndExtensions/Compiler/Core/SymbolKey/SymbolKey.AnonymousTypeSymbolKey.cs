@@ -36,7 +36,7 @@ internal partial struct SymbolKey
         {
             contextualSymbol = contextualSymbol is { IsAnonymousType: true } ? contextualSymbol : null;
 
-            var contextualProperties = contextualSymbol?.GetMembers().OfType<IPropertySymbol>().ToImmutableArray() ?? [];
+            var contextualProperties = contextualSymbol?.GetMembers().OfType<IPropertySymbol>().ToImmutableArray() ?? new();
 
             using var propertyTypes = reader.ReadSymbolKeyArray<INamedTypeSymbol, ITypeSymbol>(
                 contextualSymbol,

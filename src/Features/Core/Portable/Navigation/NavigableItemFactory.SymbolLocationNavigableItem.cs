@@ -59,6 +59,6 @@ internal partial class NavigableItemFactory
 
         public bool IsStale => false;
 
-        public ImmutableArray<INavigableItem> ChildItems => [];
+        public ImmutableArray<INavigableItem> ChildItems => new();
     }
 }

@@ -233,10 +233,10 @@ internal partial class ExpressionSimplifier : AbstractCSharpSimplifier<Expressio
 
         speculativeSymbols = containsOtherSymbol
             ? semanticModel.LookupSymbols(memberAccess.SpanStart, name: memberAccess.Name.Identifier.ValueText)
-            : [];
+            : new();
         speculativeNamespacesAndTypes = containsNamespaceOrTypeSymbol
             ? semanticModel.LookupNamespacesAndTypes(memberAccess.SpanStart, name: memberAccess.Name.Identifier.ValueText)
-            : [];
+            : new();
     }
 
     /// <summary>

@@ -187,8 +187,8 @@ internal abstract partial class DefinitionItem
     {
         return Create(
             tags, displayParts,
-            [sourceSpan],
-            [classifiedSpans],
+            ImmutableArray.Create(sourceSpan),
+            ImmutableArray.Create(classifiedSpans),
             nameDisplayParts, displayIfNoReferences);
     }
 
@@ -269,8 +269,8 @@ internal abstract partial class DefinitionItem
             tags: tags,
             displayParts: displayParts,
             nameDisplayParts: nameDisplayParts,
-            sourceSpans: [],
-            classifiedSpans: [],
+            sourceSpans: new(),
+            classifiedSpans: new(),
             metadataLocations,
             properties: properties,
             displayableProperties: ImmutableDictionary<string, string>.Empty,

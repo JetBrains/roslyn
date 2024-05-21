@@ -21,7 +21,7 @@ internal partial class CSharpOrganizeImportsService
         private readonly bool _separateGroups;
         private readonly SyntaxTrivia _newLineTrivia;
 
-        public readonly IList<TextChange> TextChanges = [];
+        public readonly IList<TextChange> TextChanges = new List<TextChange>();
 
         public Rewriter(OrganizeImportsOptions options)
         {

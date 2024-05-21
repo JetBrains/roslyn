@@ -147,7 +147,7 @@ internal sealed class CSharpImplementExplicitlyCodeRefactoringProvider() : Abstr
         // (they're not legal in C#). If they don't match on defaults, then keep them in so that the user gets a
         // warning (from us and the compiler) and considers what to do about this.
         var removeDefaults = AllDefaultValuesMatch(implMember, interfaceMember);
-        return generator.WithExplicitInterfaceImplementations(decl, [interfaceMember], removeDefaults);
+        return generator.WithExplicitInterfaceImplementations(decl, ImmutableArray.Create(interfaceMember), removeDefaults);
     }
 
     private static bool AllDefaultValuesMatch(ISymbol implMember, ISymbol interfaceMember)

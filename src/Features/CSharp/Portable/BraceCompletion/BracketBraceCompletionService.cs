@@ -45,7 +45,7 @@ internal class BracketBraceCompletionService : AbstractCurlyBraceOrBracketComple
 
     protected override ImmutableArray<AbstractFormattingRule> GetBraceFormattingIndentationRulesAfterReturn(IndentationOptions options)
     {
-        return [BracketCompletionFormattingRule.Instance];
+        return ImmutableArray.Create(BracketCompletionFormattingRule.Instance);
     }
 
     private sealed class BracketCompletionFormattingRule : BaseFormattingRule

@@ -83,13 +83,13 @@ internal class CodeGenerationFieldSymbol(
 
     public RefKind RefKind => RefKind.None;
 
-    public ImmutableArray<CustomModifier> RefCustomModifiers => [];
+    public ImmutableArray<CustomModifier> RefCustomModifiers => new();
 
     public ImmutableArray<CustomModifier> CustomModifiers
     {
         get
         {
-            return [];
+            return ImmutableArray.Create<CustomModifier>();
         }
     }
 

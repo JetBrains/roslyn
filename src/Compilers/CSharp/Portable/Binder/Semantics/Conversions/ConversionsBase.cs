@@ -1660,7 +1660,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 // That method checks for an implicit conversion from IEnumerable to the collection type, to
                 // match earlier implementation, even though it states that walking the implemented interfaces
                 // would be better. If we use CollectionInitializerTypeImplementsIEnumerable() here, we'd need
-                // to check for nullable to disallow: Nullable<StructCollection> s = [];
+                // to check for nullable to disallow: Nullable<StructCollection> s = new();
                 // Instead, we just walk the implemented interfaces.
                 elementType = default;
                 return CollectionExpressionTypeKind.ImplementsIEnumerable;
@@ -2525,7 +2525,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
             // The specification says that there is a conversion:
 
-            // * From a single-dimensional array type S[] to IList<T> and its base
+            // * From a single-dimensional array type Snew() to IList<T> and its base
             //   interfaces, provided that there is an implicit identity or reference
             //   conversion from S to T.
             //
@@ -2643,7 +2643,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case TypeKind.Array:
                     // SPEC: From an array-type S ... to an array-type T, provided ...
                     // SPEC: From any array-type to System.Array and the interfaces it implements.
-                    // SPEC: From a single-dimensional array type S[] to IList<T>, provided ...
+                    // SPEC: From a single-dimensional array type Snew() to IList<T>, provided ...
                     return HasImplicitConversionFromArray(source, destination, ref useSiteInfo);
             }
 
@@ -2715,7 +2715,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return true;
             }
 
-            // * From a single-dimensional array type S[] to IList<T> and its base
+            // * From a single-dimensional array type Snew() to IList<T> and its base
             //   interfaces, provided that there is an implicit identity or reference
             //   conversion from S to T.
 
@@ -3639,7 +3639,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
             }
 
-            // SPEC: From a single-dimensional array type S[] to System.Collections.Generic.IList<T> and its base interfaces
+            // SPEC: From a single-dimensional array type Snew() to System.Collections.Generic.IList<T> and its base interfaces
             // SPEC: provided that there is an explicit reference conversion from S to T.
 
             // The framework now also allows arrays to be converted to IReadOnlyList<T> and IReadOnlyCollection<T>; we 

@@ -14,10 +14,10 @@ internal partial class ExtensionOrderer
     private class Node<TExtension, TMetadata>(Lazy<TExtension, TMetadata> extension)
     {
         public readonly Lazy<TExtension, TMetadata> Extension = extension;
-        public readonly HashSet<Node<TExtension, TMetadata>> ExtensionsBeforeMeSet = [];
+        public readonly HashSet<Node<TExtension, TMetadata>> ExtensionsBeforeMeSet = new();
 
         public void CheckForCycles()
-            => this.CheckForCycles([]);
+            => this.CheckForCycles(new());
 
         private void CheckForCycles(
             HashSet<Node<TExtension, TMetadata>> seenNodes)

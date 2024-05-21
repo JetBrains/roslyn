@@ -33,7 +33,7 @@ internal partial class CSharpUseInterpolatedVerbatimStringCodeFixProvider : Synt
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => ["CS8401"];
+        => ImmutableArray.Create("CS8401");
 
     private const string InterpolatedVerbatimText = "$@\"";
 

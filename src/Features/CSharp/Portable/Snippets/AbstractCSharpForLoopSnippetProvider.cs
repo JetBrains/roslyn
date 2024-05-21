@@ -57,7 +57,7 @@ internal abstract class AbstractCSharpForLoopSnippetProvider : AbstractForLoopSn
 
         return ForStatement(
             variableDeclaration,
-            initializers: [],
+            initializers: new(),
             BinaryExpression(ConditionKind, indexVariable, GenerateRightSideOfCondition(generator, inlineExpression)),
             [PostfixUnaryExpression(IncrementorKind, indexVariable)],
             Block());
@@ -83,7 +83,7 @@ internal abstract class AbstractCSharpForLoopSnippetProvider : AbstractForLoopSn
 
     protected override ImmutableArray<SnippetPlaceholder> GetPlaceHolderLocationsList(SyntaxNode node, ISyntaxFacts syntaxFacts, CancellationToken cancellationToken)
     {
-        using var _ = ArrayBuilder<SnippetPlaceholder>.GetInstance(out var result);
+        using var _ = ArrayBuilder<SnippetPlaceholder>.GetInstance(out var arrayBuilder);
         var placeholderBuilder = new MultiDictionary<string, int>();
         GetPartsOfForStatement(node, out var declaration, out var condition, out var incrementor, out var _);
 
@@ -101,9 +101,11 @@ internal abstract class AbstractCSharpForLoopSnippetProvider : AbstractForLoopSn
         placeholderBuilder.Add(operand.ToString(), operand.SpanStart);
 
         foreach (var (key, value) in placeholderBuilder)
-            result.Add(new(key, [.. value]));
+        {
+            arrayBuilder.Add(new(key, value.ToImmutableArray()));
+        }
 
-        return result.ToImmutableAndClear();
+        return arrayBuilder.ToImmutableArray();
     }
 
     protected override int GetTargetCaretPosition(ISyntaxFactsService syntaxFacts, SyntaxNode caretTarget, SourceText sourceText)

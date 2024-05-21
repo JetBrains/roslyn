@@ -26,7 +26,7 @@ internal abstract partial class AbstractSimplifyThisOrMeCodeFixProvider<TMemberA
     protected abstract SyntaxNode Rewrite(SyntaxNode root, ISet<TMemberAccessExpressionSyntax> memberAccessNodes);
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        [IDEDiagnosticIds.RemoveThisOrMeQualificationDiagnosticId];
+        ImmutableArray.Create(IDEDiagnosticIds.RemoveThisOrMeQualificationDiagnosticId);
 
     public sealed override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

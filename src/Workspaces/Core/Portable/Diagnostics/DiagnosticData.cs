@@ -256,7 +256,7 @@ internal sealed class DiagnosticData(
     {
         if (diagnostic.AdditionalLocations.Count == 0)
         {
-            return [];
+            return new();
         }
 
         using var _ = ArrayBuilder<DiagnosticDataLocation>.GetInstance(diagnostic.AdditionalLocations.Count, out var builder);

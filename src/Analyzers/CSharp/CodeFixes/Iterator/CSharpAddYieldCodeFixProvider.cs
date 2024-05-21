@@ -42,7 +42,7 @@ internal class CSharpAddYieldCodeFixProvider : AbstractIteratorCodeFixProvider
 
     public override ImmutableArray<string> FixableDiagnosticIds
     {
-        get { return [CS0029, CS0266]; }
+        get { return ImmutableArray.Create(CS0029, CS0266); }
     }
 
     protected override async Task<CodeAction?> GetCodeFixAsync(SyntaxNode root, SyntaxNode node, Document document, Diagnostic diagnostics, CancellationToken cancellationToken)

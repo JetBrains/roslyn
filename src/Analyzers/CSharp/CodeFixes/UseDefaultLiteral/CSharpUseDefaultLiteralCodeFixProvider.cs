@@ -28,7 +28,7 @@ internal partial class CSharpUseDefaultLiteralCodeFixProvider : SyntaxEditorBase
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; }
-        = [IDEDiagnosticIds.UseDefaultLiteralDiagnosticId];
+        = ImmutableArray.Create(IDEDiagnosticIds.UseDefaultLiteralDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

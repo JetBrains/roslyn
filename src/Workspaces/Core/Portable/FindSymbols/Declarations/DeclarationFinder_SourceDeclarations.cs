@@ -39,7 +39,7 @@ internal static partial class DeclarationFinder
 
         if (string.IsNullOrWhiteSpace(name))
         {
-            return [];
+            return new();
         }
 
         var client = await RemoteHostClient.TryGetClientAsync(solution.Services, cancellationToken).ConfigureAwait(false);
@@ -52,7 +52,7 @@ internal static partial class DeclarationFinder
 
             if (!result.HasValue)
             {
-                return [];
+                return new();
             }
 
             return await RehydrateAsync(solution, result.Value, cancellationToken).ConfigureAwait(false);
@@ -77,7 +77,7 @@ internal static partial class DeclarationFinder
 
         if (string.IsNullOrWhiteSpace(name))
         {
-            return [];
+            return new();
         }
 
         var client = await RemoteHostClient.TryGetClientAsync(project, cancellationToken).ConfigureAwait(false);
@@ -90,7 +90,7 @@ internal static partial class DeclarationFinder
 
             if (!result.HasValue)
             {
-                return [];
+                return new();
             }
 
             return await RehydrateAsync(project.Solution, result.Value, cancellationToken).ConfigureAwait(false);
@@ -123,7 +123,7 @@ internal static partial class DeclarationFinder
 
             if (!result.HasValue)
             {
-                return [];
+                return new();
             }
 
             return await RehydrateAsync(solution, result.Value, cancellationToken).ConfigureAwait(false);
@@ -156,7 +156,7 @@ internal static partial class DeclarationFinder
 
             if (!result.HasValue)
             {
-                return [];
+                return new();
             }
 
             return await RehydrateAsync(project.Solution, result.Value, cancellationToken).ConfigureAwait(false);

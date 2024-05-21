@@ -16,7 +16,7 @@ internal partial class UnitTestingSolutionCrawlerRegistrationService
     {
         private class UnitTestingAsyncDocumentWorkItemQueue(UnitTestingSolutionCrawlerProgressReporter progressReporter) : UnitTestingAsyncWorkItemQueue<DocumentId>(progressReporter)
         {
-            private readonly Dictionary<ProjectId, Dictionary<DocumentId, UnitTestingWorkItem>> _documentWorkQueue = [];
+            private readonly Dictionary<ProjectId, Dictionary<DocumentId, UnitTestingWorkItem>> _documentWorkQueue = new();
 
             protected override int WorkItemCount_NoLock => _documentWorkQueue.Count;
 

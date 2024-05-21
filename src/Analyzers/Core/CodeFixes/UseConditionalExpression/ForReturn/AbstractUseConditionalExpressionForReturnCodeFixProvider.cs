@@ -31,7 +31,7 @@ internal abstract class AbstractUseConditionalExpressionForReturnCodeFixProvider
     where TConditionalExpressionSyntax : TExpressionSyntax
 {
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseConditionalExpressionForReturnDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseConditionalExpressionForReturnDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.Editing;
 /// </summary>
 public class SolutionEditor(Solution solution)
 {
-    private readonly Dictionary<DocumentId, DocumentEditor> _documentEditors = [];
+    private readonly Dictionary<DocumentId, DocumentEditor> _documentEditors = new();
 
     /// <summary>
     /// The <see cref="Solution"/> that was specified when the <see cref="SolutionEditor"/> was constructed.

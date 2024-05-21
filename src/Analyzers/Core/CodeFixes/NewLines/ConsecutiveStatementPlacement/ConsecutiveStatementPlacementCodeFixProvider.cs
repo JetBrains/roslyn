@@ -23,7 +23,7 @@ namespace Microsoft.CodeAnalysis.NewLines.ConsecutiveStatementPlacement;
 internal sealed class ConsecutiveStatementPlacementCodeFixProvider() : CodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.ConsecutiveStatementPlacementDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.ConsecutiveStatementPlacementDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {
@@ -38,7 +38,7 @@ internal sealed class ConsecutiveStatementPlacementCodeFixProvider() : CodeFixPr
     }
 
     private static Task<Document> UpdateDocumentAsync(Document document, Diagnostic diagnostic, CodeActionOptionsProvider fallbackOptions, CancellationToken cancellationToken)
-        => FixAllAsync(document, [diagnostic], fallbackOptions, cancellationToken);
+        => FixAllAsync(document, ImmutableArray.Create(diagnostic), fallbackOptions, cancellationToken);
 
     public static async Task<Document> FixAllAsync(Document document, ImmutableArray<Diagnostic> diagnostics, CodeActionOptionsProvider fallbackOptions, CancellationToken cancellationToken)
     {

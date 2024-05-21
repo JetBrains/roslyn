@@ -38,7 +38,11 @@ internal sealed partial class RegexEmbeddedCompletionProvider(RegexEmbeddedLangu
 
     private readonly RegexEmbeddedLanguage _language = language;
 
-    public override ImmutableHashSet<char> TriggerCharacters { get; } = ['\\', '[', '(', '{']; // \p{
+    public override ImmutableHashSet<char> TriggerCharacters { get; } = ImmutableHashSet.Create(
+            '\\', // any escape
+            '[', // character class
+            '(', // any group
+            '{'); // \p{
 
     public override bool ShouldTriggerCompletion(SourceText text, int caretPosition, CompletionTrigger trigger)
     {
@@ -465,6 +469,6 @@ internal sealed partial class RegexEmbeddedCompletionProvider(RegexEmbeddedLangu
         }
 
         return Task.FromResult(CompletionDescription.Create(
-            [new TaggedText(TextTags.Text, description)]));
+            ImmutableArray.Create(new TaggedText(TextTags.Text, description))));
     }
 }

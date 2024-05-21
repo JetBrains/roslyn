@@ -15,7 +15,7 @@ namespace Microsoft.CodeAnalysis.CodeRefactorings;
 /// </summary>
 public abstract class CodeRefactoringProvider
 {
-    private protected ImmutableArray<string> CustomTags = [];
+    private protected ImmutableArray<string> CustomTags = new();
 
     /// <summary>
     /// Computes one or more refactorings for the specified <see cref="CodeRefactoringContext"/>.

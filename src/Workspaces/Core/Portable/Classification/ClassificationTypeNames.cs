@@ -11,10 +11,10 @@ public static class ClassificationTypeNames
     /// <summary>
     /// Additive classifications types supply additional context to other classifications.
     /// </summary>
-    public static ImmutableArray<string> AdditiveTypeNames { get; } = [StaticSymbol, ReassignedVariable, TestCode];
+    public static ImmutableArray<string> AdditiveTypeNames { get; } = ImmutableArray.Create(StaticSymbol, ReassignedVariable, TestCode);
 
     public static ImmutableArray<string> AllTypeNames { get; } =
-    [
+    ImmutableArray.Create(
         Comment,
         ExcludedCode,
         Identifier,
@@ -95,8 +95,7 @@ public static class ClassificationTypeNames
         JsonPropertyName,
         JsonConstructorName,
         TestCode,
-        TestCodeMarkdown,
-    ];
+        TestCodeMarkdown);
 
     public const string Comment = "comment";
     public const string ExcludedCode = "excluded code";

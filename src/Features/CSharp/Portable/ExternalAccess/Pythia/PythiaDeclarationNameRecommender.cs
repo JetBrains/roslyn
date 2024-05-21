@@ -33,7 +33,7 @@ internal sealed class PythiaDeclarationNameRecommender([Import(AllowDefault = tr
         CancellationToken cancellationToken)
     {
         if (_lazyImplementation is null || nameInfo.PossibleSymbolKinds.IsEmpty)
-            return [];
+            return new();
 
         var context = new PythiaDeclarationNameContext(syntaxContext);
         var result = await _lazyImplementation.Value.ProvideRecommendationsAsync(context, cancellationToken).ConfigureAwait(false);

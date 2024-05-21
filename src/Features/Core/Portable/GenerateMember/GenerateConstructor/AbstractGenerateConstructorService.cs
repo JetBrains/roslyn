@@ -117,7 +117,7 @@ internal abstract partial class AbstractGenerateConstructorService<TService, TEx
             }
         }
 
-        return [];
+        return new();
     }
 
     protected static bool IsSymbolAccessible(ISymbol? symbol, SemanticDocument document)

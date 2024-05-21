@@ -46,7 +46,7 @@ internal sealed class RemoteDebuggingSessionProxy(Workspace workspace, IDisposab
                 (service, cancallationToken) => service.BreakStateOrCapabilitiesChangedAsync(_sessionId, inBreakState, cancellationToken),
                 cancellationToken).ConfigureAwait(false);
 
-            documentsToReanalyze = documentsToReanalyzeOpt.HasValue ? documentsToReanalyzeOpt.Value : [];
+            documentsToReanalyze = documentsToReanalyzeOpt.HasValue ? documentsToReanalyzeOpt.Value : new();
         }
 
         // clear all reported rude edits:
@@ -71,7 +71,7 @@ internal sealed class RemoteDebuggingSessionProxy(Workspace workspace, IDisposab
                 (service, cancallationToken) => service.EndDebuggingSessionAsync(_sessionId, cancellationToken),
                 cancellationToken).ConfigureAwait(false);
 
-            documentsToReanalyze = documentsToReanalyzeOpt.HasValue ? documentsToReanalyzeOpt.Value : [];
+            documentsToReanalyze = documentsToReanalyzeOpt.HasValue ? documentsToReanalyzeOpt.Value : new();
         }
 
         var designTimeDocumentsToReanalyze = await CompileTimeSolutionProvider.GetDesignTimeDocumentsAsync(
@@ -130,9 +130,9 @@ internal sealed class RemoteDebuggingSessionProxy(Workspace workspace, IDisposab
                 }
                 else
                 {
-                    moduleUpdates = new ModuleUpdates(ModuleUpdateStatus.RestartRequired, []);
-                    diagnosticData = [];
-                    rudeEdits = [];
+                    moduleUpdates = new ModuleUpdates(ModuleUpdateStatus.RestartRequired, new());
+                    diagnosticData = new();
+                    rudeEdits = new();
                     syntaxError = null;
                 }
             }
@@ -140,8 +140,8 @@ internal sealed class RemoteDebuggingSessionProxy(Workspace workspace, IDisposab
         catch (Exception e) when (FatalError.ReportAndCatchUnlessCanceled(e, cancellationToken))
         {
             diagnosticData = GetInternalErrorDiagnosticData(solution, e);
-            rudeEdits = [];
-            moduleUpdates = new ModuleUpdates(ModuleUpdateStatus.RestartRequired, []);
+            rudeEdits = new();
+            moduleUpdates = new ModuleUpdates(ModuleUpdateStatus.RestartRequired, new());
             syntaxError = null;
         }
 
@@ -166,7 +166,7 @@ internal sealed class RemoteDebuggingSessionProxy(Workspace workspace, IDisposab
             Location.None,
             string.Format(descriptor.MessageFormat.ToString(), "", e.Message));
 
-        return [DiagnosticData.Create(solution, diagnostic, project: null)];
+        return ImmutableArray.Create(DiagnosticData.Create(solution, diagnostic, project: null));
     }
 
     public async ValueTask CommitSolutionUpdateAsync(IDiagnosticAnalyzerService diagnosticService, CancellationToken cancellationToken)
@@ -184,7 +184,7 @@ internal sealed class RemoteDebuggingSessionProxy(Workspace workspace, IDisposab
                 (service, cancallationToken) => service.CommitSolutionUpdateAsync(_sessionId, cancellationToken),
                 cancellationToken).ConfigureAwait(false);
 
-            documentsToReanalyze = documentsToReanalyzeOpt.HasValue ? documentsToReanalyzeOpt.Value : [];
+            documentsToReanalyze = documentsToReanalyzeOpt.HasValue ? documentsToReanalyzeOpt.Value : new();
         }
 
         // clear all reported rude edits:
@@ -218,7 +218,7 @@ internal sealed class RemoteDebuggingSessionProxy(Workspace workspace, IDisposab
             (service, solutionInfo, cancellationToken) => service.GetBaseActiveStatementSpansAsync(solutionInfo, _sessionId, documentIds, cancellationToken),
             cancellationToken).ConfigureAwait(false);
 
-        return result.HasValue ? result.Value : [];
+        return result.HasValue ? result.Value : new();
     }
 
     public async ValueTask<ImmutableArray<ActiveStatementSpan>> GetAdjustedActiveStatementSpansAsync(TextDocument document, ActiveStatementSpanProvider activeStatementSpanProvider, CancellationToken cancellationToken)
@@ -226,7 +226,7 @@ internal sealed class RemoteDebuggingSessionProxy(Workspace workspace, IDisposab
         // filter out documents that are not synchronized to remote process before we attempt remote invoke:
         if (!RemoteSupportedLanguages.IsSupported(document.Project.Language))
         {
-            return [];
+            return new();
         }
 
         var client = await RemoteHostClient.TryGetClientAsync(_workspace, cancellationToken).ConfigureAwait(false);
@@ -241,6 +241,6 @@ internal sealed class RemoteDebuggingSessionProxy(Workspace workspace, IDisposab
             callbackTarget: new ActiveStatementSpanProviderCallback(activeStatementSpanProvider),
             cancellationToken).ConfigureAwait(false);
 
-        return result.HasValue ? result.Value : [];
+        return result.HasValue ? result.Value : new();
     }
 }

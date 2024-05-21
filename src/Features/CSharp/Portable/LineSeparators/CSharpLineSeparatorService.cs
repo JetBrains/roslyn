@@ -46,7 +46,7 @@ internal class CSharpLineSeparatorService : ILineSeparatorService
         foreach (var block in blocks)
         {
             if (cancellationToken.IsCancellationRequested)
-                return [];
+                return new();
 
             switch (block)
             {

@@ -41,7 +41,7 @@ namespace Microsoft.CodeAnalysis.Host.Mef
         /// If non-empty the service is only exported for the listed workspace kinds and <see cref="Layer"/> is not applied,
         /// unless <see cref="Layer"/> is <see cref="ServiceLayer.Test"/> in which case the export overrides all other exports.
         /// </summary>
-        internal IReadOnlyList<string> WorkspaceKinds { get; } = [];
+        internal IReadOnlyList<string> WorkspaceKinds { get; } = Array.Empty<string>();
 
         internal ExportLanguageServiceFactoryAttribute(Type type, string language, string[] workspaceKinds)
             : this(type, language)

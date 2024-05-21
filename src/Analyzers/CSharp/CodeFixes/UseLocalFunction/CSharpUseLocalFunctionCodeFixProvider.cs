@@ -40,7 +40,7 @@ internal class CSharpUseLocalFunctionCodeFixProvider : SyntaxEditorBasedCodeFixP
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseLocalFunctionDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseLocalFunctionDiagnosticId);
 
     protected override bool IncludeDiagnosticDuringFixAll(Diagnostic diagnostic)
         => !diagnostic.IsSuppressed;

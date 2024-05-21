@@ -246,7 +246,7 @@ public static partial class Simplifier
     {
         var root = await document.GetRequiredSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
         return await document.GetRequiredLanguageService<ISimplificationService>()
-            .ReduceAsync(document, [root.FullSpan], options,
+            .ReduceAsync(document, ImmutableArray.Create(root.FullSpan), options,
                          reducers, cancellationToken).ConfigureAwait(false);
     }
 

@@ -384,8 +384,8 @@ internal abstract partial class AbstractInlineMethodRefactoringProvider<TMethodD
                     keySelector: argument => argument.Parameter!,
                     elementSelector: argument => GenerateArgumentExpression(syntaxGenerator, argument));
             return new MethodParametersInfo(
-                [],
-                [],
+                new(),
+                new(),
                 parameterToReplaceMap,
                 false);
         }

@@ -87,13 +87,13 @@ internal static partial class ISymbolExtensions
             IEventSymbol @event => ImmutableArray<ISymbol>.CastUp(@event.ExplicitInterfaceImplementations),
             IMethodSymbol method => ImmutableArray<ISymbol>.CastUp(method.ExplicitInterfaceImplementations),
             IPropertySymbol property => ImmutableArray<ISymbol>.CastUp(property.ExplicitInterfaceImplementations),
-            _ => [],
+            _ => ImmutableArray.Create<ISymbol>(),
         };
 
     public static ImmutableArray<ISymbol> ExplicitOrImplicitInterfaceImplementations(this ISymbol symbol)
     {
         if (symbol.Kind is not SymbolKind.Method and not SymbolKind.Property and not SymbolKind.Event)
-            return [];
+            return new();
 
         var containingType = symbol.ContainingType;
         var query = from iface in containingType.AllInterfaces
@@ -360,7 +360,7 @@ internal static partial class ISymbolExtensions
         {
             IMethodSymbol m => m.Parameters,
             IPropertySymbol nt => nt.Parameters,
-            _ => [],
+            _ => new(),
         };
 
     public static ImmutableArray<ITypeParameterSymbol> GetTypeParameters(this ISymbol? symbol)
@@ -368,7 +368,7 @@ internal static partial class ISymbolExtensions
         {
             IMethodSymbol m => m.TypeParameters,
             INamedTypeSymbol nt => nt.TypeParameters,
-            _ => [],
+            _ => new(),
         };
 
     public static ImmutableArray<ITypeParameterSymbol> GetAllTypeParameters(this ISymbol? symbol)
@@ -389,7 +389,7 @@ internal static partial class ISymbolExtensions
         {
             IMethodSymbol m => m.TypeArguments,
             INamedTypeSymbol nt => nt.TypeArguments,
-            _ => [],
+            _ => ImmutableArray.Create<ITypeSymbol>(),
         };
 
     public static ImmutableArray<ITypeSymbol> GetAllTypeArguments(this ISymbol symbol)
@@ -412,7 +412,7 @@ internal static partial class ISymbolExtensions
 
     /// <summary>
     /// Returns <see langword="true"/> if the signature of this symbol requires the <see
-    /// langword="unsafe"/> modifier.  For example a method that takes <c>List&lt;int*[]&gt;</c>
+    /// langword="unsafe"/> modifier.  For example a method that takes <c>List&lt;int*new()&gt;</c>
     /// is unsafe, as is <c>int* Goo { get; }</c>.  This will return <see langword="false"/> for
     /// symbols that cannot have the <see langword="unsafe"/> modifier on them.
     /// </summary>

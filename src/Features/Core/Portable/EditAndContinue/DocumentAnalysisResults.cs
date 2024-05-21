@@ -204,7 +204,7 @@ internal sealed class DocumentAnalysisResults
             documentId,
             filePath,
             activeStatementsOpt: default,
-            rudeEdits: [],
+            rudeEdits: new(),
             syntaxError: null,
             semanticEditsOpt: default,
             exceptionRegionsOpt: default,

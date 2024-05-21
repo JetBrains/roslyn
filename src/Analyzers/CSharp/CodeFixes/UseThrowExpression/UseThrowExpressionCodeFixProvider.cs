@@ -31,7 +31,7 @@ internal partial class UseThrowExpressionCodeFixProvider : SyntaxEditorBasedCode
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseThrowExpressionDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseThrowExpressionDiagnosticId);
 
     protected override bool IncludeDiagnosticDuringFixAll(Diagnostic diagnostic)
         => !diagnostic.Descriptor.ImmutableCustomTags().Contains(WellKnownDiagnosticTags.Unnecessary);

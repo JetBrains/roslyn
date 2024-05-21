@@ -32,7 +32,7 @@ public class PerLanguageOption<T> : IPublicOption
                OptionGroup.Default,
                name ?? throw new ArgumentNullException(nameof(name)),
                defaultValue,
-               storageLocations: [],
+               storageLocations: new(),
                storageMapping: null,
                isEditorConfigOption: false)
     {

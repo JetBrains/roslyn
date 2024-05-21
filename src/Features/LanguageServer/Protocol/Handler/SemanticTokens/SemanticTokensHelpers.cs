@@ -31,7 +31,7 @@ namespace Microsoft.CodeAnalysis.LanguageServer.Handler.SemanticTokens
         {
             if (ranges.Length == 0)
             {
-                return [];
+                return Array.Empty<int>();
             }
 
             var contextDocument = context.GetRequiredDocument();
@@ -96,7 +96,7 @@ namespace Microsoft.CodeAnalysis.LanguageServer.Handler.SemanticTokens
             ImmutableArray<TextSpan> textSpans;
             if (spans.Length == 0)
             {
-                textSpans = [root.FullSpan];
+                textSpans = ImmutableArray.Create(root.FullSpan);
             }
             else
             {

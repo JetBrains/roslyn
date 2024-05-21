@@ -29,7 +29,7 @@ internal sealed class ConstructorInitializerPlacementCodeFixProvider : CodeFixPr
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.ConstructorInitializerPlacementDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.ConstructorInitializerPlacementDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {
@@ -38,7 +38,7 @@ internal sealed class ConstructorInitializerPlacementCodeFixProvider : CodeFixPr
         context.RegisterCodeFix(
             CodeAction.Create(
                 CSharpCodeFixesResources.Place_token_on_following_line,
-                c => UpdateDocumentAsync(document, [diagnostic], c),
+                c => UpdateDocumentAsync(document, ImmutableArray.Create(diagnostic), c),
                 nameof(CSharpCodeFixesResources.Place_token_on_following_line)),
             context.Diagnostics);
         return Task.CompletedTask;

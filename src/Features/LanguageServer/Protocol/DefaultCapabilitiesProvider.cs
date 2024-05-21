@@ -79,7 +79,7 @@ namespace Microsoft.CodeAnalysis.LanguageServer
             };
 
             capabilities.FoldingRangeProvider = true;
-            capabilities.ExecuteCommandProvider = new ExecuteCommandOptions() { Commands = [] };
+            capabilities.ExecuteCommandProvider = new ExecuteCommandOptions() { Commands = Array.Empty<string>() };
             capabilities.TextDocumentSync = new TextDocumentSyncOptions
             {
                 Change = TextDocumentSyncKind.Incremental,

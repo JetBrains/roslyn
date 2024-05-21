@@ -120,7 +120,7 @@ internal class CodeGenerationNamedTypeSymbol : CodeGenerationAbstractNamedTypeSy
     {
         get
         {
-            return [];
+            return ImmutableArray.Create<ISymbol>();
         }
     }
 

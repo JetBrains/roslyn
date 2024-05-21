@@ -77,7 +77,7 @@ internal abstract partial class AbstractStructuralTypeDisplayService : IStructur
         var transitiveStructuralTypeReferences = GetTransitiveStructuralTypeReferences(directStructuralTypeReferences);
         transitiveStructuralTypeReferences = OrderStructuralTypes(transitiveStructuralTypeReferences, orderSymbol);
 
-        IList<SymbolDisplayPart> typeParts = [];
+        IList<SymbolDisplayPart> typeParts = new List<SymbolDisplayPart>();
 
         if (transitiveStructuralTypeReferences.Length > 0)
         {

@@ -34,7 +34,7 @@ internal class SemanticTokensRefreshQueue :
     /// Mapping from project id to the project-cone-checksum for it we were at when the project for it had its
     /// compilation produced on the oop server.
     /// </summary>
-    private readonly Dictionary<ProjectId, Checksum> _projectIdToLastComputedChecksum = [];
+    private readonly Dictionary<ProjectId, Checksum> _projectIdToLastComputedChecksum = new();
 
     private readonly LspWorkspaceManager _lspWorkspaceManager;
     private readonly IClientLanguageServerManager _notificationManager;

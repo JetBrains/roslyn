@@ -54,7 +54,7 @@ internal abstract class AbstractUseNullPropagationCodeFixProvider<
     protected abstract TElementBindingExpressionSyntax ElementBindingExpression(TElementBindingArgumentListSyntax argumentList);
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseNullPropagationDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseNullPropagationDiagnosticId);
 
     protected override bool IncludeDiagnosticDuringFixAll(Diagnostic diagnostic)
         => !diagnostic.Descriptor.ImmutableCustomTags().Contains(WellKnownDiagnosticTags.Unnecessary);

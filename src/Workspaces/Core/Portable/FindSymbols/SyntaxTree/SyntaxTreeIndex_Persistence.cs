@@ -56,7 +56,7 @@ internal sealed partial class SyntaxTreeIndex
 
         if (globalAliasInfoCount > 0)
         {
-            globalAliasInfo = [];
+            globalAliasInfo = new();
 
             for (var i = 0; i < globalAliasInfoCount; i++)
             {

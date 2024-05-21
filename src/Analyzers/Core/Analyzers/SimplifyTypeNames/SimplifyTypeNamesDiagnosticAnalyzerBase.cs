@@ -65,14 +65,10 @@ internal abstract class SimplifyTypeNamesDiagnosticAnalyzerBase<TLanguageKindEnu
 
     protected SimplifyTypeNamesDiagnosticAnalyzerBase()
         : base(ImmutableDictionary<DiagnosticDescriptor, ImmutableHashSet<IOption2>>.Empty
-              .Add(s_descriptorSimplifyNames, [])
-              .Add(s_descriptorSimplifyMemberAccess, [])
-              .Add(s_descriptorPreferBuiltinOrFrameworkType,
-              [
-                  CodeStyleOptions2.PreferIntrinsicPredefinedTypeKeywordInDeclaration,
-                  CodeStyleOptions2.PreferIntrinsicPredefinedTypeKeywordInMemberAccess,
-              ]),
-              fadingOption: null)
+                .Add(s_descriptorSimplifyNames, ImmutableHashSet<IOption2>.Empty)
+                .Add(s_descriptorSimplifyMemberAccess, ImmutableHashSet<IOption2>.Empty)
+                .Add(s_descriptorPreferBuiltinOrFrameworkType, ImmutableHashSet.Create<IOption2>(CodeStyleOptions2.PreferIntrinsicPredefinedTypeKeywordInDeclaration, CodeStyleOptions2.PreferIntrinsicPredefinedTypeKeywordInMemberAccess)),
+            fadingOption: null)
     {
     }
 
@@ -93,10 +89,9 @@ internal abstract class SimplifyTypeNamesDiagnosticAnalyzerBase<TLanguageKindEnu
     }
 
     protected static ImmutableArray<NotificationOption2> GetAllNotifications(SimplifierOptions options)
-        => [
+        => ImmutableArray.Create(
             options.PreferPredefinedTypeKeywordInDeclaration.Notification,
-            options.PreferPredefinedTypeKeywordInMemberAccess.Notification,
-        ];
+            options.PreferPredefinedTypeKeywordInMemberAccess.Notification);
 
     protected sealed override void InitializeWorker(AnalysisContext context)
     {
@@ -230,7 +225,7 @@ internal abstract class SimplifyTypeNamesDiagnosticAnalyzerBase<TLanguageKindEnu
         /// </description></item>
         /// </list>
         /// </summary>
-        private readonly ConcurrentDictionary<SyntaxTree, (StrongBox<bool> completed, TextSpanIntervalTree? intervalTree)> _codeBlockIntervals = [];
+        private readonly ConcurrentDictionary<SyntaxTree, (StrongBox<bool> completed, TextSpanIntervalTree? intervalTree)> _codeBlockIntervals = new();
 
         public void AnalyzeCodeBlock(CodeBlockAnalysisContext context)
         {

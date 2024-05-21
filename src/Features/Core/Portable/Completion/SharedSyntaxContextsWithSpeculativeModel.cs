@@ -24,7 +24,7 @@ internal sealed class SharedSyntaxContextsWithSpeculativeModel
     {
         _document = document;
         _position = position;
-        _cache = [];
+        _cache = new();
         _lazyRelatedDocumentIds = new(_document.GetLinkedDocumentIds, isThreadSafe: true);
     }
 

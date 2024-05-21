@@ -144,7 +144,7 @@ internal class CSharpSyntacticQuickInfoProvider : CommonQuickInfoProvider
             {
                 var regionStart = directiveTrivia.GetMatchingDirective(cancellationToken);
                 if (regionStart is not null)
-                    return QuickInfoItem.Create(token.Span, relatedSpans: [regionStart.Span]);
+                    return QuickInfoItem.Create(token.Span, relatedSpans: ImmutableArray.Create(regionStart.Span));
             }
             else if (directiveTrivia is ElifDirectiveTriviaSyntax or ElseDirectiveTriviaSyntax or EndIfDirectiveTriviaSyntax)
             {

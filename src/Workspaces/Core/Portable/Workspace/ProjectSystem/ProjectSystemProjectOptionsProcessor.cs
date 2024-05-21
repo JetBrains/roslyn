@@ -56,7 +56,7 @@ internal class ProjectSystemProjectOptionsProcessor : IDisposable
 
         // Silence NRT warning.  This will be initialized by the call below to ReparseCommandLineIfChanged_NoLock.
         _commandLineArgumentsForCommandLine = null!;
-        ReparseCommandLineIfChanged_NoLock(arguments: []);
+        ReparseCommandLineIfChanged_NoLock(arguments: new());
     }
 
     /// <returns><see langword="true"/> if the command line was updated.</returns>

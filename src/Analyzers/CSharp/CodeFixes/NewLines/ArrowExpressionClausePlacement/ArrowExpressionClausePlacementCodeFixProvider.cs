@@ -31,7 +31,7 @@ internal sealed class ArrowExpressionClausePlacementCodeFixProvider : CodeFixPro
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.ArrowExpressionClausePlacementDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.ArrowExpressionClausePlacementDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {
@@ -40,7 +40,7 @@ internal sealed class ArrowExpressionClausePlacementCodeFixProvider : CodeFixPro
         context.RegisterCodeFix(
             CodeAction.Create(
                 CSharpCodeFixesResources.Place_token_on_following_line,
-                c => UpdateDocumentAsync(document, [diagnostic], c),
+                c => UpdateDocumentAsync(document, ImmutableArray.Create(diagnostic), c),
                 nameof(CSharpCodeFixesResources.Place_token_on_following_line)),
             context.Diagnostics);
         return Task.CompletedTask;

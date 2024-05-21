@@ -52,7 +52,7 @@ internal sealed class ParameterSymbolReferenceFinder : AbstractReferenceFinder<I
         CancellationToken cancellationToken)
     {
         if (parameter.IsThis)
-            return [];
+            return new();
 
         using var _ = ArrayBuilder<ISymbol>.GetInstance(out var symbols);
 

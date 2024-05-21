@@ -62,7 +62,7 @@ internal sealed class AggregateLogger : ILogger
             }
 
             // merge two
-            return new AggregateLogger([newLogger, oldLogger]);
+            return new AggregateLogger(ImmutableArray.Create(newLogger, oldLogger));
         }
 
         var set = new HashSet<ILogger>();

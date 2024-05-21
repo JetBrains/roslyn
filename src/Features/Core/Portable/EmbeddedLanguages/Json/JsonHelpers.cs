@@ -16,7 +16,7 @@ internal static class JsonHelpers
     public static JsonToken CreateToken(
         JsonKind kind, ImmutableArray<JsonTrivia> leadingTrivia,
         VirtualCharSequence virtualChars, ImmutableArray<JsonTrivia> trailingTrivia)
-        => CreateToken(kind, leadingTrivia, virtualChars, trailingTrivia, []);
+        => CreateToken(kind, leadingTrivia, virtualChars, trailingTrivia, new());
 
     public static JsonToken CreateToken(JsonKind kind,
         ImmutableArray<JsonTrivia> leadingTrivia, VirtualCharSequence virtualChars,
@@ -24,13 +24,13 @@ internal static class JsonHelpers
         => new(kind, leadingTrivia, virtualChars, trailingTrivia, diagnostics, value: null!);
 
     public static JsonToken CreateMissingToken(JsonKind kind)
-        => CreateToken(kind, [], VirtualCharSequence.Empty, []);
+        => CreateToken(kind, new(), VirtualCharSequence.Empty, new());
 
     public static JsonTrivia CreateTrivia(JsonKind kind, VirtualCharSequence virtualChars)
-        => CreateTrivia(kind, virtualChars, []);
+        => CreateTrivia(kind, virtualChars, ImmutableArray<EmbeddedDiagnostic>.Empty);
 
     public static JsonTrivia CreateTrivia(JsonKind kind, VirtualCharSequence virtualChars, EmbeddedDiagnostic diagnostic)
-        => CreateTrivia(kind, virtualChars, [diagnostic]);
+        => CreateTrivia(kind, virtualChars, ImmutableArray.Create(diagnostic));
 
     public static JsonTrivia CreateTrivia(JsonKind kind, VirtualCharSequence virtualChars, ImmutableArray<EmbeddedDiagnostic> diagnostics)
         => new(kind, virtualChars, diagnostics);

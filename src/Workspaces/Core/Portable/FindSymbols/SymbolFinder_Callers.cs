@@ -91,6 +91,6 @@ public static partial class SymbolFinder
             return collector.GetReferencedSymbols();
         }
 
-        return [];
+        return new();
     }
 }

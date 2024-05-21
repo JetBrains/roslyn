@@ -319,7 +319,7 @@ internal static class ConvertToRecordHelpers
                         if (additionalValuesBuilder.ContainsKey(property))
                         {
                             // don't allow assignment to the same property more than once
-                            return [];
+                            return new();
                         }
 
                         additionalValuesBuilder.Add(property, captured);
@@ -395,7 +395,7 @@ internal static class ConvertToRecordHelpers
         }
 
         // no initializer or uses explicit constructor, no need to make a change
-        return [];
+        return new();
     }
 
     private static ImmutableArray<ExpressionSyntax> GetAssignmentExpressionsFromValuesMap(
@@ -499,7 +499,7 @@ internal static class ConvertToRecordHelpers
         var body = GetBlockOfMethodBody(operation);
 
         if (body == null || !methodSymbol.Parameters.IsSingle())
-            return [];
+            return new();
 
         var bodyOps = body.Operations;
         var parameter = methodSymbol.Parameters.First();
@@ -546,7 +546,7 @@ internal static class ConvertToRecordHelpers
             // and a variable assignment happens (either in the if or in a following statement)
             else if (!TryGetBindingCastInFirstIfStatement(bodyOps, parameter, type, fields, out otherC, out statementsToCheck))
             {
-                return [];
+                return new();
             }
         }
 
@@ -554,7 +554,7 @@ internal static class ConvertToRecordHelpers
             !TryAddEqualizedFieldsForStatements(statementsToCheck, otherC, type, fields))
         {
             // no patterns matched to bind variable or statements didn't match expectation
-            return [];
+            return new();
         }
 
         return fields.ToImmutable();
@@ -789,7 +789,7 @@ internal static class ConvertToRecordHelpers
         IEnumerable<IOperation>? additionalConditions = null)
     {
         boundVariable = null;
-        additionalConditions ??= [];
+        additionalConditions ??= Array.Empty<IOperation>();
         return (successRequirement, condition) switch
         {
             (_, IUnaryOperation { OperatorKind: UnaryOperatorKind.Not, Operand: IOperation newCondition })
@@ -1057,16 +1057,16 @@ internal static class ConvertToRecordHelpers
         // this will be changed if we successfully match the pattern
         successRequirement = default;
         // this could be empty even if we match, if there is no else block
-        remainingStatements = [];
+        remainingStatements = Array.Empty<IOperation>();
 
         // all the operations that would happen after the condition is true or false
         // branches can either be block bodies or single statements
         // each branch is followed by statements outside the branch either way
-        var trueOps = ((whenTrue as IBlockOperation)?.Operations ?? [whenTrue])
+        var trueOps = ((whenTrue as IBlockOperation)?.Operations ?? ImmutableArray.Create(whenTrue))
             .Concat(otherOps);
         var falseOps = ((whenFalse as IBlockOperation)?.Operations ??
             (whenFalse != null
-                ? [whenFalse]
+                ? ImmutableArray.Create(whenFalse)
                 : ImmutableArray<IOperation>.Empty))
             .Concat(otherOps);
 

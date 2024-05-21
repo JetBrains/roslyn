@@ -24,7 +24,9 @@ internal sealed class CSharpMakeMemberStaticCodeFixProvider : AbstractMakeMember
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds { get; } =
-        ["CS0708"];
+        ImmutableArray.Create(
+                "CS0708" // 'MyMethod': cannot declare instance members in a static class
+            );
 
     protected override bool TryGetMemberDeclaration(SyntaxNode node, [NotNullWhen(true)] out SyntaxNode? memberDeclaration)
     {

@@ -57,7 +57,7 @@ internal static class ReferenceLocationExtensions
             {
                 if (!result.TryGetValue(containingSymbol, out var locations))
                 {
-                    locations = [];
+                    locations = new();
                     result.Add(containingSymbol, locations);
                 }
 

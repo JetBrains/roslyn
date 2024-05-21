@@ -57,7 +57,7 @@ public abstract partial class CompletionService : ILanguageService
     /// </summary>
     [Obsolete("Built-in providers will be ignored in a future release, please make them MEF exports instead.")]
     protected virtual ImmutableArray<CompletionProvider> GetBuiltInProviders()
-        => [];
+        => new();
 
     /// <summary>
     /// The language from <see cref="LanguageNames"/> this service corresponds to.
@@ -268,7 +268,7 @@ public abstract partial class CompletionService : ILanguageService
 
     // The FilterItems method might need to handle a large list of items when import completion is enabled and filter text is
     // very short, i.e. <= 1. Therefore, use pooled list to avoid repeated (potentially LOH) allocations.
-    private static readonly ObjectPool<List<MatchResult>> s_listOfMatchResultPool = new(factory: () => []);
+    private static readonly ObjectPool<List<MatchResult>> s_listOfMatchResultPool = new(factory: () => new());
 
     /// <summary>
     /// Given a list of completion items that match the current code typed by the user,

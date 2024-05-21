@@ -139,7 +139,7 @@ public sealed class SymbolEditor
 
         if (!_assemblyNameToProjectIdMap.TryGetValue(assembly.Name, out var projectIds))
         {
-            projectIds = [];
+            projectIds = new();
         }
 
         return projectIds;

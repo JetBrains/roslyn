@@ -36,7 +36,7 @@ internal abstract class AbstractMainMethodSnippetProvider : AbstractSingleChange
     }
 
     protected override ImmutableArray<SnippetPlaceholder> GetPlaceHolderLocationsList(SyntaxNode node, ISyntaxFacts syntaxFacts, CancellationToken cancellationToken)
-        => [];
+        => new();
 
     protected override Func<SyntaxNode?, bool> GetSnippetContainerFunction(ISyntaxFacts syntaxFacts)
         => syntaxFacts.IsMethodDeclaration;

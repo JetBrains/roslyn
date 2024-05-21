@@ -335,7 +335,7 @@ internal sealed class TokenBasedFormattingRule : BaseFormattingRule
             }
         }
 
-        // empty () or []
+        // empty () or new()
         if (previousToken.ParenOrBracketContainsNothing(currentToken))
         {
             return CreateAdjustSpacesOperation(0, AdjustSpacesOption.ForceSpacesIfOnSingleLine);

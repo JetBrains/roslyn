@@ -25,7 +25,7 @@ internal abstract partial class CSharpTypeStyleDiagnosticAnalyzerBase :
         string diagnosticId, EnforceOnBuild enforceOnBuild, LocalizableString title, LocalizableString message)
         : base(diagnosticId,
                enforceOnBuild,
-               [CSharpCodeStyleOptions.VarForBuiltInTypes, CSharpCodeStyleOptions.VarWhenTypeIsApparent, CSharpCodeStyleOptions.VarElsewhere],
+               ImmutableHashSet.Create<IOption2>(CSharpCodeStyleOptions.VarForBuiltInTypes, CSharpCodeStyleOptions.VarWhenTypeIsApparent, CSharpCodeStyleOptions.VarElsewhere),
                title, message)
     {
     }

@@ -35,7 +35,7 @@ internal abstract partial class AbstractGenerateDeconstructMethodService<TServic
             var state = await State.GenerateDeconstructMethodStateAsync(
                 (TService)this, semanticDocument, leftSide, typeToGenerateIn, cancellationToken).ConfigureAwait(false);
 
-            return state != null ? await GetActionsAsync(document, state, fallbackOptions, cancellationToken).ConfigureAwait(false) : [];
+            return state != null ? await GetActionsAsync(document, state, fallbackOptions, cancellationToken).ConfigureAwait(false) : new();
         }
     }
 }

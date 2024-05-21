@@ -23,5 +23,5 @@ internal abstract class AbstractSuggestionModeCompletionProvider : LSPCompletion
     protected static CompletionItem CreateEmptySuggestionModeItem()
         => CreateSuggestionModeItem(displayText: null, description: null);
 
-    public override ImmutableHashSet<char> TriggerCharacters => [];
+    public override ImmutableHashSet<char> TriggerCharacters => ImmutableHashSet<char>.Empty;
 }

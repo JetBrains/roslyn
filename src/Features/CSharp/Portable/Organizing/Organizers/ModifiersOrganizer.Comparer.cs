@@ -34,7 +34,7 @@ internal partial class ModifiersOrganizer
         }
 
         private static readonly ImmutableArray<Func<SyntaxToken, IComparable>> s_comparers =
-            [t => t.Kind() == SyntaxKind.PartialKeyword, t => GetOrdering(t)];
+            ImmutableArray.Create<Func<SyntaxToken, IComparable>>(t => t.Kind() == SyntaxKind.PartialKeyword, t => GetOrdering(t));
 
         private static Ordering GetOrdering(SyntaxToken token)
         {

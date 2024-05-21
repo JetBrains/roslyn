@@ -31,7 +31,7 @@ internal abstract class AbstractJsonDetectionCodeFixProvider : SyntaxEditorBased
     protected abstract void AddComment(SyntaxEditor editor, SyntaxToken stringLiteral, string commentContents);
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [AbstractJsonDetectionAnalyzer.DiagnosticId];
+        => ImmutableArray.Create(AbstractJsonDetectionAnalyzer.DiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

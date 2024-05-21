@@ -63,7 +63,7 @@ internal partial class XmlDocCommentCompletionProvider : AbstractDocCommentCompl
         => text[characterPosition] is ('<' or '"') ||
            CompletionUtilities.IsTriggerAfterSpaceOrStartOfWordCharacter(text, characterPosition, options);
 
-    public override ImmutableHashSet<char> TriggerCharacters { get; } = ['<', '"', ' '];
+    public override ImmutableHashSet<char> TriggerCharacters { get; } = ImmutableHashSet.Create('<', '"', ' ');
 
     protected override async Task<IEnumerable<CompletionItem>?> GetItemsWorkerAsync(
         Document document, int position,
@@ -399,6 +399,6 @@ internal partial class XmlDocCommentCompletionProvider : AbstractDocCommentCompl
     private static readonly CompletionItemRules s_defaultRules =
         CompletionItemRules.Create(
             filterCharacterRules: FilterRules,
-            commitCharacterRules: [CharacterSetModificationRule.Create(CharacterSetModificationKind.Add, '>', '\t')],
+            commitCharacterRules: ImmutableArray.Create(CharacterSetModificationRule.Create(CharacterSetModificationKind.Add, '>', '\t')),
             enterKeyRule: EnterKeyRule.Never);
 }

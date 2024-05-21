@@ -24,7 +24,7 @@ internal class KeywordCompletionProvider : AbstractKeywordCompletionProvider<CSh
     [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
     public KeywordCompletionProvider()
         : base(
-        [
+        ImmutableArray.Create<IKeywordRecommender<CSharpSyntaxContext>>(
             new AbstractKeywordRecommender(),
             new AddKeywordRecommender(),
             new AliasKeywordRecommender(),
@@ -169,9 +169,9 @@ internal class KeywordCompletionProvider : AbstractKeywordCompletionProvider<CSh
             new WhereKeywordRecommender(),
             new WhileKeywordRecommender(),
             new WithKeywordRecommender(),
-            new YieldKeywordRecommender(),
-        ])
-    {
+            new YieldKeywordRecommender()))
+        {
+    
     }
 
     internal override string Language => LanguageNames.CSharp;

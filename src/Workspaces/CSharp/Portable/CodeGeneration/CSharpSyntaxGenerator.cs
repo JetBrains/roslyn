@@ -1205,7 +1205,7 @@ internal sealed class CSharpSyntaxGenerator : SyntaxGenerator
 
     internal override ImmutableArray<SyntaxNode> GetTypeInheritance(SyntaxNode declaration)
         => declaration is BaseTypeDeclarationSyntax baseType && baseType.BaseList != null
-            ? [baseType.BaseList]
+            ? ImmutableArray.Create<SyntaxNode>(baseType.BaseList)
             : ImmutableArray<SyntaxNode>.Empty;
 
     public override IReadOnlyList<SyntaxNode> GetNamespaceImports(SyntaxNode declaration)
@@ -1834,7 +1834,7 @@ internal sealed class CSharpSyntaxGenerator : SyntaxGenerator
     {
         var constraints = types != null
             ? SyntaxFactory.SeparatedList<TypeParameterConstraintSyntax>(types.Select(t => SyntaxFactory.TypeConstraint((TypeSyntax)t)))
-            : [];
+            : new();
 
         if ((kinds & SpecialTypeConstraintKind.Constructor) != 0)
         {

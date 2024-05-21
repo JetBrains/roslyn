@@ -276,7 +276,7 @@ internal abstract partial class AbstractIntroduceParameterCodeRefactoringProvide
 
         // Adding the original document to ensure that it will be seen again when processing the call sites
         // in order to update the original expression and containing method.
-        methodCallSites.Add(document, []);
+        methodCallSites.Add(document, new());
         var syntaxFacts = document.GetRequiredLanguageService<ISyntaxFactsService>();
 
         foreach (var refLocation in referencedLocations)
@@ -295,7 +295,7 @@ internal abstract partial class AbstractIntroduceParameterCodeRefactoringProvide
 
                 if (!methodCallSites.TryGetValue(refLocation.Document, out var list))
                 {
-                    list = [];
+                    list = new();
                     methodCallSites.Add(refLocation.Document, list);
                 }
 

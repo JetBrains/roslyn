@@ -436,7 +436,7 @@ internal abstract partial class AbstractGenerateTypeService<TService, TSimpleNam
         public GenerateTypeServiceStateOptions()
         {
             IsMembersWithModule = false;
-            PropertiesToGenerate = [];
+            PropertiesToGenerate = new();
             IsTypeGeneratedIntoNamespaceFromMemberAccess = false;
             IsInterfaceOrEnumNotAllowedInTypeContext = false;
             IsDelegateAllowed = true;

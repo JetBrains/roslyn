@@ -2577,7 +2577,7 @@ options: ExplicitTypeEverywhere());
                 {
                     void Main()
                     {
-                        [|Int32[]|] array = new[] { 1, 2, 3 };
+                        [|Int32new()|] array = new[] { 1, 2, 3 };
                     }
                 }
                 """, new TestParameters(options: ExplicitTypeForBuiltInTypesOnly()));
@@ -2594,7 +2594,7 @@ options: ExplicitTypeEverywhere());
                 {
                     void Main()
                     {
-                        [|Int32[][]|] a = new Int32[][]
+                        [|Int32new()[]|] a = new Int32new()[]
                         {
                             new[] { 1, 2 },
                             new[] { 3, 4 }

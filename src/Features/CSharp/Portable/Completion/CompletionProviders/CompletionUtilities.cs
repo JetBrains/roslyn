@@ -110,9 +110,9 @@ internal static class CompletionUtilities
         return text[characterPosition] == '#';
     }
 
-    internal static ImmutableHashSet<char> CommonTriggerCharacters { get; } = ['.', '#', '>', ':'];
+    internal static ImmutableHashSet<char> CommonTriggerCharacters { get; } = ImmutableHashSet.Create('.', '#', '>', ':');
 
-    internal static ImmutableHashSet<char> CommonTriggerCharactersWithArgumentList { get; } = ['.', '#', '>', ':', '(', '[', ' '];
+    internal static ImmutableHashSet<char> CommonTriggerCharactersWithArgumentList { get; } = ImmutableHashSet.Create('.', '#', '>', ':', '(', '[', ' ');
 
     internal static bool IsTriggerCharacterOrArgumentListCharacter(SourceText text, int characterPosition, in CompletionOptions options)
         => IsTriggerCharacter(text, characterPosition, options) || IsArgumentListCharacter(text, characterPosition);
@@ -131,7 +131,7 @@ internal static class CompletionUtilities
             (IsStartingNewWord(text, characterPosition) && options.TriggerOnTypingLetters);
     }
 
-    internal static ImmutableHashSet<char> SpaceTriggerCharacter => [' '];
+    internal static ImmutableHashSet<char> SpaceTriggerCharacter => ImmutableHashSet.Create(' ');
 
     private static bool SpaceTypedNotBeforeWord(char ch, SourceText text, int characterPosition)
         => ch == ' ' && (characterPosition == text.Length - 1 || !IsWordStartCharacter(text[characterPosition + 1]));

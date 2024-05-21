@@ -112,7 +112,7 @@ internal sealed class DefaultCodeActionRequestPriorityProvider(CodeActionRequest
     {
         lock (_gate)
         {
-            _lowPriorityAnalyzers ??= [];
+            _lowPriorityAnalyzers ??= new();
             _lowPriorityAnalyzers.Add(analyzer);
         }
     }

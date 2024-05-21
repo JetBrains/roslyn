@@ -69,7 +69,7 @@ internal static class SerializationExtensions
         {
             // return empty since that is what IDE does for this case
             // see AbstractProject.GetStrongNameKeyPaths
-            return [];
+            return new();
         }
 
         var builder = ArrayBuilder<string>.GetInstance();

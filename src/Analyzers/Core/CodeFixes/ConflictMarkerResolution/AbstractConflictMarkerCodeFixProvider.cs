@@ -43,7 +43,7 @@ internal abstract partial class AbstractResolveConflictMarkerCodeFixProvider : C
     protected AbstractResolveConflictMarkerCodeFixProvider(
         ISyntaxKinds syntaxKinds, string diagnosticId)
     {
-        FixableDiagnosticIds = [diagnosticId];
+        FixableDiagnosticIds = ImmutableArray.Create(diagnosticId);
         _syntaxKinds = syntaxKinds;
 
 #if !CODE_STYLE

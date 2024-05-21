@@ -39,7 +39,7 @@ internal static class ReferenceFinders
     static ReferenceFinders()
     {
         DefaultRenameReferenceFinders =
-        [
+        ImmutableArray.Create(
             Constructor,
             Destructor,
             Event,
@@ -57,8 +57,7 @@ internal static class ReferenceFinders
             Property,
             PropertyAccessor,
             RangeVariable,
-            TypeParameter,
-        ];
+            TypeParameter);
         DefaultReferenceFinders = DefaultRenameReferenceFinders.Add(ConstructorInitializer);
     }
 }

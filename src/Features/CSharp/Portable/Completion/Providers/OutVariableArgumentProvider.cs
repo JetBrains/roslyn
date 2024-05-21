@@ -50,11 +50,11 @@ internal sealed class OutVariableArgumentProvider : ArgumentProvider
             SyntaxFactory.DeclarationExpression(
                 type: SyntaxFactory.IdentifierName("var"),
                 designation: SyntaxFactory.SingleVariableDesignation(SyntaxFactory.Identifier(
-                    [],
+                    new(),
                     contextualKind: SyntaxKind.None,
                     text: name,
                     valueText: context.Parameter.Name,
-                    []))));
+                    new()))));
 
         context.DefaultValue = syntax.NormalizeWhitespace().ToFullString();
         return Task.CompletedTask;

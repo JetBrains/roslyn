@@ -212,7 +212,7 @@ internal class ImplementationAssemblyLookupService : IImplementationAssemblyLook
                 var foundNamespace = md.GetString(et.Namespace);
                 var foundTypeName = md.GetString(et.Name);
 
-                result ??= [];
+                result ??= new();
                 result.Add((foundNamespace, foundTypeName), assemblyName);
             }
         }

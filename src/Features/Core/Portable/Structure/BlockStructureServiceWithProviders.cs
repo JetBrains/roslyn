@@ -30,7 +30,7 @@ internal abstract class BlockStructureServiceWithProviders : BlockStructureServi
     /// This does not included providers imported via MEF composition.
     /// </summary>
     protected virtual ImmutableArray<BlockStructureProvider> GetBuiltInProviders()
-        => [];
+        => new();
 
     private ImmutableArray<BlockStructureProvider> GetImportedProviders()
     {

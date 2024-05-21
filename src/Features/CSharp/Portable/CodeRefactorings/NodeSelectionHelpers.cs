@@ -33,8 +33,8 @@ internal static class NodeSelectionHelpers
                 // could not find a member, we may be directly on a variable declaration
                 var varDeclarator = await context.TryGetRelevantNodeAsync<VariableDeclaratorSyntax>().ConfigureAwait(false);
                 return varDeclarator == null
-                    ? []
-                    : [varDeclarator];
+                    ? new()
+                    : ImmutableArray.Create<SyntaxNode>(varDeclarator);
             }
             else
             {
@@ -42,8 +42,8 @@ internal static class NodeSelectionHelpers
                 {
                     FieldDeclarationSyntax fieldDeclaration => fieldDeclaration.Declaration.Variables.AsImmutable<SyntaxNode>(),
                     EventFieldDeclarationSyntax eventFieldDeclaration => eventFieldDeclaration.Declaration.Variables.AsImmutable<SyntaxNode>(),
-                    IncompleteMemberSyntax or GlobalStatementSyntax => [],
-                    _ => [memberDeclaration],
+                    IncompleteMemberSyntax or GlobalStatementSyntax => new(),
+                    _ => ImmutableArray.Create<SyntaxNode>(memberDeclaration),
                 };
             }
         }
@@ -61,7 +61,7 @@ internal static class NodeSelectionHelpers
             // Consider pub[||] static int Foo;
             // Which has 2 member nodes (an incomplete and a field), but we'd only expect one
             return members.Any(m => m is GlobalStatementSyntax or IncompleteMemberSyntax)
-                ? []
+                ? new()
                 : members;
         }
     }

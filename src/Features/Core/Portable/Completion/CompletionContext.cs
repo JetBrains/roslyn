@@ -21,7 +21,7 @@ namespace Microsoft.CodeAnalysis.Completion;
 /// </summary>
 public sealed class CompletionContext
 {
-    private readonly SegmentedList<CompletionItem> _items = [];
+    private readonly SegmentedList<CompletionItem> _items = new();
 
     private CompletionItem? _suggestionModeItem;
     private bool _isExclusive;

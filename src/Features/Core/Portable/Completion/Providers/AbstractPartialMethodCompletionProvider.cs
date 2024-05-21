@@ -67,7 +67,7 @@ internal abstract partial class AbstractPartialMethodCompletionProvider : Abstra
 
         var method = (IMethodSymbol)member;
         return CodeGenerationSymbolFactory.CreateMethodSymbol(
-            attributes: [],
+            attributes: new(),
             accessibility: IncludeAccessibility(method, cancellationToken) ? method.DeclaredAccessibility : Accessibility.NotApplicable,
             modifiers: MemberInsertionCompletionItem.GetModifiers(item),
             returnType: method.ReturnType,

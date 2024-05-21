@@ -74,7 +74,7 @@ internal sealed class WatchHotReloadService
             solution,
             new DebuggerService(_capabilities),
             NullPdbMatchingSourceTextProvider.Instance,
-            captureMatchingDocuments: [],
+            captureMatchingDocuments: new(),
             captureAllMatchingDocuments: true,
             reportDiagnostics: false,
             cancellationToken).ConfigureAwait(false);

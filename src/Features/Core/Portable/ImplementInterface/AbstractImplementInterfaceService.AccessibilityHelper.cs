@@ -31,7 +31,7 @@ internal abstract partial class AbstractImplementInterfaceService
             switch (first)
             {
                 case IPropertySymbol propertySymbol:
-                    if (IsTypeLessAccessibleThanOtherType(propertySymbol.Type, second, []))
+                    if (IsTypeLessAccessibleThanOtherType(propertySymbol.Type, second, new()))
                     {
                         return true;
                     }
@@ -49,14 +49,14 @@ internal abstract partial class AbstractImplementInterfaceService
                     return false;
 
                 case IMethodSymbol methodSymbol:
-                    if (IsTypeLessAccessibleThanOtherType(methodSymbol.ReturnType, second, []))
+                    if (IsTypeLessAccessibleThanOtherType(methodSymbol.ReturnType, second, new()))
                     {
                         return true;
                     }
 
                     foreach (var parameter in methodSymbol.Parameters)
                     {
-                        if (IsTypeLessAccessibleThanOtherType(parameter.Type, second, []))
+                        if (IsTypeLessAccessibleThanOtherType(parameter.Type, second, new()))
                         {
                             return true;
                         }
@@ -64,7 +64,7 @@ internal abstract partial class AbstractImplementInterfaceService
 
                     foreach (var typeArg in methodSymbol.TypeArguments)
                     {
-                        if (IsTypeLessAccessibleThanOtherType(typeArg, second, []))
+                        if (IsTypeLessAccessibleThanOtherType(typeArg, second, new()))
                         {
                             return true;
                         }
@@ -73,7 +73,7 @@ internal abstract partial class AbstractImplementInterfaceService
                     return false;
 
                 case IEventSymbol eventSymbol:
-                    return IsTypeLessAccessibleThanOtherType(eventSymbol.Type, second, []);
+                    return IsTypeLessAccessibleThanOtherType(eventSymbol.Type, second, new());
 
                 default:
                     return false;

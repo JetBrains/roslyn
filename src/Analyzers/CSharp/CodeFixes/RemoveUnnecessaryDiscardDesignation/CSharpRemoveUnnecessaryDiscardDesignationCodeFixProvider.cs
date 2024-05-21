@@ -31,7 +31,7 @@ internal partial class CSharpRemoveUnnecessaryDiscardDesignationCodeFixProvider 
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.RemoveUnnecessaryDiscardDesignationDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.RemoveUnnecessaryDiscardDesignationDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

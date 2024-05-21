@@ -201,7 +201,7 @@ internal static class UnitTestingSolutionCrawlerLogger
                 }
                 else if (key is ValueTuple<string, Guid> propertyNameAndId)
                 {
-                    var list = statMap.GetOrAdd(propertyNameAndId.Item1, _ => []);
+                    var list = statMap.GetOrAdd(propertyNameAndId.Item1, _ => new());
                     list.Add(counter.GetCount());
                 }
                 else

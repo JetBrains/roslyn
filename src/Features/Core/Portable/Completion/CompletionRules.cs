@@ -155,7 +155,10 @@ public sealed class CompletionRules
     public CompletionRules WithSnippetsRule(SnippetsRule snippetsRule)
         => With(snippetsRule: snippetsRule);
 
-    private static readonly ImmutableArray<char> s_defaultCommitKeys = [' ', '{', '}', '[', ']', '(', ')', '.', ',', ':', ';', '+', '-', '*', '/', '%', '&', '|', '^', '!', '~', '=', '<', '>', '?', '@', '#', '\'', '\"', '\\'];
+    private static readonly ImmutableArray<char> s_defaultCommitKeys = ImmutableArray.Create(
+                ' ', '{', '}', '[', ']', '(', ')', '.', ',', ':',
+                ';', '+', '-', '*', '/', '%', '&', '|', '^', '!',
+                '~', '=', '<', '>', '?', '@', '#', '\'', '\"', '\\');
 
     /// <summary>
     /// The default <see cref="CompletionRules"/> if none is otherwise specified.

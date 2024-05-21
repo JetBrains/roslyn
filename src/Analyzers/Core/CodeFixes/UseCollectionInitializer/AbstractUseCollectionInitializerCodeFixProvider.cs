@@ -49,7 +49,7 @@ internal abstract class AbstractUseCollectionInitializerCodeFixProvider<
         TAnalyzer>, new()
 {
     public sealed override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UseCollectionInitializerDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UseCollectionInitializerDiagnosticId);
 
     protected abstract TAnalyzer GetAnalyzer();
 

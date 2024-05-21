@@ -44,7 +44,7 @@ internal sealed partial class SyntaxTreeIndex
     public ImmutableArray<string> GetGlobalAliases(string name, int arity)
     {
         if (_globalAliasInfo == null)
-            return [];
+            return new();
 
         using var result = TemporaryArray<string>.Empty;
 

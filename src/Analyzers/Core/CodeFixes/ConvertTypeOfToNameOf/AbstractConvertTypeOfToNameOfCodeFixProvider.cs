@@ -22,7 +22,7 @@ internal abstract class AbstractConvertTypeOfToNameOfCodeFixProvider<
     protected abstract SyntaxNode GetSymbolTypeExpression(SemanticModel model, TMemberAccessExpressionSyntax node, CancellationToken cancellationToken);
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds
-       => [IDEDiagnosticIds.ConvertTypeOfToNameOfDiagnosticId];
+       => ImmutableArray.Create(IDEDiagnosticIds.ConvertTypeOfToNameOfDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

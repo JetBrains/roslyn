@@ -62,11 +62,11 @@ internal abstract class AbstractMoveToNamespaceService<TCompilationUnitSyntax, T
 
             if (typeAnalysisResult.CanPerform)
             {
-                return [AbstractMoveToNamespaceCodeAction.Generate(this, typeAnalysisResult, cleanupOptions)];
+                return ImmutableArray.Create(AbstractMoveToNamespaceCodeAction.Generate(this, typeAnalysisResult, cleanupOptions));
             }
         }
 
-        return [];
+        return new();
     }
 
     public async Task<MoveToNamespaceAnalysisResult> AnalyzeTypeAtPositionAsync(

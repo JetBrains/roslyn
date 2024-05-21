@@ -23,7 +23,7 @@ internal abstract class AbstractQualifyMemberAccessCodeFixprovider<TSimpleNameSy
     protected abstract TSimpleNameSyntax? GetNode(Diagnostic diagnostic, CancellationToken cancellationToken);
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.AddThisOrMeQualificationDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.AddThisOrMeQualificationDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

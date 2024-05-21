@@ -164,7 +164,7 @@ public readonly struct CodeFixContext
         CancellationToken cancellationToken)
         : this(document,
                (diagnostic ?? throw new ArgumentNullException(nameof(diagnostic))).Location.SourceSpan,
-               [diagnostic],
+               ImmutableArray.Create(diagnostic),
                registerCodeFix,
                CodeActionOptions.DefaultProvider,
                cancellationToken)
@@ -189,7 +189,7 @@ public readonly struct CodeFixContext
         CancellationToken cancellationToken)
         : this(document,
                (diagnostic ?? throw new ArgumentNullException(nameof(diagnostic))).Location.SourceSpan,
-               [diagnostic],
+               ImmutableArray.Create(diagnostic),
                registerCodeFix,
                CodeActionOptions.DefaultProvider,
                cancellationToken)
@@ -231,7 +231,7 @@ public readonly struct CodeFixContext
             throw new ArgumentNullException(nameof(diagnostic));
         }
 
-        _registerCodeFix(action, [diagnostic]);
+        _registerCodeFix(action, ImmutableArray.Create(diagnostic));
     }
 
     /// <summary>

@@ -23,7 +23,7 @@ internal abstract class AbstractSimplifyLinqExpressionCodeFixProvider<TInvocatio
     protected abstract ISyntaxFacts SyntaxFacts { get; }
 
     public sealed override ImmutableArray<string> FixableDiagnosticIds
-       => [IDEDiagnosticIds.SimplifyLinqExpressionDiagnosticId];
+       => ImmutableArray.Create(IDEDiagnosticIds.SimplifyLinqExpressionDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

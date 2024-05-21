@@ -31,7 +31,7 @@ internal class VarKeywordRecommender : IKeywordRecommender<CSharpSyntaxContext>
     public ImmutableArray<RecommendedKeyword> RecommendKeywords(int position, CSharpSyntaxContext context, CancellationToken cancellationToken)
     {
         return IsValidContext(context)
-            ? [new RecommendedKeyword("var")]
-            : [];
+            ? ImmutableArray.Create(new RecommendedKeyword("var"))
+            : new();
     }
 }

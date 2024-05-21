@@ -50,6 +50,6 @@ internal sealed class CSharpFixAllSpanMappingService : AbstractFixAllSpanMapping
         }
 
         return ImmutableDictionary<Document, ImmutableArray<TextSpan>>.Empty
-            .Add(document, [fixAllSpan]);
+            .Add(document, ImmutableArray.Create(fixAllSpan));
     }
 }

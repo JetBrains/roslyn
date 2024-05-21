@@ -30,7 +30,7 @@ internal sealed class EmbeddedStatementPlacementCodeFixProvider : CodeFixProvide
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.EmbeddedStatementPlacementDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.EmbeddedStatementPlacementDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {
@@ -39,7 +39,7 @@ internal sealed class EmbeddedStatementPlacementCodeFixProvider : CodeFixProvide
         context.RegisterCodeFix(
             CodeAction.Create(
                 CSharpCodeFixesResources.Place_statement_on_following_line,
-                c => FixAllAsync(document, [diagnostic], context.GetOptionsProvider(), c),
+                c => FixAllAsync(document, ImmutableArray.Create(diagnostic), context.GetOptionsProvider(), c),
                 nameof(CSharpCodeFixesResources.Place_statement_on_following_line)),
             context.Diagnostics);
         return Task.CompletedTask;

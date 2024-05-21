@@ -172,7 +172,7 @@ namespace Microsoft.CodeAnalysis.Editor.CSharp.UnitTests.Diagnostics.NamingStyle
                     {
                     }
                 }
-                """, new TestParameters(options: s_options.MethodNamesWithAccessibilityArePascalCase([])));
+                """, new TestParameters(options: s_options.MethodNamesWithAccessibilityArePascalCase(new())));
 
             await TestInRegularAndScriptAsync(
                 $$"""

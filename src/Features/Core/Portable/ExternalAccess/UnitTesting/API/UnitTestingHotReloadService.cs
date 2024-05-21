@@ -52,8 +52,8 @@ internal sealed class UnitTestingHotReloadService(HostWorkspaceServices services
     private static readonly ActiveStatementSpanProvider s_solutionActiveStatementSpanProvider =
         (_, _, _) => ValueTaskFactory.FromResult(ImmutableArray<ActiveStatementSpan>.Empty);
 
-    private static readonly ImmutableArray<Update> EmptyUpdate = [];
-    private static readonly ImmutableArray<Diagnostic> EmptyDiagnostic = [];
+    private static readonly ImmutableArray<Update> EmptyUpdate = ImmutableArray.Create<Update>();
+    private static readonly ImmutableArray<Diagnostic> EmptyDiagnostic = ImmutableArray.Create<Diagnostic>();
 
     private readonly IEditAndContinueService _encService = services.GetRequiredService<IEditAndContinueWorkspaceService>().Service;
     private DebuggingSessionId _sessionId;
@@ -70,7 +70,7 @@ internal sealed class UnitTestingHotReloadService(HostWorkspaceServices services
             solution,
             new DebuggerService(capabilities),
             NullPdbMatchingSourceTextProvider.Instance,
-            captureMatchingDocuments: [],
+            captureMatchingDocuments: new(),
             captureAllMatchingDocuments: true,
             reportDiagnostics: false,
             cancellationToken).ConfigureAwait(false);

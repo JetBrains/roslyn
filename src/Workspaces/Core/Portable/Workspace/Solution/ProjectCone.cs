@@ -15,9 +15,9 @@ namespace Microsoft.CodeAnalysis;
 internal sealed class ProjectCone : IEquatable<ProjectCone>
 {
     public readonly ProjectId RootProjectId;
-    private readonly FrozenSet<ProjectId> _projectIds;
+    private readonly FrozenSet4Hack<ProjectId> _projectIds;
 
-    public ProjectCone(ProjectId rootProjectId, FrozenSet<ProjectId> projectIds)
+    public ProjectCone(ProjectId rootProjectId, FrozenSet4Hack<ProjectId> projectIds)
     {
         Contract.ThrowIfFalse(projectIds.Contains(rootProjectId));
         RootProjectId = rootProjectId;

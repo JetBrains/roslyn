@@ -25,8 +25,8 @@ public sealed partial class Match<TNode>
     private readonly TNode _root1;
     private readonly TNode _root2;
 
-    private readonly Dictionary<TNode, TNode> _oneToTwo = [];
-    private readonly Dictionary<TNode, TNode> _twoToOne = [];
+    private readonly Dictionary<TNode, TNode> _oneToTwo = new();
+    private readonly Dictionary<TNode, TNode> _twoToOne = new();
 
     internal Match(TNode root1, TNode root2, TreeComparer<TNode> comparer, IEnumerable<KeyValuePair<TNode, TNode>> knownMatches)
     {
@@ -93,7 +93,7 @@ public sealed partial class Match<TNode>
             var list = nodes[label];
             if (list == null)
             {
-                nodes[label] = list = [];
+                nodes[label] = list = new();
             }
 
             list.Add(node);

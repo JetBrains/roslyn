@@ -209,7 +209,7 @@ done:
             var pooled = PooledStringBuilder.GetInstance();
             StringBuilder mangledName = pooled.Builder;
 
-            const string needsEscaping = "\\[]*.+,& ";
+            const string needsEscaping = "\\new()*.+,& ";
             if (namedType.AssociatedFileIdentifier is string fileIdentifier)
             {
                 Debug.Assert(needsEscaping.All(c => !fileIdentifier.Contains(c)));
@@ -235,7 +235,7 @@ done:
         }
 
         /// <summary>
-        /// Strip off *, &amp;, and [].
+        /// Strip off *, &amp;, and new().
         /// </summary>
         private static ITypeReference UnwrapTypeReference(ITypeReference typeReference, EmitContext context)
         {

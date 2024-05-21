@@ -16,6 +16,6 @@ internal static class BlockStructureExtensions
         where TType : SyntaxNode
         where TOutliner : AbstractSyntaxStructureProvider, new()
     {
-        builder.Add(typeof(TType), [new TOutliner()]);
+        builder.Add(typeof(TType), ImmutableArray.Create<AbstractSyntaxStructureProvider>(new TOutliner()));
     }
 }

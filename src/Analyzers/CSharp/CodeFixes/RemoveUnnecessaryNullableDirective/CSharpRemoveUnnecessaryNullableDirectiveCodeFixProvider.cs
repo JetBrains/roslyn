@@ -28,10 +28,9 @@ internal sealed class CSharpRemoveUnnecessaryNullableDirectiveCodeFixProvider()
     : SyntaxEditorBasedCodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [
+        => ImmutableArray.Create(
             IDEDiagnosticIds.RemoveRedundantNullableDirectiveDiagnosticId,
-            IDEDiagnosticIds.RemoveUnnecessaryNullableDirectiveDiagnosticId,
-        ];
+            IDEDiagnosticIds.RemoveUnnecessaryNullableDirectiveDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

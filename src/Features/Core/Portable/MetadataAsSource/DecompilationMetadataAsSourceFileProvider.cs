@@ -37,7 +37,7 @@ internal class DecompilationMetadataAsSourceFileProvider(IImplementationAssembly
     /// are called under a lock in <see cref="MetadataAsSourceFileService"/>.  So this is safe as a plain
     /// dictionary.
     /// </summary>
-    private readonly Dictionary<UniqueDocumentKey, MetadataAsSourceGeneratedFileInfo> _keyToInformation = [];
+    private readonly Dictionary<UniqueDocumentKey, MetadataAsSourceGeneratedFileInfo> _keyToInformation = new();
 
     /// <summary>
     /// Accessed both in <see cref="GetGeneratedFileAsync"/> and in UI thread operations.  Those should not

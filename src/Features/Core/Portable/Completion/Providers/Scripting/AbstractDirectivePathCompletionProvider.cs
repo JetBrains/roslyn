@@ -173,7 +173,7 @@ internal abstract class AbstractDirectivePathCompletionProvider : CompletionProv
         }
         else
         {
-            referenceSearchPaths = [];
+            referenceSearchPaths = new();
             baseDirectory = null;
         }
 

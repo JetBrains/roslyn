@@ -68,7 +68,7 @@ internal static class PooledBuilderExtensions
         {
             if (builders.Count == 0)
             {
-                return [];
+                return new();
             }
 
             if (builders.Count == 1)

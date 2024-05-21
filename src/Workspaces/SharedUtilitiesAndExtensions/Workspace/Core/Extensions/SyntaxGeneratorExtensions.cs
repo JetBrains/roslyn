@@ -46,7 +46,7 @@ internal static partial class SyntaxGeneratorExtensions
 
     public static ImmutableArray<SyntaxNode> CreateThrowNotImplementedStatementBlock(
         this SyntaxGenerator codeDefinitionFactory, Compilation compilation)
-        => [CreateThrowNotImplementedStatement(codeDefinitionFactory, compilation)];
+        => ImmutableArray.Create(CreateThrowNotImplementedStatement(codeDefinitionFactory, compilation));
 
     public static ImmutableArray<SyntaxNode> CreateArguments(
         this SyntaxGenerator factory,

@@ -23,7 +23,7 @@ internal sealed class DebuggingSessionTelemetry(Guid solutionSessionId)
     private readonly object _guard = new();
 
     private readonly Guid _solutionSessionId = solutionSessionId;
-    private readonly List<EditSessionTelemetry.Data> _editSessionData = [];
+    private readonly List<EditSessionTelemetry.Data> _editSessionData = new();
     private int _emptyEditSessionCount;
     private int _emptyHotReloadEditSessionCount;
 

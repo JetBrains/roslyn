@@ -24,8 +24,9 @@ internal class CSharpGenerateEqualsAndGetHashCodeService : AbstractGenerateEqual
 
     protected override bool TryWrapWithUnchecked(ImmutableArray<SyntaxNode> statements, out ImmutableArray<SyntaxNode> wrappedStatements)
     {
-        wrappedStatements = [SyntaxFactory.CheckedStatement(SyntaxKind.UncheckedStatement,
-                SyntaxFactory.Block(statements.OfType<StatementSyntax>()))];
+        wrappedStatements = ImmutableArray.Create<SyntaxNode>(
+                SyntaxFactory.CheckedStatement(SyntaxKind.UncheckedStatement,
+                SyntaxFactory.Block(statements.OfType<StatementSyntax>())));
         return true;
     }
 }

@@ -42,7 +42,7 @@ internal abstract class AbstractValidateFormatStringDiagnosticAnalyzer<TSyntaxKi
 #pragma warning restore RS0030 // Do not used banned APIs
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => [Rule];
+        => ImmutableArray.Create(Rule);
 
     /// <summary>
     /// this regex is used to remove escaped brackets from

@@ -46,7 +46,7 @@ internal sealed partial class ProjectSystemProject
         /// <summary>
         /// The map of <see cref="DocumentId"/> to <see cref="IDynamicFileInfoProvider"/> whose <see cref="DynamicFileInfo"/> got added into <see cref="Workspace"/>
         /// </summary>
-        private readonly Dictionary<DocumentId, IDynamicFileInfoProvider> _documentIdToDynamicFileInfoProvider = [];
+        private readonly Dictionary<DocumentId, IDynamicFileInfoProvider> _documentIdToDynamicFileInfoProvider = new();
 
         /// <summary>
         /// The current list of documents that are to be added in this batch.
@@ -56,7 +56,7 @@ internal sealed partial class ProjectSystemProject
         /// <summary>
         /// The current list of documents that are being removed in this batch. Once the document is in this list, it is no longer in <see cref="_documentPathsToDocumentIds"/>.
         /// </summary>
-        private readonly List<DocumentId> _documentsRemovedInBatch = [];
+        private readonly List<DocumentId> _documentsRemovedInBatch = new();
 
         /// <summary>
         /// The current list of document file paths that will be ordered in a batch.
@@ -121,7 +121,7 @@ internal sealed partial class ProjectSystemProject
                 else
                 {
                     _project._projectSystemProjectFactory.ApplyChangeToWorkspace(w => _documentAddAction(w, documentInfo));
-                    _project._projectSystemProjectFactory.RaiseOnDocumentsAddedMaybeAsync(useAsync: false, [fullPath]).VerifyCompleted();
+                    _project._projectSystemProjectFactory.RaiseOnDocumentsAddedMaybeAsync(useAsync: false, ImmutableArray.Create(fullPath)).VerifyCompleted();
                 }
             }
 

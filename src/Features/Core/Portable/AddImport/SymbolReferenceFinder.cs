@@ -169,7 +169,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
             cancellationToken.ThrowIfCancellationRequested();
             if (!_owner.CanAddImportForType(_diagnosticId, _node, out var nameNode))
             {
-                return [];
+                return new();
             }
 
             CalculateContext(
@@ -180,7 +180,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
             if (ExpressionBinds(nameNode, checkForExtensionMethods: false, cancellationToken: cancellationToken))
             {
                 // If the expression bound, there's nothing to do.
-                return [];
+                return new();
             }
 
             var symbols = await searchScope.FindDeclarationsAsync(name, nameNode, SymbolFilter.Type, cancellationToken).ConfigureAwait(false);
@@ -269,7 +269,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                 }
             }
 
-            return [];
+            return new();
         }
 
         /// <summary>
@@ -323,7 +323,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                 }
             }
 
-            return [];
+            return new();
         }
 
         private bool HasAccessibleStaticFieldOrProperty(INamedTypeSymbol namedType, string fieldOrPropertyName)
@@ -367,7 +367,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                 }
             }
 
-            return [];
+            return new();
         }
 
         private ImmutableArray<SymbolResult<IMethodSymbol>> GetViableExtensionMethods(
@@ -421,7 +421,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                     viableMethods.SelectAsArray(m => m.WithSymbol(m.Symbol.ContainingNamespace)));
             }
 
-            return [];
+            return new();
         }
 
         /// <summary>
@@ -445,7 +445,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                 }
             }
 
-            return [];
+            return new();
         }
 
         /// <summary>
@@ -470,7 +470,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                 }
             }
 
-            return [];
+            return new();
         }
 
         /// <summary>
@@ -495,7 +495,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                 }
             }
 
-            return [];
+            return new();
         }
 
         /// <summary>
@@ -520,7 +520,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                 }
             }
 
-            return [];
+            return new();
         }
 
         /// <summary>
@@ -547,7 +547,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                 }
             }
 
-            return [];
+            return new();
         }
 
         private async Task<ImmutableArray<SymbolReference>> GetReferencesForExtensionMethodAsync(

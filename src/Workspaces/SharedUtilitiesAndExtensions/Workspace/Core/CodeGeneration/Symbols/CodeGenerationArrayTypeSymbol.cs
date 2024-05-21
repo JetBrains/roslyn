@@ -25,7 +25,7 @@ internal class CodeGenerationArrayTypeSymbol(ITypeSymbol elementType, int rank, 
     {
         get
         {
-            return [];
+            return new();
         }
     }
 
@@ -58,7 +58,7 @@ internal class CodeGenerationArrayTypeSymbol(ITypeSymbol elementType, int rank, 
     {
         get
         {
-            return [];
+            return ImmutableArray.Create<CustomModifier>();
         }
     }
 

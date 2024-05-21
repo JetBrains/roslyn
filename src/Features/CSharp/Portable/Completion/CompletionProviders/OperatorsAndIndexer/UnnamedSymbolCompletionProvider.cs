@@ -61,7 +61,7 @@ internal partial class UnnamedSymbolCompletionProvider : LSPCompletionProvider
 
     internal override string Language => LanguageNames.CSharp;
 
-    public override ImmutableHashSet<char> TriggerCharacters => ['.'];
+    public override ImmutableHashSet<char> TriggerCharacters => ImmutableHashSet.Create('.');
 
     public override bool IsInsertionTrigger(SourceText text, int insertedCharacterPosition, CompletionOptions options)
         => text[insertedCharacterPosition] == '.';

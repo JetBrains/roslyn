@@ -21,13 +21,13 @@ internal static class RegexHelpers
         => (options & val) != 0;
 
     public static RegexToken CreateToken(RegexKind kind, ImmutableArray<RegexTrivia> leadingTrivia, VirtualCharSequence virtualChars)
-        => new(kind, leadingTrivia, virtualChars, [], [], value: null);
+        => new(kind, leadingTrivia, virtualChars, new(), new(), value: null);
 
     public static RegexToken CreateMissingToken(RegexKind kind)
-        => CreateToken(kind, [], VirtualCharSequence.Empty);
+        => CreateToken(kind, new(), VirtualCharSequence.Empty);
 
     public static RegexTrivia CreateTrivia(RegexKind kind, VirtualCharSequence virtualChars)
-        => CreateTrivia(kind, virtualChars, []);
+        => CreateTrivia(kind, virtualChars, new());
 
     public static RegexTrivia CreateTrivia(RegexKind kind, VirtualCharSequence virtualChars, ImmutableArray<EmbeddedDiagnostic> diagnostics)
         => new(kind, virtualChars, diagnostics);

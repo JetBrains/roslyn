@@ -50,7 +50,7 @@ internal static class UnitTestingSearchHelpers
         Project project, UnitTestingSearchQuery query, CancellationToken cancellationToken)
     {
         if (!project.SupportsCompilation)
-            return [];
+            return new();
 
         var client = await RemoteHostClient.TryGetClientAsync(project.Solution.Services, cancellationToken).ConfigureAwait(false);
 
@@ -61,7 +61,7 @@ internal static class UnitTestingSearchHelpers
                 (service, solutionChecksum, cancellationToken) => service.GetSourceLocationsAsync(solutionChecksum, project.Id, query, cancellationToken),
                 cancellationToken).ConfigureAwait(false);
             if (!locations.HasValue)
-                return [];
+                return new();
 
             using var _ = ArrayBuilder<UnitTestingDocumentSpan>.GetInstance(out var result);
             foreach (var location in locations.Value)

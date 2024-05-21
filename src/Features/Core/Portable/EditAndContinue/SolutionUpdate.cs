@@ -31,9 +31,9 @@ internal readonly struct SolutionUpdate(
         Diagnostic? syntaxError,
         bool hasEmitErrors)
         => new(
-            new(syntaxError != null || hasEmitErrors ? ModuleUpdateStatus.Blocked : ModuleUpdateStatus.RestartRequired, []),
+            new(syntaxError != null || hasEmitErrors ? ModuleUpdateStatus.Blocked : ModuleUpdateStatus.RestartRequired, new()),
             ImmutableArray<(Guid, ImmutableArray<(ManagedModuleMethodId, NonRemappableRegion)>)>.Empty,
-            [],
+            new(),
             diagnostics,
             documentsWithRudeEdits,
             syntaxError);

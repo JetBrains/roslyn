@@ -49,7 +49,7 @@ internal abstract class AbstractAggregateEmbeddedLanguageCompletionProvider : LS
             return completionProvider.TriggerCharacters;
         }
 
-        return [];
+        return ImmutableHashSet<char>.Empty;
     }
 
     private static bool IsEmbeddedLanguageProvider(Lazy<ILanguageService, LanguageServiceMetadata> lazyLanguageService, string languageName, string? embeddedLanguageServiceType)
@@ -62,7 +62,7 @@ internal abstract class AbstractAggregateEmbeddedLanguageCompletionProvider : LS
         if (_languageProviders.IsDefault)
         {
             var languagesProvider = languageServices?.GetService<IEmbeddedLanguagesProvider>();
-            ImmutableInterlocked.InterlockedInitialize(ref _languageProviders, languagesProvider?.Languages ?? []);
+            ImmutableInterlocked.InterlockedInitialize(ref _languageProviders, languagesProvider?.Languages ?? new());
         }
 
         return _languageProviders;

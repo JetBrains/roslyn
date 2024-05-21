@@ -36,7 +36,7 @@ internal sealed partial class UnitTestingSolutionCrawlerRegistrationService
             private readonly UnitTestingProjectProcessor _processor;
 
             private readonly NonReentrantLock _workGate = new();
-            private readonly Dictionary<DocumentId, UnitTestingData> _pendingWork = [];
+            private readonly Dictionary<DocumentId, UnitTestingData> _pendingWork = new();
 
             public UnitTestingSemanticChangeProcessor(
                 IAsynchronousOperationListener listener,
@@ -328,7 +328,7 @@ internal sealed partial class UnitTestingSolutionCrawlerRegistrationService
                 private readonly UnitTestingIncrementalAnalyzerProcessor _processor;
 
                 private readonly NonReentrantLock _workGate = new();
-                private readonly Dictionary<ProjectId, UnitTestingData> _pendingWork = [];
+                private readonly Dictionary<ProjectId, UnitTestingData> _pendingWork = new();
 
                 public UnitTestingProjectProcessor(
                     IAsynchronousOperationListener listener,

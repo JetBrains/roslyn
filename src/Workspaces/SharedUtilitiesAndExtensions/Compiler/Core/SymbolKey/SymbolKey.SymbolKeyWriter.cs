@@ -61,12 +61,12 @@ internal partial struct SymbolKey
         private readonly Action<IParameterSymbol> _writeParameterType;
         private readonly Action<IParameterSymbol> _writeRefKind;
 
-        private readonly Dictionary<ISymbol, int> _symbolToId = [];
+        private readonly Dictionary<ISymbol, int> _symbolToId = new();
         private readonly StringBuilder _stringBuilder = new();
 
         public CancellationToken CancellationToken { get; private set; }
 
-        private readonly List<IMethodSymbol> _methodSymbolStack = [];
+        private readonly List<IMethodSymbol> _methodSymbolStack = new();
 
         internal int _nestingCount;
         private int _nextId;

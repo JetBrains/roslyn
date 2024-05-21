@@ -37,7 +37,7 @@ public static class Formatter
         => GetDefaultFormattingRules(document.Project.Services);
 
     internal static ImmutableArray<AbstractFormattingRule> GetDefaultFormattingRules(LanguageServices languageServices)
-        => languageServices.GetService<ISyntaxFormattingService>()?.GetDefaultFormattingRules() ?? [];
+        => languageServices.GetService<ISyntaxFormattingService>()?.GetDefaultFormattingRules() ?? new();
 
     /// <summary>
     /// Formats the whitespace in a document.

@@ -74,7 +74,7 @@ internal sealed class CodeRefactoringService(
         {
             // TODO (https://github.com/dotnet/roslyn/issues/4932): Don't restrict refactorings in Interactive
             if (document.Project.Solution.WorkspaceKind == WorkspaceKind.Interactive)
-                return [];
+                return new();
 
             return ProjectCodeRefactoringProvider.GetExtensions(document, GetExtensionInfo);
         }

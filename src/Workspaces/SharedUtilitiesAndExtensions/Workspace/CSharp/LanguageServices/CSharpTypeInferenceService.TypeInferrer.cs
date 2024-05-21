@@ -568,7 +568,7 @@ internal partial class CSharpTypeInferenceService
                 if (indexers.Any())
                 {
                     return indexers.SelectMany(i =>
-                        InferTypeInArgument(index, [i.Parameters], argumentOpt));
+                        InferTypeInArgument(index, ImmutableArray.Create(i.Parameters), argumentOpt));
                 }
             }
 
@@ -2285,7 +2285,7 @@ internal partial class CSharpTypeInferenceService
                 }
             }
 
-            return [];
+            return new();
         }
 
         private IEnumerable<TypeInferenceInfo> InferTypeInVariableComponentAssignment(ExpressionSyntax left)

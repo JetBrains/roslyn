@@ -167,14 +167,14 @@ internal static class DefinitionItemFactory
 
         if (!definition.Locations.Any(static location => location.MetadataModule != null))
         {
-            return [];
+            return new();
         }
 
         var assembly = definition as IAssemblySymbol ?? definition.ContainingAssembly;
         if (assembly != null)
         {
             // symbol is defined within a single metadata assembly:
-            return [GetMetadataLocation(assembly, solution, out originatingProjectId)];
+            return ImmutableArray.Create(GetMetadataLocation(assembly, solution, out originatingProjectId));
         }
 
         if (definition is INamespaceSymbol namespaceSymbol)
@@ -185,7 +185,7 @@ internal static class DefinitionItemFactory
             // It is not useful to display these locations.
             if (namespaceSymbol.IsGlobalNamespace)
             {
-                return [];
+                return new();
             }
 
             // only shared namespace symbols don't have containing assembly:
@@ -218,7 +218,7 @@ internal static class DefinitionItemFactory
             return metadataLocations.ToImmutableAndClear();
         }
 
-        return [];
+        return new();
     }
 
     private static ImmutableArray<DocumentSpan> GetSourceLocations(ISymbol definition, ImmutableArray<Location> locations, Solution solution, bool includeHiddenLocations)
@@ -227,7 +227,7 @@ internal static class DefinitionItemFactory
         // We could consider creating a definition item that points to the project source instead.
         if (definition is IAssemblySymbol or IModuleSymbol or INamespaceSymbol { IsGlobalNamespace: true })
         {
-            return [];
+            return new();
         }
 
         using var source = TemporaryArray<DocumentSpan>.Empty;

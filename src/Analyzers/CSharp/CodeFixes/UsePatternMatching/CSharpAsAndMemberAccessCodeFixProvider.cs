@@ -32,7 +32,7 @@ internal partial class CSharpAsAndMemberAccessCodeFixProvider : SyntaxEditorBase
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.UsePatternMatchingAsAndMemberAccessDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.UsePatternMatchingAsAndMemberAccessDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

@@ -74,7 +74,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                 callbackTarget: symbolSearchService,
                 cancellationToken).ConfigureAwait(false);
 
-            return result.HasValue ? result.Value : [];
+            return result.HasValue ? result.Value : new();
         }
 
         return await GetFixesInCurrentProcessAsync(
@@ -150,7 +150,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
         // future use.
         if (!IsHostOrRemoteWorkspace(project))
         {
-            return [];
+            return new();
         }
 
         var fuzzyReferences = await FindResultsAsync(projectToAssembly, referenceToCompilation, project, maxResults, finder, exact: false, cancellationToken: cancellationToken).ConfigureAwait(false);
@@ -514,7 +514,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
                 callbackTarget: symbolSearchService,
                 cancellationToken).ConfigureAwait(false);
 
-            return result.HasValue ? result.Value : [];
+            return result.HasValue ? result.Value : new();
         }
 
         return await GetUniqueFixesAsyncInCurrentProcessAsync(

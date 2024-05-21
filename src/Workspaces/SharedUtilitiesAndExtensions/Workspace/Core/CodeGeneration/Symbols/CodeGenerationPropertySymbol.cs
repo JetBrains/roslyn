@@ -82,7 +82,7 @@ internal class CodeGenerationPropertySymbol(
 
     public bool IsWithEvents => false;
 
-    public ImmutableArray<CustomModifier> RefCustomModifiers => [];
+    public ImmutableArray<CustomModifier> RefCustomModifiers => new();
 
-    public ImmutableArray<CustomModifier> TypeCustomModifiers => [];
+    public ImmutableArray<CustomModifier> TypeCustomModifiers => new();
 }

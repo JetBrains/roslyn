@@ -40,14 +40,14 @@ internal abstract class AbstractProjectExtensionProvider<TProvider, TExtension, 
             return true;
         }
 
-        extensions = [];
+        extensions = new();
         return false;
     }
 
     public static ImmutableArray<TExtension> GetExtensions(Project? project)
     {
         if (project is null)
-            return [];
+            return new();
 
         return GetExtensions(project.Language, project.AnalyzerReferences);
     }
@@ -143,7 +143,7 @@ internal abstract class AbstractProjectExtensionProvider<TProvider, TExtension, 
 
         // otherwise, see whether we can pick it up from reference itself
         if (this.Reference is not AnalyzerFileReference analyzerFileReference)
-            return [];
+            return new();
 
         using var _ = ArrayBuilder<TExtension>.GetInstance(out var builder);
 

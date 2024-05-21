@@ -113,7 +113,7 @@ internal sealed class SnippetCompletionProvider : LSPCompletionProvider
             syntaxFacts.GetContainingTypeDeclaration(root, position) is EnumDeclarationSyntax ||
             syntaxTree.IsPossibleTupleContext(leftToken, position))
         {
-            return [];
+            return new();
         }
 
         var context = await completionContext.GetSyntaxContextWithExistingSpeculativeModelAsync(document, cancellationToken).ConfigureAwait(false);
@@ -158,7 +158,7 @@ internal sealed class SnippetCompletionProvider : LSPCompletionProvider
             }
         }
 
-        return [];
+        return new();
     }
 
     private static ImmutableArray<CompletionItem> GetSnippetCompletionItems(
@@ -166,7 +166,7 @@ internal sealed class SnippetCompletionProvider : LSPCompletionProvider
     {
         var service = services.GetLanguageServices(semanticModel.Language).GetService<ISnippetInfoService>();
         if (service == null)
-            return [];
+            return new();
 
         var snippets = service.GetSnippetsIfAvailable();
         if (context.CompletionOptions.ShouldShowNewSnippetExperience(context.Document))

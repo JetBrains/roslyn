@@ -31,7 +31,7 @@ internal abstract partial class AbstractNavigateToSearchService
     /// full solution becoming available.  Once the full solution is available, this will be dropped
     /// (set to <see langword="null"/>) to release all cached data.
     /// </summary>
-    private static CachedIndexMap? s_cachedIndexMap = [];
+    private static CachedIndexMap? s_cachedIndexMap = new();
 
     /// <summary>
     /// String table we use to dedupe common values while deserializing <see cref="SyntaxTreeIndex"/>s.  Once the 

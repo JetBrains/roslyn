@@ -22,11 +22,11 @@ internal abstract class AbstractInlineHintsService : IInlineHintsService
         var inlineTypeService = document.GetLanguageService<IInlineTypeHintsService>();
 
         var parameters = inlineParameterService == null
-            ? []
+            ? new()
             : await inlineParameterService.GetInlineHintsAsync(document, textSpan, options.ParameterOptions, options.DisplayOptions, displayAllOverride, cancellationToken).ConfigureAwait(false);
 
         var types = inlineTypeService == null
-            ? []
+            ? new()
             : await inlineTypeService.GetInlineHintsAsync(document, textSpan, options.TypeOptions, options.DisplayOptions, displayAllOverride, cancellationToken).ConfigureAwait(false);
 
         return parameters.Concat(types);

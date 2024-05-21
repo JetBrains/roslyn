@@ -24,7 +24,7 @@ internal class CSharpAddRequiredExpressionParenthesesDiagnosticAnalyzer :
     }
 
     private static readonly ImmutableArray<SyntaxKind> s_kinds =
-    [
+    ImmutableArray.Create(
         SyntaxKind.AddExpression,
         SyntaxKind.SubtractExpression,
         SyntaxKind.MultiplyExpression,
@@ -46,8 +46,7 @@ internal class CSharpAddRequiredExpressionParenthesesDiagnosticAnalyzer :
         SyntaxKind.IsExpression,
         SyntaxKind.AsExpression,
         SyntaxKind.CoalesceExpression,
-        SyntaxKind.IsPatternExpression,
-    ];
+        SyntaxKind.IsPatternExpression);
 
     protected override ImmutableArray<SyntaxKind> GetSyntaxNodeKinds()
         => s_kinds;

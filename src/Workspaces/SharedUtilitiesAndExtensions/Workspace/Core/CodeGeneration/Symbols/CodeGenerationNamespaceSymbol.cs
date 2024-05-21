@@ -60,7 +60,7 @@ internal class CodeGenerationNamespaceSymbol(string name, IList<INamespaceOrType
     {
         get
         {
-            return [this];
+            return ImmutableArray.Create<INamespaceSymbol>(this);
         }
     }
 }

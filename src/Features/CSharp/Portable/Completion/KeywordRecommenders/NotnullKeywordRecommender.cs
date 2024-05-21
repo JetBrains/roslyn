@@ -14,7 +14,7 @@ internal class NotNullKeywordRecommender : IKeywordRecommender<CSharpSyntaxConte
     public ImmutableArray<RecommendedKeyword> RecommendKeywords(int position, CSharpSyntaxContext context, CancellationToken cancellationToken)
     {
         return context.SyntaxTree.IsTypeParameterConstraintContext(position, context.LeftToken)
-            ? [new RecommendedKeyword("notnull")]
-            : [];
+            ? ImmutableArray.Create(new RecommendedKeyword("notnull"))
+            : new();
     }
 }

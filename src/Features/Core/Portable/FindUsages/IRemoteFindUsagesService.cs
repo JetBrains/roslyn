@@ -88,7 +88,7 @@ internal sealed class FindUsagesServerCallback(Solution solution, IFindUsagesCon
 {
     private readonly Solution _solution = solution;
     private readonly IFindUsagesContext _context = context;
-    private readonly Dictionary<int, DefinitionItem> _idToDefinition = [];
+    private readonly Dictionary<int, DefinitionItem> _idToDefinition = new();
     private readonly OptionsProvider<ClassificationOptions> _classificationOptions = classificationOptions;
 
     internal ValueTask<ClassificationOptions> GetClassificationOptionsAsync(string language, CancellationToken cancellationToken)

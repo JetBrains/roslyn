@@ -39,7 +39,7 @@ internal partial class CSharpInlineDeclarationCodeFixProvider : SyntaxEditorBase
     }
 
     public override ImmutableArray<string> FixableDiagnosticIds
-        => [IDEDiagnosticIds.InlineDeclarationDiagnosticId];
+        => ImmutableArray.Create(IDEDiagnosticIds.InlineDeclarationDiagnosticId);
 
     public override Task RegisterCodeFixesAsync(CodeFixContext context)
     {

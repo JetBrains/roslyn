@@ -197,17 +197,17 @@ namespace Roslyn.LanguageServer.Protocol
                         parameterTypeInfo == typeof(string) ||
                         typeof(IStringEnum).IsAssignableFrom(parameterTypeInfo))
                     {
-                        primitiveUnionTypeInfosSet ??= [];
+                        primitiveUnionTypeInfosSet ??= new();
                         primitiveUnionTypeInfosSet.Add(unionTypeInfo);
                     }
                     else if (parameterTypeInfo.IsArray)
                     {
-                        arrayUnionTypeInfosSet ??= [];
+                        arrayUnionTypeInfosSet ??= new();
                         arrayUnionTypeInfosSet.Add(unionTypeInfo);
                     }
                     else
                     {
-                        objectUnionTypeInfosSet ??= [];
+                        objectUnionTypeInfosSet ??= new();
                         objectUnionTypeInfosSet.Add(unionTypeInfo);
                     }
                 }

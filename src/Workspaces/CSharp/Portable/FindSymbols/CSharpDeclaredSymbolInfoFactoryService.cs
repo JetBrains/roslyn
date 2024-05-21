@@ -48,7 +48,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
     {
         if (baseList == null)
         {
-            return [];
+            return new();
         }
 
         var builder = ArrayBuilder<string>.GetInstance(baseList.Types.Count);
@@ -194,7 +194,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
                     DeclaredSymbolInfoKind.Method,
                     Accessibility.Private,
                     localFunction.Identifier.Span,
-                    inheritanceNames: [],
+                    inheritanceNames: new(),
                     parameterCount: localFunction.ParameterList.Parameters.Count,
                     typeParameterCount: localFunction.TypeParameterList?.Parameters.Count ?? 0));
             }
@@ -260,7 +260,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
             DeclaredSymbolInfoKind.Enum,
             GetAccessibility(container, enumDeclaration.Modifiers),
             enumDeclaration.Identifier.Span,
-            inheritanceNames: [],
+            inheritanceNames: new(),
             isNestedType: IsNestedType(enumDeclaration));
     }
 
@@ -288,7 +288,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
                     DeclaredSymbolInfoKind.Constructor,
                     GetAccessibility(container, ctorDecl.Modifiers),
                     ctorDecl.Identifier.Span,
-                    inheritanceNames: [],
+                    inheritanceNames: new(),
                     parameterCount: ctorDecl.ParameterList?.Parameters.Count ?? 0));
                 return;
             case SyntaxKind.DelegateDeclaration:
@@ -304,7 +304,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
                     DeclaredSymbolInfoKind.Delegate,
                     GetAccessibility(container, delegateDecl.Modifiers),
                     delegateDecl.Identifier.Span,
-                    inheritanceNames: []));
+                    inheritanceNames: new()));
                 return;
             case SyntaxKind.EnumMemberDeclaration:
                 var enumMember = (EnumMemberDeclarationSyntax)node;
@@ -318,7 +318,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
                     DeclaredSymbolInfoKind.EnumMember,
                     Accessibility.Public,
                     enumMember.Identifier.Span,
-                    inheritanceNames: []));
+                    inheritanceNames: new()));
                 return;
             case SyntaxKind.EventDeclaration:
                 var eventDecl = (EventDeclarationSyntax)node;
@@ -332,7 +332,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
                     DeclaredSymbolInfoKind.Event,
                     GetAccessibility(container, eventDecl.Modifiers),
                     eventDecl.Identifier.Span,
-                    inheritanceNames: []));
+                    inheritanceNames: new()));
                 return;
             case SyntaxKind.IndexerDeclaration:
                 var indexerDecl = (IndexerDeclarationSyntax)node;
@@ -346,7 +346,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
                     DeclaredSymbolInfoKind.Indexer,
                     GetAccessibility(container, indexerDecl.Modifiers),
                     indexerDecl.ThisKeyword.Span,
-                    inheritanceNames: []));
+                    inheritanceNames: new()));
                 return;
             case SyntaxKind.MethodDeclaration:
                 var method = (MethodDeclarationSyntax)node;
@@ -361,7 +361,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
                     isExtensionMethod ? DeclaredSymbolInfoKind.ExtensionMethod : DeclaredSymbolInfoKind.Method,
                     GetAccessibility(container, method.Modifiers),
                     method.Identifier.Span,
-                    inheritanceNames: [],
+                    inheritanceNames: new(),
                     parameterCount: method.ParameterList?.Parameters.Count ?? 0,
                     typeParameterCount: method.TypeParameterList?.Parameters.Count ?? 0));
                 return;
@@ -377,7 +377,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
                     DeclaredSymbolInfoKind.Property,
                     GetAccessibility(container, property.Modifiers),
                     property.Identifier.Span,
-                    inheritanceNames: []));
+                    inheritanceNames: new()));
                 return;
             case SyntaxKind.FieldDeclaration:
             case SyntaxKind.EventFieldDeclaration:
@@ -400,7 +400,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
                         kind,
                         GetAccessibility(container, fieldDeclaration.Modifiers),
                         variableDeclarator.Identifier.Span,
-                        inheritanceNames: []));
+                        inheritanceNames: new()));
                 }
 
                 return;
@@ -450,7 +450,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
                         DeclaredSymbolInfoKind.Property,
                         Accessibility.Public,
                         parameter.Identifier.Span,
-                        inheritanceNames: []));
+                        inheritanceNames: new()));
                 }
             }
         }
@@ -675,7 +675,7 @@ internal class CSharpDeclaredSymbolInfoFactoryService : AbstractDeclaredSymbolIn
             if (TryGetSimpleTypeName(usingDirectiveNode.Alias.Name, typeParameterNames: null, out var aliasName, out _) &&
                 TryGetSimpleTypeName(usingDirectiveNode.NamespaceOrType, typeParameterNames: null, out var name, out _))
             {
-                aliases = [(aliasName, name)];
+                aliases = ImmutableArray.Create<(string, string)>((aliasName, name));
                 return true;
             }
         }

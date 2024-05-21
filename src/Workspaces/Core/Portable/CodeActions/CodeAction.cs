@@ -34,8 +34,8 @@ namespace Microsoft.CodeAnalysis.CodeActions;
 /// </summary>
 public abstract class CodeAction
 {
-    private static readonly Dictionary<Type, bool> s_isNonProgressGetChangedSolutionAsyncOverridden = [];
-    private static readonly Dictionary<Type, bool> s_isNonProgressComputeOperationsAsyncOverridden = [];
+    private static readonly Dictionary<Type, bool> s_isNonProgressGetChangedSolutionAsyncOverridden = new();
+    private static readonly Dictionary<Type, bool> s_isNonProgressComputeOperationsAsyncOverridden = new();
 
     /// <summary>
     /// Special tag that indicates that it's this is a privileged code action that is allowed to use the <see
@@ -58,7 +58,7 @@ public abstract class CodeAction
     /// </para>
     /// </summary>
     internal const string RequiresNonDocumentChange = nameof(RequiresNonDocumentChange);
-    private protected static ImmutableArray<string> RequiresNonDocumentChangeTags = [RequiresNonDocumentChange];
+    private protected static ImmutableArray<string> RequiresNonDocumentChangeTags = ImmutableArray.Create(RequiresNonDocumentChange);
 
     /// <summary>
     /// A short title describing the action that may appear in a menu.
@@ -147,7 +147,7 @@ public abstract class CodeAction
     /// Descriptive tags from <see cref="WellKnownTags"/>.
     /// These tags may influence how the item is displayed.
     /// </summary>
-    public virtual ImmutableArray<string> Tags => [];
+    public virtual ImmutableArray<string> Tags => new();
 
     /// <summary>
     /// Child actions contained within this <see cref="CodeAction"/>.  Can be presented in a host to provide more
@@ -155,13 +155,13 @@ public abstract class CodeAction
     /// actions, use <see cref="Create(string, ImmutableArray{CodeAction}, bool)"/>.
     /// </summary>
     public virtual ImmutableArray<CodeAction> NestedActions
-        => [];
+        => new();
 
     /// <summary>
     /// Code actions that should be presented as hyperlinks in the code action preview pane,
     /// similar to FixAll scopes and Preview Changes but may not apply to ALL CodeAction types.
     /// </summary>
-    internal virtual ImmutableArray<CodeAction> AdditionalPreviewFlavors => [];
+    internal virtual ImmutableArray<CodeAction> AdditionalPreviewFlavors => new();
 
     /// <summary>
     /// Bridge method for sdk. https://github.com/dotnet/roslyn-sdk/issues/1136 tracks removing this.
@@ -183,7 +183,7 @@ public abstract class CodeAction
     /// <summary>
     /// Gets custom tags for the CodeAction.
     /// </summary>
-    internal ImmutableArray<string> CustomTags { get; set; } = [];
+    internal ImmutableArray<string> CustomTags { get; set; } = new();
 
     /// <summary>
     /// Lazily set provider type that registered this code action.
@@ -251,7 +251,7 @@ public abstract class CodeAction
             return await this.PostProcessAsync(originalSolution, operations, cancellationToken).ConfigureAwait(false);
         }
 
-        return [];
+        return new();
     }
 
     /// <summary>
@@ -272,7 +272,7 @@ public abstract class CodeAction
             return await this.PostProcessAsync(originalSolution, operations, cancellationToken).ConfigureAwait(false);
         }
 
-        return [];
+        return new();
     }
 
     /// <summary>
@@ -283,7 +283,7 @@ public abstract class CodeAction
     {
         var changedSolution = await GetChangedSolutionAsync(CodeAnalysisProgress.None, cancellationToken).ConfigureAwait(false);
         return changedSolution == null
-            ? []
+            ? Array.Empty<CodeActionOperation>()
             : SpecializedCollections.SingletonEnumerable<CodeActionOperation>(new ApplyChangesOperation(changedSolution));
     }
 
@@ -309,8 +309,8 @@ public abstract class CodeAction
         {
             var changedSolution = await GetChangedSolutionAsync(progress, cancellationToken).ConfigureAwait(false);
             return changedSolution == null
-                ? []
-                : [new ApplyChangesOperation(changedSolution)];
+                ? new()
+                : ImmutableArray.Create<CodeActionOperation>(new ApplyChangesOperation(changedSolution));
         }
     }
 

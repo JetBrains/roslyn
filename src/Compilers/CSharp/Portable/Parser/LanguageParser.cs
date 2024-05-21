@@ -6461,7 +6461,7 @@ parse_member_name:;
 
             /// <summary>
             /// Definitely a type name: either a predefined type (int, string, etc.) or an array
-            /// type (ending with a [] brackets), or a pointer type (ending with *s), or a function
+            /// type (ending with a new() brackets), or a pointer type (ending with *s), or a function
             /// pointer type (ending with > in valid cases, or a *, ), or calling convention
             /// identifier, in invalid cases).
             /// </summary>
@@ -7475,7 +7475,7 @@ done:;
                 or SyntaxKind.MinusGreaterThanToken;
 
             // Now look for another set of items that indicate that we're not an attribute, but instead are a collection
-            // expression misplaced in an invalid top level expression-statement. (like `[] + b`).  These are
+            // expression misplaced in an invalid top level expression-statement. (like `new() + b`).  These are
             // technically invalid. But checking for this allows us to parse effectively to then give a good semantic
             // error later on. These cases came from: ParseExpressionContinued
             isCollectionExpression = isCollectionExpression
@@ -8121,10 +8121,10 @@ done:;
             //   new partial <class|interface|struct|enum>
             //
             // New expressions:
-            //   new T []
+            //   new T new()
             //   new T { }
             //   new <non-type>
-            //   new partial []
+            //   new partial new()
             //
             if (SyntaxFacts.GetBaseTypeDeclarationKind(nextToken.Kind) != SyntaxKind.None)
             {
@@ -11390,7 +11390,7 @@ done:;
             else if (isIndexer && this.CurrentToken.Kind == closeKind)
             {
                 // An indexer always expects at least one value. And so we need to give an error
-                // for the case where we see only "[]". ParseArgumentExpression gives it.
+                // for the case where we see only "new()". ParseArgumentExpression gives it.
                 var list = _pool.AllocateSeparated<ArgumentSyntax>();
                 list.Add(this.ParseArgumentExpression(isIndexer));
                 arguments = _pool.ToListAndFree(list);
@@ -11899,7 +11899,7 @@ done:;
 
                 case ScanTypeFlags.GenericTypeOrExpression:
                 case ScanTypeFlags.NonGenericTypeOrExpression:
-                    // if we have `(A)[]` then treat that always as a cast of an empty collection expression.  `[]` is not
+                    // if we have `(A)[]` then treat that always as a cast of an empty collection expression.  `new()` is not
                     // legal on the RHS in any other circumstances for a parenthesized expr.
                     if (this.CurrentToken.Kind == SyntaxKind.OpenBracketToken &&
                         this.PeekToken(1).Kind == SyntaxKind.CloseBracketToken)

@@ -181,7 +181,7 @@ internal sealed class ImplementAbstractClassData(
             method,
             accessibility: accessibility,
             modifiers: modifiers,
-            statements: [body]);
+            statements: ImmutableArray.Create(body));
     }
 
     private IPropertySymbol GenerateProperty(
@@ -253,7 +253,7 @@ internal sealed class ImplementAbstractClassData(
         return CodeGenerationSymbolFactory.CreateAccessorSymbol(
             attributes: default,
             accessibility: Accessibility.NotApplicable,
-            statements: [statement]);
+            statements: ImmutableArray.Create(statement));
     }
 
     private bool ShouldGenerateAccessor([NotNullWhen(true)] IMethodSymbol? method)

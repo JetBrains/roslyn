@@ -21,16 +21,16 @@ internal static partial class IMethodSymbolExtensions
         if (method.PartialDefinitionPart != null)
         {
             Debug.Assert(method.PartialImplementationPart == null && !Equals(method.PartialDefinitionPart, method));
-            return [method, method.PartialDefinitionPart];
+            return ImmutableArray.Create(method, method.PartialDefinitionPart);
         }
         else if (method.PartialImplementationPart != null)
         {
             Debug.Assert(!Equals(method.PartialImplementationPart, method));
-            return [method.PartialImplementationPart, method];
+            return ImmutableArray.Create(method.PartialImplementationPart, method);
         }
         else
         {
-            return [method];
+            return ImmutableArray.Create(method);
         }
     }
 

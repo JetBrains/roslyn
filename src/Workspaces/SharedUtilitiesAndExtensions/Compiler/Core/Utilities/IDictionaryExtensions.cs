@@ -122,7 +122,7 @@ internal static class IDictionaryExtensions
     {
         if (!dictionary.TryGetValue(key, out var existingArray))
         {
-            existingArray = [];
+            existingArray = new();
         }
 
         dictionary[key] = existingArray.Add(value);
@@ -134,7 +134,7 @@ internal static class IDictionaryExtensions
     {
         if (!dictionary.TryGetValue(key, out var existingArray))
         {
-            existingArray = [];
+            existingArray = new();
         }
 
         dictionary[key] = existingArray.IsEmpty && value.Equals(defaultArray[0]) ? defaultArray : existingArray.Add(value);

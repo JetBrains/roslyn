@@ -34,7 +34,7 @@ internal abstract partial class AbstractAddImportFeatureService<TSimpleNameSynta
             if (info == null)
             {
                 // Looks like there was nothing in the cache.  Return no results for now.
-                return [];
+                return new();
             }
 
             // Don't create the assembly until it is actually needed by the SymbolTreeInfo.FindAsync

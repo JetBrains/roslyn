@@ -355,7 +355,7 @@ internal abstract class AbstractConvertForToForEachCodeRefactoringProvider<
         if (foreachIdentifier.RawKind == 0)
         {
             foreachIdentifier = semanticFacts.GenerateUniqueName(
-                semanticModel, forStatement, container: null, baseName: "v", usedNames: [], cancellationToken);
+                semanticModel, forStatement, container: null, baseName: "v", usedNames: Array.Empty<string>(), cancellationToken);
             foreachIdentifier = foreachIdentifier.WithAdditionalAnnotations(RenameAnnotation.Create());
         }
 

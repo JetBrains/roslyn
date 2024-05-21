@@ -652,7 +652,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.Symbols
             '    SOURCE:                        BCSYM:                               IL:
             '    Interface I(Of Out T1)         Interface"I"/genericparams=T1        .interface I(Of Out T1)
             '      Interface J : End Interface    Interface"J"/no genericparams         .interface J(Of Out T1)
-            '      Sub f(ByVal x as J)            ... GenericTypeBinding(J,args=[],       .proc f(x As J(Of T1))
+            '      Sub f(ByVal x as J)            ... GenericTypeBinding(J,args=new(),       .proc f(x As J(Of T1))
             '    End Interface                                     parentargs=I[T1])
             ' Observe that, by construction, any time we use a nested type like J in a contravariant position
             ' then it's bound to be invalid. If we simply applied the previous paragraph then we'd emit a

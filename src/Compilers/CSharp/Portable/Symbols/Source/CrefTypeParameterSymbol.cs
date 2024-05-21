@@ -40,7 +40,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
     /// existing code for TypeSyntaxes should just work!
     /// 
     /// In the example above, this means that, between the cref quotation marks, the name "U" binds to an
-    /// implicitly declared type parameter, whether it is in "B{U}", "M{U}", or "M{List{U[]}}".
+    /// implicitly declared type parameter, whether it is in "B{U}", "M{U}", or "M{List{Unew()}}".
     /// 
     /// Of course, it's not all gravy.  One thing we're giving up by using this representation is the ability to
     /// distinguish between "declared" type parameters with the same name.  Consider the following example:
