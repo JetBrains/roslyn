@@ -783,7 +783,8 @@ internal sealed class EditSession
                     EditAndContinueService.Log.Write("GetChangedDocumentsAsync: EnC state of '{0}' [0x{1:X8}] queried: project not loaded", project.Id.DebugName, project.Id);
                     return ImmutableArray<Document>.Empty;
                 }
-                await PopulateChangedAndAddedDocumentsAsync(oldProject, project, changedDocuments, cancellationToken).ConfigureAwait(false);
+                using var _4 = ArrayBuilder<ProjectDiagnostics>.GetInstance(out var diagnostics);
+                await PopulateChangedAndAddedDocumentsAsync(oldProject, project, changedDocuments, diagnostics, cancellationToken).ConfigureAwait(false);
                 return changedDocuments.ToImmutableArray();
             }).ToList();
 
