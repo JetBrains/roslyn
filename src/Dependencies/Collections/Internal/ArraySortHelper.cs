@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-#if NET
+#if NET || NETCOREAPP3_1
 using System.Numerics;
 #else
 using System.Runtime.InteropServices;
@@ -1263,7 +1263,7 @@ namespace Microsoft.CodeAnalysis.Collections.Internal
 
         public static int Log2(uint value)
         {
-#if NET
+#if NET || NETCOREAPP3_1
             return BitOperations.Log2(value);
 #else
             // Fallback contract is 0->0
