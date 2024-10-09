@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis.CSharp
     public enum SyntaxKind : ushort
     {
         None = 0,
-        List = GreenNode.ListKind,
+        List = 1, // HACK: we replace GreenNode.ListKind because this file is used in CSharpSyntaxGenerator.csproj that does not have reference to Microsoft.CodeAnalysis
 
         // punctuation
         /// <summary>Represents <c>~</c> token.</summary>

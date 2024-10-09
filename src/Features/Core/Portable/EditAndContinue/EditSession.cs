@@ -606,31 +606,32 @@ internal sealed class EditSession
         return ProjectAnalysisSummary.ValidChanges;
     }
 
-        internal Task<ImmutableArray<Document>> GetChangedDocumentsAsync(Solution solution, CancellationToken cancellationToken)
+    internal Task<ImmutableArray<Document>> GetChangedDocumentsAsync(Solution solution, CancellationToken cancellationToken)
+    {
+        var baseSolution = DebuggingSession.LastCommittedSolution;
+        if (baseSolution.HasNoChanges(solution))
+            return Task.FromResult(ImmutableArray<Document>.Empty);
+
+        return Task.Factory.StartNew(async () =>
         {
-            var baseSolution = DebuggingSession.LastCommittedSolution;
-            if (baseSolution.HasNoChanges(solution))
-                return Task.FromResult(ImmutableArray<Document>.Empty);
-
-            return Task.Factory.StartNew(async () =>
+            var tasks = solution.Projects.Select(async project =>
             {
-                var tasks = solution.Projects.Select(async project =>
+                using var changedDocumentsDisposer = ArrayBuilder<Document>.GetInstance(out var changedDocuments);
+                var oldProject = baseSolution.GetProject(project.Id);
+                if (oldProject == null)
                 {
-                    using var changedDocumentsDisposer = ArrayBuilder<Document>.GetInstance(out var changedDocuments);
-                    var oldProject = baseSolution.GetProject(project.Id);
-                    if (oldProject == null)
-                    {
-                        EditAndContinueService.Log.Write("GetChangedDocumentsAsync: EnC state of '{0}' [0x{1:X8}] queried: project not loaded", project.Id.DebugName, project.Id);
-                        return ImmutableArray<Document>.Empty;
-                    }
-                    await PopulateChangedAndAddedDocumentsAsync(oldProject, project, changedDocuments, cancellationToken).ConfigureAwait(false);
-                    return changedDocuments.ToImmutableArray();
-                }).ToList();
+                    EditAndContinueService.Log.Write("GetChangedDocumentsAsync: EnC state of '{0}' [0x{1:X8}] queried: project not loaded", project.Id.DebugName, project.Id);
+                    return ImmutableArray<Document>.Empty;
+                }
+                using var _4 = ArrayBuilder<ProjectDiagnostics>.GetInstance(out var diagnostics);
+                await PopulateChangedAndAddedDocumentsAsync(oldProject, project, changedDocuments, diagnostics, cancellationToken).ConfigureAwait(false);
+                return changedDocuments.ToImmutableArray();
+            }).ToList();
 
-                var arrays = await Task.WhenAll(tasks).ConfigureAwait(false);
-                return arrays.SelectMany(x => x).ToImmutableArray();
-            }, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default).Unwrap();
-        }
+            var arrays = await Task.WhenAll(tasks).ConfigureAwait(false);
+            return arrays.SelectMany(x => x).ToImmutableArray();
+        }, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default).Unwrap();
+    }
 
     internal static async ValueTask<ProjectChanges> GetProjectChangesAsync(
         ActiveStatementsMap baseActiveStatements,
