@@ -56,7 +56,7 @@ internal sealed class CompileTimeSolutionProvider : ICompileTimeSolutionProvider
     /// <summary>
     /// Cached compile-time solution corresponding to an existing design-time solution.
     /// </summary>
-#if NET
+#if NET || NETCOREAPP3_1
     private readonly ConditionalWeakTable<Solution, Solution> _designTimeToCompileTimeSolution = [];
 #else
     private ConditionalWeakTable<Solution, Solution> _designTimeToCompileTimeSolution = new();
@@ -73,7 +73,7 @@ internal sealed class CompileTimeSolutionProvider : ICompileTimeSolutionProvider
             {
                 lock (_gate)
                 {
-#if NET
+#if NET || NETCOREAPP3_1
                     _designTimeToCompileTimeSolution.Clear();
 #else
                     _designTimeToCompileTimeSolution = new();
