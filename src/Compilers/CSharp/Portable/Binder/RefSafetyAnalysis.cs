@@ -177,7 +177,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private (uint RefEscapeScope, uint ValEscapeScope) GetLocalScopes(LocalSymbol local)
         {
-            Debug.Assert(_localEscapeScopes?.ContainsKey(local) == true);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC
+            // Debug.Assert(_localEscapeScopes?.ContainsKey(local) == true);
 
             return _localEscapeScopes?.TryGetValue(local, out var scopes) == true
                 ? scopes
@@ -186,14 +187,16 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void SetLocalScopes(LocalSymbol local, uint refEscapeScope, uint valEscapeScope)
         {
-            Debug.Assert(_localEscapeScopes?.ContainsKey(local) == true);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC
+            // Debug.Assert(_localEscapeScopes?.ContainsKey(local) == true);
 
             AddOrSetLocalScopes(local, refEscapeScope, valEscapeScope);
         }
 
         private void AddPlaceholderScope(BoundValuePlaceholderBase placeholder, uint valEscapeScope)
         {
-            Debug.Assert(_placeholderScopes?.ContainsKey(placeholder) != true);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC
+            // Debug.Assert(_placeholderScopes?.ContainsKey(placeholder) != true);
 
             // Consider not adding the placeholder to the dictionary if the escape scope is
             // CallingMethod, and simply fallback to that value in GetPlaceholderScope().
@@ -205,7 +208,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 #pragma warning disable IDE0060
         private void RemovePlaceholderScope(BoundValuePlaceholderBase placeholder)
         {
-            Debug.Assert(_placeholderScopes?.ContainsKey(placeholder) == true);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC            
+            // Debug.Assert(_placeholderScopes?.ContainsKey(placeholder) == true);
 
             // https://github.com/dotnet/roslyn/issues/65961: Currently, analysis may require subsequent calls
             // to GetRefEscape(), etc. for the same expression so we cannot remove placeholders eagerly.
@@ -215,7 +219,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private uint GetPlaceholderScope(BoundValuePlaceholderBase placeholder)
         {
-            Debug.Assert(_placeholderScopes?.ContainsKey(placeholder) == true);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC            
+            // Debug.Assert(_placeholderScopes?.ContainsKey(placeholder) == true);
 
             return _placeholderScopes?.TryGetValue(placeholder, out var scope) == true
                 ? scope
@@ -278,14 +283,16 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (node is BoundValuePlaceholderBase placeholder)
             {
-                Debug.Assert(ContainsPlaceholderScope(placeholder));
+                // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC                
+                // Debug.Assert(ContainsPlaceholderScope(placeholder));
             }
             else if (node is BoundExpression expr)
             {
                 if (_visited is { } && _visited.Count <= MaxTrackVisited)
                 {
                     bool added = _visited.Add(expr);
-                    RoslynDebug.Assert(added, $"Expression {expr} `{expr.Syntax}` visited more than once.");
+                    // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC
+                    // RoslynDebug.Assert(added, $"Expression {expr} `{expr.Syntax}` visited more than once.");
                 }
             }
         }
@@ -294,11 +301,13 @@ namespace Microsoft.CodeAnalysis.CSharp
         {
             if (expr is BoundValuePlaceholderBase placeholder)
             {
-                Debug.Assert(ContainsPlaceholderScope(placeholder));
+                // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC                
+                // Debug.Assert(ContainsPlaceholderScope(placeholder));
             }
             else if (_visited is { } && _visited.Count <= MaxTrackVisited)
             {
-                RoslynDebug.Assert(_visited.Contains(expr), $"Expected {expr} `{expr.Syntax}` to be visited.");
+                // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC                
+                // RoslynDebug.Assert(_visited.Contains(expr), $"Expected {expr} `{expr.Syntax}` to be visited.");
             }
         }
 #endif
@@ -435,8 +444,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         public override BoundNode? VisitLocal(BoundLocal node)
         {
             // _localEscapeScopes may be null for locals in top-level statements.
-            Debug.Assert(_localEscapeScopes?.ContainsKey(node.LocalSymbol) == true ||
-                (node.LocalSymbol.ContainingSymbol is SynthesizedSimpleProgramEntryPointSymbol entryPoint && _symbol != entryPoint));
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC            
+            // Debug.Assert(_localEscapeScopes?.ContainsKey(node.LocalSymbol) == true ||
+            //     (node.LocalSymbol.ContainingSymbol is SynthesizedSimpleProgramEntryPointSymbol entryPoint && _symbol != entryPoint));
 
             return base.VisitLocal(node);
         }
@@ -462,8 +472,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     _localScopeDepth :
                     CallingMethodScope;
             }
-
-            Debug.Assert(_localEscapeScopes?.ContainsKey(local) != true);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC
+            // Debug.Assert(_localEscapeScopes?.ContainsKey(local) != true);
 
             AddOrSetLocalScopes(local, refEscapeScope, valEscapeScope);
         }
@@ -477,7 +487,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 #pragma warning disable IDE0060
         private void RemoveLocalScopes(LocalSymbol local)
         {
-            Debug.Assert(_localEscapeScopes is { });
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC
+            // Debug.Assert(_localEscapeScopes is { });
             // https://github.com/dotnet/roslyn/issues/65961: Currently, analysis may require subsequent calls
             // to GetRefEscape(), etc. for the same expression so we cannot remove locals eagerly.
             //_localEscapeScopes.Remove(local);
@@ -498,8 +509,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     // If the local has a scoped modifier, then the lifetime is not inferred from
                     // the initializer. Validate the escape values for the initializer instead.
 
-                    Debug.Assert(localSymbol.RefKind == RefKind.None ||
-                        refEscapeScope >= GetRefEscape(initializer, _localScopeDepth));
+                    // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC
+                    // Debug.Assert(localSymbol.RefKind == RefKind.None ||
+                    //     refEscapeScope >= GetRefEscape(initializer, _localScopeDepth));
 
                     if (node.DeclaredTypeOpt?.Type.IsRefLikeOrAllowsRefLikeType() == true)
                     {
@@ -659,7 +671,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         protected override void VisitArguments(BoundCall node)
         {
-            Debug.Assert(node.InitialBindingReceiverIsSubjectToCloning != ThreeState.Unknown);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC
+            // Debug.Assert(node.InitialBindingReceiverIsSubjectToCloning != ThreeState.Unknown);
             VisitArgumentsAndGetArgumentPlaceholders(node.ReceiverOpt, node.Arguments);
 
             if (!node.HasErrors)
@@ -695,7 +708,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                 switch (argIndex)
                 {
                     case BoundInterpolatedStringArgumentPlaceholder.InstanceParameter:
-                        Debug.Assert(receiver != null);
+                        // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC
+                        // Debug.Assert(receiver != null);
                         if (receiver is null)
                         {
                             valEscapeScope = CallingMethodScope;
@@ -706,7 +720,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                         }
                         break;
                     case BoundInterpolatedStringArgumentPlaceholder.TrailingConstructorValidityParameter:
-                        Debug.Assert(placeholder.Type.SpecialType == SpecialType.System_Boolean);
+                        // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC                        
+                        // Debug.Assert(placeholder.Type.SpecialType == SpecialType.System_Boolean);
                         // Escape scope of bool parameter is CallingMethod, which is the default for placeholders.
                         continue;
                     case BoundInterpolatedStringArgumentPlaceholder.UnspecifiedParameter:
@@ -834,13 +849,15 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override BoundNode? VisitPropertyAccess(BoundPropertyAccess node)
         {
-            Debug.Assert(node.InitialBindingReceiverIsSubjectToCloning != ThreeState.Unknown);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC
+            // Debug.Assert(node.InitialBindingReceiverIsSubjectToCloning != ThreeState.Unknown);
             return base.VisitPropertyAccess(node);
         }
 
         public override BoundNode? VisitIndexerAccess(BoundIndexerAccess node)
         {
-            Debug.Assert(node.InitialBindingReceiverIsSubjectToCloning != ThreeState.Unknown);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC            
+            // Debug.Assert(node.InitialBindingReceiverIsSubjectToCloning != ThreeState.Unknown);
             Visit(node.ReceiverOpt);
             VisitArgumentsAndGetArgumentPlaceholders(node.ReceiverOpt, node.Arguments);
 
@@ -907,7 +924,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         public override BoundNode? VisitImplicitIndexerAccess(BoundImplicitIndexerAccess node)
         {
             // Verify we're only skipping placeholders for int values, where the escape scope is always CallingMethod.
-            Debug.Assert(node.ArgumentPlaceholders.All(p => p is BoundImplicitIndexerValuePlaceholder { Type.SpecialType: SpecialType.System_Int32 }));
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC            
+            // Debug.Assert(node.ArgumentPlaceholders.All(p => p is BoundImplicitIndexerValuePlaceholder { Type.SpecialType: SpecialType.System_Int32 }));
 
             base.VisitImplicitIndexerAccess(node);
             return null;
@@ -928,7 +946,8 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         private void VisitDeconstructionArguments(ArrayBuilder<DeconstructionVariable> variables, SyntaxNode syntax, Conversion conversion, BoundExpression right)
         {
-            Debug.Assert(conversion.Kind == ConversionKind.Deconstruction);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC            
+            // Debug.Assert(conversion.Kind == ConversionKind.Deconstruction);
 
             // We only need to visit the right side when deconstruction uses a Deconstruct() method call
             // (when !DeconstructionInfo.IsDefault), not when the right side is a tuple, because ref structs
@@ -956,7 +975,8 @@ namespace Microsoft.CodeAnalysis.CSharp
             var parameters = deconstructMethod.Parameters;
             int n = variables.Count;
             int offset = invocation.InvokedAsExtensionMethod ? 1 : 0;
-            Debug.Assert(parameters.Length - offset == n);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC            
+            // Debug.Assert(parameters.Length - offset == n);
 
             for (int i = 0; i < n; i++)
             {
@@ -1115,7 +1135,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         private static void Error(BindingDiagnosticBag diagnostics, ErrorCode code, SyntaxNodeOrToken syntax, params object[] args)
         {
             var location = syntax.GetLocation();
-            RoslynDebug.Assert(location is object);
+            // JetHack: don't assert because if we build Roslyn in Debug mode, it shows annoying message boxes while PWC
+            // RoslynDebug.Assert(location is object);
             Error(diagnostics, code, location, args);
         }
 
