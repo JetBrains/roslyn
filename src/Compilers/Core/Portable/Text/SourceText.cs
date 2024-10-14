@@ -349,7 +349,7 @@ namespace Microsoft.CodeAnalysis.Text
         /// </remarks>
         internal static bool IsBinary(ReadOnlySpan<char> text)
         {
-#if NET
+#if NET || NETCOREAPP3_1
             // On .NET Core, Contains has an optimized vectorized implementation, much faster than a custom loop.
             return text.Contains("\0\0", StringComparison.Ordinal);
 #else
