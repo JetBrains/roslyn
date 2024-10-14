@@ -29,7 +29,7 @@ namespace Microsoft.CodeAnalysis.Collections
 #endif
     {
         private const bool SupportsComparerDevirtualization
-#if NET
+#if NET || NETCOREAPP3_1
             = true;
 #else
             = false;
@@ -59,7 +59,7 @@ namespace Microsoft.CodeAnalysis.Collections
         private int _freeList;
         private int _freeCount;
         private int _version;
-#if NET
+#if NET || NETCOREAPP3_1
         private readonly IEqualityComparer<T>? _comparer;
 #else
         /// <summary>
@@ -326,7 +326,7 @@ namespace Microsoft.CodeAnalysis.Collections
                         Debug.Assert((StartOfFreeList - _freeList) < 0, "shouldn't underflow because max hashtable length is MaxPrimeArrayLength = 0x7FEFFFFD(2146435069) _freelist underflow threshold 2147483646");
                         entry._next = StartOfFreeList - _freeList;
 
-#if NET
+#if NET || NETCOREAPP3_1
                         if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
 #endif
                         {
