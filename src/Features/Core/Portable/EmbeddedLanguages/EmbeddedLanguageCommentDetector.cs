@@ -43,7 +43,7 @@ internal readonly struct EmbeddedLanguageCommentDetector
         identifier = match.Groups["identifier"].Value;
 
         var optionGroup = match.Groups["option"];
-#if NET
+#if NET || NETCOREAPP3_1
         options = optionGroup.Captures.Select(c => c.Value);
 #else
         options = optionGroup.Captures.OfType<Capture>().Select(c => c.Value);

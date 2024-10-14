@@ -238,7 +238,7 @@ namespace Roslyn.Utilities
 
         public void EnsureCapacity(int capacity)
         {
-#if NET
+#if NET || NETCOREAPP3_1
             _dictionary.EnsureCapacity(capacity);
 #endif
         }

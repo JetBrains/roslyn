@@ -69,7 +69,7 @@ internal class LocationLink : IEquatable<LocationLink>
 
     /// <inheritdoc/>
     public override int GetHashCode() =>
-#if NET
+#if NET || NETCOREAPP3_1
         HashCode.Combine(OriginSelectionRange, TargetUri, TargetRange, TargetSelectionRange);
 #else
         Hash.Combine(OriginSelectionRange,
