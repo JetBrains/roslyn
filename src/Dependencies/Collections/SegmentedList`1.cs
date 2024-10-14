@@ -359,7 +359,7 @@ namespace Microsoft.CodeAnalysis.Collections
         public void Clear()
         {
             _version++;
-#if NET
+#if NET || NETCOREAPP3_1
             if (!RuntimeHelpers.IsReferenceOrContainsReferences<T>())
             {
                 _size = 0;
@@ -1049,7 +1049,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 }
             }
 
-#if NET
+#if NET || NETCOREAPP3_1
             if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
 #endif
             {
@@ -1075,7 +1075,7 @@ namespace Microsoft.CodeAnalysis.Collections
             {
                 SegmentedArray.Copy(_items, index + 1, _items, index, _size - index);
             }
-#if NET
+#if NET || NETCOREAPP3_1
             if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
 #endif
             {
@@ -1109,7 +1109,7 @@ namespace Microsoft.CodeAnalysis.Collections
                 }
 
                 _version++;
-#if NET
+#if NET || NETCOREAPP3_1
                 if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
 #endif
                 {
