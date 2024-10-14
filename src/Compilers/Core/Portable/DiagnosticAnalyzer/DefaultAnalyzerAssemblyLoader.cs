@@ -26,7 +26,7 @@ namespace Microsoft.CodeAnalysis
         {
         }
 
-#if NET
+#if NET || NETCOREAPP3_1
 
         internal DefaultAnalyzerAssemblyLoader(System.Runtime.Loader.AssemblyLoadContext? compilerLoadContext = null, AnalyzerLoadOption loadOption = AnalyzerLoadOption.LoadFromDisk, ImmutableArray<IAnalyzerAssemblyResolver>? externalResolvers = null)
             : base(compilerLoadContext, loadOption, externalResolvers ?? [])

@@ -52,7 +52,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 var builder = new NodeMapBuilder(additionMap, tree, node);
                 builder.Visit(root);
 
-#if NET
+#if NET || NETCOREAPP3_1
                 // Ensure map is large enough to hold found nodes.
                 map.EnsureCapacity(map.Count + additionMap.Keys.Count);
 #endif

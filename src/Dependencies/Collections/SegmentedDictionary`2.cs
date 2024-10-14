@@ -35,7 +35,7 @@ namespace Microsoft.CodeAnalysis.Collections
         where TKey : notnull
     {
         private const bool SupportsComparerDevirtualization
-#if NET
+#if NET || NETCOREAPP3_1
             = true;
 #else
             = false;
@@ -50,7 +50,7 @@ namespace Microsoft.CodeAnalysis.Collections
         private int _freeList;
         private int _freeCount;
         private int _version;
-#if NET
+#if NET || NETCOREAPP3_1
         private readonly IEqualityComparer<TKey>? _comparer;
 #else
         /// <summary>
@@ -710,14 +710,14 @@ ReturnNotFound:
                         Debug.Assert((StartOfFreeList - _freeList) < 0, "shouldn't underflow because max hashtable length is MaxPrimeArrayLength = 0x7FEFFFFD(2146435069) _freelist underflow threshold 2147483646");
                         entry._next = StartOfFreeList - _freeList;
 
-#if NET
+#if NET || NETCOREAPP3_1
                         if (RuntimeHelpers.IsReferenceOrContainsReferences<TKey>())
 #endif
                         {
                             entry._key = default!;
                         }
 
-#if NET
+#if NET || NETCOREAPP3_1
                         if (RuntimeHelpers.IsReferenceOrContainsReferences<TValue>())
 #endif
                         {
@@ -789,14 +789,14 @@ ReturnNotFound:
                         Debug.Assert((StartOfFreeList - _freeList) < 0, "shouldn't underflow because max hashtable length is MaxPrimeArrayLength = 0x7FEFFFFD(2146435069) _freelist underflow threshold 2147483646");
                         entry._next = StartOfFreeList - _freeList;
 
-#if NET
+#if NET || NETCOREAPP3_1
                         if (RuntimeHelpers.IsReferenceOrContainsReferences<TKey>())
 #endif
                         {
                             entry._key = default!;
                         }
 
-#if NET
+#if NET || NETCOREAPP3_1
                         if (RuntimeHelpers.IsReferenceOrContainsReferences<TValue>())
 #endif
                         {

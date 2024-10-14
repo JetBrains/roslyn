@@ -69,7 +69,7 @@ internal sealed class LegacyTemporaryStorageService : ITemporaryStorageService
         public async Task WriteStreamAsync(Stream stream, CancellationToken cancellationToken = default)
         {
             var newStream = new MemoryStream();
-#if NET
+#if NET || NETCOREAPP3_1
             await stream.CopyToAsync(newStream, cancellationToken).ConfigureAwait(false);
 # else
             await stream.CopyToAsync(newStream).ConfigureAwait(false);
