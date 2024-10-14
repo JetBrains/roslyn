@@ -111,21 +111,50 @@ namespace Microsoft.CodeAnalysis
         /// </summary>
         ImmutableArray<CustomModifier> TypeCustomModifiers { get; }
 
+
         /// <summary>
         /// If this is a partial property implementation part, returns the corresponding
         /// definition part.  Otherwise null.
         /// </summary>
-        IPropertySymbol? PartialDefinitionPart { get; }
+        IPropertySymbol? PartialDefinitionPart
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
 
         /// <summary>
         /// If this is a partial property definition part, returns the corresponding
         /// implementation part.  Otherwise null.
         /// </summary>
-        IPropertySymbol? PartialImplementationPart { get; }
+        IPropertySymbol? PartialImplementationPart
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif        
 
         /// <summary>
         /// Returns true if this is a partial definition part.  Otherwise false.
         /// </summary>
-        bool IsPartialDefinition { get; }
+        bool IsPartialDefinition
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif        
+
     }
 }
