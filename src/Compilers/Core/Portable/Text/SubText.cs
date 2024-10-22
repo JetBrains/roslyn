@@ -90,7 +90,7 @@ namespace Microsoft.CodeAnalysis.Text
 
         private TextSpan GetCompositeSpan(int start, int length)
         {
-            int compositeStart = Math.Min(UnderlyingText.Length, UnderlyingSpan.Start + start);
+            int compositeStart = Math.Min(UnderlyingText.Length - 1, UnderlyingSpan.Start + start);
             int compositeEnd = Math.Min(UnderlyingText.Length, compositeStart + length);
             return new TextSpan(compositeStart, compositeEnd - compositeStart);
         }
