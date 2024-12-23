@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.VisualStudio.Debugger.Evaluation;
@@ -31,9 +32,10 @@ namespace Microsoft.CodeAnalysis.ExpressionEvaluator
             ImmutableArray<Alias> aliases,
             DiagnosticBag diagnostics,
             out ResultProperties resultProperties,
-            CompilationTestData testData)
+            CompilationTestData testData,
+            CancellationToken cancellationToken)
         {
-            return CompileExpression(expr, compilationFlags, aliases, ImmutableArray<string>.Empty, diagnostics, out resultProperties, testData);
+            return CompileExpression(expr, compilationFlags, aliases, ImmutableArray<string>.Empty, diagnostics, out resultProperties, testData, cancellationToken);
         }
 
         internal abstract CompileResult? CompileExpression(
@@ -43,7 +45,8 @@ namespace Microsoft.CodeAnalysis.ExpressionEvaluator
             ImmutableArray<string> additionalImports,
             DiagnosticBag diagnostics,
             out ResultProperties resultProperties,
-            CompilationTestData? testData);
+            CompilationTestData? testData,
+            CancellationToken cancellationToken);
 
         internal CompileResult CompileAssignment(
             string target,
