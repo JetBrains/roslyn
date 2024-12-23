@@ -165,7 +165,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             ImmutableArray<NamespaceOrTypeAndUsingDirective> usings,
             DiagnosticBag diagnostics,
             [NotNullWhen(true)] out CommonPEModuleBuilder? module,
-            [NotNullWhen(true)] out EEMethodSymbol? synthesizedMethod)
+            [NotNullWhen(true)] out EEMethodSymbol? synthesizedMethod,
+            CancellationToken cancellationToken)
         {
             var synthesizedType = CreateSynthesizedType(syntax, typeName, methodName, aliases, usings);
 
@@ -180,7 +181,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                 emittingPdb: false,
                 diagnostics,
                 filterOpt: null,
-                CancellationToken.None);
+                cancellationToken);
 
             if (diagnostics.HasAnyErrors())
             {
