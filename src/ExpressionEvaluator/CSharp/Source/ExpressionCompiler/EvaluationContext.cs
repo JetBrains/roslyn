@@ -303,7 +303,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             ImmutableArray<string> additionalImports,
             DiagnosticBag diagnostics,
             out ResultProperties resultProperties,
-            CompilationTestData? testData)
+            CompilationTestData? testData,
+            CancellationToken cancellationToken)
         {
             var syntax = Parse(expr, (compilationFlags & DkmEvaluationFlags.TreatAsExpression) != 0, diagnostics, out var formatSpecifiers);
             if (syntax == null)
@@ -314,7 +315,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
 
             var context = this.CreateCompilationContext();
             var usings = GetUsings(Compilation, additionalImports);
-            if (!context.TryCompileExpression(syntax, TypeName, MethodName, aliases, testData, usings, diagnostics, out var moduleBuilder, out var synthesizedMethod))
+            if (!context.TryCompileExpression(syntax, TypeName, MethodName, aliases, testData, usings, diagnostics, out var moduleBuilder, out var synthesizedMethod, cancellationToken))
             {
                 resultProperties = default;
                 return null;
@@ -333,7 +334,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                 isDeterministic: false,
                 emitTestCoverageData: false,
                 privateKeyOpt: null,
-                CancellationToken.None);
+                cancellationToken);
 
             if (diagnostics.HasAnyErrors())
             {
