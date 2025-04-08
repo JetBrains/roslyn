@@ -348,6 +348,12 @@ public abstract partial class Workspace : IDisposable
                 if (relatedDocumentId is null)
                     continue;
 
+                // JetFork fix:
+                // further optimization didn't take into account Document Kind,
+                // which resulted in an error when adding the same file as Document and AdditionalDocument
+                if(solution.GetDocumentKind(addedDocumentId) != solution.GetDocumentKind(relatedDocumentId))
+                    continue;
+                
                 var relatedDocument = solution.GetRequiredDocument(relatedDocumentId);
 
                 // Should never return a file as its own related document
