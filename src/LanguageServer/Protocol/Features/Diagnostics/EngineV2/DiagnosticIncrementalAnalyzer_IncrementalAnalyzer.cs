@@ -48,7 +48,7 @@ internal partial class DiagnosticAnalyzerService
 
                     // Try to add the new computed data to the CWT.  But use any existing value that another thread
                     // might have beaten us to storing in it.
-#if NET
+#if NET || NETCOREAPP3_1
                     if (!s_projectToForceAnalysisData.TryAdd(projectState, box))
                         Contract.ThrowIfFalse(s_projectToForceAnalysisData.TryGetValue(projectState, out box));
 #else

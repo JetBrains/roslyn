@@ -27,7 +27,7 @@ namespace Microsoft.CodeAnalysis
 
         public int GetHashCode(ReadOnlyMemory<char> obj)
         {
-#if NET
+#if NET || NETCOREAPP3_1
             return string.GetHashCode(obj.Span);
 #else
             return Hash.GetFNVHashCode(obj.Span);

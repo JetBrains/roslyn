@@ -25,7 +25,7 @@ internal partial class DiagnosticAnalyzerService
     /// </summary>
     private static readonly ConditionalWeakTable<ProjectState, StrongBox<(Checksum checksum, ImmutableArray<DiagnosticAnalyzer> analyzers, CompilationWithAnalyzersPair? compilationWithAnalyzersPair)>> s_projectToCompilationWithAnalyzers = new();
 
-    private static async Task<CompilationWithAnalyzersPair?> GetOrCreateCompilationWithAnalyzersAsync(
+    public static async Task<CompilationWithAnalyzersPair?> GetOrCreateCompilationWithAnalyzersAsync(
         Project project,
         ImmutableArray<DiagnosticAnalyzer> analyzers,
         HostAnalyzerInfo hostAnalyzerInfo,
@@ -48,7 +48,7 @@ internal partial class DiagnosticAnalyzerService
             var compilationWithAnalyzersPair = CreateCompilationWithAnalyzers(projectState, compilation);
             tupleBox = new((checksum, analyzers, compilationWithAnalyzersPair));
 
-#if NET
+#if NET || NETCOREAPP3_1
             s_projectToCompilationWithAnalyzers.AddOrUpdate(projectState, tupleBox);
 #else
             // Make a best effort attempt to store the latest computed value against these state sets. If this
