@@ -157,7 +157,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             int localSignatureToken)
         {
             var typedSymReader = (ISymUnmanagedReader3)symReader;
-            return CreateMethodContext(compilation, moduleVersionId, methodToken, methodVersion, ilOffset, localSignatureToken,
+            return CreateMethodContext(compilation, moduleId, methodToken, methodVersion, ilOffset, localSignatureToken,
                 symbolProvider => MethodDebugInfo<TypeSymbol, LocalSymbol>.ReadMethodDebugInfo(typedSymReader, symbolProvider, methodToken, methodVersion, ilOffset, isVisualBasicMethod: false));
         }
 
@@ -173,7 +173,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
         /// <returns>Evaluation context</returns>
         internal static EvaluationContext CreateMethodContext(
             CSharpCompilation compilation,
-            Guid moduleVersionId,
+            ModuleId moduleId,
             int methodToken,
             int methodVersion,
             int ilOffset,
