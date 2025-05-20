@@ -396,7 +396,7 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-#if NET
+#if NET || NETCOREAPP3_1
         /// <summary>
         /// Return an <see cref="IAnalyzerAssemblyLoader"/> which does not lock assemblies on disk that is
         /// most appropriate for the current platform.

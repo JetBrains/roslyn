@@ -13,7 +13,7 @@ namespace Microsoft.CodeAnalysis.Scripting.Hosting
         internal readonly InteractiveAssemblyLoader Loader = loader;
 
         public static AssemblyLoaderImpl Create(InteractiveAssemblyLoader loader)
-#if NET
+#if NET || NETCOREAPP3_1
             => new CoreAssemblyLoaderImpl(loader);
 #else
             => new DesktopAssemblyLoaderImpl(loader);

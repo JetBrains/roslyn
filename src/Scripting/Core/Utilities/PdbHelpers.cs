@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis.Scripting
     {
         public static DebugInformationFormat GetPlatformSpecificDebugInformationFormat()
         {
-#if NET
+#if NET || NETCOREAPP3_1
             // Use PortablePdb for .NET
             return DebugInformationFormat.PortablePdb;
 #else
