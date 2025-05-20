@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Roslyn.Utilities;
 
-#if NET
+#if NET || NETCOREAPP3_1
 // Can't use global alias due to generic parameters. Extension types would do.
 
 internal readonly struct EnumerableConditionalWeakTable<TKey, TValue>() : IEnumerable<KeyValuePair<TKey, TValue>>

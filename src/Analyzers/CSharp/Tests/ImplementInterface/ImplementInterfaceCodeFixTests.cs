@@ -7251,7 +7251,7 @@ class Goo : [|IComparable|]
     [Fact, WorkItem("http://vstfdevdiv:8080/DevDiv2/DevDiv/_workitems/edit/994328")]
     public async Task TestDisposePatternWhenAdditionalUsingsAreIntroduced1()
     {
-#if NET
+#if NET || NETCOREAPP3_1
         var extraUsing = """
 
             using System.Diagnostics.CodeAnalysis;
