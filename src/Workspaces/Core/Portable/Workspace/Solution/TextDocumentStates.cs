@@ -24,7 +24,7 @@ namespace Microsoft.CodeAnalysis;
 // On NetFx, frozen dictionary is very expensive when you give it a case insensitive comparer.  This is due to
 // unavoidable allocations it performs while doing its key-analysis that involve going through the non-span-aware
 // culture types.  So, on netfx, we use a plain ReadOnlyDictionary here.
-#if NET
+#if NET || NETCOREAPP3_1
 using FilePathToDocumentIds = FrozenDictionary<string, OneOrMany<DocumentId>>;
 #else
 using FilePathToDocumentIds = ReadOnlyDictionary<string, OneOrMany<DocumentId>>;
@@ -36,14 +36,14 @@ using FilePathToDocumentIds = ReadOnlyDictionary<string, OneOrMany<DocumentId>>;
 internal sealed class TextDocumentStates<TState>
     where TState : TextDocumentState
 {
-#if NET
+#if NET || NETCOREAPP3_1
     private static readonly ObjectPool<Dictionary<string, OneOrMany<DocumentId>>> s_filePathPool = new(() => new(SolutionState.FilePathComparer));
 #endif
 
     public static readonly TextDocumentStates<TState> Empty =
         new([],
             ImmutableSortedDictionary.Create<DocumentId, TState>(DocumentIdComparer.Instance),
-#if NET
+#if NET || NETCOREAPP3_1
             FilePathToDocumentIds.Empty);
 #else
             new(new Dictionary<string, OneOrMany<DocumentId>>()));
@@ -352,7 +352,7 @@ internal sealed class TextDocumentStates<TState>
 
     private FilePathToDocumentIds ComputeFilePathToDocumentIds()
     {
-#if NET
+#if NET || NETCOREAPP3_1
         using var pooledDictionary = s_filePathPool.GetPooledObject();
         var result = pooledDictionary.Object;
 #else
@@ -370,7 +370,7 @@ internal sealed class TextDocumentStates<TState>
                 : OneOrMany.Create(documentId);
         }
 
-#if NET
+#if NET || NETCOREAPP3_1
         return result.ToFrozenDictionary(SolutionState.FilePathComparer);
 #else
         return new(result);

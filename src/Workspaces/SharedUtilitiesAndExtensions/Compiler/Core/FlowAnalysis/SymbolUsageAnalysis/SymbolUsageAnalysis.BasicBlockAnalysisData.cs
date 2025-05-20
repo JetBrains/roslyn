@@ -232,7 +232,7 @@ internal static partial class SymbolUsageAnalysis
                         result.Add(symbol, values);
                     }
 
-#if NET
+#if NET || NETCOREAPP3_1
                     values.EnsureCapacity(values.Count + operations.Count);
 #endif
 
