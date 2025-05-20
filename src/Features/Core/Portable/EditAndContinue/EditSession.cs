@@ -1753,4 +1753,31 @@ internal sealed class EditSession
                 -r.Region.OldSpan.Span.GetLineDelta(r.Region.NewSpan.Span),
                 r.Region.NewSpan.Span.ToSourceSpan()));
     }
+    
+    internal Task<ImmutableArray<Document>> GetChangedDocumentsAsync(Solution solution, EditAndContinueService editAndContinueService, CancellationToken cancellationToken)
+    {
+        var baseSolution = DebuggingSession.LastCommittedSolution;
+        if (baseSolution.HasNoChanges(solution))
+            return Task.FromResult(ImmutableArray<Document>.Empty);
+
+        return Task.Factory.StartNew(async () =>
+                                     {
+                                         var tasks = solution.Projects.Select(async project =>
+                                                                              {
+                                                                                  using var changedDocumentsDisposer = ArrayBuilder<Document>.GetInstance(out var changedDocuments);
+                                                                                  var oldProject = baseSolution.GetProject(project.Id);
+                                                                                  if (oldProject == null)
+                                                                                  {
+                                                                                      editAndContinueService.Log.Write($"GetChangedDocumentsAsync: EnC state of '{project.Id.DebugName}' [0x{project.Id:X8}] queried: project not loaded");
+                                                                                      return ImmutableArray<Document>.Empty;
+                                                                                  }
+                                                                                  using var _4 = ArrayBuilder<ProjectDiagnostics>.GetInstance(out var diagnostics);
+                                                                                  await PopulateChangedAndAddedDocumentsAsync(Log, oldProject, project, changedDocuments, diagnostics, cancellationToken).ConfigureAwait(false);
+                                                                                  return changedDocuments.ToImmutableArray();
+                                                                              }).ToList();
+
+                                         var arrays = await Task.WhenAll(tasks).ConfigureAwait(false);
+                                         return arrays.SelectMany(x => x).ToImmutableArray();
+                                     }, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default).Unwrap();
+    }
 }
