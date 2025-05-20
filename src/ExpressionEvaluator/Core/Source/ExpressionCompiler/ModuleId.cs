@@ -13,8 +13,8 @@ internal readonly struct ModuleId(Guid id, string displayName)
     public string DisplayName { get; } = displayName;
 }
 
-internal static class Extensions
+/*internal static class Extensions
 {
     public static ModuleId GetModuleId(this DkmClrModuleInstance module)
         => new(module.Mvid, module.FullName);
-}
+}*/
