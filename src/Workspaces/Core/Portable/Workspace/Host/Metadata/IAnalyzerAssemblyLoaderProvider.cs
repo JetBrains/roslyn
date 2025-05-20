@@ -9,7 +9,7 @@ using System.Composition;
 using System.IO;
 using Microsoft.CodeAnalysis.Host.Mef;
 
-#if NET
+#if NET || NETCOREAPP3_1
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Runtime.Loader;
 #endif
@@ -20,7 +20,7 @@ internal interface IAnalyzerAssemblyLoaderProvider : IWorkspaceService
 {
     IAnalyzerAssemblyLoaderInternal SharedShadowCopyLoader { get; }
 
-#if NET
+#if NET || NETCOREAPP3_1
     /// <summary>
     /// Creates a fresh shadow copying loader that will load all <see cref="AnalyzerReference"/>s and <see
     /// cref="ISourceGenerator"/>s in a fresh <see cref="AssemblyLoadContext"/>.
@@ -35,7 +35,7 @@ internal interface IAnalyzerAssemblyLoaderProvider : IWorkspaceService
 /// </summary>
 internal abstract class AbstractAnalyzerAssemblyLoaderProvider : IAnalyzerAssemblyLoaderProvider
 {
-#if NET
+#if NET || NETCOREAPP3_1
     private readonly Lazy<IAnalyzerAssemblyLoaderInternal> _shadowCopyLoader;
     private readonly ImmutableArray<IAnalyzerAssemblyResolver> _assemblyResolvers;
 
@@ -77,7 +77,7 @@ internal abstract class AbstractAnalyzerAssemblyLoaderProvider : IAnalyzerAssemb
 [ExportWorkspaceService(typeof(IAnalyzerAssemblyLoaderProvider)), Shared]
 internal sealed class DefaultAnalyzerAssemblyLoaderProvider : AbstractAnalyzerAssemblyLoaderProvider
 {
-#if NET
+#if NET || NETCOREAPP3_1
     [ImportingConstructor]
     [Obsolete(MefConstruction.ImportingConstructorMessage, error: true)]
     public DefaultAnalyzerAssemblyLoaderProvider([ImportMany] IEnumerable<IAnalyzerAssemblyResolver> assemblyResolvers)

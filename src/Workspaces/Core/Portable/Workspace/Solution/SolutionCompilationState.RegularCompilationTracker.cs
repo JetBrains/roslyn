@@ -961,7 +961,7 @@ namespace Microsoft.CodeAnalysis
                 {
                     // Assert that all the trees we expect to see are in the Compilation...
                     var syntaxTreesInWorkspaceStates = new HashSet<SyntaxTree>(
-#if NET
+#if NET || NETCOREAPP3_1
                         capacity: projectState.DocumentStates.Count + generatorInfo?.Documents.Count ?? 0
 #endif
                         );

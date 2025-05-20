@@ -50,7 +50,7 @@ internal static partial class DependentTypeFinder
             {
                 tuple = new((checksum, AsyncLazy.Create(CreateIndexAsync, project)));
 
-#if NET
+#if NET || NETCOREAPP3_1
                 s_projectToIndex.AddOrUpdate(project.State, tuple);
 #else
                 // Best effort try to update the map with the new data. 

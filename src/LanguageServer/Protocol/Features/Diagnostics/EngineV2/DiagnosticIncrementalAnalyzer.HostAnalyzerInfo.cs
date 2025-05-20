@@ -95,7 +95,7 @@ internal partial class DiagnosticAnalyzerService
         }
     }
 
-    private sealed class HostAnalyzerInfo
+    internal sealed class HostAnalyzerInfo
     {
         private const int FileContentLoadAnalyzerPriority = -4;
         private const int GeneratorDiagnosticsPlaceholderAnalyzerPriority = -3;
