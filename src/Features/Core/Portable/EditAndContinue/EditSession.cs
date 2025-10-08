@@ -765,33 +765,6 @@ internal sealed class EditSession
         oldNames.AddRange(oldCompilation.ReferencedAssemblyNames.Select(static r => r.Name));
         return newCompilation.ReferencedAssemblyNames.Any(static (newReference, oldNames) => !oldNames.Contains(newReference.Name), oldNames);
     }
-    
-    internal Task<ImmutableArray<Document>> GetChangedDocumentsAsync(Solution solution, CancellationToken cancellationToken)
-    {
-        var baseSolution = DebuggingSession.LastCommittedSolution;
-        if (baseSolution.HasNoChanges(solution))
-            return Task.FromResult(ImmutableArray<Document>.Empty);
-
-        return Task.Factory.StartNew(async () =>
-        {
-            var tasks = solution.Projects.Select(async project =>
-            {
-                using var changedDocumentsDisposer = ArrayBuilder<Document>.GetInstance(out var changedDocuments);
-                var oldProject = baseSolution.GetProject(project.Id);
-                if (oldProject == null)
-                {
-                    EditAndContinueService.Log.Write("GetChangedDocumentsAsync: EnC state of '{0}' [0x{1:X8}] queried: project not loaded", project.Id.DebugName, project.Id);
-                    return ImmutableArray<Document>.Empty;
-                }
-                using var _4 = ArrayBuilder<ProjectDiagnostics>.GetInstance(out var diagnostics);
-                await PopulateChangedAndAddedDocumentsAsync(oldProject, project, changedDocuments, diagnostics, cancellationToken).ConfigureAwait(false);
-                return changedDocuments.ToImmutableArray();
-            }).ToList();
-
-            var arrays = await Task.WhenAll(tasks).ConfigureAwait(false);
-            return arrays.SelectMany(x => x).ToImmutableArray();
-        }, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default).Unwrap();
-    }
 
     internal static async ValueTask<ProjectChanges> GetProjectChangesAsync(
         ActiveStatementsMap baseActiveStatements,
@@ -1764,16 +1737,18 @@ internal sealed class EditSession
                                      {
                                          var tasks = solution.Projects.Select(async project =>
                                                                               {
-                                                                                  using var changedDocumentsDisposer = ArrayBuilder<Document>.GetInstance(out var changedDocuments);
+                                                                                  //using var changedDocumentsDisposer = ArrayBuilder<Document>.GetInstance(out var changedDocuments);
+                                                                                  using var projectDifferences = new ProjectDifferences();
                                                                                   var oldProject = baseSolution.GetProject(project.Id);
                                                                                   if (oldProject == null)
                                                                                   {
                                                                                       editAndContinueService.Log.Write($"GetChangedDocumentsAsync: EnC state of '{project.Id.DebugName}' [0x{project.Id:X8}] queried: project not loaded");
                                                                                       return ImmutableArray<Document>.Empty;
                                                                                   }
-                                                                                  using var _4 = ArrayBuilder<ProjectDiagnostics>.GetInstance(out var diagnostics);
-                                                                                  await PopulateChangedAndAddedDocumentsAsync(Log, oldProject, project, changedDocuments, diagnostics, cancellationToken).ConfigureAwait(false);
-                                                                                  return changedDocuments.ToImmutableArray();
+
+                                                                                  using var _4 = ArrayBuilder<Diagnostic>.GetInstance(out var diagnostics);
+                                                                                  await GetProjectDifferencesAsync(Log, oldProject, project, projectDifferences, diagnostics, cancellationToken).ConfigureAwait(false);
+                                                                                  return projectDifferences.ChangedOrAddedDocuments.ToImmutableArray();
                                                                               }).ToList();
 
                                          var arrays = await Task.WhenAll(tasks).ConfigureAwait(false);

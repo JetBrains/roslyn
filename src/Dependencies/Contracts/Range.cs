@@ -4,7 +4,7 @@
 
 #nullable enable
 
-#if NET
+#if NET || NETCOREAPP3_1
 
 #pragma warning disable RS0016 // Add public types and members to the declared API (this is a supporting forwarder for an internal polyfill API)
 [assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Range))]
