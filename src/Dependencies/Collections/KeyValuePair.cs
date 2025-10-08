@@ -7,7 +7,7 @@
 // Copied from:
 // https://github.com/dotnet/runtime/blob/9214279d93b8b422495a98eb4edda91e92bd60c3/src/libraries/System.Private.CoreLib/src/System/Collections/Generic/KeyValuePair.cs
 
-#if NET
+#if NET || NETCOREAPP3_1
 
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;

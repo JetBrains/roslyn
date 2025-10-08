@@ -9,7 +9,7 @@ namespace Microsoft.CodeAnalysis.Shared.Extensions;
 
 internal static class ReadOnlySpanExtensions
 {
-#if !NET
+#if !NET && !NETCOREAPP3_1
     public static bool Contains<T>(this ReadOnlySpan<T> values, T value)
     {
         foreach (var v in values)
