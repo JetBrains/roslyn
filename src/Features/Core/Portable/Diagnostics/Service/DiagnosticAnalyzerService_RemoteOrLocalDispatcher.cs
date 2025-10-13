@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.PooledObjects;
 using Microsoft.CodeAnalysis.Remote;
 using Microsoft.CodeAnalysis.Text;
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Diagnostics;
 
@@ -21,7 +22,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics;
 internal sealed partial class DiagnosticAnalyzerService : IDiagnosticAnalyzerService
 {
     public async Task<ImmutableArray<DiagnosticData>> ForceRunCodeAnalysisDiagnosticsAsync(
-        Project project, CancellationToken cancellationToken)
+        Project project, bool includeProjectAnalysis, CancellationToken cancellationToken)
     {
         var client = await RemoteHostClient.TryGetClientAsync(project, cancellationToken).ConfigureAwait(false);
         if (client is not null)
@@ -35,7 +36,7 @@ internal sealed partial class DiagnosticAnalyzerService : IDiagnosticAnalyzerSer
         }
 
         // Otherwise, fallback to computing in proc.
-        return await ForceRunCodeAnalysisDiagnosticsInProcessAsync(project, cancellationToken).ConfigureAwait(false);
+        return await ForceRunCodeAnalysisDiagnosticsInProcessAsync(project, includeProjectAnalysis, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<ImmutableArray<DiagnosticDescriptor>> GetDiagnosticDescriptorsAsync(

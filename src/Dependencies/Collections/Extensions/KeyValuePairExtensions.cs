@@ -4,11 +4,13 @@
 
 #nullable enable
 
-namespace System.Collections.Generic;
+using System.Collections.Generic;
+
+namespace Roslyn.Utilities;
 
 internal static class RoslynKeyValuePairExtensions
 {
-#if NET
+#if NET || NETCOREAPP3_1
     public static void Deconstruct<TKey, TValue>(KeyValuePair<TKey, TValue> keyValuePair, out TKey key, out TValue value)
         => keyValuePair.Deconstruct(out key, out value);
 #else
