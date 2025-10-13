@@ -10,7 +10,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics;
 
 internal sealed partial class DiagnosticAnalyzerService
 {
-    private sealed class ChecksumAndAnalyzersEqualityComparer
+    internal sealed class ChecksumAndAnalyzersEqualityComparer
         : IEqualityComparer<(Checksum checksum, ImmutableArray<DiagnosticAnalyzer> analyzers)>
     {
         public static readonly ChecksumAndAnalyzersEqualityComparer Instance = new();
