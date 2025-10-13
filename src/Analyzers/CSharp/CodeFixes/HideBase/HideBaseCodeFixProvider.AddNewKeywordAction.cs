@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.OrderModifiers;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.CodeAnalysis.OrderModifiers;
 using Microsoft.CodeAnalysis.Shared.Extensions;
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.CSharp.CodeFixes.HideBase;
 
