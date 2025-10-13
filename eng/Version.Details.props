@@ -11,7 +11,7 @@ This file should be imported by eng/Versions.props
     <!-- dotnet/dotnet dependencies -->
     <SystemCommandLinePackageVersion>2.0.0-rtm.25509.106</SystemCommandLinePackageVersion>
     <!-- dotnet/runtime dependencies -->
-    <MicrosoftBclAsyncInterfacesPackageVersion>9.0.0</MicrosoftBclAsyncInterfacesPackageVersion>
+    <MicrosoftBclAsyncInterfacesPackageVersion>8.0.0</MicrosoftBclAsyncInterfacesPackageVersion>
     <MicrosoftExtensionsConfigurationPackageVersion>9.0.0</MicrosoftExtensionsConfigurationPackageVersion>
     <MicrosoftExtensionsDependencyInjectionPackageVersion>9.0.0</MicrosoftExtensionsDependencyInjectionPackageVersion>
     <MicrosoftExtensionsFileSystemGlobbingPackageVersion>8.0.0</MicrosoftExtensionsFileSystemGlobbingPackageVersion>
@@ -21,20 +21,20 @@ This file should be imported by eng/Versions.props
     <MicrosoftExtensionsOptionsPackageVersion>9.0.0</MicrosoftExtensionsOptionsPackageVersion>
     <MicrosoftExtensionsOptionsConfigurationExtensionPackageVersion>8.0.0</MicrosoftExtensionsOptionsConfigurationExtensionPackageVersion>
     <MicrosoftExtensionsPrimitivesPackageVersion>9.0.0</MicrosoftExtensionsPrimitivesPackageVersion>
-    <SystemCollectionsImmutablePackageVersion>9.0.0</SystemCollectionsImmutablePackageVersion>
+    <SystemCollectionsImmutablePackageVersion>8.0.0</SystemCollectionsImmutablePackageVersion>
     <SystemComponentModelCompositionPackageVersion>9.0.0</SystemComponentModelCompositionPackageVersion>
-    <SystemCompositionPackageVersion>9.0.0</SystemCompositionPackageVersion>
+    <SystemCompositionPackageVersion>8.0.0</SystemCompositionPackageVersion>
     <SystemConfigurationConfigurationManagerPackageVersion>9.0.0</SystemConfigurationConfigurationManagerPackageVersion>
     <SystemDiagnosticsDiagnosticSourcePackageVersion>9.0.0</SystemDiagnosticsDiagnosticSourcePackageVersion>
     <SystemDiagnosticsEventLogPackageVersion>9.0.0</SystemDiagnosticsEventLogPackageVersion>
     <SystemIOHashingPackageVersion>9.0.0</SystemIOHashingPackageVersion>
     <SystemIOPipelinesPackageVersion>9.0.0</SystemIOPipelinesPackageVersion>
-    <SystemReflectionMetadataPackageVersion>9.0.0</SystemReflectionMetadataPackageVersion>
+    <SystemReflectionMetadataPackageVersion>8.0.0</SystemReflectionMetadataPackageVersion>
     <SystemResourcesExtensionsPackageVersion>9.0.0</SystemResourcesExtensionsPackageVersion>
     <SystemSecurityCryptographyProtectedDataPackageVersion>9.0.0</SystemSecurityCryptographyProtectedDataPackageVersion>
     <SystemSecurityPermissionsPackageVersion>9.0.0</SystemSecurityPermissionsPackageVersion>
     <SystemTextEncodingsWebPackageVersion>9.0.0</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>9.0.0</SystemTextJsonPackageVersion>
+    <SystemTextJsonPackageVersion>8.0.5</SystemTextJsonPackageVersion>
     <SystemThreadingTasksDataflowPackageVersion>9.0.0</SystemThreadingTasksDataflowPackageVersion>
     <SystemWindowsExtensionsPackageVersion>9.0.0</SystemWindowsExtensionsPackageVersion>
     <!-- dotnet/arcade dependencies -->
