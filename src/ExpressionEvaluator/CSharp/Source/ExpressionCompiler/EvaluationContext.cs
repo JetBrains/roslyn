@@ -246,14 +246,15 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             out ImmutableArray<int> methodTokens,
             out ImmutableArray<string> errorMessages)
         {
+            var context = CreateCompilationContext();
+            bool isInFieldKeywordContext = context.IsInFieldKeywordContext();
             var diagnostics = DiagnosticBag.GetInstance();
-            var syntaxNodes = expressions.SelectAsArray(expr => Parse(expr, treatAsExpression: true, diagnostics, out var formatSpecifiers));
+            var syntaxNodes = expressions.SelectAsArray(expr => Parse(expr, isInFieldKeywordContext, treatAsExpression: true, diagnostics, out var formatSpecifiers));
             byte[]? assembly = null;
             if (!diagnostics.HasAnyErrors())
             {
                 RoslynDebug.Assert(syntaxNodes.All(s => s != null));
 
-                var context = CreateCompilationContext();
                 if (context.TryCompileExpressions(syntaxNodes!, TypeName, MethodName, diagnostics, out var moduleBuilder))
                 {
                     using var stream = new MemoryStream();
@@ -306,14 +307,15 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             CompilationTestData? testData,
             CancellationToken cancellationToken)
         {
-            var syntax = Parse(expr, (compilationFlags & DkmEvaluationFlags.TreatAsExpression) != 0, diagnostics, out var formatSpecifiers);
+            var context = CreateCompilationContext();
+
+            var syntax = Parse(expr, context.IsInFieldKeywordContext(), (compilationFlags & DkmEvaluationFlags.TreatAsExpression) != 0, diagnostics, out var formatSpecifiers);
             if (syntax == null)
             {
                 resultProperties = default;
                 return null;
             }
 
-            var context = this.CreateCompilationContext();
             var usings = GetUsings(Compilation, additionalImports);
             if (!context.TryCompileExpression(syntax, TypeName, MethodName, aliases, testData, usings, diagnostics, out var moduleBuilder, out var synthesizedMethod, cancellationToken))
             {
@@ -352,8 +354,9 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                 formatSpecifiers: formatSpecifiers);
         }
 
-        private static CSharpSyntaxNode? Parse(
+        private CSharpSyntaxNode? Parse(
             string expr,
+            bool isInFieldKeywordContext,
             bool treatAsExpression,
             DiagnosticBag diagnostics,
             out ReadOnlyCollection<string>? formatSpecifiers)
@@ -362,7 +365,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             {
                 // Try to parse as a statement. If that fails, parse as an expression.
                 var statementDiagnostics = DiagnosticBag.GetInstance();
-                var statementSyntax = expr.ParseStatement(statementDiagnostics);
+                var statementSyntax = expr.ParseStatement(isInFieldKeywordContext, statementDiagnostics);
                 Debug.Assert((statementSyntax == null) || !statementDiagnostics.HasAnyErrors());
                 statementDiagnostics.Free();
                 var isExpressionStatement = statementSyntax.IsKind(SyntaxKind.ExpressionStatement);
@@ -380,7 +383,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                 }
             }
 
-            return expr.ParseExpression(diagnostics, allowFormatSpecifiers: true, out formatSpecifiers);
+            return expr.ParseExpression(isInFieldKeywordContext, diagnostics, allowFormatSpecifiers: true, out formatSpecifiers);
         }
 
         internal override CompileResult? CompileAssignment(
@@ -392,7 +395,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             out ResultProperties resultProperties,
             CompilationTestData? testData)
         {
-            var assignment = target.ParseAssignment(expr, diagnostics);
+            var context = CreateCompilationContext();
+            var assignment = target.ParseAssignment(expr, context.IsInFieldKeywordContext(), diagnostics);
             if (assignment == null)
             {
                 resultProperties = default;
@@ -401,7 +405,6 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
 
             var usings = GetUsings(Compilation, additionalImports);
 
-            var context = this.CreateCompilationContext();
             if (!context.TryCompileAssignment(assignment, TypeName, MethodName, aliases, testData, usings, diagnostics, out var moduleBuilder, out var synthesizedMethod))
             {
                 resultProperties = default;
