@@ -303,7 +303,16 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Returns <see langword="true"/> if this method is a source method implemented as an iterator (either sync or async)
         /// </summary>
-        bool IsIterator { get; }
+        bool IsIterator
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         // Tracked by https://github.com/dotnet/roslyn/issues/78957 : public API, add support for constructed symbols
         /// <summary>
@@ -323,6 +332,15 @@ namespace Microsoft.CodeAnalysis
         /// When given the method symbol for <c>E.extension(int i).M()</c>,
         /// it will return the corresponding static implementation method <c>E.M(this int i)</c>.
         /// </summary>
-        IMethodSymbol? AssociatedExtensionImplementation { get; }
+        IMethodSymbol? AssociatedExtensionImplementation
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
     }
 }

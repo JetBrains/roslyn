@@ -215,12 +215,30 @@ namespace Microsoft.CodeAnalysis
         /// Returns null otherwise.
         /// Note: the metadata name for generic grouping types includes an arity suffix, so differs from the ExtensionGroupingName property.
         /// </summary>
-        string? ExtensionGroupingName { get; }
+        string? ExtensionGroupingName
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
 
         /// <summary>
         /// For extensions, returns the synthesized identifier for the marker type.
         /// Returns null otherwise.
         /// </summary>
-        string? ExtensionMarkerName { get; }
+        string? ExtensionMarkerName
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
     }
 }
