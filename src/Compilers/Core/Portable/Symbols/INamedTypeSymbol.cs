@@ -202,13 +202,31 @@ namespace Microsoft.CodeAnalysis
         /// Is this a symbol for an extension declaration.
         /// </summary>
         [MemberNotNullWhen(true, nameof(ExtensionGroupingName), nameof(ExtensionMarkerName))]
-        new bool IsExtension { get; }
+        new bool IsExtension
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         /// <summary>
         /// The extension parameter if this is an extension declaration (<see cref="IsExtension"/> is true).
         /// Note: this may be null even if <see cref="IsExtension"/> is true, in error cases.
         /// </summary>
-        new IParameterSymbol? ExtensionParameter { get; }
+        new IParameterSymbol? ExtensionParameter
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
 
         /// <summary>
         /// For extensions, returns the synthesized identifier for the grouping type.

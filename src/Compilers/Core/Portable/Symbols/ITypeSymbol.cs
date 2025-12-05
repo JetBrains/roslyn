@@ -82,10 +82,28 @@ namespace Microsoft.CodeAnalysis
         bool IsNativeIntegerType { get; }
 
         [Obsolete($"This API will be removed in the future. Use {nameof(INamedTypeSymbol)}.{nameof(INamedTypeSymbol.IsExtension)} instead.")]
-        bool IsExtension { get; }
+        bool IsExtension
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         [Obsolete($"This API will be removed in the future. Use {nameof(INamedTypeSymbol)}.{nameof(INamedTypeSymbol.ExtensionParameter)} instead.")]
-        IParameterSymbol? ExtensionParameter { get; }
+        IParameterSymbol? ExtensionParameter
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
 
         /// <summary>
         /// The original definition of this symbol. If this symbol is constructed from another
