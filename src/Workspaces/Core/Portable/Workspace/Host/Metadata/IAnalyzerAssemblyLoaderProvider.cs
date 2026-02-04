@@ -20,7 +20,7 @@ internal interface IAnalyzerAssemblyLoaderProvider : IWorkspaceService
 {
     IAnalyzerAssemblyLoaderInternal SharedShadowCopyLoader { get; }
 
-#if NET || NETCOREAPP3_1
+#if NET || NETCOREAPP3_1 || NETSTANDARD2_0
     /// <summary>
     /// Creates a fresh shadow copying loader that will load all <see cref="AnalyzerReference"/>s and <see
     /// cref="ISourceGenerator"/>s in a fresh <see cref="AssemblyLoadContext"/>.

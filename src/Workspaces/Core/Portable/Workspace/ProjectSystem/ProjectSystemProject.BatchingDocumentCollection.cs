@@ -394,6 +394,14 @@ internal sealed partial class ProjectSystemProject
             }
         }
 
+        public Dictionary<string, DocumentId> GetFiles()
+        {
+            using (_project._gate.DisposableWait())
+            {
+                return _documentPathsToDocumentIds;
+            }
+        }
+
         public async ValueTask ProcessRegularFileChangesAsync(ImmutableSegmentedList<string> filePaths)
         {
             using (await _project._gate.DisposableWaitAsync().ConfigureAwait(false))

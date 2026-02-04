@@ -21,6 +21,11 @@ using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.Workspaces.ProjectSystem;
 
+internal interface IJetAfterApplyProjectUpdateStateHandler : IWorkspaceService
+{
+    void ApplyProjectUpdateState(ProjectSystemProjectFactory.ProjectUpdateState projectUpdateState);
+}
+
 internal sealed partial class ProjectSystemProjectFactory
 {
     /// <summary>
@@ -346,7 +351,14 @@ internal sealed partial class ProjectSystemProjectFactory
         // will only run *if* the transformation resulted in a changed solution, but this
         // must run regardless (it is possible we update maps, but did not end up actually changing the sln object) in the transformation.
         ApplyProjectUpdateState(projectUpdateState);
+        AfterApplyProjectUpdateState(projectUpdateState);
         onAfterUpdateAlways?.Invoke(projectUpdateState);
+    }
+
+    private void AfterApplyProjectUpdateState(ProjectUpdateState projectUpdateState)
+    {
+        var updateStateHandler = this.SolutionServices.GetService<IJetAfterApplyProjectUpdateStateHandler>();
+        updateStateHandler?.ApplyProjectUpdateState(projectUpdateState);
     }
 
     private void ApplyBatchChangeToWorkspace_NoLock(

@@ -843,9 +843,28 @@ internal sealed partial class ProjectSystemProject
 
     #endregion
 
+    #region Jet
+
+    public Dictionary<string, DocumentId> GetSourceFiles()
+    {
+        return _sourceFiles.GetFiles();
+    }
+
+    public Dictionary<string, DocumentId> GetAdditionalFiles()
+    {
+        return _additionalFiles.GetFiles();
+    }
+
+    public Dictionary<string, DocumentId> GetAnalyzerConfigFiles()
+    {
+        return _analyzerConfigFiles.GetFiles();
+    }
+
+    #endregion
+
     #region Source File Addition/Removal
 
-    public void AddSourceFile(string fullPath, SourceCodeKind sourceCodeKind = SourceCodeKind.Regular, ImmutableArray<string> folders = default)
+    public DocumentId AddSourceFile(string fullPath, SourceCodeKind sourceCodeKind = SourceCodeKind.Regular, ImmutableArray<string> folders = default)
         => _sourceFiles.AddFile(fullPath, sourceCodeKind, folders);
 
     /// <summary>
@@ -882,7 +901,7 @@ internal sealed partial class ProjectSystemProject
     #region Additional File Addition/Removal
 
     // TODO: should AdditionalFiles have source code kinds?
-    public void AddAdditionalFile(string fullPath, SourceCodeKind sourceCodeKind = SourceCodeKind.Regular, ImmutableArray<string> folders = default)
+    public DocumentId AddAdditionalFile(string fullPath, SourceCodeKind sourceCodeKind = SourceCodeKind.Regular, ImmutableArray<string> folders = default)
         => _additionalFiles.AddFile(fullPath, sourceCodeKind, folders);
 
     public bool ContainsAdditionalFile(string fullPath)
@@ -895,10 +914,10 @@ internal sealed partial class ProjectSystemProject
 
     #region Analyzer Config File Addition/Removal
 
-    public void AddAnalyzerConfigFile(string fullPath)
+    public DocumentId AddAnalyzerConfigFile(string fullPath)
     {
         // TODO: do we need folders for analyzer config files?
-        _analyzerConfigFiles.AddFile(fullPath, SourceCodeKind.Regular, folders: default);
+        return _analyzerConfigFiles.AddFile(fullPath, SourceCodeKind.Regular, folders: default);
     }
 
     public bool ContainsAnalyzerConfigFile(string fullPath)
