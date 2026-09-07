@@ -13,6 +13,8 @@ using System.Diagnostics;
 using System.Linq;
 #endif
 
+using Roslyn.Utilities;
+
 namespace Microsoft.CodeAnalysis.FlowAnalysis.DataFlow
 {
     /// <summary>
