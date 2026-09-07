@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 #endif
 
+using Roslyn.Utilities;
+
 namespace Microsoft.CodeAnalysis.FlowAnalysis;
 
 /// <summary>

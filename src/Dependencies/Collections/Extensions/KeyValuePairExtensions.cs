@@ -4,7 +4,10 @@
 
 #nullable enable
 
-namespace System.Collections.Generic;
+using System.Collections.Generic;
+
+namespace Roslyn.Utilities;
+//namespace System.Collections.Generic;
 
 internal static class RoslynKeyValuePairExtensions
 {

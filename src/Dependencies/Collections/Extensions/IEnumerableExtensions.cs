@@ -826,7 +826,8 @@ namespace Roslyn.Utilities
     }
 }
 
-namespace System.Linq
+namespace Roslyn.Utilities
+//namespace System.Linq
 {
     /// <remarks>
     /// Defines polyfill methods and overloads or alternative names of existing methods defined in System.Linq.

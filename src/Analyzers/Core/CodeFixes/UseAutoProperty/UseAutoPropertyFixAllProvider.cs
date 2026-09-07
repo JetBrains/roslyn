@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CodeFixesAndRefactorings;
 using Microsoft.CodeAnalysis.Shared.Extensions;
 using Microsoft.CodeAnalysis.Threading;
+using Roslyn.Utilities;
 
 namespace Microsoft.CodeAnalysis.UseAutoProperty;
 
