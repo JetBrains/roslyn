@@ -24,6 +24,7 @@ namespace Microsoft.CodeAnalysis.Workspaces.ProjectSystem;
 internal interface IJetAfterApplyProjectUpdateStateHandler : IWorkspaceService
 {
     void ApplyProjectUpdateState(ProjectSystemProjectFactory.ProjectUpdateState projectUpdateState);
+    TextLoader GetTextLoader(string fullPath);
 }
 
 internal sealed partial class ProjectSystemProjectFactory
@@ -99,8 +100,15 @@ internal sealed partial class ProjectSystemProjectFactory
         FileWatchedAnalyzerReferenceFactory = new(fileChangeWatcher, WorkspaceListener, this.StartRefreshingAnalyzerReferenceForFileAsync, cancellationToken);
     }
 
-    public FileTextLoader CreateFileTextLoader(string fullPath)
-        => new WorkspaceFileTextLoader(this.SolutionServices, fullPath, defaultEncoding: null);
+    public TextLoader CreateFileTextLoader(string fullPath)
+    {
+        var updateStateHandler = this.SolutionServices.GetService<IJetAfterApplyProjectUpdateStateHandler>();
+        if (updateStateHandler != null)
+        {
+            return updateStateHandler.GetTextLoader(fullPath);
+        }
+        return new WorkspaceFileTextLoader(this.SolutionServices, fullPath, defaultEncoding: null);
+    }
 
     public async Task<ProjectSystemProject> CreateAndAddToWorkspaceAsync(string projectSystemName, string language, ProjectSystemProjectCreationInfo creationInfo, ProjectSystemHostInfo hostInfo)
     {
