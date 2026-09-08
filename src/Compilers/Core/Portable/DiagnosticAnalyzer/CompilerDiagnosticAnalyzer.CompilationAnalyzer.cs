@@ -20,7 +20,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
         /// <summary>
         /// Per-compilation DiagnosticAnalyzer for compiler's syntax/semantic/compilation diagnostics.
         /// </summary>
-        private class CompilationAnalyzer
+        internal class CompilationAnalyzer
         {
             private readonly Compilation _compilation;
 
@@ -73,7 +73,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 }
             }
 
-            private sealed class CompilerDiagnostic : Diagnostic
+            internal sealed class CompilerDiagnostic : Diagnostic
             {
                 private readonly Diagnostic _original;
                 private readonly ImmutableDictionary<string, string?> _properties;
