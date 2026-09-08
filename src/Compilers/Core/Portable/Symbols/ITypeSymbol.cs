@@ -84,11 +84,29 @@ namespace Microsoft.CodeAnalysis
 
         // 4.14 BACKCOMPAT OVERLOAD -- DO NOT TOUCH
         [EditorBrowsable(EditorBrowsableState.Never)]
-        bool IsExtension { get; }
+        bool IsExtension
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         // 4.14 BACKCOMPAT OVERLOAD -- DO NOT TOUCH
         [EditorBrowsable(EditorBrowsableState.Never)]
-        IParameterSymbol? ExtensionParameter { get; }
+        IParameterSymbol? ExtensionParameter
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
 
         /// <summary>
         /// The original definition of this symbol. If this symbol is constructed from another
@@ -147,25 +165,46 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// True if language treats the type as a Union.
         /// </summary>
+        [Experimental(RoslynExperiments.PreviewLanguageFeatureApi, UrlFormat = "https://github.com/dotnet/roslyn/issues/82567")]
         bool IsUnion
+#if NETSTANDARD2_0
         {
-            [Experimental(RoslynExperiments.PreviewLanguageFeatureApi, UrlFormat = "https://github.com/dotnet/roslyn/issues/82567")]
             get;
         }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         /// <summary>
         /// Indicates that the type is restricted from being inherited from outside its containing module.
         /// </summary>
         [Experimental(RoslynExperiments.PreviewLanguageFeatureApi, UrlFormat = "https://github.com/dotnet/roslyn/issues/83717")]
-        bool IsClosed { get; }
+        bool IsClosed
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         /// <summary>
         /// Gets the direct derived types of a closed type.
         /// </summary>
         /// <exception cref="InvalidOperationException">If this is not a closed type.</exception>
         [Experimental(RoslynExperiments.PreviewLanguageFeatureApi, UrlFormat = "https://github.com/dotnet/roslyn/issues/83717")]
-        ClosedDerivedTypeInfo GetClosedDerivedTypeInfo(CancellationToken cancellationToken);
-
+        ClosedDerivedTypeInfo GetClosedDerivedTypeInfo(CancellationToken cancellationToken)
+#if NETSTANDARD2_0
+        ;
+#else
+        {
+            throw new NotImplementedException();
+        }
+#endif
         /// <summary>
         /// Converts an <c>ITypeSymbol</c> and a nullable flow state to a string representation.
         /// </summary>

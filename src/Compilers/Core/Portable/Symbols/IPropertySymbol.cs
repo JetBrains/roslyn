@@ -115,23 +115,57 @@ namespace Microsoft.CodeAnalysis
         /// If this is a partial property implementation part, returns the corresponding
         /// definition part.  Otherwise null.
         /// </summary>
-        IPropertySymbol? PartialDefinitionPart { get; }
+        IPropertySymbol? PartialDefinitionPart
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
 
         /// <summary>
         /// If this is a partial property definition part, returns the corresponding
         /// implementation part.  Otherwise null.
         /// </summary>
-        IPropertySymbol? PartialImplementationPart { get; }
+        IPropertySymbol? PartialImplementationPart
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif        
 
         /// <summary>
         /// Returns true if this is a partial definition part.  Otherwise false.
         /// </summary>
-        bool IsPartialDefinition { get; }
+        bool IsPartialDefinition
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif        
 
         /// <summary>
         /// If this is an extension property that can be applied to a receiver of the given type,
         /// returns the property symbol in the substituted extension for that receiver type. Otherwise, returns null.
         /// </summary>
-        IPropertySymbol? ReduceExtensionMember(ITypeSymbol receiverType);
+        IPropertySymbol? ReduceExtensionMember(ITypeSymbol receiverType)
+#if NETSTANDARD2_0
+        ;
+#else
+        {
+           return null;
+        }
+#endif     
     }
 }

@@ -69,16 +69,43 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// If this is a partial event implementation part, returns the corresponding definition part, otherwise <see langword="null"/>.
         /// </summary>
-        IEventSymbol? PartialDefinitionPart { get; }
+        IEventSymbol? PartialDefinitionPart
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
 
         /// <summary>
         /// If this is a partial event definition part, returns the corresponding implementation part, otherwise <see langword="null"/>.
         /// </summary>
-        IEventSymbol? PartialImplementationPart { get; }
+        IEventSymbol? PartialImplementationPart
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
 
         /// <summary>
         /// Returns <see langword="true"/> if this is a partial definition part, otherwise <see langword="false"/>.
         /// </summary>
-        bool IsPartialDefinition { get; }
+        bool IsPartialDefinition
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif
     }
 }

@@ -200,7 +200,14 @@ namespace Microsoft.CodeAnalysis
         /// If this is a method of an extension block that can be applied to a receiver of the given type,
         /// returns the method symbol in the substituted extension for that receiver type. Otherwise, returns null.
         /// </summary>
-        IMethodSymbol? ReduceExtensionMember(ITypeSymbol receiverType);
+        IMethodSymbol? ReduceExtensionMember(ITypeSymbol receiverType)
+#if NETSTANDARD2_0
+        ;
+#else
+        {
+            return null;
+        }
+#endif   
 
         /// <summary>
         /// Returns interface methods explicitly implemented by this method.
@@ -309,7 +316,16 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Returns <see langword="true"/> if this method is a source method implemented as an iterator (either sync or async)
         /// </summary>
-        bool IsIterator { get; }
+        bool IsIterator
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         /// <summary>
         /// For a method/accessor/operator in an extension block, returns the corresponding implementation method if one exists.
@@ -331,6 +347,15 @@ namespace Microsoft.CodeAnalysis
         /// When given a generic extension member definition, it returns an implementation method constructed
         /// with the extension member's type parameters.
         /// </summary>
-        IMethodSymbol? AssociatedExtensionImplementation { get; }
+        IMethodSymbol? AssociatedExtensionImplementation
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
     }
 }
