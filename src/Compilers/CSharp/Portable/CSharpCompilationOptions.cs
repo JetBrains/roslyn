@@ -52,6 +52,12 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// </summary>
         public override NullableContextOptions NullableContextOptions { get; protected set; }
 
+        internal IgnoreAccessibilityOptions IgnoreAccessibilityOptions { get; private set; } 
+
+        internal bool IgnoreUnassignedVariables { get; private set; }
+        internal bool IgnoreReturnExpectedDiagnostics { get; private set; }
+        internal ITypeSymbolAdditionalEqualityComparer? AdditionTypeEqualityComparer { get; private set; }
+
         // Defaults correspond to the compiler's defaults or indicate that the user did not specify when that is significant.
         // That's significant when one option depends on another's setting. SubsystemVersion depends on Platform and Target.
         public CSharpCompilationOptions(
@@ -687,6 +693,30 @@ namespace Microsoft.CodeAnalysis.CSharp
         protected override CompilationOptions CommonWithFeatures(ImmutableArray<string> features)
         {
             throw new NotImplementedException();
+        }
+
+        internal CSharpCompilationOptions WithIgnoreAccessibilityOptions(ImmutableArray<string> assembliesToGiveAccessTo, string assembly)
+        {
+            this.IgnoreAccessibilityOptions = new IgnoreAccessibilityOptions(assembliesToGiveAccessTo, assembly);
+            return this;
+        }
+
+        internal CSharpCompilationOptions WithIgnoreUnassignedVariables(bool ignoreUnassignedVariables)
+        {
+            this.IgnoreUnassignedVariables = ignoreUnassignedVariables;
+            return this;
+        }
+
+        internal CSharpCompilationOptions WithIgnoreReturnExpectedDiagnostics(bool ignoreReturnExpectedDiagnostics)
+        {
+            this.IgnoreReturnExpectedDiagnostics = ignoreReturnExpectedDiagnostics;
+            return this;
+        }
+
+        internal CSharpCompilationOptions WithAdditionalTypeEqualityComparer(ITypeSymbolAdditionalEqualityComparer comparer)
+        {
+            this.AdditionTypeEqualityComparer = comparer;
+            return this;
         }
 
         internal override void ValidateOptions(ArrayBuilder<Diagnostic> builder)

@@ -98,7 +98,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 }
                 // If there's more than one location, then the method is partial and we
                 // have already reported a non-void partial method error.
-                else if (method.Locations.Length == 1)
+                else if (method.Locations.Length == 1 && !compilation.Options.IgnoreReturnExpectedDiagnostics)
                 {
                     var location = method is SynthesizedSimpleProgramEntryPointSymbol entryPoint
                         ? entryPoint.ReturnTypeSyntax.GetLocation()

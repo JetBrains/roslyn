@@ -126,6 +126,9 @@ internal sealed class CommittedSolution(DebuggingSession debuggingSession, Solut
         }
     }
 
+    public bool HasNoChanges(Solution solution)
+        => _solution == solution;
+
     public Project? GetProject(ProjectId id)
         => _solution.GetProject(id);
 

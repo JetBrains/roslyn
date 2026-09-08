@@ -826,11 +826,14 @@ internal sealed class EditSession
                 // Active statements are calculated if document changed and has no syntax errors:
                 Contract.ThrowIfTrue(analysis.ActiveStatements.IsDefault);
 
-                allEdits.AddRange(analysis.SemanticEdits);
+                //allEdits.AddRange(analysis.SemanticEdits);
+                if (!analysis.SemanticEdits.IsDefault)
+                    allEdits.AddRange(analysis.SemanticEdits);
                 allLineEdits.AddRange(analysis.LineEdits);
                 requiredCapabilities |= analysis.RequiredCapabilities;
 
-                if (analysis.ActiveStatements.Length > 0)
+                //if (analysis.ActiveStatements.Length > 0)
+                if (!analysis.ActiveStatements.IsDefault && analysis.ActiveStatements.Length > 0)
                 {
                     var oldDocument = await oldProject.GetDocumentAsync(analysis.DocumentId, includeSourceGenerated: true, cancellationToken).ConfigureAwait(false);
 
@@ -1796,5 +1799,34 @@ internal sealed class EditSession
                 r.Method,
                 -r.Region.OldSpan.Span.GetLineDelta(r.Region.NewSpan.Span),
                 r.Region.NewSpan.Span.ToSourceSpan()));
+    }
+
+    internal Task<ImmutableArray<Document>> GetChangedDocumentsAsync(Solution solution, EditAndContinueService editAndContinueService, CancellationToken cancellationToken)
+    {
+        var baseSolution = DebuggingSession.LastCommittedSolution;
+        if (baseSolution.HasNoChanges(solution))
+            return Task.FromResult(ImmutableArray<Document>.Empty);
+
+        return Task.Factory.StartNew(async () =>
+                                     {
+                                         var tasks = solution.Projects.Select(async project =>
+                                                                              {
+                                                                                  //using var changedDocumentsDisposer = ArrayBuilder<Document>.GetInstance(out var changedDocuments);
+                                                                                  using var projectDifferences = new ProjectDifferences();
+                                                                                  var oldProject = baseSolution.GetProject(project.Id);
+                                                                                  if (oldProject == null)
+                                                                                  {
+                                                                                      editAndContinueService.Log.Write($"GetChangedDocumentsAsync: EnC state of '{project.Id.DebugName}' [0x{project.Id:X8}] queried: project not loaded");
+                                                                                      return ImmutableArray<Document>.Empty;
+                                                                                  }
+
+                                                                                  using var _4 = ArrayBuilder<Diagnostic>.GetInstance(out var diagnostics);
+                                                                                  await GetProjectDifferencesAsync(Log, oldProject, project, projectDifferences, diagnostics, cancellationToken).ConfigureAwait(false);
+                                                                                  return projectDifferences.ChangedOrAddedDocuments.ToImmutableArray();
+                                                                              }).ToList();
+
+                                         var arrays = await Task.WhenAll(tasks).ConfigureAwait(false);
+                                         return arrays.SelectMany(x => x).ToImmutableArray();
+                                     }, cancellationToken, TaskCreationOptions.None, TaskScheduler.Default).Unwrap();
     }
 }

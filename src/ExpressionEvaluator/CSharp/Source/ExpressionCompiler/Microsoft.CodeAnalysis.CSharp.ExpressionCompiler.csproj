@@ -31,7 +31,11 @@
 
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Debugger.Engine-implementation" />
+    <!--<PackageReference Include="Microsoft.VisualStudio.Debugger.Engine-implementation" />-->
+    <Compile Remove="CSharpExpressionCompiler.cs" />
+    <Compile Remove="CSharpFrameDecoder.cs" />
+    <Compile Remove="CSharpInstructionDecoder.cs" />
+    <Compile Remove="CSharpLanguageInstructionDecoder.cs" />
   </ItemGroup>
   <Import Project="$(RepositoryEngineeringDir)targets\Vsdconfig.targets" />
 </Project>
