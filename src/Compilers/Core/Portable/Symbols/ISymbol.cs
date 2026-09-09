@@ -165,7 +165,16 @@ namespace Microsoft.CodeAnalysis
         /// Under <see cref="MemorySafetyRulesVersion.Version2"/>, symbols marked <see langword="unsafe"/> are considered requires-unsafe.
         /// </summary>
         [Experimental(RoslynExperiments.PreviewLanguageFeatureApi, UrlFormat = "https://github.com/dotnet/roslyn/issues/82789")]
-        bool RequiresUnsafeContext { get; }
+        bool RequiresUnsafeContext
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         /// <summary>
         /// Returns true if this symbol can be referenced by its name in code.

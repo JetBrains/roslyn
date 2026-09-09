@@ -35,12 +35,30 @@ namespace Microsoft.CodeAnalysis
         /// <summary>
         /// Returns true if the parameter was declared as a parameter array. 
         /// </summary>
-        bool IsParamsArray { get; }
+        bool IsParamsArray
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return IsParams; }
+        }
+#endif
 
         /// <summary>
         /// Returns true if the parameter was declared as a parameter collection. 
         /// </summary>
-        bool IsParamsCollection { get; }
+        bool IsParamsCollection
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return IsParams; }
+        }
+#endif
 
         /// <summary>
         /// Returns true if the parameter is optional.
