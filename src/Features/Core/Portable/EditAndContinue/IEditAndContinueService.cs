@@ -17,6 +17,8 @@ internal interface IEditAndContinueWorkspaceService : IWorkspaceService
 
 internal interface IEditAndContinueService
 {
+    DebuggingSession? GetDebuggingSession(DebuggingSessionId id);
+
     ValueTask<ImmutableArray<Diagnostic>> GetDocumentDiagnosticsAsync(Document document, ActiveStatementSpanProvider activeStatementSpanProvider, CancellationToken cancellationToken);
     ValueTask<EmitSolutionUpdateResults> EmitSolutionUpdateAsync(DebuggingSessionId sessionId, Solution solution, ImmutableDictionary<ProjectId, RunningProjectOptions> runningProjects, ActiveStatementSpanProvider activeStatementSpanProvider, CancellationToken cancellationToken);
 

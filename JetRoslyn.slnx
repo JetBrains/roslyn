@@ -1,0 +1,86 @@
+<Solution>
+  <Folder Name="/Compilers/" />
+  <Folder Name="/Compilers/Core/">
+    <Project Path="src/Compilers/Core/AnalyzerDriver/AnalyzerDriver.shproj" />
+    <Project Path="src/Compilers/Core/Portable/Microsoft.CodeAnalysis.csproj" />
+  </Folder>
+  <Folder Name="/Compilers/CSharp/">
+    <Project Path="src/Compilers/CSharp/CSharpAnalyzerDriver/CSharpAnalyzerDriver.shproj" />
+    <Project Path="src/Compilers/CSharp/Portable/Microsoft.CodeAnalysis.CSharp.csproj" />
+  </Folder>
+  <Folder Name="/Compilers/VisualBasic/">
+    <Project Path="src/Compilers/VisualBasic/BasicAnalyzerDriver/BasicAnalyzerDriver.shproj" />
+    <Project Path="src/Compilers/VisualBasic/Portable/Microsoft.CodeAnalysis.VisualBasic.vbproj" />
+  </Folder>
+  <Folder Name="/Dependencies/">
+    <Project Path="src/Dependencies/CodeAnalysis.Debugging/Microsoft.CodeAnalysis.Debugging.Package.csproj" />
+    <Project Path="src/Dependencies/CodeAnalysis.Debugging/Microsoft.CodeAnalysis.Debugging.shproj" />
+    <Project Path="src/Dependencies/Collections/Microsoft.CodeAnalysis.Collections.Package.csproj" />
+    <Project Path="src/Dependencies/Collections/Microsoft.CodeAnalysis.Collections.shproj" />
+    <Project Path="src/Dependencies/PooledObjects/Microsoft.CodeAnalysis.PooledObjects.Package.csproj" />
+    <Project Path="src/Dependencies/PooledObjects/Microsoft.CodeAnalysis.PooledObjects.shproj" />
+  </Folder>
+  <Folder Name="/ExpressionEvaluator/" />
+  <Folder Name="/ExpressionEvaluator/Core/">
+    <Project Path="src/ExpressionEvaluator/Core/Source/ExpressionCompiler/Microsoft.CodeAnalysis.ExpressionCompiler.csproj" />
+  </Folder>
+  <Folder Name="/ExpressionEvaluator/CSharp/">
+    <Project Path="src/ExpressionEvaluator/CSharp/Source/ExpressionCompiler/Microsoft.CodeAnalysis.CSharp.ExpressionCompiler.csproj" />
+  </Folder>
+  <Folder Name="/Features/">
+    <Project Path="src/Features/Core/Portable/Microsoft.CodeAnalysis.Features.csproj" />
+    <Project Path="src/Features/CSharp/Portable/Microsoft.CodeAnalysis.CSharp.Features.csproj" />
+    <Project Path="src/Features/VisualBasic/Portable/Microsoft.CodeAnalysis.VisualBasic.Features.vbproj" />
+    <Project Path="src/LanguageServer/Protocol/Microsoft.CodeAnalysis.LanguageServer.Protocol.csproj" />
+  </Folder>
+  <Folder Name="/Features/Analyzers/">
+    <Project Path="src/Analyzers/Core/Analyzers/Analyzers.shproj" />
+    <Project Path="src/Analyzers/Core/CodeFixes/CodeFixes.shproj" />
+    <Project Path="src/Analyzers/CSharp/Analyzers/CSharpAnalyzers.shproj" />
+    <Project Path="src/Analyzers/CSharp/CodeFixes/CSharpCodeFixes.shproj" />
+    <Project Path="src/Analyzers/CSharp/Tests/CSharpAnalyzers.UnitTests.shproj" />
+    <Project Path="src/Analyzers/VisualBasic/Analyzers/VisualBasicAnalyzers.shproj" />
+    <Project Path="src/Analyzers/VisualBasic/CodeFixes/VisualBasicCodeFixes.shproj" />
+    <Project Path="src/Analyzers/VisualBasic/Tests/VisualBasicAnalyzers.UnitTests.shproj" />
+  </Folder>
+  <Folder Name="/LanguageServer/">
+    <Project Path="src/LanguageServer/Microsoft.CommonLanguageServerProtocol.Framework/Microsoft.CommonLanguageServerProtocol.Framework.Shared.shproj" />
+  </Folder>
+  <Folder Name="/Scripting/">
+    <Project Path="src/Scripting/Core/Microsoft.CodeAnalysis.Scripting.csproj" />
+    <Project Path="src/Scripting/CSharp/Microsoft.CodeAnalysis.CSharp.Scripting.csproj" />
+  </Folder>
+  <Folder Name="/Tools/">
+    <Project Path="src/Tools/CompilerGeneratorTools/Source/CSharpErrorFactsGenerator/CSharpErrorFactsGenerator.csproj">
+      <Platform Solution="Release|*" Project="x64" />
+    </Project>
+    <Project Path="src/Tools/CompilerGeneratorTools/Source/CSharpSyntaxGenerator/CSharpSyntaxGenerator.csproj" />
+    <Project Path="src/Tools/CompilerGeneratorTools/Source/VisualBasicErrorFactsGenerator/VisualBasicErrorFactsGenerator.vbproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="src/Tools/CompilerGeneratorTools/Source/VisualBasicSyntaxGenerator/VisualBasicSyntaxGenerator.vbproj">
+      <Platform Project="x64" />
+    </Project>
+  </Folder>
+  <Folder Name="/Tools/ExternalAccess/">
+    <Project Path="src/Features/ExternalAccess/AspNetCore/Microsoft.CodeAnalysis.ExternalAccess.AspNetCore.csproj" />
+    <Project Path="src/Tools/ExternalAccess/RazorCompiler/Microsoft.CodeAnalysis.ExternalAccess.RazorCompiler.csproj" />
+  </Folder>
+  <Folder Name="/Workspaces/">
+    <Project Path="src/Workspaces/Core/Portable/Microsoft.CodeAnalysis.Workspaces.csproj" />
+    <Project Path="src/Workspaces/CSharp/Portable/Microsoft.CodeAnalysis.CSharp.Workspaces.csproj" />
+    <Project Path="src/Workspaces/VisualBasic/Portable/Microsoft.CodeAnalysis.VisualBasic.Workspaces.vbproj" />
+  </Folder>
+  <Folder Name="/Workspaces/SharedUtilitiesAndExtensions/" />
+  <Folder Name="/Workspaces/SharedUtilitiesAndExtensions/Compiler/">
+    <Project Path="src/Workspaces/SharedUtilitiesAndExtensions/Compiler/Core/CompilerExtensions.shproj" />
+    <Project Path="src/Workspaces/SharedUtilitiesAndExtensions/Compiler/CSharp/CSharpCompilerExtensions.shproj" />
+    <Project Path="src/Workspaces/SharedUtilitiesAndExtensions/Compiler/VisualBasic/VisualBasicCompilerExtensions.shproj" />
+  </Folder>
+  <Folder Name="/Workspaces/SharedUtilitiesAndExtensions/Workspace/">
+    <Project Path="src/Workspaces/SharedUtilitiesAndExtensions/Workspace/Core/WorkspaceExtensions.shproj" />
+    <Project Path="src/Workspaces/SharedUtilitiesAndExtensions/Workspace/CSharp/CSharpWorkspaceExtensions.shproj" />
+    <Project Path="src/Workspaces/SharedUtilitiesAndExtensions/Workspace/VisualBasic/VisualBasicWorkspaceExtensions.shproj" />
+  </Folder>
+  <Project Path="src/LanguageServer/Microsoft.CommonLanguageServerProtocol.Framework/Microsoft.CommonLanguageServerProtocol.Framework.Package.csproj" />
+</Solution>

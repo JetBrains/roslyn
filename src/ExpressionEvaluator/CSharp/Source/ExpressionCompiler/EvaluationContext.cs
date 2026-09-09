@@ -15,6 +15,7 @@ using System.Threading;
 using Microsoft.CodeAnalysis.CodeGen;
 using Microsoft.CodeAnalysis.CSharp.Symbols;
 using Microsoft.CodeAnalysis.CSharp.Symbols.Metadata.PE;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.ExpressionEvaluator;
 using Microsoft.CodeAnalysis.PooledObjects;
@@ -155,6 +156,20 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             int ilOffset,
             int localSignatureToken)
         {
+            var typedSymReader = (ISymUnmanagedReader3)symReader!;
+            return CreateMethodContext(compilation, moduleId, methodToken, methodVersion, ilOffset, localSignatureToken,
+                symbolProvider => MethodDebugInfo<TypeSymbol, LocalSymbol>.ReadMethodDebugInfo(typedSymReader, symbolProvider, methodToken, methodVersion, ilOffset, isVisualBasicMethod: false));
+        }
+
+        internal static EvaluationContext CreateMethodContext(
+            CSharpCompilation compilation,
+            ModuleId moduleId,
+            int methodToken,
+            int methodVersion,
+            int ilOffset,
+            int localSignatureToken,
+            Func<CSharpEESymbolProvider, MethodDebugInfo<TypeSymbol, LocalSymbol>> debugInfoProvider)
+        {
             var methodHandle = (MethodDefinitionHandle)MetadataTokens.Handle(methodToken);
             var currentSourceMethod = compilation.GetSourceMethod(moduleId, methodHandle);
             var localSignatureHandle = (localSignatureToken != 0) ? (StandaloneSignatureHandle)MetadataTokens.Handle(localSignatureToken) : default;
@@ -166,9 +181,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             var metadataDecoder = new MetadataDecoder((PEModuleSymbol)currentFrame.ContainingModule, currentFrame);
             var localInfo = metadataDecoder.GetLocalInfo(localSignatureHandle);
 
-            var typedSymReader = (ISymUnmanagedReader3?)symReader;
 
-            var debugInfo = MethodDebugInfo<TypeSymbol, LocalSymbol>.ReadMethodDebugInfo(typedSymReader, symbolProvider, methodToken, methodVersion, ilOffset, isVisualBasicMethod: false);
+            var debugInfo = debugInfoProvider(symbolProvider);
 
             var reuseSpan = debugInfo.ReuseSpan;
             var localsBuilder = ArrayBuilder<LocalSymbol>.GetInstance();
@@ -277,9 +291,11 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             string expr,
             DkmEvaluationFlags compilationFlags,
             ImmutableArray<Alias> aliases,
+            ImmutableArray<string> additionalImports,
             DiagnosticBag diagnostics,
             out ResultProperties resultProperties,
-            CompilationTestData? testData)
+            CompilationTestData? testData,
+            CancellationToken cancellationToken)
         {
             var context = CreateCompilationContext();
 
@@ -290,7 +306,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                 return null;
             }
 
-            if (!context.TryCompileExpression(syntax, TypeName, MethodName, aliases, testData, diagnostics, out var moduleBuilder, out var synthesizedMethod))
+            var usings = GetUsings(Compilation, additionalImports);
+            if (!context.TryCompileExpression(syntax, TypeName, MethodName, aliases, testData, usings, diagnostics, out var moduleBuilder, out var synthesizedMethod, cancellationToken))
             {
                 resultProperties = default;
                 return null;
@@ -309,7 +326,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                 isDeterministic: false,
                 emitTestCoverageData: false,
                 privateKeyOpt: null,
-                CancellationToken.None);
+                cancellationToken);
 
             if (diagnostics.HasAnyErrors())
             {
@@ -363,6 +380,7 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
             string target,
             string expr,
             ImmutableArray<Alias> aliases,
+            ImmutableArray<string> additionalImports,
             DiagnosticBag diagnostics,
             out ResultProperties resultProperties,
             CompilationTestData? testData)
@@ -375,7 +393,8 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                 return null;
             }
 
-            if (!context.TryCompileAssignment(assignment, TypeName, MethodName, aliases, testData, diagnostics, out var moduleBuilder, out var synthesizedMethod))
+            var usings = GetUsings(Compilation, additionalImports);
+            if (!context.TryCompileAssignment(assignment, TypeName, MethodName, aliases, testData, usings, diagnostics, out var moduleBuilder, out var synthesizedMethod))
             {
                 resultProperties = default;
                 return null;
@@ -410,6 +429,71 @@ namespace Microsoft.CodeAnalysis.CSharp.ExpressionEvaluator
                 stream.ToArray(),
                 synthesizedMethod,
                 formatSpecifiers: null);
+        }
+
+        private static ImmutableArray<NamespaceOrTypeAndUsingDirective> GetUsings(
+            CSharpCompilation compilation,
+            ImmutableArray<string> usings)
+        {
+            if (usings.Length == 0 && compilation.PreviousSubmission == null)
+            {
+                return ImmutableArray<NamespaceOrTypeAndUsingDirective>.Empty;
+            }
+
+            var usingsBinder = new InContainerBinder(compilation.GlobalNamespace, new BuckStopsHereBinder(compilation, null));
+            var boundUsings = ArrayBuilder<NamespaceOrTypeAndUsingDirective>.GetInstance();
+            var uniqueUsings = PooledHashSet<NamespaceOrTypeSymbol>.GetInstance();
+
+            foreach (string @using in usings)
+            {
+                if (!@using.IsValidClrNamespaceName())
+                {
+                    continue;
+                }
+
+                var identifiers = @using.Split('.');
+                NameSyntax qualifiedName = SyntaxFactory.IdentifierName(identifiers[0]);
+
+                for (var j = 1; j < identifiers.Length; j++)
+                {
+                    var identifierNameSyntax = SyntaxFactory.IdentifierName(identifiers[j]);
+                    qualifiedName = SyntaxFactory.QualifiedName(left: qualifiedName, right: identifierNameSyntax);
+                }
+
+                var directiveDiagnostics = BindingDiagnosticBag.GetInstance();
+
+                var imported = usingsBinder.BindNamespaceOrTypeSymbol(qualifiedName, directiveDiagnostics).NamespaceOrTypeSymbol;
+                if (uniqueUsings.Add(imported))
+                {
+                    boundUsings.Add(new NamespaceOrTypeAndUsingDirective(imported, null, dependencies: directiveDiagnostics.DependenciesBag!.ToImmutableArray()));
+                }
+
+                directiveDiagnostics.Free();
+            }
+
+            var previousSubmissionImports = compilation.PreviousSubmission?.GlobalImports;
+            if (previousSubmissionImports != null)
+            {
+                var expandedImports = Imports.ExpandPreviousSubmissionImports(previousSubmissionImports.Value, compilation);
+
+                foreach (var previousUsing in expandedImports)
+                {
+                    if (uniqueUsings.Add(previousUsing.NamespaceOrType))
+                    {
+                        boundUsings.Add(previousUsing);
+                    }
+                }
+            }
+
+            uniqueUsings.Free();
+
+            if (boundUsings.Count == 0)
+            {
+                boundUsings.Free();
+                return ImmutableArray<NamespaceOrTypeAndUsingDirective>.Empty;
+            }
+
+            return boundUsings.ToImmutableAndFree();
         }
 
         private static readonly ReadOnlyCollection<byte> s_emptyBytes =

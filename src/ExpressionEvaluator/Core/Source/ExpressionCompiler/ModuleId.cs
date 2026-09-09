@@ -13,8 +13,10 @@ internal readonly struct ModuleId(Guid id, string displayName)
     public string DisplayName { get; } = displayName;
 }
 
+#if VSDEBUGGER
 internal static class Extensions
 {
     public static ModuleId GetModuleId(this DkmClrModuleInstance module)
         => new(module.Mvid, module.FullName);
 }
+#endif
