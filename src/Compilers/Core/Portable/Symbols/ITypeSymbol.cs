@@ -84,11 +84,29 @@ namespace Microsoft.CodeAnalysis
 
         // 4.14 BACKCOMPAT OVERLOAD -- DO NOT TOUCH
         [EditorBrowsable(EditorBrowsableState.Never)]
-        bool IsExtension { get; }
+        bool IsExtension
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         // 4.14 BACKCOMPAT OVERLOAD -- DO NOT TOUCH
         [EditorBrowsable(EditorBrowsableState.Never)]
-        IParameterSymbol? ExtensionParameter { get; }
+        IParameterSymbol? ExtensionParameter
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return null; }
+        }
+#endif
 
         /// <summary>
         /// The original definition of this symbol. If this symbol is constructed from another
@@ -148,28 +166,56 @@ namespace Microsoft.CodeAnalysis
         /// True if language treats the type as a Union.
         /// </summary>
         bool IsUnion
+#if NETSTANDARD2_0
         {
             get;
         }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         /// <summary>
         /// When <see cref="IsUnion"/> is true, returns the case types of the union. Otherwise, returns an empty array.
         /// </summary>
         ImmutableArray<ITypeSymbol> UnionCaseTypes
+#if NETSTANDARD2_0
         {
             get;
         }
+#else
+        {
+            get { return ImmutableArray<ITypeSymbol>.Empty; }
+        }
+#endif
 
         /// <summary>
         /// Indicates that the type is restricted from being inherited from outside its containing module.
         /// </summary>
-        bool IsClosed { get; }
+        bool IsClosed
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         /// <summary>
         /// Gets the direct derived types of a closed type.
         /// </summary>
         /// <exception cref="InvalidOperationException">If this is not a closed type.</exception>
-        ClosedDerivedTypeInfo GetClosedDerivedTypeInfo(CancellationToken cancellationToken);
+        ClosedDerivedTypeInfo GetClosedDerivedTypeInfo(CancellationToken cancellationToken)
+#if NETSTANDARD2_0
+        ;
+#else
+        {
+            throw new NotImplementedException();
+        }
+#endif
 
         /// <summary>
         /// Converts an <c>ITypeSymbol</c> and a nullable flow state to a string representation.

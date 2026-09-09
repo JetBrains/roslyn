@@ -164,7 +164,16 @@ namespace Microsoft.CodeAnalysis
         /// or a symbol compiled with the legacy memory safety rules which has pointers in its signature.
         /// </summary>
         [Experimental(RoslynExperiments.PreviewLanguageFeatureApi, UrlFormat = "https://github.com/dotnet/roslyn/issues/82789")]
-        bool RequiresUnsafeContext { get; }
+        bool RequiresUnsafeContext
+#if NETSTANDARD2_0
+        {
+            get;
+        }
+#else
+        {
+            get { return false; }
+        }
+#endif
 
         /// <summary>
         /// Returns true if this symbol can be referenced by its name in code.
