@@ -14,7 +14,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics;
 internal sealed partial class DiagnosticAnalyzerService
 {
     public async ValueTask<ImmutableArray<DiagnosticData>> ForceRunCodeAnalysisDiagnosticsInProcessAsync(
-        Project project, CancellationToken cancellationToken)
+        Project project, bool includeProjectAnalysis, CancellationToken cancellationToken)
     {
         // We are being asked to explicitly analyze this project.  As such we do *not* want to use the
         // default rules determining which analyzers to run.  For example, even if compiler diagnostics
@@ -31,8 +31,9 @@ internal sealed partial class DiagnosticAnalyzerService
         var documentDiagnosticsTask = GetDiagnosticsForIdsAsync();
 
         // Then all the non-document diagnostics for that project as well.
-        var projectDiagnosticsTask = this.GetProjectDiagnosticsForIdsInProcessAsync(
-            project, diagnosticIds: null, filteredAnalyzers, cancellationToken);
+        var projectDiagnosticsTask = includeProjectAnalysis
+            ? this.GetProjectDiagnosticsForIdsInProcessAsync(project, diagnosticIds: null, filteredAnalyzers, cancellationToken)
+            : Task.FromResult(ImmutableArray<DiagnosticData>.Empty);
 
         await Task.WhenAll(documentDiagnosticsTask, projectDiagnosticsTask).ConfigureAwait(false);
 

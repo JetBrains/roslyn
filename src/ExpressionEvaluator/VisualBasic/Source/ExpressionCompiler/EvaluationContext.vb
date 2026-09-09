@@ -346,6 +346,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.ExpressionEvaluator
             expr As String,
             compilationFlags As DkmEvaluationFlags,
             aliases As ImmutableArray(Of [Alias]),
+            additionalImports as ImmutableArray(Of string),
             diagnostics As DiagnosticBag,
             <Out> ByRef resultProperties As ResultProperties,
             testData As Microsoft.CodeAnalysis.CodeGen.CompilationTestData) As CompileResult
@@ -404,6 +405,7 @@ Namespace Microsoft.CodeAnalysis.VisualBasic.ExpressionEvaluator
             target As String,
             expr As String,
             aliases As ImmutableArray(Of [Alias]),
+            additionalImports as ImmutableArray(Of string),
             diagnostics As DiagnosticBag,
             <Out> ByRef resultProperties As ResultProperties,
             testData As Microsoft.CodeAnalysis.CodeGen.CompilationTestData) As CompileResult

@@ -29,7 +29,7 @@ internal interface IDiagnosticAnalyzerService : IWorkspaceService
     /// diagnostics.
     /// </summary>
     Task<ImmutableArray<DiagnosticData>> ForceRunCodeAnalysisDiagnosticsAsync(
-        Project project, CancellationToken cancellationToken);
+        Project project, bool includeProjectAnalysis, CancellationToken cancellationToken);
 
     /// <summary>
     /// Returns <see langword="true"/> if any of the given diagnostic IDs belong to an analyzer that is considered
