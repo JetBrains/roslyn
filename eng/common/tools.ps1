@@ -616,6 +616,8 @@ function InitializeBuildTool() {
     ExitWithExitCode 1
   }
 
+  Write-Host "Using msbuildEngine='$msbuildEngine' Path='$($buildTool.Path)' Command='$($buildTool.Command)'" -ForegroundColor Yellow
+
   return $global:_BuildTool = $buildTool
 }
 
