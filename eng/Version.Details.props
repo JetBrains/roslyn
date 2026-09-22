@@ -11,7 +11,7 @@ This file should be imported by eng/Versions.props
     <MicrosoftDotNetHelixSdkPackageVersion>11.0.0-beta.26421.2</MicrosoftDotNetHelixSdkPackageVersion>
     <MicrosoftDotNetXliffTasksPackageVersion>11.0.0-beta.26421.2</MicrosoftDotNetXliffTasksPackageVersion>
     <!-- dotnet-dotnet dependencies -->
-    <MicrosoftBclAsyncInterfacesPackageVersion>10.0.10</MicrosoftBclAsyncInterfacesPackageVersion>
+    <MicrosoftBclAsyncInterfacesPackageVersion>8.0.0</MicrosoftBclAsyncInterfacesPackageVersion>
     <MicrosoftExtensionsConfigurationPackageVersion>10.0.10</MicrosoftExtensionsConfigurationPackageVersion>
     <MicrosoftExtensionsDependencyInjectionPackageVersion>10.0.10</MicrosoftExtensionsDependencyInjectionPackageVersion>
     <MicrosoftExtensionsFileSystemGlobbingPackageVersion>10.0.10</MicrosoftExtensionsFileSystemGlobbingPackageVersion>
@@ -22,22 +22,22 @@ This file should be imported by eng/Versions.props
     <MicrosoftExtensionsOptionsConfigurationExtensionPackageVersion>10.0.10</MicrosoftExtensionsOptionsConfigurationExtensionPackageVersion>
     <MicrosoftExtensionsPrimitivesPackageVersion>10.0.10</MicrosoftExtensionsPrimitivesPackageVersion>
     <SystemCodeDomPackageVersion>10.0.10</SystemCodeDomPackageVersion>
-    <SystemCollectionsImmutablePackageVersion>10.0.10</SystemCollectionsImmutablePackageVersion>
+    <SystemCollectionsImmutablePackageVersion>8.0.0</SystemCollectionsImmutablePackageVersion>
     <SystemCommandLinePackageVersion>3.0.0-rc.1.26411.119</SystemCommandLinePackageVersion>
     <SystemComponentModelCompositionPackageVersion>10.0.10</SystemComponentModelCompositionPackageVersion>
-    <SystemCompositionPackageVersion>10.0.10</SystemCompositionPackageVersion>
+    <SystemCompositionPackageVersion>8.0.0</SystemCompositionPackageVersion>
     <SystemConfigurationConfigurationManagerPackageVersion>10.0.10</SystemConfigurationConfigurationManagerPackageVersion>
     <SystemDiagnosticsDiagnosticSourcePackageVersion>10.0.10</SystemDiagnosticsDiagnosticSourcePackageVersion>
     <SystemDiagnosticsEventLogPackageVersion>10.0.10</SystemDiagnosticsEventLogPackageVersion>
     <SystemIOHashingPackageVersion>10.0.10</SystemIOHashingPackageVersion>
     <SystemIOPipelinesPackageVersion>10.0.10</SystemIOPipelinesPackageVersion>
-    <SystemReflectionMetadataPackageVersion>10.0.10</SystemReflectionMetadataPackageVersion>
+    <SystemReflectionMetadataPackageVersion>8.0.0</SystemReflectionMetadataPackageVersion>
     <SystemResourcesExtensionsPackageVersion>10.0.10</SystemResourcesExtensionsPackageVersion>
     <SystemSecurityCryptographyProtectedDataPackageVersion>10.0.10</SystemSecurityCryptographyProtectedDataPackageVersion>
     <SystemSecurityPermissionsPackageVersion>10.0.10</SystemSecurityPermissionsPackageVersion>
     <SystemTextEncodingsWebPackageVersion>10.0.10</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>10.0.10</SystemTextJsonPackageVersion>
-    <SystemThreadingChannelsPackageVersion>10.0.10</SystemThreadingChannelsPackageVersion>
+    <SystemTextJsonPackageVersion>8.0.5</SystemTextJsonPackageVersion>
+    <SystemThreadingChannelsPackageVersion>8.0.0</SystemThreadingChannelsPackageVersion>
     <SystemThreadingTasksDataflowPackageVersion>10.0.10</SystemThreadingTasksDataflowPackageVersion>
     <SystemWindowsExtensionsPackageVersion>10.0.10</SystemWindowsExtensionsPackageVersion>
     <!-- dotnet-roslyn dependencies -->
