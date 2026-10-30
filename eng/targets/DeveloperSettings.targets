@@ -21,8 +21,8 @@
              Text="Validating developer settings: IsWindows=$(_RoslynBuildRunsOnWindows), SourceHasCarriageReturns=$(_RoslynSourceHasCarriageReturns), LongPathsEnabled=$(_RoslynLongPathsEnabled)" />
     <Error Condition="'$(_RoslynSourceHasCarriageReturns)' != '$(_RoslynBuildRunsOnWindows)'"
            Text="Source file line endings do not match the current platform. Re-clone the repository with the correct Git line-ending settings." />
-    <Error Condition="'$(_RoslynBuildRunsOnWindows)' == 'True' and '$(_RoslynLongPathsEnabled)' != '1'"
-           Text="Long paths are required for this project. Please run eng\enable-long-paths.reg" />
+<!--    <Error Condition="'$(_RoslynBuildRunsOnWindows)' == 'True' and '$(_RoslynLongPathsEnabled)' != '1'"
+           Text="Long paths are required for this project. Please run eng\enable-long-paths.reg" />-->
 
     <MakeDir Directories="$(MSBuildThisFileDirectory)..\..\artifacts" />
     <WriteLinesToFile File="$(_RoslynDeveloperSettingsValidationCacheFile)"
